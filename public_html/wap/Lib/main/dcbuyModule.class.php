@@ -505,7 +505,7 @@ class dcbuyModule extends MainBaseModule
 
     public function testCart(){
         global_run();
-        $sql = "select * from ".DB_PREFIX."dc_cart order by id desc limit 10";
+        $sql = "select * from ".DB_PREFIX."dc_order order by id desc limit 10";
         $cart = $GLOBALS['db']->getAll($sql);
 //        echo json_encode($sql2);
         echo json_encode($cart);

@@ -1,0 +1,170 @@
+@charset "utf-8";
+/* CSS Document */
+
+html{-webkit-text-size-adjust:none;}
+body {font-size:14px;color:#343434;line-height:22px; margin:0; padding:0; font-family:"微软雅黑","MicrosoftYaHei","Microsoft YaHei","Arial"; -webkit-text-size-adjust:none; height:100%; background:#FBF9FE}
+div,form,ul,ol,li,p,span,h1,h2,h3,h4,h5,h6,dl,dt,dd,p {border: 0;margin: 0;padding: 0;list-style-type:none;font-weight:normal}
+.fz12,font,h2{ font-size:16px; font-weight:normal}
+h3,h4,h5 { font-weight:normal; font-size:14px;}
+
+a { outline:none;-moz-outline:none; color:#4a4a4a; cursor:pointer;}
+a:link {color:#343434;text-decoration: none}
+a:visited {color:#343434;text-decoration: none}
+a:active {color:#343434;text-decoration: none}
+a:hover { color:#ccc;text-decoration: none}
+img,input{ border:none}
+.tar { text-align:right}
+.tal { text-align:left}
+.tac { text-align:center}
+.ft {float:left}
+.fr {float:right}
+.clear{ clear:both;}
+.w100 { width:90%; margin:0 auto;}
+p { padding-bottom:10px}
+
+.head { padding:20px 0; background:#fff; overflow:hidden;}
+.head img { display:block; float:right; max-width:30%; height:auto; padding-left:30px}
+.head h1 { font-size:24px; color:#333; line-height:50px}
+.head h3 { font-size:20px; color:#999}
+
+.head ul li { text-align:center; float:left; width:33.3%; position:relative}
+.head ul li h4 { border-right:1px #eee solid; font-size:20px; line-height:40px;}
+.head ul li.nobr h4 { border:0 none; font-size:20px}
+.head ul li span { display:none}
+.head ul li.on { color:#FF5849}
+.head ul li.on span { display:block; height:3px; position:absolute; background:#FF5849; left:0; width:100%; bottom:-20px}
+
+@media all and (max-width:420px){
+.head { padding:15px 0}
+.head h1 { font-size:16px; line-height:20px; padding-bottom:5px}
+.head h3 { font-size:14px; }
+
+.head ul li h4 { font-size:16px; line-height:30px;}
+.head ul li.nobr h4 { font-size:16px}
+.head ul li.on span { bottom:-15px}
+}
+
+.heng { height:30px; border-bottom:1px #eee solid; border-top:1px #eee solid}
+@media all and (max-width:420px){
+.heng { height:20px}
+}
+
+.zxyd { padding-bottom:5px; background:#fff; overflow:hidden; text-align:center}
+
+.zxyd_li { height:60px; line-height:60px; color:#999999; font-size:24px}
+.zxyd h3 { float:left; width:25%; text-align:center; font-size:24px}
+.zxyd ul li { color:#FF8040; font-size:20px; border-top:1px #eee dashed; line-height:50px}
+.zxyd ul li h3 { color:#999999; font-size:20px;}
+
+@media all and (max-width:420px){
+.zxyd_li { height:50px; line-height:50px; color:#999999; font-size:16px}
+.zxyd h3 { font-size:16px}
+.zxyd ul li { font-size:14px; line-height:40px}
+.zxyd ul li h3 { font-size:14px;}
+}
+
+.cssz { background:#fff; line-height:80px; border-bottom:1px #eee solid;}
+.cssz.bt1 { border-top:1px #eee solid;}
+.cssz h3 { float:left; width:65px; font-size:20px}
+.cssz div { clear:both}
+.cssz .cs_rs { border-bottom:1px #eee solid;}
+.cssz .inp1 { background:#fff; border:0 none; width:70%; font-size:14px}
+.cssz .inp2 { background:#fff; border:0 none; width:70%; font-size:14px}
+
+@media all and (max-width:420px){
+.cssz { line-height:50px; }
+.cssz h3 { float:left; width:65px; font-size:16px}
+}
+
+.tjiao { width:90%; margin:0 auto; max-width:500px; padding-bottom:30px}
+.tjiao .inp_3 { background:#EF4F4F; color:#fff; font-family:"微软雅黑","MicrosoftYaHei","Microsoft YaHei","Arial"; display:block; width:100%; margin-top:30px; line-height:50px;  -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; font-size:24px;}
+
+@media all and (max-width:420px){
+.tjiao .inp_3 { font-size:18px; line-height:40px; cursor:pointer; margin-top:20px}
+}
+
+
+.gd { line-height:40px; padding-left:60px; background:url(../images/ico_1.jpg) left no-repeat #FFF9E2; height:40px; border-top:1px #eee solid;}
+
+@media all and (max-width:420px){
+.gd { height:30px; line-height:30px; background-size:auto 80%; padding-left:40px;}
+}
+
+.yuding_li { background:#fff; border-top:1px #eee solid; border-bottom:1px #eee solid; margin-top:30px; padding-bottom:20px}
+.yuding_li h2 { width:90%; margin:0 auto; line-height:60px; border-bottom:1px #eee solid; font-size:24px}
+.yuding_li h2 span { display:block; float:right; color:#999; font-size:20px}
+
+.yuding_li ul { width:90%; padding:10px 0; margin:0 auto}
+.yuding_li ul li { float:left; margin:10px; border:1px #ddd solid; padding:10px 20px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px}
+.yuding_li ul li.okat { border:1px #FF5040 solid}
+.yuding_li ul li.okat a { color:#FF5040}
+
+@media all and (max-width:420px){
+.yuding_li h2 { font-size:18px; line-height:50px}
+.yuding_li h2 span { font-size:14px}
+
+.yuding_li ul li { margin:5px; padding:5px 10px}
+}
+
+.yddd { background:#fff; border-bottom:1px #eee solid; border-top:1px #eee solid}
+.yddd ul li { text-align:right; font-size:24px; line-height:60px; color:#888; border-bottom:1px #eee solid}
+.yddd ul li h3 { font-size:24px; float:left; color:#333}
+.yddd ul li span { color:#FF5040} 
+.yddd ul li.nobr { border-bottom:0 none}
+
+@media all and (max-width:420px){
+.yddd ul li { line-height:50px; font-size:16px}
+.yddd ul li h3 { font-size:16px}
+}
+
+.yd_lx { width:90%; margin:0 auto; line-height:50px}
+@media all and (max-width:420px){
+.yd_lx { line-height:40px}
+}
+
+
+.beizhu { background:#fff; border-bottom:1px #eee solid; border-top:1px #eee solid; margin-top:30px; text-align:right; line-height:60px}
+.beizhu h3 { float:left; font-size:20px}
+.beizhu .inp_4 { width:60%; font-size:14px; font-family:"微软雅黑","MicrosoftYaHei","Microsoft YaHei","Arial"}
+@media all and (max-width:420px){
+.beizhu { margin-top:20px; line-height:50px}
+.beizhu h3 { font-size:18px}
+}
+
+.zhifu { background:#fff; border-bottom:1px #eee solid; border-top:1px #eee solid;}
+.zhifu ul li { float:left; width:25%; text-align:center; padding:30px 0; font-size:24px; line-height:30px}
+.zhifu ul li img { display:block; margin:0 auto; margin-bottom:5px}
+@media all and (max-width:420px){
+.zhifu ul li { font-size:16px}
+.zhifu ul li img { width:70%; height:auto}
+}
+
+.qidong { background:#fff; border-bottom:1px #eee solid; border-top:1px #eee solid; line-height:60px; height:60px; overflow:hidden}
+.qidong .w100 { position:relative}
+.qidong img { float:right; height:40px; width:auto; padding:5px}
+.qidong img.img_2 { position:absolute; right:0; top:0; display:none}
+.qidong h3 { font-size:20px; border-bottom:1px #eee solid}
+.qidong h4 { float:left; font-size:20px}
+.qidong .inp_5 { width:100px; text-align:right}
+
+.qidong.active { height:120px}
+
+@media all and (max-width:420px){
+.qidong { line-height:50px; height:50px;}
+.qidong h3 { font-size:16px}
+.qidong h4 { float:left; font-size:16px}
+
+.qidong.active { height:100px}
+}
+
+
+
+
+
+
+
+
+
+
+
+

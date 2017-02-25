@@ -1,0 +1,29 @@
+<div class="show_wind" style="display:none;z-index:1000;" id="show_{$item.id}">
+<div style="z-index:1002;top:15%;"  class="bg_fff ovhide pf w_percentage_70 bor_1 bdr5 l_percentage_15 rsorder_view_reason">
+	<div class="clearfix lh080">
+		<div  style="text-align: center;" class="f_l pl030 f_fe4d3d">{$item.name}</div><i class="icon iconfont f040 f_fe4d3d mr040 f_r rsorder_view_close_wind">&#xe671;</i>
+	</div> 
+	
+	<div class="bor_5 pb020">
+		<img src="{function name="get_spec_image" v=$item.image g=1}" style="width: 100%;">
+		<span style="color: #7f7f7f" class="f_l pl030 pt020">价格：</span><p class="h024 lh024 pt024"><span class="f_fe4d3d">{function name=format_price v=$item.price g=2}</span><span class="f_7f7f7f">/份</span></p>
+	</div>
+	<div class="p_017_030 w_b_s  w_b  bg_fff w_percentage_100  ">
+		<span style="line-height: 0.4rem;color: #7f7f7f">数量：</span>
+			<div class="menu_right" menu-id={$item.id}>
+					
+					 <div class="f_r" menu-id={$item.id} menu-count={$item.cart_count}>
+						
+					{if $item.cart_count gt 0}
+						<span class="f_l block w050 h050 tc bor_7 bdr3 lh040 {if $data.is_allow_add_cart eq 1}del_one{else}bg_ccc{/if}"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}f_dcdcdc{/if} f024">&#xe673;</i></span>
+						<span class="f_fe4d3d f_l block h044 w054 lh048 tc">{$item.cart_count}</span>
+					{/if}	
+						<span class="f_l block w050 h050 tc bor_7 bdr3 lh040 {if $data.is_allow_add_cart eq 1}add_one{else}bg_ccc{/if}"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}f_dcdcdc{/if} f024">&#xe674;</i></span>
+
+					</div>	
+			</div>
+	</div>
+</div>
+
+<div id='fade' class='black_overlay'></div>
+</div>

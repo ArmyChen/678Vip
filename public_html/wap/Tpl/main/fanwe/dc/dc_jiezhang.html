@@ -1,0 +1,179 @@
+<?php
+
+
+
+
+
+
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/dc/css/dc_style.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/dc/css/dc_location.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/weebox.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/fanweUI.css";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery-1.6.2.min.js";
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/login_panel.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/login_panel.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/dc/js/js_ext/script.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/dc/js/js_ext/TouchSlide.1.1.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/dc/js/js_ext/touchScroll.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/dc/js/js_ext/touchslider.dev.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/dc/js/page_js/fastclick.js";
+
+?>
+{include file="dc/inc/header.html"}
+{include file="dc/inc/dc_js_var.html"}
+<script type="text/javascript">
+function submitFun()
+{
+cart_form.submit();
+}
+</script>
+<form id="cart_form" action="{url r="index" p="dcorder#codejz" g="lid=$slid"}" method="post">
+<!----------------------------------------------------------资费详情-->
+
+
+<div class=" w_percentage_100  b_0 bg_e8e9ea " style="text-align: center">
+
+
+    {if $data.txt}
+    <div class="clearfix pl030 pr074 bor_5">
+        <h2 class="f029" style="line-height:1.5rem; text-align:center; font-size:.5rem; color:#f00">亲，您的桌台是&nbsp;{$data.txt}</h2>
+    </div>
+    {/if}
+    {if $data.realname}
+    <p class="clearfix lh100 f029  pl030 pr029">
+    <p class="">本次服务人员是
+        <span style=" color:#f00;font-size:0.29rem; border:none; margin:-1px 0 0 0;background:none">{$data.realname}</span>
+    </p>
+    {/if}
+
+     <p
+            class=" lh067 pb016 pr010 f_fe4d3d">合计：<i class="bold" id="zjesy"
+                                                                style="font-size:0.4rem; color:#f9803b">{function name=format_price v=$data.money_ys g=2}</i></p>
+
+
+        <a href="javascript:submitFun();" class="cart_done text-center bg_ffb955 f_fff f030"
+           style="line-height:1rem; height:1rem;padding: 0.1rem 2rem 0.1rem 2rem;border-radius:20px;">提交单</a>
+
+</p>
+
+<div class="bg_fff bor_3 bor_4 " style="border-top:none">
+   <input id="guandanid" type="hidden" name="guandanid" value="{$data.id}"/>   
+   <input type="hidden" name="slid" value="{$slid}"/>
+    </div>
+
+
+
+
+
+    <div class="blank024"></div>  
+        {if $data.detail}		
+		 {foreach from=$detail item=dc_promote}
+        <div class="bor_5 w_b p_0_030 mb-1 lh100">			
+            <div class="w_percentage_50">{$dc_promote.pname}</div>
+			<div>{$dc_promote.pnum}</div>
+            <div class="w_percentage_50 tr f_fe4d3d">单价：{function name=format_price v=$dc_promote.pmoney g=2}</div>
+        </div> {/foreach}   
+  {/if}
+    
+  <div class="blank124"></div>
+
+
+
+
+    </form>
+
+    <script>
+
+        function ssdel(vara) {
+
+
+            var cpid = vara.id;
+
+            var dj = document.getElementById("dj" + cpid);
+
+            var danjia = dj.innerHTML;
+
+            danjia = danjia.substring(danjia.length, danjia.length - danjia.length + 1);
+
+            var ul = document.getElementById("sd" + cpid);
+
+            var cs = Number(ul.innerHTML);
+
+            var cddj = Number(danjia) / Number(cs);//单个菜品价格
+
+            //	 		alert(cddj);
+
+            ul.innerHTML = cs - 1;
+
+            dj.innerHTML = "¥" + (cs - 1) * cddj;
+
+
+            var zjesy = document.getElementById("zjesy");
+
+            zjesy.innerHTML = "¥" + (cs - 1) * cddj;
+
+        }
+
+        function add(vara) {
+
+
+            var cpid = vara.id;
+
+            var dj = document.getElementById("dj" + cpid);
+
+            var danjia = dj.innerHTML;
+
+            danjia = danjia.substring(danjia.length, danjia.length - danjia.length + 1);
+
+            var ul = document.getElementById("sd" + cpid);
+
+            var cs = Number(ul.innerHTML);
+
+            var cddj = Number(danjia) / Number(cs);//单个菜品价格
+
+//	 			 		alert(cddj);
+
+            ul.innerHTML = cs + 1;
+
+            dj.innerHTML = "¥" + (cs + 1) * cddj;
+
+
+            var zjesy = document.getElementById("zjesy");
+
+            zjesy.innerHTML = "¥" + (cs + 1) * cddj;
+
+        }
+
+    </script>
+
+    </body></html>

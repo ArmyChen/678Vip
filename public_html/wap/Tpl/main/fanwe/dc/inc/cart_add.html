@@ -1,0 +1,25 @@
+<div class="f_r" menu-id={$item.id} menu-count={$item.cart_count}>
+
+	<!-- {if $item.cart_count gt 0}
+        <span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $data.is_allow_add_cart eq 1}del_one{else}bg_ccc{/if}" onclick="del(this)"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}f_dcdcdc{/if} f024 delicon">&#xe673;</i></span>
+        <span class="f_fe4d3d f_l block h044 w054 lh044 tc" cart-menuid="{$item.id}">{$item.cart_count}</span>
+    {/if}
+        <span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $data.is_allow_add_cart eq 1}add_one{else}bg_ccc{/if}" onclick="add(this)"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}f_dcdcdc{/if} f024 addicon">&#xe674;</i></span>
+     -->
+
+	<!--2017/2/22-->
+	<span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $data.is_allow_add_cart eq 1}del_one{else}{/if} {if $item.has_attrs eq 0}{if $item.cart_count lt 1}hide1{/if}{else}hide1{/if}" onclick="del(this)" del-menuid="{$item.id}"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 delicon">&#xe673;</i></span>
+
+	<span class="f_fe4d3d f_l block h044 w054 lh044 tc {if $item.has_attrs eq 0}{if $item.cart_count lt 1}hide1{/if}{else}hide1{/if}" cart-menuid="{$item.id}">{$item.cart_count}</span>
+	<span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $item.has_attrs eq 0}{if $data.is_allow_add_cart eq 1}add_one{else}{/if}{else}hide1{/if}" onclick="add(this)"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 addicon">&#xe674;</i></span>
+	<span class="f_l block w160 h040 tc bor_7 bdr8 lh034 {if $item.has_attrs eq 1}{else}hide1{/if}" onclick="show(this)"><span class="counter-num special-count" style="float: right">{$item.cart_count}</span><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 addicon" style="margin-left:14px">商品选项</i></span>
+
+	<!--以前的-->
+	<!--<span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $data.is_allow_add_cart eq 1}del_one{else}{/if} {if $item.cart_count lt 1}hide1{/if}" onclick="del(this)" del-menuid="{$item.id}"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 delicon">&#xe673;</i></span>-->
+
+	<!--<span class="f_fe4d3d f_l block h044 w054 lh044 tc {if $item.cart_count lt 1}hide1{/if}" cart-menuid="{$item.id}">{$item.cart_count}</span>-->
+	<!--<span class="f_l block w040 h040 tc bor_7 bdr3 lh034 {if $data.is_allow_add_cart eq 1}add_one{else}{/if}" onclick="add(this)"><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 addicon">&#xe674;</i></span>-->
+	<!--<span class="f_l block w160 h040 tc bor_7 bdr8 lh034 show hide1" onclick="show(this)"><span class="counter-num special-count" style="float: right">1</span><i class="icon iconfont {if $data.is_allow_add_cart eq 1}f_fe4d3d{else}{/if} f024 addicon" style="margin-left:14px">商品选项</i></span>-->
+
+</div>	
+	
