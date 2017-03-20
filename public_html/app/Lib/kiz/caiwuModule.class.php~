@@ -1,0 +1,481 @@
+<?php 
+ini_set('date.timezone','Asia/Shanghai');
+/**
+ * 订单记录
+ */
+require APP_ROOT_PATH.'app/Lib/page.php';
+require_once APP_ROOT_PATH."system/model/user.php";
+class caiwuModule extends BizBaseModule
+{
+    
+	function __construct()
+	{
+        parent::__construct();
+        global_run();
+        $this->check_auth();
+    }
+		
+    public function index()	{
+	init_app_page();
+	    $zffsarr=json_decode(ZFFSLIST,true); //解析支付方式
+		$s_account_info = $GLOBALS["account_info"];		
+		$supplier_id = intval($s_account_info['supplier_id']);
+		//var_dump($s_account_info['location_ids']);
+		$slid=$s_account_info['slid'];
+		$s_account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+	    if ($s_account_info['is_main']=='1'){
+		$slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+    	$s_account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));	
+		}	
+		
+		
+		// 执行统计程序 此函数在common.php里
+		stat_do_day($supplier_id);
+		//OVER
+		$action=$_REQUEST['action'];
+		
+		$mid=$_REQUEST['id'];
+		
+		
+	    $uname = strim($_REQUEST['uname']);
+	    $type = intval($_REQUEST['type']);
+		
+		
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+		$begin_time = strim($_REQUEST['begin_time']);
+		$end_time = strim($_REQUEST['end_time']);	
+		}else{	 //默认为当天的时间		
+		
+        $start=date("Y-m-d", strtotime('-30 day'));			
+        $startstr=strtotime($start);
+        $startend=strtotime($start)+31*24*3600-1;
+        $begin_time=date("Y-m-d H:i:s",$startstr); 
+        $end_time=date("Y-m-d H:i:s",$startend); 
+        }	
+        		
+		$begin_time_s = to_timespan($begin_time,"Y-m-d H:i:s");
+		$end_time_s = to_timespan($end_time,"Y-m-d H:i:s");
+		
+		$sqlstr="WHERE a.shoukuanfang=0 ";
+		if($mid!=""){
+		//$sqlstr = "WHERE a.shoukuanfang=0 and a.dpid =  '".$mid."'";
+		$sqlstr .= "and a.mid =  '".$mid."'";
+		$sqlstrlogo = "WHERE location_id =  '".$mid."'";
+		}else{
+		$sqlstr .= " and a.mid=".$slid;
+		//$sqlstrlogo = "WHERE location_id in (".implode(",",$s_account_info['location_ids']).")";
+		$sqlstrlogo = "WHERE location_id=".$slid;
+		}
+		if($begin_time){
+			$sqlstr .=" and a.otime > '".$begin_time_s."'";
+			$sqlstrlogo .=" and create_time > '".$begin_time_s."'";
+			}
+		if($end_time){
+			$sqlstr .=" and a.otime < '".$end_time_s."'";
+			$sqlstrlogo .=" and create_time < '".$end_time_s."'";
+			}
+		if($type){
+		$showlogsql =" and type=".$type;	
+		}
+	   	
+		$GLOBALS['tmpl']->assign("begin_time",$begin_time);
+		$GLOBALS['tmpl']->assign("end_time",$end_time);
+		$GLOBALS['tmpl']->assign("slid",$mid);
+		$GLOBALS['tmpl']->assign("begin_time",$begin_time);
+		$GLOBALS['tmpl']->assign("end_time",$end_time);
+		$GLOBALS['tmpl']->assign("uname_str",$uname_str);
+		//echo "hdkfd";
+		//echo $zhifustatus_str;
+				
+	//分页
+	    $page_size = 50;
+	    $page = intval($_REQUEST['p']);
+	    if($page==0) $page = 1;
+	    $limit = (($page-1)*$page_size).",".$page_size;
+	     // echo $limit; 
+		
+	    $listdata=array();//定义要去模板的变量
+	    /*
+		$sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_alipay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+        $alipaylist = $GLOBALS['db']->getAll($sql);
+		
+		  foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['alipay']=round($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['ralipay']=round($v['money'],2);} //退款
+	     }
+		 $listdata['alipay_name']=$zffsarr['alipay'];	
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_weixin_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['weixipay']=round($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rweixipay']=round($v['money'],2);} //退款
+	     }
+		 $listdata['weixipay_name']=$zffsarr['weixipay'];	
+		 
+		
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_bestpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['bestpay']=round($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rbestpay']=round($v['money'],2);} //退款
+	     }
+		 $listdata['bestpay_name']=$zffsarr['bestpay'];	
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_jdpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['jdpay']=round($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rjdpay']=round($v['money'],2);} //退款
+	     }
+		 $listdata['jdpay_name']=$zffsarr['jdpay'];	
+		 
+		$sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_qqpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['qqpay']=round($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rqqpay']=round($v['money'],2);} //退款
+	     }
+		 $listdata['qqpay_name']=$zffsarr['qqpay'];	
+		 
+		
+		$listdata['zsy']=$listdata['alipay']+$listdata['weixipay']+$listdata['bestpay']+$listdata['jdpay']+$listdata['qqpay'];
+		
+				
+		$listdata['ztk']=$listdata['ralipay']+$listdata['rweixipay']+$listdata['rbestpay']+$listdata['rjdpay']+$listdata['rqqpay'];  //TK
+		$listdata['xse']=$listdata['zsy']+$listdata['ztk'];  //三种支付方式收到的款
+		
+		*/
+		//收款SQL
+		$sql="SELECT sum(a.cmoney) as money,a.zhifustatus,a.zffs FROM orders_pay a ".$sqlstr." and a.zhifustatus=1 group by a.zffs order by a.zhifustatus ASC ";
+		//echo $sql;
+		//退款SQL
+		$tsql="SELECT sum(a.cmoney) as money,a.zhifustatus,a.zffs FROM orders_pay a ".$sqlstr." and a.zhifustatus=9 group by a.zffs order by a.zhifustatus ASC ";
+        
+		//echo $tsql;
+		
+		
+		$shoukuan_data = $GLOBALS['db']->getAll($sql);
+		//var_dump($shoukuan_data);
+        $tuikuan_data = $GLOBALS['db']->getAll($tsql);
+		
+		foreach($shoukuan_data as $k=>$v){		  
+		$listdata[$v['zffs']]=round($v['money'],2);
+		$listdata[$v['zffs'].'_name']=$zffsarr[$v['zffs']];
+        $listdata['zsy']=$listdata['zsy']+$listdata[$v['zffs']];
+	    }
+		foreach($tuikuan_data as $k=>$v){		  
+		$listdata['r'.$v['zffs']]=round($v['money'],2);	
+		$listdata['ztk']=$listdata['ztk']+$listdata['r'.$v['zffs']];
+	    }
+		$listdata['xse']=$listdata['zsy']+$listdata['ztk'];  //三种支付方式收到的款
+			
+		
+		
+		
+		
+		 $sql="SELECT sum(money) as money,type FROM fanwe_location_money_log ".$sqlstrlogo." group by type";
+		// echo $sql;
+		 $total_pay = $GLOBALS['db']->getAll($sql);
+		//var_dump($total_pay);
+		 foreach($total_pay as $k=>$v){
+			$totaljz_hadpay[$v['type']]=$v['money'];			 
+		 }
+		// var_dump($totaljz_hadpay);
+		 
+		 $listdata['zsy']=$listdata['zsy']+$totaljz_hadpay['4'];
+		 $listdata['hadpay']=$totaljz_hadpay['5']+$totaljz_hadpay['6']+$totaljz_hadpay['7']; //已经打款		 	 
+		 $listdata['nopay']=$listdata['zsy']-$listdata['hadpay']; //未打款金额
+		 
+	   	$GLOBALS['tmpl']->assign("totaljz_hadpay",$totaljz_hadpay); //输出 
+		
+	
+		foreach ($listdata as $k=>$v)
+		{
+ 		   $o.= "$k=".urlencode($v)."&";
+		}
+		$postdata=substr($o,0,-1);
+		 $postdata='/biz.php?ctl=ofc&act=caiwu&r'.NOW_TIME.'&'.$postdata;
+		
+		
+		if ($action=="excel"){
+	    $sql="SELECT a.* FROM fanwe_jiaojieban_log a  ".$sqlstr;
+		}
+	   // echo $sql;
+		$sql_count="SELECT count(id) FROM fanwe_location_money_log ".$sqlstrlogo.$showlogsql ;
+		$sql="SELECT * FROM fanwe_location_money_log ".$sqlstrlogo.$showlogsql." order by id desc limit ".$limit;;
+		$list = $GLOBALS['db']->getAll($sql);
+		foreach($list as $k=>$v){
+			$list[$k]['create_time']=date("Y-m-d H:i:s",$v['create_time']);
+			$list[$k]['log_info']=substr($v['log_info'],0,150);
+			if ($v['type']==5 or $v['type']==6 or $v['type']==7){
+			$list[$k]['fangxiang']=	"-";			
+			}
+			if ($v['type']==4){
+			$list[$k]['fangxiang']=	"+";			
+			}
+			if($v['type']==4){
+			$list[$k]['typeshow']="主·结转入款";	
+			}elseif($v['type']==5){
+			$list[$k]['typeshow']="打款记录";	
+			}elseif($v['type']==6){
+			$list[$k]['typeshow']="结转线上";	
+			}elseif($v['type']==7){
+			$list[$k]['typeshow']="子·结转出款";	
+			}
+		}
+		
+		
+		
+	    $total = $GLOBALS['db']->getOne($sql_count);
+	    $page = new Page($total,$page_size);   //初始化分页对象
+	    $p  =  $page->show();
+		 
+		 
+		
+		
+		
+	    $GLOBALS['tmpl']->assign('pages',$p);
+	    $GLOBALS['tmpl']->assign('NOW_TIME',NOW_TIME);
+
+
+	    $GLOBALS['tmpl']->assign("listdata",$listdata);
+	    $GLOBALS['tmpl']->assign("type",$type);
+	    $GLOBALS['tmpl']->assign("list",$list);
+	    $GLOBALS['tmpl']->assign("rlist",$rlist);
+	    $GLOBALS['tmpl']->assign("ofc_data_url",urlencode($postdata));
+		
+		$GLOBALS['tmpl']->assign("ORDER_DELIVERY_EXPIRE",ORDER_DELIVERY_EXPIRE);
+		$GLOBALS['tmpl']->assign("head_title","财务结算");
+		$GLOBALS['tmpl']->assign("classr"," class='curr' ");
+		$GLOBALS['tmpl']->display("pages/goodsales/caiwu.html");
+		
+	}
+	
+	public function exchange()	{
+	init_app_page();
+	    $zffsarr=json_decode(ZFFSLIST,true); //解析支付方式
+		$s_account_info = $GLOBALS["account_info"];
+		$action=$_REQUEST['action'];
+		$supplier_id = intval($s_account_info['supplier_id']);
+		$mid=$_REQUEST['id'];
+		
+		
+	    $uname = strim($_REQUEST['uname']);
+	    $type = intval($_REQUEST['type']);
+		
+		
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+		$begin_time = strim($_REQUEST['begin_time']);
+		$end_time = strim($_REQUEST['end_time']);	
+		}else{	 //默认为当天的时间		
+		
+        $start=date("Y-m-d", strtotime('-30 day'));			
+        $startstr=strtotime($start);
+        $startend=strtotime($start)+31*24*3600-1;
+        $begin_time=date("Y-m-d H:i:s",$startstr); 
+        $end_time=date("Y-m-d H:i:s",$startend); 
+        }	
+        		
+		$begin_time_s = to_timespan($begin_time,"Y-m-d H:i:s");
+		$end_time_s = to_timespan($end_time,"Y-m-d H:i:s");
+		
+		
+		$sqlstr="WHERE a.shoukuanfang=0 ";
+		if($mid!=""){
+		//$sqlstr = "WHERE a.shoukuanfang=0 and a.dpid =  '".$mid."'";
+		$sqlstr = "and a.mid =  '".$mid."'";
+		$sqlstrlogo = "WHERE location_id =  '".$mid."'";
+		}else{
+		$sqlstr .= " and a.mid in (".implode(",",$s_account_info['location_ids']).")";
+		$sqlstrlogo = "WHERE location_id in (".implode(",",$s_account_info['location_ids']).")";
+		}
+		if($begin_time){
+			$sqlstr .=" and a.otime > '".$begin_time_s."'";
+			$sqlstrlogo .=" and create_time > '".$begin_time_s."'";
+			}
+		if($end_time){
+			$sqlstr .=" and a.otime < '".$end_time_s."'";
+			$sqlstrlogo .=" and create_time < '".$end_time_s."'";
+			}
+		if($type){
+		$showlogsql =" and type=".$type;	
+		}
+		
+	   	
+		$GLOBALS['tmpl']->assign("begin_time",$begin_time);
+		$GLOBALS['tmpl']->assign("end_time",$end_time);
+		$GLOBALS['tmpl']->assign("slid",$mid);
+		$GLOBALS['tmpl']->assign("begin_time",$begin_time);
+		$GLOBALS['tmpl']->assign("end_time",$end_time);
+		$GLOBALS['tmpl']->assign("uname_str",$uname_str);
+		//echo "hdkfd";
+		//echo $zhifustatus_str;
+				
+		
+	    $listdata=array();//定义要去模板的变量
+	     /*
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_alipay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+        $alipaylist = $GLOBALS['db']->getAll($sql);
+		  foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['alipay']=number_format($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['ralipay']=number_format($v['money'],2);} //退款
+	     }
+		 $listdata['alipay_name']=$zffsarr['alipay'];	
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_weixin_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['weixipay']=number_format($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rweixipay']=number_format($v['money'],2);} //退款
+	     }
+		 $listdata['weixipay_name']=$zffsarr['weixipay'];	
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_bestpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['bestpay']=number_format($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rbestpay']=number_format($v['money'],2);} //退款
+	     }
+		 $listdata['bestpay_name']=$zffsarr['bestpay'];	
+		 
+		 $sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_jdpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['jdpay']=number_format($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rjdpay']=number_format($v['money'],2);} //退款
+	     }
+		 $listdata['jdpay_name']=$zffsarr['jdpay'];	
+		 
+		$sql="SELECT sum(a.pay_money) as money,a.pay_state FROM fanwe_shoukuan_qqpay_log a ".$sqlstr." group by a.pay_state order by a.pay_state DESC ";
+		 $alipaylist = $GLOBALS['db']->getAll($sql);
+		 
+		 foreach($alipaylist as $k=>$v){
+		  if ($v['pay_state']==1){$listdata['qqpay']=number_format($v['money'],2);} //收到的款
+		  if ($v['pay_state']==0){$listdata['rqqpay']=number_format($v['money'],2);} //退款
+	     }
+		 $listdata['qqpay_name']=$zffsarr['qqpay'];	
+		 
+		
+		$listdata['zsy']=$listdata['alipay']+$listdata['weixipay']+$listdata['bestpay']+$listdata['jdpay']+$listdata['qqpay'];
+		$listdata['ztk']=$listdata['ralipay']+$listdata['rweixipay']+$listdata['rbestpay']+$listdata['rjdpay']+$listdata['rqqpay'];  //TK
+		$listdata['xse']=$listdata['zsy']+$listdata['ztk'];  //三种支付方式收到的款
+		*/
+		
+		//收款SQL
+		$sql="SELECT sum(a.cmoney) as money,a.zhifustatus,a.zffs FROM orders_pay a ".$sqlstr." and a.zhifustatus=1 group by a.zffs order by a.zhifustatus ASC ";
+		//退款SQL
+		$tsql="SELECT sum(a.cmoney) as money,a.zhifustatus,a.zffs FROM orders_pay a ".$sqlstr." and a.zhifustatus=9 group by a.zffs order by a.zhifustatus ASC ";
+        $shoukuan_data = $GLOBALS['db']->getAll($sql);
+        $tuikuan_data = $GLOBALS['db']->getAll($tsql);
+		
+		foreach($shoukuan_data as $k=>$v){		  
+		$listdata[$v['zffs']]=round($v['money'],2);
+		$listdata[$v['zffs'].'_name']=$zffsarr[$v['zffs']];
+        $listdata['zsy']=$listdata['zsy']+$listdata[$v['zffs']];
+	    }
+		foreach($tuikuan_data as $k=>$v){		  
+		$listdata['r'.$v['zffs']]=round($v['money'],2);	
+		$listdata['ztk']=$listdata['ztk']+$listdata['r'.$v['zffs']];
+	    }
+		$listdata['xse']=$listdata['zsy']+$listdata['ztk'];  //三种支付方式收到的款
+		
+		
+		
+		
+		 $sql="SELECT sum(money) as money,type FROM fanwe_location_money_log ".$sqlstrlogo." group by type";
+		 $total_pay = $GLOBALS['db']->getAll($sql);
+		//var_dump($total_pay);
+		 foreach($total_pay as $k=>$v){
+			$totaljz_hadpay[$v['type']]=$v['money'];			 
+		 }
+		 //var_dump($totaljz_hadpay);
+		 $listdata['hadpay']=$totaljz_hadpay['5']+$totaljz_hadpay['6']; //已经打款		 	 
+		 $listdata['nopay']=$listdata['zsy']-$listdata['hadpay']; //未打款金额
+	     $GLOBALS['tmpl']->assign("totaljz_hadpay",$totaljz_hadpay); //输出 
+		
+			
+				
+		
+		
+	    
+	    $GLOBALS['tmpl']->assign('NOW_TIME',NOW_TIME);
+
+	    $GLOBALS['tmpl']->assign("listdata",$listdata);
+	    $GLOBALS['tmpl']->assign("type",$type);
+	    $GLOBALS['tmpl']->assign("list",$list);
+	    $GLOBALS['tmpl']->assign("rlist",$rlist);
+	    $GLOBALS['tmpl']->assign("ofc_data_url",urlencode($postdata));
+		
+		$GLOBALS['tmpl']->assign("ORDER_DELIVERY_EXPIRE",ORDER_DELIVERY_EXPIRE);
+		$GLOBALS['tmpl']->assign("head_title","结转线上");
+		$GLOBALS['tmpl']->display("pages/goodsales/exchange.html");
+		
+	}
+	public function save()	{
+	init_app_page();
+	$account_info = $GLOBALS['account_info'];
+	$slid=$account_info['slid'];		
+	$account_name=$account_info['account_name'];	
+	$supplier_id=$account_info['supplier_id'];	
+	
+	$nopay=intval($_REQUEST['nopay']);
+	$jiezhuan=intval($_REQUEST['jiezhuan']);
+	if($jiezhuan==0){
+	 showBizErr("结转金额不能为0",0,url("biz","caiwu#exchange"));
+	 }
+	 if($jiezhuan>$nopay){
+	 showBizErr("结转超限额了",0,url("biz","caiwu#exchange"));
+	 }
+	        
+			$data=array();
+			$data['log_info']="结转线上：".$account_name."申请结转线上：".format_price($jiezhuan)."元。";
+			$data['location_id']=$slid;
+			$data['create_time']=NOW_TIME;
+			$data['money']=$jiezhuan;
+			$data['type']=6;          
+			$loging=$GLOBALS['db']->autoExecute(DB_PREFIX."location_money_log",$data);	
+			
+			//$acting=$GLOBALS['db']->query("update ".DB_PREFIX."supplier_location set money=money+$jiezhuan where id=".$slid);
+			require_once APP_ROOT_PATH."system/model/supplier.php";
+			modify_supplier_account($jiezhuan,$supplier_id,3,$data['log_info'],$slid);
+			if ($loging){
+			showBizSuccess("结转成功！",0,url("biz","caiwu#index"));		
+			}
+	
+	
+	}
+	
+	/*
+	public function update_jie(){
+		$s_account_info = $GLOBALS["account_info"];
+		$action=$_REQUEST['action'];
+		$supplier_id = intval($s_account_info['supplier_id']);
+		$begin=$_REQUEST['id1'];
+		$end=$_REQUEST['id2'];
+		$list=$GLOBALS['db']->getAll("select id,supplier_id from fanwe_supplier_location where id<$end and id>$begin");
+		
+		foreach($list as $k=>$v){
+			
+		// 执行统计程序 此函数在common.php里
+		stat_do_day($v['supplier_id'],$v['id']);
+		echo "over".$k."<br>";
+		ob_flush();
+        flush();
+		//OVER	
+		}
+		echo "over:ing";
+	}
+	*/
+	
+	
+}
+?>

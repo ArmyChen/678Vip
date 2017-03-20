@@ -1,0 +1,1151 @@
+<?php
+
+require APP_ROOT_PATH . 'app/Lib/page.php';
+
+function werror()
+{
+}
+function wsuccess()
+{
+}
+
+class orderModule extends BizBaseModule{
+    function __construct()
+    {
+
+        parent::__construct();
+
+        global_run();
+
+        //$this->check_auth();
+
+    }
+	
+	public function index()
+	{
+		init_app_page();
+	   	$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		$peisong_center=$GLOBALS['db']->getOne("select peisong_center from fanwe_supplier_account where supplier_id=".$supplier_id." and is_main=1");
+		$peisong=unserialize($peisong_center);
+		
+		
+		$peisong_list= $GLOBALS['db']->getAll("select id,name,address,tel,preview from fanwe_supplier_location where id in (" . implode(",", $peisong) . ")");
+		$id = intval($_REQUEST['id']);
+		$GLOBALS['tmpl']->assign("slid", $id);		
+		$GLOBALS['tmpl']->assign("list", $peisong_list);
+		$GLOBALS['tmpl']->display("pages/order/index.html");
+		
+		//$this->project();
+	}
+	public function project()
+	{
+        init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		/*获取参数*/
+		$buyer_slid = intval($_REQUEST['id']);   //本地门店ID
+		$seller_slid = intval($_REQUEST['peisong']);   //配送中心ID
+		if ($seller_slid==$buyer_slid ){
+		showBizErr("未选择配送中心!",0,url("biz","order#index&id=$buyer_slid"));		
+		}
+		if (!$seller_slid){
+		showBizErr("未选择配送中心!",0,url("biz","order#index&id=$buyer_slid"));		
+		}
+		
+		$account_info = $GLOBALS['account_info'];
+        if($buyer_slid==0){
+		$buyer_slid=end($account_info['location_ids']);
+		}
+	
+		$conditions .= " where 1=1"; // 查询条件
+		$conditions .= " and location_id=".$seller_slid;
+          
+		if ($_REQUEST['name'] != ""){
+		$bname=strim($_REQUEST['name']);
+		$conditions .=" and (name like '%".$bname."%' or barcode like '".$bname."')";	
+		}
+		if ($_REQUEST['cate_id'] != ""){
+		$cate_id=intval($_REQUEST['cate_id']);
+		$conditions .=" and (cate_id = $cate_id )";			
+		}
+		
+		//分类
+		$sortconditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+		$sortconditions .= " and location_id=".$seller_slid;
+		$sqlsort = " select id,name,is_effect,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+		$sqlsort.=$sortconditions. " order by sort desc";
+
+		$listsort = array();		
+		$wsublist = array();
+		$wmenulist = $GLOBALS['db']->getAll($sqlsort);
+		
+		foreach($wmenulist as $wmenu)
+		{
+			if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+		}
+		foreach($wmenulist as $wmenu0)
+		{
+			if($wmenu0['wcategory'] == '0')
+			{
+				$listsort[] = $wmenu0;
+				
+				foreach($wsublist[$wmenu0['id']] as $wmenu1)
+				{
+					$listsort[] = $wmenu1;
+					foreach($wsublist[$wmenu1['id']] as $wmenu2)
+					{
+						$listsort[] = $wmenu2;
+						foreach($wsublist[$wmenu2['id']] as $wmenu3)
+						{
+							$listsort[] = $wmenu3;
+						}
+					}
+				}
+			}
+		}
+         
+		$GLOBALS['tmpl']->assign("sortlist", $listsort);
+		$GLOBALS['tmpl']->assign("cate_id", $cate_id);
+		
+		
+		
+		$sql_count = " select count(id) from " . DB_PREFIX . "dc_menu";
+		$sql = " select id,name,is_effect,cate_id,price,image,yujingtishi,stock,unit,funit,times,barcode from " . DB_PREFIX . "dc_menu ";
+
+		$page_size = 10;
+		$page = intval($_REQUEST['p']);
+		if ($page == 0)
+			$page = 1;
+		$limit = (($page - 1) * $page_size) . "," . $page_size;
+
+		$total = $GLOBALS['db']->getOne($sql_count.$conditions);
+		$page = new Page($total, $page_size); // 初始化分页对象
+		$p = $page->show();
+		$GLOBALS['tmpl']->assign('pages', $p);
+
+       
+		$list = $GLOBALS['db']->getAll($sql.$conditions . " limit " . $limit);
+
+		//获取菜单分类
+		$menu_cate_list = $GLOBALS['db']->getAll("select id,name from ".DB_PREFIX."dc_supplier_menu_cate where location_id=".$seller_slid." and supplier_id = ".$supplier_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
+		foreach ($menu_cate_list as $k=>$v){
+			$f_menu_cate_list[$v['id']] =  $v['name'];
+		}
+
+		foreach ($list as $k=>$v){
+			$list[$k]['cate_name'] = $f_menu_cate_list[$v['cate_id']]?$f_menu_cate_list[$v['cate_id']]:"暂无";
+		}
+
+        $order_cart=$GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."dinghuo_cache where seller_slid=$seller_slid and buyer_slid=$buyer_slid");
+		/* 数据 */
+		$GLOBALS['tmpl']->assign("order_cart", $order_cart);
+		$GLOBALS['tmpl']->assign("location_id", $buyer_slid);
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("ajax_url", url("biz","dc"));
+		$GLOBALS['tmpl']->assign("seller_slid", $seller_slid);
+
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("page_title", "配送中心商品页面");
+		$GLOBALS['tmpl']->display("pages/order/menu_index.html");
+    
+	}
+	
+	public function my_cart()
+	{
+        init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		
+		/*获取参数*/
+		$buyer_slid = intval($_REQUEST['buyer_slid']);   //本地门店ID
+		$seller_slid = intval($_REQUEST['seller_slid']);   //配送中心ID
+
+        if($buyer_slid==0){
+		$buyer_slid=end($account_info['location_ids']);
+		}
+	
+		$conditions .= " where 1=1"; // 查询条件
+		$conditions .= " and seller_slid=".$seller_slid;
+		$conditions .= " and buyer_slid=".$buyer_slid;
+		
+        if ($_REQUEST['name'] != ""){
+		$mname=strim($_REQUEST['name']);
+		$conditions .=" and (mname like '%".$mname."%' or barcode like '".$mname."')";	
+		}
+		
+			
+		$sql_count = " select count(id) from " . DB_PREFIX . "dinghuo_cache".$conditions;
+		$sql = " select * from " . DB_PREFIX . "dinghuo_cache ".$conditions;
+      
+		$page_size = 50;
+		$page = intval($_REQUEST['p']);
+		if ($page == 0)
+			$page = 1;
+		$limit = (($page - 1) * $page_size) . "," . $page_size;
+
+		$total = $GLOBALS['db']->getOne($sql_count);
+		$page = new Page($total, $page_size); // 初始化分页对象
+		$p = $page->show();
+		$GLOBALS['tmpl']->assign('pages', $p);      
+		$list = $GLOBALS['db']->getAll($sql. " limit " . $limit);
+	    foreach($list as $k=>$v){
+			if($v['unit_type']==1){
+			$list[$k]['dinghuodanwei']=$v['funit'];			
+			}else{
+			$list[$k]['dinghuodanwei']=$v['unit'];		
+			}
+		}
+
+        /* 数据 */
+		$GLOBALS['tmpl']->assign("order_cart", $order_cart);
+		
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("ajax_url", url("biz","dc"));
+		$GLOBALS['tmpl']->assign("seller_slid", $seller_slid);
+		$GLOBALS['tmpl']->assign("buyer_slid", $buyer_slid);
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("page_title", "我的订货车");
+		$GLOBALS['tmpl']->display("pages/order/my_cart.html");
+    
+	}
+	
+	
+	
+	public function cart()
+	{
+	init_app_page();
+	$menu_id = intval($_REQUEST['menu_id']);   //菜单菜单ID
+	$unit_type = intval($_REQUEST['unit_type']);   //菜单菜单ID
+	$buyer_slid = intval($_REQUEST['buyer_slid']);   //菜单菜单ID
+	$seller_slid = intval($_REQUEST['seller_slid']);   //菜单菜单ID
+	if($unit_type==9){$unit_type==0;}
+	$datain=$_REQUEST;
+	$datain['ctime']=to_date(NOW_TIME);
+	$sqlstr="where buyer_slid=$buyer_slid  and seller_slid=$seller_slid and unit_type=$unit_type and menu_id=".$menu_id;	
+	$check=$GLOBALS['db']->getRow("select * from fanwe_dinghuo_cache ".$sqlstr);
+	
+	if($check){
+		//存在的话更新数量
+		$order_num=intval($_REQUEST['num']);
+		$unit_type=intval($_REQUEST['unit_type']);		
+		$yuan_stock=$GLOBALS['db']->getOne("select stock from ".DB_PREFIX."dc_menu where id=".$menu_id);
+		if ($unit_type==1){
+			$funit_stock=$yuan_stock/$_REQUEST['times'];
+			$order_num=$order_num+$check['num']; 
+			if($funit_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;		 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."dinghuo_cache set num=$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+			}
+		}else{
+			$order_num=$order_num+$check['num']; 
+			if($yuan_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;				 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."dinghuo_cache set num=$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+			}
+		}		
+	}else{
+		//添加 
+		$res=$GLOBALS['db']->autoExecute(DB_PREFIX."dinghuo_cache", $datain ,"INSERT");
+	}
+	    if($res){
+		 echo '{"status":"success","msg":"加入成功"}';
+		}else{
+		 echo '{"status":"fail","msg":"加入失败"}';	
+		}
+	
+	}
+	
+	public function edit_cart()
+	{
+	init_app_page();
+	$cache_id = intval($_REQUEST['cache_id']);   //菜单菜单ID
+	$type = intval($_REQUEST['type']);   //0 减  1 加
+	
+	$check=$GLOBALS['db']->getRow("select * from fanwe_dinghuo_cache where id=".$cache_id);
+	
+	if($check){
+		    if ($type==0){
+			$order_num=$check['num']-1; 	
+			}else{
+			$order_num=$check['num']+1;	
+			}
+			$order_money=$order_num*$check['price'];
+		if ($order_num==0){
+		echo '{"status":"fail","msg":"编辑过程中订购数量不能为0，如需删除请选择删除功能！"}';	
+		exit;		
+		}
+		//存在的话更新数量
+		$unit_type=intval($check['unit_type']);		
+		$yuan_stock=$GLOBALS['db']->getOne("select stock from ".DB_PREFIX."dc_menu where id=".$check['menu_id']);
+		if ($unit_type==1){
+			$funit_stock=$yuan_stock/$check['times'];
+			
+			
+			if($funit_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;		 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."dinghuo_cache set money=$order_money,num=$order_num,ctime='".to_date(NOW_TIME)."' where id=".$cache_id);
+			}
+		}else{
+			
+			if($yuan_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;				 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."dinghuo_cache set money=$order_money,num=$order_num,ctime='".to_date(NOW_TIME)."' where id=".$cache_id);
+			}
+		}
+
+        if($res){
+		 echo '{"status":"success","msg":"成功","order_num":'.$order_num.'}';
+		}else{
+		 echo '{"status":"fail","msg":"数据操作失败"}';	
+		}
+		
+	}else{
+		echo '{"status":"fail","msg":"数据错误"}';	
+	}
+	
+	    
+	
+	}
+	
+	public function edit_diaohuo_cart()
+	{
+	init_app_page();
+	$cache_id = intval($_REQUEST['cache_id']);   //菜单菜单ID
+	$type = intval($_REQUEST['type']);   //0 减  1 加
+	
+	$check=$GLOBALS['db']->getRow("select * from fanwe_diaohuo_cache where id=".$cache_id);
+	
+	if($check){
+		    if ($type==0){
+			$order_num=$check['num']-1; 	
+			}else{
+			$order_num=$check['num']+1;	
+			}
+			$order_money=$order_num*$check['price'];
+		if ($order_num==0){
+		echo '{"status":"fail","msg":"编辑过程中订购数量不能为0，如需删除请选择删除功能！"}';	
+		exit;		
+		}
+		//存在的话更新数量
+		$unit_type=intval($check['unit_type']);		
+		$yuan_stock=$GLOBALS['db']->getOne("select stock from ".DB_PREFIX."dc_menu where id=".$check['menu_id']);
+		if ($unit_type==1){
+			$funit_stock=$yuan_stock/$check['times'];
+			
+			
+			if($funit_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;		 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."diaohuo_cache set money=$order_money,num=$order_num,ctime='".to_date(NOW_TIME)."' where id=".$cache_id);
+			}
+		}else{
+			
+			if($yuan_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;				 
+			}else{
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."diaohuo_cache set money=$order_money,num=$order_num,ctime='".to_date(NOW_TIME)."' where id=".$cache_id);
+			}
+		}
+
+        if($res){
+		 echo '{"status":"success","msg":"成功","order_num":'.$order_num.'}';
+		}else{
+		 echo '{"status":"fail","msg":"数据操作失败"}';	
+		}
+		
+	}else{
+		echo '{"status":"fail","msg":"数据错误"}';	
+	}
+	
+	    
+	
+	}
+	
+	
+	public function del_cart()
+	{
+	init_app_page();
+	
+	$cache_id = intval($_REQUEST['cache_id']);   //菜单菜单ID
+	$GLOBALS['db']->query("delete from fanwe_dinghuo_cache where id=".$cache_id);
+	echo '{"status":"success","msg":"成功"}';
+	}
+	
+		
+	public function del_diaohuo_cart()
+	{
+	init_app_page();
+	
+	$cache_id = intval($_REQUEST['cache_id']);   //菜单菜单ID
+	$GLOBALS['db']->query("delete from fanwe_diaohuo_cache where id=".$cache_id);
+	echo '{"status":"success","msg":"成功"}';
+	}
+	
+	
+	
+	public function op_order()
+	{
+	init_app_page();
+	$account_info = $GLOBALS['account_info'];
+	$supplier_id = $account_info['supplier_id'];
+	$order_id = intval($_REQUEST['order_id']); 
+	$status = intval($_REQUEST['status']);	
+	$order_info=$GLOBALS['db']->getRow("select * from fanwe_dinghuo where id=".$order_id);
+	$order_detail=unserialize($order_info['detail']);
+	$buyer_slid=$order_info['buyer_slid'];	
+	$checksign=$status-$order_info['status'];	
+   	
+	
+	if ($checksign==1 || $checksign==9){
+	
+	if ($order_info['status']==9){
+	echo '{"status":"fail","msg":"已经拒绝采购单，不能进行此类操作！"}';	
+	exit;
+	die;
+	}
+	
+	switch ($status)
+	{
+	case 1:	 //审核
+	$sqlstr='stime='.NOW_TIME; 	
+	break; 
+	case 2:  //打包
+	$sqlstr='ptime='.NOW_TIME;
+	break; 
+	case 3:  //发货
+	$sqlstr='ftime='.NOW_TIME;
+	break; 	
+	
+	case 4:	 //确认收货，增加库存 
+	$sqlstr='rtime='.NOW_TIME; 	
+	/*
+	foreach($order_detail as $kf=>$vf){
+	$op_stock=$vf['op_stock'];
+	$barcode=$vf['barcode'];
+	$is_had=$GLOBALS['db']->getRow("select id,name,barcode from fanwe_dc_menu where barcode='".$barcode."' and location_id=".$buyer_slid);
+	 if ($is_had){
+	 //存在该商品，直接更新库存 
+	  $GLOBALS['db']->query("update fanwe_dc_menu set `stock`=stock+".$op_stock." where barcode='".$barcode."' and location_id=".$buyer_slid);
+	 }else{
+	  //不存在  本地增加
+	  $menu_info=$GLOBALS['db']->getRow("select barcode,name,fu_title,m_desc,price,image,unit,funit,pinyin,company,productionDate,maxStock,minStock,times from fanwe_dc_menu where id=".$vf['menu_id']);
+      $menu_info['location_id']=$buyer_slid;
+      $menu_info['supplier_id']=$supplier_id;
+      $menu_info['stock']=$op_stock;
+	  $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $menu_info ,"INSERT");	  
+	 }
+	//恢复库存 	
+	}	
+*/	
+	break; 
+
+	
+	case 9:  //拒绝
+	//库存回滚
+	/*
+	foreach($order_detail as $kf=>$vf){
+	$op_stock=$vf['op_stock'];
+	$GLOBALS['db']->query("update fanwe_dc_menu set `stock`=stock+".$op_stock.",`buy_count` = buy_count-".$op_stock." where id=".$vf['menu_id']);
+	//恢复库存 	
+	}*/		
+	$sqlstr='stime='.NOW_TIME; 			
+	break;
+	
+	 
+    } 
+	
+	$res=$GLOBALS['db']->query("update fanwe_dinghuo set status=$status,".$sqlstr." where id=".$order_id);
+	if($res){
+	echo '{"status":"success","msg":"成功","optime":"'.to_date(NOW_TIME,"Y-m-d").'"}';	
+	}else{
+	echo '{"status":"fail","msg":"失败"}';
+	}
+	
+
+	}else{
+	echo '{"status":"fail","msg":"请按顺序来！"}';	
+	exit;
+	die;		
+	}
+	
+	
+	
+	}
+	
+	public function ordering()
+	{
+		init_app_page();
+		$buyer_slid=intval($_REQUEST['buyer_slid']);
+		$seller_slid=intval($_REQUEST['seller_slid']);
+		$dinghuo_cache=$GLOBALS['db']->getAll("select mname,barcode,menu_id,price,num,money,unit,funit,unit_type,times from fanwe_dinghuo_cache where buyer_slid=".$buyer_slid." and seller_slid=".$seller_slid);
+		if($dinghuo_cache){
+			$money=$GLOBALS['db']->getOne("select sum(money) from fanwe_dinghuo_cache where buyer_slid=".$buyer_slid." and seller_slid=".$seller_slid);
+	         
+			foreach($dinghuo_cache as $kc=>$vc) {
+				if($vc['unit_type']==1){
+				$dinghuo_cache[$kc]['op_stock']=$vc['num']*$vc['times'];
+				}else{
+				$dinghuo_cache[$kc]['op_stock']=$vc['num'];	
+				}
+				//减库存 
+				$GLOBALS['db']->query("update fanwe_dc_menu set `stock`=stock-".$dinghuo_cache[$kc]['op_stock'].",`buy_count` = buy_count+".$dinghuo_cache[$kc]['op_stock']." where id=".$vc['menu_id']);
+			    //减仓库 
+				
+				$cangkuid_sql="select id from fanwe_cangku_menu where `mid` = ".$vc['menu_id']." and `slid`=".$vc['seller_slid']." limit 1";
+				$cangkuid=$GLOBALS['db']->getOne($cangkuid_sql);	
+				$sqlu = "update `fanwe_cangku_menu` set `mstock` =mstock-".$dinghuo_cache[$kc]['op_stock']." where `id`=".$cangkuid; 
+				$GLOBALS['db']->query($sqlu);  //更新 
+				
+			
+			
+			}			 
+			 
+			$datain=array(
+			"seller_slid"=>$seller_slid,
+			"buyer_slid"=>$buyer_slid,
+			"detail"=>serialize($dinghuo_cache),
+			"money"=>$money,
+			"ctime"=>NOW_TIME,
+			"status"=>0				
+			);
+			//写出库记录
+			$GLOBALS['db']->autoExecute(DB_PREFIX."dinghuo", $datain ,"INSERT");
+			$GLOBALS['db']->query("delete from fanwe_dinghuo_cache where buyer_slid=".$buyer_slid." and seller_slid=".$seller_slid);
+			
+			//减库存 
+			showBizSuccess("提交成功！",0,url("biz","order#my_order&id=$buyer_slid&peisong=$seller_slid"));
+			
+			
+		}else{
+			showBizErr("订货车为空，不能提交！",0,url("biz","order#project&peisong=$seller_slid&id=$buyer_slid"));	
+		}
+		
+	}
+	public function my_order(){
+	    init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+			$peisong_center=$GLOBALS['db']->getOne("select peisong_center from fanwe_supplier_account where supplier_id=".$supplier_id." and is_main=1");
+
+		$peisong=unserialize($peisong_center);
+		
+		/*获取参数*/
+		$buyer_slid = intval($_REQUEST['id']);   //本地门店ID
+		$seller_slid = intval($_REQUEST['peisong']);   //配送中心ID
+		if(isset($_REQUEST['status'])){
+		$status = intval($_REQUEST['status']); 
+        }else{
+		$status=99;	
+		}
+ 
+        if($buyer_slid==0){
+		$buyer_slid=end($account_info['location_ids']);
+		}
+		if($seller_slid==0){ //配送中心
+		$seller_slid=end($account_info['location_ids']);
+		}
+		
+		if(in_array(end($account_info['location_ids']),$peisong)){
+		 $op_auth=1;
+		}
+		
+		if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+		$begin_time = strim($_REQUEST['begin_time']);
+		$end_time = strim($_REQUEST['end_time']);	
+		}else{	 //默认为当月的			
+		$begin_time=date('Y-m-01', strtotime(date("Y-m-d")));
+		$end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day"));
+        }	
+		$begin_time_s = strtotime($begin_time);
+		$end_time_s = strtotime($end_time);	
+		
+		
+		
+		$sqlstr="where 1=1";
+		if(in_array($buyer_slid,$peisong)){ //配送中心
+		$sqlstr.=' and a.seller_slid='.$buyer_slid;	
+		}else{ //普通门店
+		$sqlstr.=' and a.buyer_slid='.$buyer_slid;		
+		}
+		if($begin_time_s){
+		$sqlstr .=" and a.ctime > ".$begin_time_s." ";
+		}
+		if($end_time_s){
+		$sqlstr .=" and a.ctime < ".$end_time_s." ";
+		}
+		
+		if ($status<10){	
+		$sqlstr .=" and a.status = ".$status." ";
+		}
+		
+		
+        $sql="select a.*,b.name as seller_name,c.name as buyer_name from ".DB_PREFIX."dinghuo a left join ".DB_PREFIX."supplier_location b on a.seller_slid=b.id left join ".DB_PREFIX."supplier_location c on a.buyer_slid=c.id ".$sqlstr." order by a.id desc";
+     
+		$list=$GLOBALS['db']->getAll($sql);
+		foreach($list as $kl=>$vl){
+			$vl['ctime']=to_date($vl['ctime'],'Y-m-d');
+			$vl['ptime']=to_date($vl['ptime'],'Y-m-d');
+			$vl['stime']=to_date($vl['stime'],'Y-m-d');
+			$vl['ftime']=to_date($vl['ftime'],'Y-m-d');
+			$vl['rtime']=to_date($vl['rtime'],'Y-m-d');
+			$vl['detail']=unserialize($vl['detail']);
+			
+			$list[$kl]=$vl;			
+		}
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("status", $status);
+		$GLOBALS['tmpl']->assign("begin_time", $begin_time);
+		$GLOBALS['tmpl']->assign("end_time", $end_time);
+		$GLOBALS['tmpl']->assign("op_auth", $op_auth);		
+		$GLOBALS['tmpl']->assign("seller_slid", $seller_slid);
+		
+		$GLOBALS['tmpl']->assign("seller_slid", $seller_slid);
+		$GLOBALS['tmpl']->assign("buyer_slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("peisong", $seller_slid);
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("page_title", "我的配送中心");
+		$GLOBALS['tmpl']->display("pages/order/my_center.html");
+		
+	}
+	
+	public function qiudiaohuo()
+	{
+        init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];		
+		$buyer_slid = intval($_REQUEST['id']);   //本地门店ID
+		$location_ids=$account_info['location_ids']; //同商户的所有门店列表 
+	
+        $conditions = " where a.location_id != $buyer_slid and a.supplier_id=".$supplier_id ;
+
+		if ($_REQUEST['name'] != ""){
+		$bname=strim($_REQUEST['name']);
+		$conditions .=" and (a.name like '%".$bname."%' or a.barcode like '".$bname."')";
+        $sql_count = " select count(a.id) from " . DB_PREFIX . "dc_menu a";
+		$sql = " select a.id,a.name,a.is_effect,a.cate_id,a.price,a.image,a.yujingtishi,a.stock,a.unit,a.funit,a.times,a.barcode,a.location_id,b.name as cate_name,c.name as location_name from " . DB_PREFIX . "dc_menu a left join " . DB_PREFIX . "dc_supplier_menu_cate b on a.cate_id=b.id left join " . DB_PREFIX . "supplier_location c on a.location_id=c.id";
+		}
+		
+
+		
+		$page_size = 20;
+		$page = intval($_REQUEST['p']);
+		if ($page == 0)
+			$page = 1;
+		$limit = (($page - 1) * $page_size) . "," . $page_size;
+
+		$total = $GLOBALS['db']->getOne($sql_count.$conditions);
+		$page = new Page($total, $page_size); // 初始化分页对象
+		$p = $page->show();
+		$GLOBALS['tmpl']->assign('pages', $p);
+
+       
+		$list = $GLOBALS['db']->getAll($sql.$conditions . " order by stock desc limit " . $limit);
+
+		
+
+        $order_cart=$GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."diaohuo_cache where owner=$buyer_slid and buyer_slid=$buyer_slid");
+		/* 数据 */
+		$GLOBALS['tmpl']->assign("order_cart", $order_cart);
+		$GLOBALS['tmpl']->assign("location_id", $buyer_slid);
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("ajax_url", url("biz","dc"));
+
+
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("page_title", "求货中心");
+		$GLOBALS['tmpl']->display("pages/order/menu_index_qiuhuo.html");
+    
+	}
+	
+	
+	public function gongdiaohuo()
+	{
+        init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];		
+		$buyer_slid = end($account_info['location_ids']);   //本地门店ID
+				
+	    $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
+	
+	
+	
+        $conditions = " where a.location_id = $buyer_slid";
+
+		if ($_REQUEST['name'] != ""){
+		$bname=strim($_REQUEST['name']);
+		$conditions .=" and (a.name like '%".$bname."%' or a.barcode like '".$bname."')";
+		}
+        $sql_count = " select count(a.id) from " . DB_PREFIX . "dc_menu a";
+		$sql = " select a.id,a.name,a.is_effect,a.cate_id,a.price,a.image,a.yujingtishi,a.stock,a.unit,a.funit,a.times,a.barcode,a.location_id,b.name as cate_name from " . DB_PREFIX . "dc_menu a left join " . DB_PREFIX . "dc_supplier_menu_cate b on a.cate_id=b.id ";
+		
+		
+
+		
+		$page_size = 20;
+		$page = intval($_REQUEST['p']);
+		if ($page == 0)
+			$page = 1;
+		$limit = (($page - 1) * $page_size) . "," . $page_size;
+
+		$total = $GLOBALS['db']->getOne($sql_count.$conditions);
+		$page = new Page($total, $page_size); // 初始化分页对象
+		$p = $page->show();
+		$GLOBALS['tmpl']->assign('pages', $p);
+
+       
+		$list = $GLOBALS['db']->getAll($sql.$conditions . " order by stock desc limit " . $limit);
+			
+
+        $order_cart=$GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."diaohuo_cache where owner=$buyer_slid and seller_slid=$buyer_slid");
+		/* 数据 */
+		$GLOBALS['tmpl']->assign("order_cart", $order_cart);
+		$GLOBALS['tmpl']->assign("location_id", $buyer_slid);
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("slidlist", $slidlist);
+
+
+
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("page_title", "供货中心");
+		$GLOBALS['tmpl']->display("pages/order/menu_index_gonghuo.html");
+    
+	}
+	
+	// 加入调货车
+	public function diaohuo_cart()
+	{
+	init_app_page();
+	$account_info = $GLOBALS['account_info'];
+	$owner=end($account_info['location_ids']); //货车主人
+	$menu_id = intval($_REQUEST['menu_id']);   //菜单菜单ID
+	$unit_type = intval($_REQUEST['unit_type']);   //菜单菜单ID
+	$buyer_slid = intval($_REQUEST['buyer_slid']);   
+	$seller_slid = intval($_REQUEST['seller_slid']);   
+	
+	if($unit_type==9){$unit_type==0;}
+	$datain=$_REQUEST;
+	$datain['ctime']=to_date(NOW_TIME);
+	$datain['owner']=$owner;
+	$sqlstr="where owner=$owner and buyer_slid=$buyer_slid  and seller_slid=$seller_slid and unit_type=$unit_type and menu_id=".$menu_id;
+	$check=$GLOBALS['db']->getRow("select * from fanwe_diaohuo_cache ".$sqlstr);
+	
+	if($check){
+		//存在的话更新数量
+		$order_num=intval($_REQUEST['num']);
+		$unit_type=intval($_REQUEST['unit_type']);		
+		$yuan_stock=$GLOBALS['db']->getOne("select stock from ".DB_PREFIX."dc_menu where id=".$menu_id);
+		if ($unit_type==1){
+			$funit_stock=$yuan_stock/$_REQUEST['times'];
+			$order_num=$order_num+$check['num']; 
+			if($funit_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;		 
+			}else{
+		 
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."diaohuo_cache set num=$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+			}
+		}else{
+			$order_num=$order_num+$check['num']; 
+			if($yuan_stock<$order_num){
+			 echo '{"status":"fail","msg":"库存不足"}';	
+			 exit;				 
+			}else{			
+			$res=$GLOBALS['db']->query("update ".DB_PREFIX."diaohuo_cache set num=$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+					}
+		}		
+	}else{
+		//添加 
+			
+		$res=$GLOBALS['db']->autoExecute(DB_PREFIX."diaohuo_cache", $datain ,"INSERT");
+	}
+	    if($res){
+		 echo '{"status":"success","msg":"加入成功"}';
+		}else{
+		 echo '{"status":"fail","msg":"加入失败"}';	
+		}
+	
+	}
+	
+	
+	public function my_diaohuo_cart()
+	{
+        init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		$owner=end($account_info['location_ids']);
+		/*获取参数*/
+		$buyer_slid = intval($_REQUEST['id']);   //本地门店ID		
+
+		$conditions .= " where owner=$owner"; // 查询条件
+		$conditions .= " and (a.buyer_slid=$buyer_slid or a.seller_slid=$buyer_slid)";
+		
+        if ($_REQUEST['name'] != ""){
+		$mname=strim($_REQUEST['name']);
+		$conditions .=" and (a.mname like '%".$mname."%' or a.barcode like '".$mname."')";	
+		}
+		
+			
+		$sql_count = " select count(id) from " . DB_PREFIX . "diaohuo_cache".$conditions;
+		$sql = " select a.*,b.name as seller_name,c.name as buyer_name from " . DB_PREFIX . "diaohuo_cache a left join " . DB_PREFIX . "supplier_location b on a.seller_slid=b.id left join " . DB_PREFIX . "supplier_location c on a.buyer_slid=c.id ".$conditions;
+		$page_size = 50;
+		$page = intval($_REQUEST['p']);
+		if ($page == 0)
+			$page = 1;
+		$limit = (($page - 1) * $page_size) . "," . $page_size;
+
+		$total = $GLOBALS['db']->getOne($sql_count);
+		$page = new Page($total, $page_size); // 初始化分页对象
+		$p = $page->show();
+		$GLOBALS['tmpl']->assign('pages', $p);      
+		$list = $GLOBALS['db']->getAll($sql. " limit " . $limit);
+	    foreach($list as $k=>$v){
+			if($v['unit_type']==1){
+			$list[$k]['dinghuodanwei']=$v['funit'];			
+			}else{
+			$list[$k]['dinghuodanwei']=$v['unit'];		
+			}
+		}
+
+        /* 数据 */	
+		$GLOBALS['tmpl']->assign("slid", $buyer_slid);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("buyer_slid", $buyer_slid);
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("page_title", "我的调货车");
+		$GLOBALS['tmpl']->display("pages/order/my_diaohuo.html");
+    
+	}
+	
+	public function diaohuo_ordering()
+	{
+		init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		$owner=end($account_info['location_ids']);
+		$location_ids_ar=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);		
+		foreach($location_ids_ar as $k=>$v){
+		$location_ids[]=$v['id'];
+		}
+		
+		
+		
+		
+		$slid=intval($_REQUEST['id']);
+		     //求货列表
+		    $dinghuo_cache=$GLOBALS['db']->getAll("select id,buyer_slid,seller_slid,mname,barcode,menu_id,price,num,money,unit,funit,unit_type,times from fanwe_diaohuo_cache where owner=$owner and buyer_slid=$slid");
+			
+			foreach($location_ids as $kl){
+				
+				foreach($dinghuo_cache as $kc=>$vc) {
+							
+				if($vc['unit_type']==1){
+				$vc['op_stock']=$vc['num']*$vc['times'];
+				}else{
+				$vc['op_stock']=$vc['num'];	
+				}
+				
+				if($kl==$vc['seller_slid']){
+				$cache_iding=$vc['id'];
+				$seller_money[$kl]['money']=$seller_money[$kl]['money']+$vc['money'];
+				$seller_money[$kl]['seller_slid']=$vc['seller_slid'];
+				$seller_money[$kl]['buyer_slid']=$vc['buyer_slid'];
+				$seller_money[$kl]['ctime']=NOW_TIME;
+				$seller_money[$kl]['status']=0;		
+				
+				$GLOBALS['db']->query("delete from fanwe_diaohuo_cache where id=".$cache_iding);
+				
+				unset($vc['buyer_slid']);
+				unset($vc['seller_slid']);
+				unset($vc['id']);                
+			    $seller_money[$kl]['detail'][]=$vc;
+				}				
+				}
+			
+			
+			}
+			
+					
+			//求货 
+		//	var_dump($seller_money);
+			
+			$dinghuo_cache=$GLOBALS['db']->getAll("select id,buyer_slid,seller_slid,mname,barcode,menu_id,price,num,money,unit,funit,unit_type,times from fanwe_diaohuo_cache where owner=$owner and seller_slid=$slid");
+			
+			foreach($location_ids as $kl){
+				
+				foreach($dinghuo_cache as $kc=>$vc) {
+							
+				if($vc['unit_type']==1){
+				$vc['op_stock']=$vc['num']*$vc['times'];
+				}else{
+				$vc['op_stock']=$vc['num'];	
+				}
+				
+				if($kl==$vc['buyer_slid']){
+				$cache_iding=$vc['id'];
+				$buyer_money[$kl]['money']=$buyer_money[$kl]['money']+$vc['money'];
+				$buyer_money[$kl]['seller_slid']=$vc['seller_slid'];
+				$buyer_money[$kl]['buyer_slid']=$vc['buyer_slid'];
+				$buyer_money[$kl]['ctime']=NOW_TIME;
+				$buyer_money[$kl]['status']=0;		
+				
+				$GLOBALS['db']->query("delete from fanwe_diaohuo_cache where id=".$cache_iding);
+				
+				unset($vc['buyer_slid']);
+				unset($vc['seller_slid']);
+				unset($vc['id']);                
+			    $buyer_money[$kl]['detail'][]=$vc;
+				}				
+				}
+			
+			
+			}
+			
+			
+			
+			//供货 var_dump($seller_peisong);
+			//var_dump($buyer_money);
+			
+			if ($buyer_money !=NULL && $seller_money !=NULL){
+			showBizErr("调货车为空，不能提交！",0,url("biz","order#qiudiaohuo&id=$buyer_slid"));	
+			}else{
+
+			
+			
+			foreach($buyer_money as $ku=>$vu){
+			$vu['detail']=serialize($vu['detail']);			
+			$datain=$vu;
+			$datain['owner']=$owner;
+			$GLOBALS['db']->autoExecute(DB_PREFIX."diaohuo", $datain ,"INSERT");
+			}
+	
+	
+			foreach($seller_money as $ku=>$vu){
+			$vu['detail']=serialize($vu['detail']);			
+			$datain=$vu;
+			$datain['owner']=$owner;
+			$GLOBALS['db']->autoExecute(DB_PREFIX."diaohuo", $datain ,"INSERT");
+			}
+			
+			showBizSuccess("提交成功！",0,url("biz","order#my_diaohuo&id=$slid"));			
+			
+		}
+		
+		
+	}
+	
+	public function my_diaohuo(){
+	    init_app_page();
+		$account_info = $GLOBALS['account_info'];
+		$supplier_id = $account_info['supplier_id'];
+		$location_id = end($account_info['location_ids']);
+		
+		if(isset($_REQUEST['status'])){
+		$status = intval($_REQUEST['status']); 
+        }else{
+		$status=99;	
+		}
+        
+				
+		if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+		$begin_time = strim($_REQUEST['begin_time']);
+		$end_time = strim($_REQUEST['end_time']);	
+		}else{	 //默认为当月的			
+		$begin_time=date('Y-m-01', strtotime(date("Y-m-d")));
+		$end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day"));
+        }	
+		$begin_time_s = strtotime($begin_time);
+		$end_time_s = strtotime($end_time);	
+		
+		
+		
+		$sqlstr="where 1=1";
+		$sqlstr.=' and ( a.seller_slid='.$location_id.' or a.buyer_slid='.$location_id.')';
+		
+		if($begin_time_s){
+		$sqlstr .=" and a.ctime > ".$begin_time_s." ";
+		}
+		if($end_time_s){
+		$sqlstr .=" and a.ctime < ".$end_time_s." ";
+		}
+		
+		if ($status<10){	
+		$sqlstr .=" and a.status = ".$status." ";
+		}
+		
+		
+        $sql="select a.*,b.name as seller_name,c.name as buyer_name from ".DB_PREFIX."diaohuo a left join ".DB_PREFIX."supplier_location b on a.seller_slid=b.id left join ".DB_PREFIX."supplier_location c on a.buyer_slid=c.id ".$sqlstr." order by a.id desc";
+    	$list=$GLOBALS['db']->getAll($sql);
+		foreach($list as $kl=>$vl){
+			$vl['ctime']=to_date($vl['ctime'],'Y-m-d');
+			$vl['ptime']=to_date($vl['ptime'],'Y-m-d');
+			$vl['stime']=to_date($vl['stime'],'Y-m-d');
+			$vl['ftime']=to_date($vl['ftime'],'Y-m-d');
+			$vl['rtime']=to_date($vl['rtime'],'Y-m-d');
+			$vl['detail']=unserialize($vl['detail']);
+			if ($vl['buyer_slid']==$location_id){
+			 $vl['shenfen']	='buyer';
+			}else{
+			  $vl['shenfen']='seller';	
+			}
+			if ($vl['owner']==$location_id){
+			 $vl['faqiren']	=1;
+			}else{
+			  $vl['faqiren']=0;	
+			}
+			
+			$list[$kl]=$vl;			
+		}
+		/* 系统默认 */
+		$GLOBALS['tmpl']->assign("status", $status);
+		$GLOBALS['tmpl']->assign("begin_time", $begin_time);
+		$GLOBALS['tmpl']->assign("end_time", $end_time);	
+		$GLOBALS['tmpl']->assign("buyer_slid", $location_id);
+		$GLOBALS['tmpl']->assign("location_id", $location_id);
+		$GLOBALS['tmpl']->assign("slid", $location_id);
+		$GLOBALS['tmpl']->assign("list", $list);
+		$GLOBALS['tmpl']->assign("page_title", "我的调货中心");
+		$GLOBALS['tmpl']->display("pages/order/my_diaohuo_center.html");
+		
+	}
+	
+	public function op_diaohuo()
+	{
+	init_app_page();
+	$account_info = $GLOBALS['account_info'];
+	$supplier_id = $account_info['supplier_id'];
+	$order_id = intval($_REQUEST['order_id']); 
+	$status = intval($_REQUEST['status']);	
+	$order_info=$GLOBALS['db']->getRow("select * from fanwe_diaohuo where id=".$order_id);
+	$order_detail=unserialize($order_info['detail']);
+	$seller_slid=$order_info['seller_slid'];
+	$buyer_slid=$order_info['buyer_slid'];	
+	$checksign=$status-$order_info['status'];	
+   	
+	
+	if ($checksign==1 || $checksign==9){
+	
+	if ($order_info['status']==9){
+	echo '{"status":"fail","msg":"已经拒绝采购单，不能进行此类操作！"}';	
+	exit;
+	die;
+	}
+	
+	switch ($status)
+	{
+	case 1:	 //审核
+	$sqlstr='stime='.NOW_TIME; 
+	
+	foreach($order_detail as $kf=>$vf){
+	$op_stock=$vf['op_stock'];
+	$GLOBALS['db']->query("update fanwe_dc_menu set `stock`=stock-".$op_stock." where id=".$vf['menu_id']);
+	//审核后减库存 	
+	//减仓库
+	    $cangkuid_sql="select id from fanwe_cangku_menu where `mid` = ".$vf['menu_id']." and `slid`=".$seller_slid." limit 1";
+		$cangkuid=$GLOBALS['db']->getOne($cangkuid_sql);	
+		$sqlu = "update `fanwe_cangku_menu` set `mstock` =mstock-".$vf['op_stock']." where `id`=".$cangkuid; 
+		$GLOBALS['db']->query($sqlu);  //更新 
+	
+	}	
+	
+	break; 
+	case 2:  //打包
+	$sqlstr='ptime='.NOW_TIME;
+	break; 
+	case 3:  //发货
+	$sqlstr='ftime='.NOW_TIME;
+	break; 	
+	
+	case 4:	 //确认收货，增加库存 
+	$sqlstr='rtime='.NOW_TIME; 
+    /*	
+	foreach($order_detail as $kf=>$vf){
+	$op_stock=$vf['op_stock'];
+	$barcode=$vf['barcode'];
+	$is_had=$GLOBALS['db']->getRow("select id,name,barcode from fanwe_dc_menu where barcode='".$barcode."' and location_id=".$buyer_slid);
+	 if ($is_had){
+	 //存在该商品，直接更新库存 
+	  $GLOBALS['db']->query("update fanwe_dc_menu set `stock`=stock+".$op_stock." where barcode='".$barcode."' and location_id=".$buyer_slid);
+	 }else{
+	  //不存在  本地增加
+	  $menu_info=$GLOBALS['db']->getRow("select barcode,name,fu_title,m_desc,price,image,unit,funit,pinyin,company,productionDate,maxStock,minStock,times from fanwe_dc_menu where id=".$vf['menu_id']);
+      $menu_info['location_id']=$buyer_slid;
+      $menu_info['supplier_id']=$supplier_id;
+      $menu_info['stock']=$op_stock;
+	  $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $menu_info ,"INSERT");	  
+	 }
+	//恢复库存 	
+	}*/			
+	break; 
+
+	
+	case 9:  //拒绝
+	//库存回滚
+		
+	$sqlstr='stime='.NOW_TIME; 			
+	break;
+	
+	 
+    } 
+	
+	$res=$GLOBALS['db']->query("update fanwe_diaohuo set status=$status,".$sqlstr." where id=".$order_id);
+	if($res){
+	echo '{"status":"success","msg":"成功","optime":"'.to_date(NOW_TIME,"Y-m-d").'"}';	
+	}else{
+	echo '{"status":"fail","msg":"失败"}';
+	}
+	
+
+	}else{
+	echo '{"status":"fail","msg":"还没有到执行的时间"}';	
+	exit;
+	die;		
+	}
+	
+	
+	
+	}
+	
+	public function get_menu_stock()
+	{
+	init_app_page();
+	$barcode = trim($_REQUEST['barcode']);   //根据条码查询当前商品的库存 
+	$slid = intval($_REQUEST['slid']);   
+
+	$sqlstr="where location_id=$slid and barcode='".$barcode."'";
+	$check=$GLOBALS['db']->getOne("select stock from fanwe_dc_menu ".$sqlstr);
+	//echo ("select stock from fanwe_dc_menu ".$sqlstr);
+	
+	if($check){
+		$retrnarray=array(
+		"status"=>"success",
+		"stock"=>$check		
+		);
+		echo json_encode($retrnarray);	
+		
+	}else{
+		echo '{"status":"fail","msg":"读取失败！"}';	
+	}
+	
+	}
+	
+	
+
+}
+
+?>

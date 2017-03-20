@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -6,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-    <title>入库单</title>
+    <title>新增入库单</title>
 
     <base href="/">
     <meta charset="UTF-8">
@@ -51,6 +55,16 @@
         };
     </script>
     <!-- oneapm end -->
+
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?887cf26826dd888eebe2769131c9969d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/scm_kry/js/jquery-1.8.3.min.js?v=20170315_135229"></script>
@@ -130,19 +144,19 @@
 
 
 
-    <base href="/scm_kry">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <!-- css begin -->
     <link rel="stylesheet" href="/scm_kry/themes/style/css/inventory.css?v=20170315_135229">
+    <link rel="stylesheet" href="/scm_kry/themes/style/css/scm-tooltip.css?v=20170315_135229">
     <!-- css end -->
 
 
 </head>
 <body>
-<input type="hidden" id="t" name="t" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
-<input type="hidden" id="t_2" name="t_2" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
+<input type="hidden" id="t" name="t" value="6f1271fd-f721-4bab-b140-05766cbb7ebd"/>
+<input type="hidden" id="t_2" name="t_2" value="6f1271fd-f721-4bab-b140-05766cbb7ebd"/>
 
 <div id="header">
 
@@ -236,10 +250,9 @@
         var ctxPath = "http://b.keruyun.com:80/scm_kry";
         function setMenu() {
 
-            var data = [];
-            $.get('/menu.json').done(function(data){
-                data = data;
-            });
+
+            var data = [{"code":"mind:dingdan","id":100,"levelId":"001","name":"订单","parentId":0,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:dingdan:yudingjilu","id":101,"levelId":"001001","name":"预订记录","parentId":100,"platform":1,"sort":1,"type":1,"url":"/booking/list"},{"code":"mind:baobiao","id":106,"levelId":"001","name":"报表","parentId":0,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao","id":107,"levelId":"001001","name":"预订报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao:yudingliangbaobiao","id":108,"levelId":"001001001","name":"预订量报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingchart/charts"},{"code":"mind:baobiao:yudingbaobiao:dailirenyudingzhanbifenxi","id":109,"levelId":"001001001","name":"代理人预订占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/innerPerson"},{"code":"mind:baobiao:yudingbaobiao:yudingjujueliyouzhanbifenxi","id":110,"levelId":"001001001","name":"预订拒绝理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=-3"},{"code":"mind:baobiao:yudingbaobiao:yudingquxiaoliyouzhanbifenxi","id":111,"levelId":"001001001","name":"预订取消理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=9"},{"code":"mind:baobiao:yudingbaobiao:yudingpincibaobiao","id":112,"levelId":"001001001","name":"预订频次报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingFrequency/view"},{"code":"mind:baobiao:paiduibaobiao","id":113,"levelId":"001001","name":"排队报表","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:paiduibaobiao:paiduiliangbaobiao","id":114,"levelId":"001001001","name":"排队量报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queueReport/list"},{"code":"mind:baobiao:paiduibaobiao:paiduiliushilvbaobiao","id":115,"levelId":"001001001","name":"排队流失率报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/queueLoss"},{"code":"mind:baobiao:paiduibaobiao:pingjundengdaishichang","id":116,"levelId":"001001001","name":"平均等待时长","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/avgWaitTime"},{"code":"mind:baobiao:yingyebaobiao","id":117,"levelId":"001001","name":"营业报表","parentId":106,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:baobiao:yingyebaobiao:jiaojiebanbaobiao","id":119,"levelId":"001001001","name":"交接班报表","parentId":117,"platform":1,"sort":60,"type":1,"url":"/report/cashHandover"},{"code":"mind:baobiao:yingyebaobiao:dandianshoukuantongjibaobiao","id":120,"levelId":"001001001","name":"单店收款统计明细表","parentId":117,"platform":1,"sort":4,"type":1,"url":"/report/collection/list"},{"code":"mind:baobiao:yingyebaobiao:mendianshoukuantongjibaobiao","id":121,"levelId":"001001001","name":"门店收款统计报表","parentId":117,"platform":1,"sort":5,"type":1,"url":"/report/paymentShop/paymentShopList"},{"code":"mind:baobiao:xiaoshoubaobiao","id":122,"levelId":"001001","name":"销售报表","parentId":106,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:baobiao:xiaoshoubaobiao:shangpinxiaoshou","id":123,"levelId":"001001001","name":"销售统计表","parentId":122,"platform":1,"sort":1,"type":1,"url":"/report/dishSaleReport/index"},{"code":"mind:baobiao:xiaoshoubaobiao:mendianxiaoshoupaihang","id":125,"levelId":"001001001","name":"门店销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/dishShopSort"},{"code":"mind:baobiao:xiaoshoubaobiao:shijianduanxiaoshoumingxibiao","id":126,"levelId":"001001001","name":"时间段销售明细表","parentId":122,"platform":1,"sort":7,"type":1,"url":"/report/periodSale/list"},{"code":"mind:baobiao:huiyuanbaobiao:jifenmingxibaobiao","id":128,"levelId":"001001001","name":"积分明细表","parentId":1853,"platform":2,"sort":3,"type":1,"url":"#/report/point-detail"},{"code":"mind:baobiao:huiyuanbaobiao:jifenjiesuanbaobiao","id":129,"levelId":"001001001","name":"积分结算表","parentId":1853,"platform":2,"sort":4,"type":1,"url":"#/report/point-settlement"},{"code":"mind:shezhi","id":130,"levelId":"001","name":"设置","parentId":0,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi","id":143,"levelId":"001001","name":"商品设置","parentId":130,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi:zuofanguanli","id":144,"levelId":"001001001","name":"做法管理","parentId":143,"platform":1,"sort":1,"type":1,"url":"/dish/cookingway/list"},{"code":"mind:shezhi:shangpinshezhi:peiliaoguanli","id":145,"levelId":"001001001","name":"配料管理","parentId":143,"platform":1,"sort":2,"type":1,"url":"/dish/condiment/list"},{"code":"mind:shezhi:shangpinshezhi:biaoqianguanli","id":146,"levelId":"001001001","name":"标签管理","parentId":143,"platform":1,"sort":4,"type":1,"url":"/dish/label/list"},{"code":"mind:shezhi:shangpinshezhi:beizhuguanli","id":147,"levelId":"001001001","name":"备注管理","parentId":143,"platform":1,"sort":5,"type":1,"url":"/dish/memo/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshouguigeguanli","id":148,"levelId":"001001001","name":"销售规格管理","parentId":143,"platform":1,"sort":6,"type":1,"url":"/dish/attribute/list"},{"code":"mind:shezhi:shangpinshezhi:danweiguanli","id":149,"levelId":"001001001","name":"单位管理","parentId":143,"platform":1,"sort":7,"type":1,"url":"/dish/unit/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinleibie","id":150,"levelId":"001001001","name":"商品类别","parentId":143,"platform":1,"sort":8,"type":1,"url":"/dish/type/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinguanli","id":151,"levelId":"001001001","name":"商品管理","parentId":143,"platform":1,"sort":9,"type":1,"url":"/dish/manage/list"},{"code":"mind:shezhi:shangpinshezhi:taocanguanli","id":152,"levelId":"001001001","name":"套餐管理","parentId":143,"platform":1,"sort":10,"type":1,"url":"/dish/setMeal/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshoufanb","id":153,"levelId":"001001001","name":"销售范本","parentId":143,"platform":1,"sort":11,"type":1,"url":"/dish/saletemplet/list"},{"code":"mind:shezhi:shangpinshezhi:jiegecelue","id":154,"levelId":"001001001","name":"价格策略","parentId":143,"platform":1,"sort":12,"type":1,"url":"/dish/pricetemplet/list"},{"code":"mind:shezhi:zhifufangshishezhi","id":160,"levelId":"001001","name":"支付方式设置","parentId":130,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufangshiguanli","id":161,"levelId":"001001001","name":"支付方式管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/management/list"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufanbenguanli","id":162,"levelId":"001001001","name":"支付范本管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/templet/list"},{"code":"mind:shezhi:quanxianshezhi","id":163,"levelId":"001001","name":"权限设置","parentId":130,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:shezhi:quanxianshezhi:jiaoseshezhi","id":164,"levelId":"001001001","name":"角色设置","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/role/list"},{"code":"mind:shezhi:quanxianshezhi:zhanghaoguanli","id":165,"levelId":"001001001","name":"账号管理","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/userBrand/list"},{"code":"mind:bangzhu","id":208,"levelId":"001","name":"帮助","parentId":0,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:bangzhu:shipinzhongxin","id":209,"levelId":"001001","name":"视频中心","parentId":208,"platform":1,"sort":3,"type":1,"url":"/faq/video/list"},{"code":"mind:bangzhu:wentijieda","id":210,"levelId":"001001","name":"问题解答","parentId":208,"platform":1,"sort":2,"type":1,"url":"/faq/question/list"},{"code":"mind:dingdan:waimaidingdan","id":213,"levelId":"001001","name":"外卖订单","parentId":100,"platform":1,"sort":2,"type":1,"url":"/takeOutOrder/orderList"},{"code":"mind:baobiao:huiyuanbaobiao:dianbieshangpinbijiaobiao","id":216,"levelId":"001001001","name":"店别商品比较表","parentId":122,"platform":1,"sort":6,"type":1,"url":"/report/commercialCompareReport/list"},{"code":"mind:baobiao:yinxiaobaobiao:quanyingxiaobaobiao","id":217,"levelId":"001001001","name":"券营销报表","parentId":297,"platform":2,"sort":6,"type":1,"url":"#/report/coupon-marketing"},{"code":"mind:baobiao:yinxiaobaobiao:quanmingxibaobiao","id":218,"levelId":"001001001","name":"券明细报表","parentId":297,"platform":2,"sort":5,"type":1,"url":"#/report/coupon-detail"},{"code":"mind:baobiao:yingxiaobaobiao","id":297,"levelId":"001001","name":"营销报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:shouyinbaobiao:fantailv","id":321,"levelId":"001001001","name":"翻台率分析表","parentId":122,"platform":1,"sort":8,"type":1,"url":"/report/tableUseRate/list"},{"code":"mind:baobiao:shouyinbaobiao:pjxfsc","id":322,"levelId":"001001001","name":"订单平均消费时长分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/avgTime/list"},{"code":"mind:baobiao:shouyinbaobiao:laikefenxi","id":323,"levelId":"001001001","name":"来客分析","parentId":122,"platform":1,"sort":10,"type":1,"url":"/report/customerAnalysis/list"},{"code":"mind:baobiao:shouyinbaobiao:fanjiezhang","id":325,"levelId":"001001001","name":"反结账记录","parentId":117,"platform":1,"sort":90,"type":1,"url":"/report/reverseCheckout/reverseCheckout"},{"code":"mind:baobiao:shouyinbaobiao:xiaoshoufenxi","id":326,"levelId":"001001001","name":"销售分析","parentId":122,"platform":1,"sort":3,"type":1,"url":"/report/cash/saleAnalysis/index"},{"code":"mind:baobiao:yingxiaobaobiao:chushimingxi","id":327,"levelId":"001001001","name":"储值明细表","parentId":1852,"platform":2,"sort":1,"type":1,"url":"#/report/stored-value-detail"},{"code":"mind:baobiao:yingxiaobaobiao:chuzhixianjin","id":328,"levelId":"001001001","name":"储值结算报表","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/stored-value-settlement"},{"code":"loyalty:member:v5","id":1193,"levelId":"001001","name":"顾客","parentId":1848,"platform":2,"sort":1,"type":1,"url":"#/customer/customer-list"},{"code":"loyalty:marketPlan:coupon:v5","id":1196,"levelId":"001001001","name":"优惠券模板","parentId":1850,"platform":2,"sort":3,"type":1,"url":"#/marketing/coupon-template"},{"code":"loyalty:member:setting:v5","id":1198,"levelId":"001001","name":"会员设置","parentId":1848,"platform":2,"sort":6,"type":1,"url":"#"},{"code":"loyalty:member:degreeSetting:v5","id":1199,"levelId":"001001001","name":"会员等级","parentId":1198,"platform":2,"sort":2,"type":1,"url":"#/setting/member-level"},{"code":"loyalty:member:groupSetting:v5","id":1200,"levelId":"001001001","name":"顾客分组","parentId":1198,"platform":2,"sort":4,"type":1,"url":"#/setting/customer-group"},{"code":"scm:index","id":1255,"levelId":"001","name":"库存","parentId":0,"platform":3,"sort":4,"type":1,"url":"/index"},{"code":"scm:masterdata","id":1256,"levelId":"001001","name":"基础管理","parentId":1255,"platform":3,"sort":1,"type":1,"url":"#"},{"code":"scm:purchase","id":1257,"levelId":"001001","name":"采购管理","parentId":1255,"platform":3,"sort":2,"type":1,"url":"#"},{"code":"scm:delivery","id":1258,"levelId":"001001","name":"配送管理","parentId":1255,"platform":3,"sort":3,"type":1,"url":"#"},{"code":"scm:scrap","id":1259,"levelId":"001001","name":"报废管理","parentId":1255,"platform":3,"sort":5,"type":1,"url":"#"},{"code":"scm:production","id":1260,"levelId":"001001","name":"生产管理","parentId":1255,"platform":3,"sort":6,"type":1,"url":"#"},{"code":"scm:cc","id":1261,"levelId":"001001","name":"盘点管理","parentId":1255,"platform":3,"sort":7,"type":1,"url":"#"},{"code":"scm:inventory","id":1262,"levelId":"001001","name":"其他管理","parentId":1255,"platform":3,"sort":8,"type":1,"url":"#"},{"code":"scm:report","id":1263,"levelId":"001001","name":"报表","parentId":1255,"platform":3,"sort":9,"type":1,"url":"#"},{"code":"scm:masterdata:warehouse:query#","id":1264,"levelId":"001001001","name":"仓库设定","parentId":1256,"platform":3,"sort":10,"type":1,"url":"/scm/warehouse/index"},{"code":"scm:masterdata:inventoryImport:import#","id":1265,"levelId":"001001001","name":"期初库存","parentId":1256,"platform":3,"sort":20,"type":1,"url":"/openingInventory/index"},{"code":"scm:masterdata:skuType:query#","id":1266,"levelId":"001001001","name":"商品-原料类别设定","parentId":1256,"platform":3,"sort":30,"type":1,"url":"/scm/skutype/index"},{"code":"scm:masterdata:sku:query#","id":1267,"levelId":"001001001","name":"商品-原料设定","parentId":1256,"platform":3,"sort":40,"type":1,"url":"/sku/index"},{"code":"scm:masterdata:skuBom:query#","id":1268,"levelId":"001001001","name":"商品配方设定","parentId":1256,"platform":3,"sort":50,"type":1,"url":"/scm/skubom/index"},{"code":"scm:masterdata:reason:edit","id":1269,"levelId":"001001001","name":"退回、报废原因设定","parentId":1256,"platform":3,"sort":60,"type":1,"url":"/reason/index"},{"code":"scm:purchase:supplierType:query#","id":1270,"levelId":"001001001","name":"供应商类别设定","parentId":1257,"platform":3,"sort":10,"type":1,"url":"/scm/supplierCate/index"},{"code":"scm:purchase:supplier:query#","id":1271,"levelId":"001001001","name":"供应商设定","parentId":1257,"platform":3,"sort":20,"type":1,"url":"/scm/supplier/index"},{"code":"scm:purchase:asn:query#","id":1272,"levelId":"001001001","name":"采购入库单","parentId":1257,"platform":3,"sort":30,"type":1,"url":"/asn/purchase/index"},{"code":"scm:purchase:return:query#","id":1273,"levelId":"001001001","name":"采购退货单","parentId":1257,"platform":3,"sort":40,"type":1,"url":"/outbound/purchasereturn/index"},{"code":"scm:delivery:line:query#","id":1274,"levelId":"001001001","name":"配送线路","parentId":1258,"platform":3,"sort":10,"type":1,"url":"/delivery/line/index"},{"code":"scm:delivery:template:query#","id":1275,"levelId":"001001001","name":"配送模板","parentId":1258,"platform":3,"sort":20,"type":1,"url":"/scm/template/delivery/index"},{"code":"scm:delivery:prepare:query#","id":1276,"levelId":"001001001","name":"预配发货单","parentId":1258,"platform":3,"sort":30,"type":1,"url":"/delivery/prepare/index"},{"code":"scm:delivery:sign:query#","id":1277,"levelId":"001001001","name":"配送签收单","parentId":1258,"platform":3,"sort":40,"type":1,"url":"/delivery/sign/index"},{"code":"scm:scrap:scrap:query#","id":1278,"levelId":"001001001","name":"报废单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/outbound/scrap/index"},{"code":"scm:production:template:query#","id":1279,"levelId":"001001001","name":"自产模板","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/scm/template/product/index"},{"code":"scm:cc:cc:query#","id":1280,"levelId":"001001001","name":"盘点单","parentId":1261,"platform":3,"sort":10,"type":1,"url":"/cc/task/index"},{"code":"scm:inventory:si:query#","id":1281,"levelId":"001001001","name":"入库单","parentId":1262,"platform":3,"sort":1,"type":1,"url":"/asn/si/index"},{"code":"scm:inventory:so:query#","id":1282,"levelId":"001001001","name":"出库单","parentId":1262,"platform":3,"sort":2,"type":1,"url":"/outbound/so/index"},{"code":"scm:inventory:transfer:query#","id":1283,"levelId":"001001001","name":"移库单","parentId":1262,"platform":3,"sort":3,"type":1,"url":"/transferorder/index"},{"code":"scm:report:inventory:query","id":1284,"levelId":"001001001","name":"库存查询","parentId":1263,"platform":3,"sort":10,"type":1,"url":"/inventory/index"},{"code":"scm:report:inventoryTransaction:query","id":1285,"levelId":"001001001","name":"库存交易凭证","parentId":1263,"platform":3,"sort":20,"type":1,"url":"/inventoryTransaction/index"},{"code":"scm:report:ccReport:query","id":1286,"levelId":"001001001","name":"盘点盈亏表","parentId":1263,"platform":3,"sort":30,"type":1,"url":"/report/cc/index"},{"code":"scm:report:allocation:query","id":1287,"levelId":"001001001","name":"调拨差异分析表","parentId":1263,"platform":3,"sort":40,"type":1,"url":"/report/allocationDifference/index"},{"code":"scm:report:skuIO:query","id":1288,"levelId":"001001001","name":"商品出入库明细表","parentId":1263,"platform":3,"sort":50,"type":1,"url":"/report/skuIO/index"},{"code":"scm:report:scrap:query","id":1289,"levelId":"001001001","name":"退回报废分析表","parentId":1263,"platform":3,"sort":60,"type":1,"url":"/report/returnandscrap/index"},{"code":"scm:report:deliveryDifference:query","id":1290,"levelId":"001001001","name":"配送差异分析表","parentId":1263,"platform":3,"sort":70,"type":1,"url":"/report/deliveryDifference/index"},{"code":"scm:report:ioreason:query","id":1291,"levelId":"001001001","name":"出入库原因分析表","parentId":1263,"platform":3,"sort":80,"type":1,"url":"/report/ioreason/index"},{"code":"scm:production:si:query#","id":1296,"levelId":"001001001","name":"自产入库单","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/asn/product/index"},{"code":"loyalty:marketPlan:marketPlan:v5","id":1298,"levelId":"001001001","name":"营销方案","parentId":1850,"platform":2,"sort":2,"type":1,"url":"#/marketing/marketing-plan"},{"code":"loyalty:marketPlan:v5","id":1300,"levelId":"001","name":"营销","parentId":0,"platform":2,"sort":2,"type":1,"url":"#"},{"code":"wx:seting5","id":1302,"levelId":"001001","name":"移动门店设置","parentId":130,"platform":5,"sort":4,"type":1,"url":"#"},{"code":"scm:scrap:back:query#","id":1427,"levelId":"001001001","name":"退回入库单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/backstorage/index"},{"code":"mind:report:salesort:query","id":1428,"levelId":"001001001","name":"销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/salesort/index"},{"code":"wx:seting5:payConfig4Brand","id":1444,"levelId":"001001001","name":"品牌支付设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4Brand/getPayConfig"},{"code":"mind:baobiao:renxiaotongji","id":1446,"levelId":"001001","name":"人效统计","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:renxiaotongji:waimaiyuan","id":1455,"levelId":"001001001","name":"外卖员情况报表","parentId":1446,"platform":1,"sort":2,"type":1,"url":"/report/outSaler/view"},{"code":"mind:baobiao:renxiaotongji:zhuotaiqingkuangbaobiao","id":1457,"levelId":"001001001","name":"桌台情况报表","parentId":1446,"platform":1,"sort":2,"type":1,"url":"/report/tradeTableSituation/list"},{"code":"mind:baobiao:yingyebaobiao:zhekouyouhui","id":1462,"levelId":"001001001","name":"优惠明细表","parentId":117,"platform":1,"sort":40,"type":1,"url":"/report/discount/view"},{"code":"mind:baobiao:yingyebaobiao:guanzhangjiaobanjilubiao","id":1466,"levelId":"001001001","name":"对账-关账交班记录表","parentId":117,"platform":1,"sort":10,"type":1,"url":"/report/closeBill/closeBillNew"},{"code":"mind:shezhi:liyoushezhi","id":1471,"levelId":"001001","name":"理由设置","parentId":130,"platform":1,"sort":7,"type":1,"url":"/brand/reason/list"},{"code":"mind:bangzhu:caozuorizhi","id":1479,"levelId":"001001","name":"操作日志","parentId":208,"platform":1,"sort":1,"type":1,"url":"/logger/list/business"},{"code":"mind:baobiao:renxiaotongji:fuwuyuanqingkuang","id":1480,"levelId":"001001001","name":"服务员情况报表","parentId":1446,"platform":1,"sort":1,"type":1,"url":"/report/waiter/list"},{"code":"scm:report:purchase:query","id":1485,"levelId":"001001001","name":"采购分析表","parentId":1263,"platform":3,"sort":90,"type":1,"url":"/report/purchaseanalysis/index"},{"code":"loyalty:report:member:memberCount","id":1486,"levelId":"001001001","name":"会员量分析","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/membership-analysis"},{"code":"loyalty:report:member:memberValue","id":1487,"levelId":"001001001","name":"会员储值分析","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/member-stored-value"},{"code":"loyalty:report:trade:tradeReport","id":1488,"levelId":"001001001","name":"会员消费分析","parentId":1851,"platform":2,"sort":3,"type":1,"url":"#/report/member-consumption"},{"code":"loyalty:member:memberpricesetting:v5","id":1489,"levelId":"001001001","name":"特价菜单","parentId":1198,"platform":2,"sort":3,"type":1,"url":"#/setting/special-menu"},{"code":"mind:baobiao:xiaoshoubaobiao:liyoufenxi","id":1490,"levelId":"001001001","name":"订单理由分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/tradeReason/list"},{"code":"mind:baobiao:yingyebaobiao:posdetails","id":1492,"levelId":"001001001","name":"银联POS账单明细","parentId":117,"platform":1,"sort":100,"type":1,"url":"/report/settlementController/pos"},{"code":"mind:shezhi:zhekouzhezhi","id":1493,"levelId":"001001","name":"折扣设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:zhekouzhezhi:zhekouguanli","id":1494,"levelId":"001001001","name":"折扣管理","parentId":1493,"platform":1,"sort":1,"type":1,"url":"/discountManage/discount/list"},{"code":"mind:shezhi:zhekouzhezhi:zhekoufanben","id":1495,"levelId":"001001001","name":"折扣范本","parentId":1493,"platform":1,"sort":2,"type":1,"url":"/discountManage/discountTemplate/list"},{"code":"loyalty:marketPlan:cardKind","id":1510,"levelId":"001001","name":"实体卡","parentId":1848,"platform":2,"sort":4,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance","id":1528,"levelId":"001001","name":"实体卡报表","parentId":106,"platform":2,"sort":8,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance:saleCardReport","id":1529,"levelId":"001001001","name":"实体卡","parentId":1528,"platform":2,"sort":1,"type":1,"url":"#/report/entity-member"},{"code":"loyalty:report:member:memberCoupon","id":1534,"levelId":"001001001","name":"券消费明细表","parentId":297,"platform":2,"sort":4,"type":1,"url":"#/report/coupon-view"},{"code":"scm:report:inventoryDistribution:query","id":1538,"levelId":"001001002","name":"库存分布明细表","parentId":1263,"platform":3,"sort":15,"type":1,"url":"/report/inventoryDistribution/index"},{"code":"mind:shezhi:logoSetting","id":1540,"levelId":"001111","name":"LOGO设置","parentId":130,"platform":1,"sort":20,"type":1,"url":"/logo/index"},{"code":"scm:stockcount:template:query#","id":1542,"levelId":"001001001","name":"盘点模板","parentId":1261,"platform":3,"sort":5,"type":1,"url":"/scm/template/stockcount/index"},{"code":"wx:seting5:brandCustom","id":1545,"levelId":"001001001","name":"品牌页面自定义","parentId":1302,"platform":5,"sort":6,"type":1,"url":"/customerContenteArea/brandCustom"},{"code":"wx:seting5:masterialNews","id":1546,"levelId":"001001001","name":"素材管理","parentId":1302,"platform":5,"sort":2,"type":1,"url":"/materialNew/list?type=materialNews"},{"code":"wx:seting5:event","id":1551,"levelId":"001001001","name":"事件中心","parentId":1302,"platform":5,"sort":5,"type":1,"url":"/event/view"},{"code":"wx:seting5:autoReply","id":1552,"levelId":"001001001","name":"自动回复","parentId":1302,"platform":5,"sort":4,"type":1,"url":"/autoReply/view"},{"code":"wx:seting5:menuCustom","id":1553,"levelId":"001001001","name":"自定义菜单","parentId":1302,"platform":5,"sort":3,"type":1,"url":"/menuCustom/page"},{"code":"loyalty:marketPlan:cardKind:v5","id":1556,"levelId":"001001001","name":"会员卡","parentId":1510,"platform":2,"sort":1,"type":1,"url":"#/customer/member-card"},{"code":"loyalty:tempCardKind:tempCardKindList","id":1557,"levelId":"001001001","name":"匿名卡","parentId":1510,"platform":2,"sort":2,"type":1,"url":"#/customer/anonymous-card"},{"code":"scm:masterdata:setting:edit","id":1577,"levelId":"001001002","name":"库存参数设定","parentId":1256,"platform":3,"sort":70,"type":1,"url":"/setting/index"},{"code":"mind:shezhi:shortMsgTemplateSetting","id":1579,"levelId":"001123","name":"通知模板设置","parentId":130,"platform":1,"sort":18,"type":1,"url":"/commercial/shortMsgTemplete/index"},{"code":"mind:shezhi:accountSubject","id":1580,"levelId":"001001","name":"收支管理","parentId":130,"platform":1,"sort":2,"type":1,"url":"/accountSubject/page"},{"code":"coupn:templet:view","id":1581,"levelId":"001001","name":"优惠券方案","parentId":1300,"platform":2,"sort":2,"type":1,"url":"#/marketing/coupon-plan"},{"code":"loyalty:baobiao:tempCard:consumeReport","id":1582,"levelId":"001001001","name":"匿名卡","parentId":1528,"platform":2,"sort":3,"type":1,"url":"#/report/entity-temp"},{"code":"mind:shezhi:depositSetting","id":1589,"levelId":"001011","name":"押金设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"/brand/deposit/index"},{"code":"mind:trade:tradeManage:listView","id":1591,"levelId":"001001","name":"订单管理","parentId":100,"platform":1,"sort":4,"type":1,"url":"/tradeManage/listView"},{"code":"mind:bangzhu:bangzhuzhongxin","id":1592,"levelId":"001001","name":"帮助中心","parentId":208,"platform":1,"sort":4,"type":1,"url":"/pos/help/centerIndexShow"},{"code":"mind:baobiao:yingyebaobiao:yajinbaobiao","id":1593,"levelId":"001001011","name":"押金报表","parentId":117,"platform":1,"sort":50,"type":1,"url":"/report/deposit/list"},{"code":"wx:payConfig4Brand:weixinConfig","id":1605,"levelId":"001001001","name":"公众号参数设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4Brand/weixinConfig"},{"code":"loyalty:report:customer:customerProfile","id":1606,"levelId":"001001001","name":"顾客画像","parentId":1851,"platform":2,"sort":5,"type":1,"url":"#/report/customer-profile"},{"code":"mind:baobiao:jingyingguanli","id":1607,"levelId":"001001","name":"经营管理","parentId":106,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:baobiao:jingyingguanli:mingancaozuobaobiao","id":1608,"levelId":"001001001","name":"敏感操作报表","parentId":1607,"platform":1,"sort":1,"type":1,"url":"/report/sensitiveOperation/list"},{"code":"scm:purchase:nav:index","id":1609,"levelId":"001001002","name":"采购流程导航","parentId":1257,"platform":3,"sort":5,"type":1,"url":"/asn/purchase/nav"},{"code":"scm:delivery:aggregate:query#","id":1610,"levelId":"001001002","name":"商品需求汇总单","parentId":1257,"platform":3,"sort":22,"type":1,"url":"/supply/aggregate/index"},{"code":"scm:purchase:apply:query#","id":1611,"levelId":"001001002","name":"采购申请单","parentId":1257,"platform":3,"sort":24,"type":1,"url":"/purchase/apply/index"},{"code":"scm:purchase:plan:query#","id":1612,"levelId":"001001002","name":"采购计划单","parentId":1257,"platform":3,"sort":26,"type":1,"url":"/purchase/plan/index"},{"code":"scm:purchase:order:query#","id":1613,"levelId":"001001002","name":"采购订单","parentId":1257,"platform":3,"sort":28,"type":1,"url":"/purchase/order/index"},{"code":"scm:masterdata:deliverysetting:edit","id":1614,"levelId":"001001002","name":"配送管理参数设定","parentId":1258,"platform":3,"sort":5,"type":1,"url":"/deliverySetting/index"},{"code":"scm:delivery:track:index#","id":1615,"levelId":"001001002","name":"配送调拨跟踪表","parentId":1258,"platform":3,"sort":25,"type":1,"url":"/delivery/track/index"},{"code":"scm:report:product:query","id":1616,"levelId":"001001002","name":"商品生产分析表","parentId":1263,"platform":3,"sort":55,"type":1,"url":"/report/productanalysis/index"},{"code":"loyalty:marketing:marketSetting","id":1622,"levelId":"001001","name":"营销设置","parentId":1300,"platform":2,"sort":16,"type":1,"url":"#/marketing/setting"},{"code":"scm:productSetting:edit","id":1623,"levelId":"001001001","name":"生产管理参数设定","parentId":1260,"platform":3,"sort":5,"type":1,"url":"/scm/cost/index"},{"code":"scm:cc:setting:edit","id":1625,"levelId":"001001001","name":"盘点参数设定","parentId":1261,"platform":3,"sort":2,"type":1,"url":"/cc/setting/index"},{"code":"scm:report:purchasedetail:query","id":1626,"levelId":"001001002","name":"采购明细表","parentId":1263,"platform":3,"sort":100,"type":1,"url":"/report/purchasedetail/index"},{"code":"scm:report:cost:bom","id":1627,"levelId":"001001003","name":"配方估算成本分析表","parentId":1263,"platform":3,"sort":110,"type":1,"url":"/report/cost/bom/index"},{"code":"scm:report:cost:selling","id":1628,"levelId":"001001004","name":"商品销售成本分析表","parentId":1263,"platform":3,"sort":120,"type":1,"url":"/report/cost/selling/index"},{"code":"scm:report:inventoryWarn:query","id":1629,"levelId":"001001002","name":"库存预警表","parentId":1263,"platform":3,"sort":16,"type":1,"url":"/report/inventoryWarn/index"},{"code":"scm:masterdata:inventoryWarning:query#","id":1630,"levelId":"001001002","name":"库存预警设定","parentId":1256,"platform":3,"sort":80,"type":1,"url":"/inventoryWarning/index"},{"code":"wx:seting5:wxTmpMsg","id":1639,"levelId":"001001001","name":"微信模板消息","parentId":1302,"platform":5,"sort":123,"type":1,"url":"/wxTmpMsg/view"},{"code":"mind:baobiao:shouyinbaobiao:tuihuofenxi","id":1816,"levelId":"001001001","name":"异常货品分析","parentId":122,"platform":1,"sort":4,"type":1,"url":"/report/returnInvalidDish/list"},{"code":"scm:sale","id":1822,"levelId":"001002","name":"销售管理","parentId":1255,"platform":3,"sort":4,"type":1,"url":"#"},{"code":"scm:account:deposit:query#","id":1823,"levelId":"001002002","name":"供货保证金","parentId":1822,"platform":3,"sort":1,"type":1,"url":"/account/deposit/index"},{"code":"scm:order:sale:query#","id":1825,"levelId":"001002002","name":"销售订单","parentId":1822,"platform":3,"sort":2,"type":1,"url":"/sale/order/index"},{"code":"scm:report:saledetail:query","id":1836,"levelId":"001001002","name":"销售明细表","parentId":1263,"platform":3,"sort":140,"type":1,"url":"/report/saledetail/index"},{"code":"mind:22222","id":1837,"levelId":"001001","name":"配送站管理","parentId":130,"platform":1,"sort":1,"type":1,"url":"/deliveryStation/stationList"},{"code":"mind:hailaosong","id":1838,"levelId":"001002","name":"海捞送订单管理","parentId":100,"platform":1,"sort":1,"type":1,"url":"/hailaosong/takeOutOrder/orderList"},{"code":"mind:baobiao:yingyebaobiao:disanfangduizhang","id":1847,"levelId":"001001003","name":"第三方对账报表","parentId":117,"platform":1,"sort":11,"type":1,"url":"/report/thirdPartyPeconciliation/index"},{"code":"loyalty:membertrunk:v5","id":1848,"levelId":"001","name":"顾客","parentId":0,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:member:levelRight:v5","id":1849,"levelId":"001001001","name":"会员权益","parentId":1198,"platform":2,"sort":1,"type":1,"url":"#/setting/member-right"},{"code":"loyalty:marketPlan:marketPlanTree:v5","id":1850,"levelId":"001001","name":"营销方案","parentId":1300,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:overview","id":1851,"levelId":"001001","name":"顾客概况","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:chuzhi","id":1852,"levelId":"001001","name":"储值报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:jifen","id":1853,"levelId":"001001","name":"积分报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:customerProfileType","id":1854,"levelId":"001001001","name":"顾客分类","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/customer-category"}];
+
 
 
             var win = window.bkeruyun || this;
@@ -283,175 +296,195 @@
     </script>
 </div>
 
+<!-- 标题 -->
 <div class="article-header">
     <div class="center-block w1200">
-        <h1><span id="orderType">入库单</span></h1>
+        <h1><span id="command-type-name">新增</span>入库单</h1>
 
         <div class="btn-wrap pull-right tar">
-            <a code="scm:button:inventory:si:add" function="$.doForward" args="{url:'/scm_kry/asn/si/add'}" class="btn-link ml10" id="btn-create">创建</a>
+            <a class="btn-link ml10"  id="btnSave" function="$.doSave"
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/asn/si/save',
+               customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.saveCallback'}">保存</a>
+            <a code="scm:button:inventory:si:confirm" class="btn-link ml10"  id="btnConfirm" function="$.doConfirmOrder"
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/asn/si/confirm',
+               customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>
+
+            <a class="btn-link ml10 hidden" code="scm:button:inventory:si:add"
+               id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>
+
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/asn/si/index');">返回</a>
         </div>
     </div>
 </div>
-<div class="center-block panel-group mt20">
-    <!-- 左栏 start -->
-    <div class="aside">
-        <form id="queryConditions" action="#" method="post" autocomplete="off">
-            <!-- 模糊查询 start -->
-            <div class="aside-column panel-search">
-                <h2>模糊查询</h2>
 
-                <div class="search-box">
-                    <input type="text" name="asnNo" id="asnNo" class="form-control" placeholder="请输入单据号"
-                           data-format="sn" maxlength="14">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
+<div class="center-block panel-group mt20" id="accordion">
+    <div class="panel">
+        <form method="post" action="/scm_kry/delivery/allocation/save" id="baseInfoForm">
+            <!-- 基本信息 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>基本信息</em></h3>
+            </div>
+
+            <!-- hidden start -->
+            <input type="hidden" id="id" name="id" value="">
+            <input type="hidden" id="asnNo" name="asnNo" value="RK201703200005"/>
+            <input type="hidden" id="warehouseName" name="warehouseName" value=""/>
+            <input type="hidden" id="sourceType" name="sourceType" value=""/>
+            <!-- hidden end -->
+            <div class="panel-body">
+                <div class="clear">
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="asnNoView">单据号<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <input type="text" class="form-control" id="asnNoView"
+                                           name="asnNoView" value="RK201703200005"
+                                           placeholder="系统生成单据号" data-type="word" maxlength="14"
+                                           disabled/>
+
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+
+
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="senderId">入库原因<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <select id="senderId" name="senderId" class="{required:true}">
+
+
+
+
+                                        <option value="">请选择入库原因</option>
+
+                                        <option value="1" >生产退料</option>
+
+                                        <option value="2" >退还入库</option>
+
+                                        <option value="3" >其他入库</option>
+
+                                        <option value="5" >预配退货</option>
+
+
+
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
-                <div class="search-box mt10">
-                    <input type="text" name="sourceOrderNo" id="sourceOrderNo" class="form-control" placeholder="请输入来源单据号"
-                           data-format="sn" maxlength="50">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
+
+                <div class="clear">
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="warehouseId">入库仓库<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <select id="warehouseId" name="warehouseId" class="{required:true}">
+
+
+
+
+                                        <option value="">请选择入库仓库</option>
+
+                                        <option value="9591" >总仓库</option>
+
+                                        <option value="13260" >饮品仓</option>
+
+                                        <option value="13261" >酒水仓</option>
+
+                                        <option value="13262" >原材料仓</option>
+
+
+
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="remarks">备注信息<strong class="white vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240 search-box">
+                                <TEXTAREA id="remarks" name="remarks" class="w240" style="height: 65px;"
+                                          placeholder="备注说明（可不填）" data-character="true"
+                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
+                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
             </div>
-            <!-- 模糊查询 end -->
-
-            <!-- 确认/保存日期 start -->
-            <div class="aside-column">
-                <h2>保存/确认日期</h2>
-
-                <div class="search-box">
-                    <input type="text" name="startDay" id="startDay" class="form-control datepicker-start" data-for-element="endDay"
-                           placeholder="请选择开始日期" readonly>
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-                <div class="search-box mt10">
-                    <input type="text" name="endDay" id="endDay" class="form-control datepicker-end" data-for-element="startDay"
-                           placeholder="请选择结束日期" readonly>
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-            </div>
-            <!-- 确认/保存日期 end -->
-
-            <!-- 入库原因 start -->
-            <div class="aside-column">
-                <h2>入库原因</h2>
-
-                <div>
-                    <select class="form-control" name="senderId" id="senderId">
-                        <option value="">请选择入库原因</option>
-
-                        <option value="1">生产退料</option>
-
-                        <option value="2">退还入库</option>
-
-                        <option value="3">其他入库</option>
-
-                        <option value="5">预配退货</option>
-
-                        <option value="6">商户退回</option>
-
-                    </select>
-                </div>
-            </div>
-            <!-- 入库原因 end -->
-
-            <!-- 入库仓库 start -->
-            <div class="aside-column">
-                <h2>入库仓库</h2>
-
-                <div>
-                    <select class="form-control" name="warehouseId" id="warehouseId">
-                        <option value="">请选择入库仓库</option>
-
-
-
-
-                        <option value="9591">总仓库</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
-                    </select>
-                </div>
-            </div>
-            <!-- 入库仓库 end -->
-
-            <!-- 状态 start -->
-            <div class="aside-column">
-                <h2>状态</h2>
-                <ul class="panel-list-type">
-                    <li>
-                        <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
-                            <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
-                    </li>
-                    <li>
-                        <label class="checkbox" for="status-1" id="checkbox-1"><span></span>
-                            <input type="checkbox" name="status" id="status-1" value="1">已确认</label>
-                    </li>
-                </ul>
-            </div>
-            <!-- 状态 end -->
-            <!-- 更多查询 start -->
-            <div class="aside-column panel-search" id="commercialCol" style="display:none;">
-
-                <div class="search-box">
-                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="商品名称/编码"
-                           data-format="skuName" maxlength="14">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-            </div>
-            <div class="aside-column panel-search" id="updateCol" style="display:none;">
-                <div class="search-box">
-                    <input type="text" name="creatorName" id="creatorName" class="form-control" placeholder="制单人"
-                           data-format="name" maxlength="14">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-            </div>
-            <!-- 更多查询 end -->
         </form>
-        <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
-        <a class="link undo-all" id="undo-all">全部撤销</a>
-        <a class="btn-blue btn-search" role="button"
-           function="$.doSearch" args="{dataGridId:grid}">查 询</a>
-    </div>
-    <!-- 左栏 end -->
-    <!-- 右栏 start -->
-    <div class="panel main">
-        <div class="panel-body">
-            <!-- grid start -->
-            <table id="grid"></table>
-            <div id="gridPager"></div>
-            <!-- grid end -->
+        <!-- 基本信息 end -->
+
+        <!-- 单据明细信息 start -->
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>单据明细</em></h3>
         </div>
+
+        <div class="ml10 mt10 mr20" style="float: left">
+            <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
+            <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
+            <div class="input-group search-box w200 pull-left ml5">
+                <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+                <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
+            </div>
+        </div>
+
+        <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+
+        <div class="panel-body">
+            <div class="inventoryTotal mr15">
+                <span>入库数量合计：<span id="qtySum">
+                    0</span></span>
+                <span>入库金额合计：<span id="amountSum">
+                    ￥0</span></span>
+            </div>
+            <div class="mt20 detail-grid">
+                <table id="grid"></table>
+            </div>
+        </div>
+        <!-- 单据明细信息 end -->
     </div>
-    <!-- 右栏 end -->
 </div>
 
+
+<div id="scmSkuSelectDiv" gridId="grid" skuScene="72" warehouseId="warehouseId" qtyColName="actualQty"></div>
+
+<!-- 商品选择 begin -->
+<script type="text/javascript" src="/scm_kry/js/scm/scm-filterGridData.js?v=20170315_135229"></script>
+<!-- 商品选择 end -->
+
+<!-- 单据作业 end -->
+
+
+
+<script type="text/javascript" src="/scm_kry/js/scm/scm-unit-select.js?v=20170315_135229"></script>
 <script type="text/javascript" src="/scm_kry/js/scm/wm/inbound/asn-si.js?v=20170315_135229"></script>
 
 <script>
     $(function() {
         var opts = {
             urlRoot : "/scm_kry/asn/si",
-            commandType : 0
+            commandType : 1,
+            gridData : eval(),
+            skuScene:72,
+            skuTypes:eval([{"id":null,"uuid":null,"brandId":null,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"dishId":null,"skuName":null,"skuAliasName":null,"skuCode":null,"skuTypeId":170317,"skuDesc":null,"wmType":null,"uomId":null,"price":null,"barcode":null,"skuKey":null,"isDisable":null,"skuShops":null,"yieldRate":null,"skuTypeName":"奶慕奉茶","uom":null,"originalCcInventoryQty":null,"inventoryQty":null,"skuConvert":null,"skuConvertOfStandard":null,"standardUnitId":null,"standardUnitName":null,"standardPrice":null,"exceptShopStr":"","uomIdForTable":null,"supplierId":null,"wmTypeStr":null,"yieldRateStr":null,"skuNameSimple":null,"propStr":null,"wmTypeName":null}]),
+            isSourceOrderIdNull: true
         };
 
         asnSi._init(opts);
