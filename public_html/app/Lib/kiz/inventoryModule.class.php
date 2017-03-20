@@ -40,7 +40,7 @@ class inventoryModule extends KizBaseModule{
     }
 
     /**
-     * 仓库入库
+     * 仓库入库查询
      */
     public function go_down_index()	{
         init_app_page();
@@ -51,7 +51,20 @@ class inventoryModule extends KizBaseModule{
 
     }
 
-	public function index()	{
+    /**
+     * 仓库入库添加
+     */
+    public function go_down_add()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $GLOBALS['tmpl']->assign("page_title", "入库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goDownAdd.html");
+
+    }
+
+
+    public function index()	{
 
 	    init_app_page();
 		$account_info = $GLOBALS['account_info'];
