@@ -1,0 +1,6 @@
+		<select name="city_id">
+			<option value="0">==未选择==</option>
+			<foreach name="city_list" item="city_item">
+				<option value="{$city_item.id}" <if condition="$vo['city_id'] eq $city_item['id']">selected="selected"</if>>{$city_item.name}</option>
+			</foreach>
+		</select>

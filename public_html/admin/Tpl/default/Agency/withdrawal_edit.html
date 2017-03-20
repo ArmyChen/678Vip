@@ -1,0 +1,42 @@
+{// 引入标签库 }
+<tagLib name="html" />
+<script type="text/javascript">
+
+
+</script>
+<div class="main">
+
+<div class="main_title">{$withdrawal_info.agency_name} 提现:{$withdrawal_info.money|format_price}</div>
+
+<div class="blank5"></div>
+<form name="edit" action="__APP__" method="post" enctype="multipart/form-data" >
+<table class="form" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=2 class="topTd"></td>
+	</tr>
+	<tr>
+		<td class="item_title">本次提现金额:</td>
+		<td class="item_input">{$withdrawal_info.money|format_price}
+		
+		</td>
+	</tr>
+
+	<tr>
+		<td class="item_title">&nbsp;</td>
+		<td class="item_input">
+			<!--隐藏元素-->
+			<input type="hidden" name="id" value="{$withdrawal_info.id}" />
+
+			<input type="hidden" name="{:conf("VAR_MODULE")}" value="Agency" />
+			<input type="hidden" name="{:conf("VAR_ACTION")}" value="do_withdrawal" />
+			<!--隐藏元素-->
+			<input type="submit" class="t_button" value="{%OK}" />
+	
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2 class="bottomTd"></td>
+	</tr>
+</table>	 
+</form>
+</div>

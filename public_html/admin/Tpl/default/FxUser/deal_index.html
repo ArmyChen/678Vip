@@ -1,0 +1,77 @@
+{// 引入标签库 }
+<tagLib name="html" />
+<include file="Public:header" />
+<load href='__TMPL__Common/js/fx_user_deal.js' />
+<php>
+
+function get_fx_status($type){
+	return $type==1?"管理员分配":"会员领取";
+}
+
+
+//状态的显示
+function get_fx_effect($is_effect,$id)
+{
+	if($is_effect)
+	{
+		return "<span class='is_effect' onclick='set_deal_effect(".$id.",this);'>上架</span>";
+	}
+	else
+	{
+		return "<span class='is_effect' onclick='set_deal_effect(".$id.",this);'>下架</span>";
+	}
+}
+</php>
+<script type="text/javascript">
+//改变分销商品状态
+function set_deal_effect(id,domobj)
+{
+		$.ajax({ 
+				url: ROOT+"?"+VAR_MODULE+"="+MODULE_NAME+"&"+VAR_ACTION+"=set_deal_effect&id="+id, 
+				data: "ajax=1",
+				dataType: "json",
+				success: function(obj){
+
+					if(obj.data=='1')
+					{
+						$(domobj).html('上架');
+					}
+					else if(obj.data=='0')
+					{
+						$(domobj).html('下架');
+					}
+					else if(obj.data=='')
+					{
+						
+					}
+					$("#info").html(obj.info);
+				}
+		});
+}
+</script>
+
+<div class="main">
+<div class="main_title">{$title_name}</div>
+<div class="blank5"></div>
+<div class="button_row">
+
+
+
+<input type="button" class="button" value="添加" onclick="add_deal_box({$user_id});"/>
+<input type="button" class="button" value="{%DEL}" onclick="foreverdel();" />	
+</div>
+<div class="blank5"></div>
+<html:list 
+	id="dataTable" 
+	style="dataTable" 
+	name="fx_list" 
+	checkbox="true" 
+	action="true" 
+	datasource="list" 
+	show="deal_id:商品编号|60px,name:商品名称,type|get_fx_status:分销类型,add_time|to_date:分销获取时间,sale_count:销量,sale_total|format_price:销售额,sale_balance|format_price:总利润,is_effect|get_fx_effect=$fx_list['id']:状态" 
+	actionlist="foreverdel:{%FOREVERDEL}" /> 
+
+<div class="blank5"></div>
+<div class="page">{$page}</div>
+</div>
+<include file="Public:footer" />

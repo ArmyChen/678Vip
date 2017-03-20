@@ -1,0 +1,131 @@
+{// 引入标签库 }
+<tagLib name="html" />
+<include file="Public:header" />
+<load href='__TMPL__Common/js/agency.js' />
+<div class="main">
+<div class="main_title">{%ADD} <a href="{:u("Agency/index")}" class="back_list">{%BACK_LIST}</a></div>
+<div class="blank5"></div>
+<form name="edit" action="__APP__" method="post" enctype="multipart/form-data">
+<table class="form" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=2 class="topTd"></td>
+	</tr>
+	<tr>
+		<td class="item_title">{%NAME}:</td>
+		<td class="item_input"><input type="text" class="textbox require" name="name" value="{$vo.name}" /></td>
+	</tr>
+	
+	<tr>
+		<td class="item_title">账户名:</td>
+		<td class="item_input">
+		<input type="text" class="textbox" name="account_name" value="{$vo.account_name}" />
+
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">手机号:</td>
+		<td class="item_input">
+		<input type="text" class="textbox" name="mobile" value="{$vo.mobile}" />
+
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">密码:</td>
+		<td class="item_input">
+		<input type="password" class="textbox" name="account_password" value="" />
+		<if condition="$account_info['id']">
+		<span class="tip_span">[密码为空则不做修改]</span>
+		</if>
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td class="item_title">省份:</td>
+		<td class="item_input">
+		<select name="province_id">
+			<option value="0">==未选择==</option>
+			<foreach name="province_list" item="province_item">
+				<option value="{$province_item.id}" <if condition="$vo['province_id'] eq $province_item['id']">selected="selected"</if>>{$province_item.name}</option>
+			</foreach>
+		</select>
+		</td>
+	</tr>	
+
+	<tr>
+		<td class="item_title">{%DEAL_CITY}:</td>
+		<td class="item_input" id="city_box">
+		<select name="city_id">
+			<option value="0">==未选择==</option>
+			<foreach name="city_list" item="city_item">
+				<option value="{$city_item.id}" <if condition="$vo['city_id'] eq $city_item['id']">selected="selected"</if>>{$city_item.name}</option>
+			</foreach>
+		</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<td class="item_title">区域:</td>
+		<td class="item_input" id="region_box">
+		<select name="region_id">
+			<option value="0">==未选择==</option>
+			<foreach name="region_list" item="region_item">
+				<option value="{$region_item.id}" <if condition="$vo['region_id'] eq $region_item['id']">selected="selected"</if>>{$region_item.name}</option>
+			</foreach>
+		</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<td class="item_title">银行户名:</td>
+		<td class="item_input">
+			<input type="text" class="textbox" name="bank_user" value="{$vo.bank_user}" />
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">开户行名称:</td>
+		<td class="item_input">
+		<input type="text" class="textbox" name="bank_name" value="{$vo.bank_name}" />
+
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">开户行帐号:</td>
+		<td class="item_input">
+		<input type="text" class="textbox" name="bank_info" value="{$vo.bank_info}" />
+
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">邀请码:</td>
+		<td class="item_input">
+		{$share_code}
+		</td>
+	</tr>
+	<tr>
+		<td class="item_title">{%IS_EFFECT}:</td>
+		<td class="item_input">
+			<lable>{%IS_EFFECT_1}<input type="radio" name="is_effect" value="1" <if condition="$vo['is_effect'] eq 1">checked="checked"</if> /></lable>
+			<lable>{%IS_EFFECT_0}<input type="radio" name="is_effect" value="0" <if condition="$vo['is_effect'] eq 0">checked="checked"</if> /></lable>	
+		</td>
+	</tr>
+	
+	<tr>
+		<td class="item_title"></td>
+		<td class="item_input">
+			<input type="hidden" name="id" value="{$vo.id}" />
+			<!--隐藏元素-->
+			<input type="hidden" name="{:conf("VAR_MODULE")}" value="Agency" />
+			<input type="hidden" name="{:conf("VAR_ACTION")}" value="update" />
+			<!--隐藏元素-->
+			<input type="submit" class="button" value="{%EDIT}" />
+			<input type="reset" class="button" value="{%RESET}" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2 class="bottomTd"></td>
+	</tr>
+</table>	 
+</form>
+</div>
+<include file="Public:footer" />

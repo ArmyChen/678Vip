@@ -1,0 +1,104 @@
+{// 引入标签库 }
+<tagLib name="html" />
+<include file="Public:header" />
+<load href='__TMPL__Common/js/conf.js' />
+<script type="text/javascript" src="__TMPL__Common/js/calendar/calendar.php?lang=zh-cn" ></script>
+<load href='__TMPL__Common/js/calendar/calendar.css' />
+<load href='__TMPL__Common/js/calendar/calendar.js' />
+<load href='__TMPL__Common/js/deal.js' />
+<load href='__TMPL__Common/js/init_relate_reply.js' />
+<script type="text/javascript">
+	
+	window.onload = function()
+	{
+		init_dealform();
+		sw_shop_cate();
+		
+	}
+</script>
+<php>
+function get_type_show($shoukuanfang)
+{   
+     
+    if ($shoukuanfang==0)
+	return '平台代收';
+    else
+	return '商家自收';
+}
+function get_zhifustatus($get_zhifustatus)
+{
+    if ($get_zhifustatus==0)
+	return '未付款';
+    elseif($get_zhifustatus==1)
+    return '付款';
+    else
+	return '退款';
+}
+function get_view($name,$list)
+{  
+   
+   $slid=$list['mid'];
+   $str = "<a href='".'biz.php?ctl=goodsales&admin_slid='.$slid."' target=_blank title='点击查看详细统统计'>".$name."</a>";
+
+   return $str;
+   //return $list;
+    
+}
+</php>
+<div class="main">
+<div class="main_title">线下财务记录</div>
+<div class="blank5"></div>
+<div class="search_row">
+<form name="search" action="__APP__" method="get">
+门店名称或ID：<input type="text" class="textbox" name="name" value="{:strim($_REQUEST['name'])}" />	
+开始时间：<input type="text" class="textbox" name="begin_time" id="begin_time" value="{$begin_time}" onfocus="this.blur(); return showCalendar('begin_time', '%Y-%m-%d %H:%M:%S', false, false, 'btn_begin_time');" onclick="return showCalendar('begin_time', '%Y-%m-%d %H:%M:%S', false, false, 'begin_time');" />
+结束时间：<input type="text" class="textbox" name="end_time" id="end_time" value="{$end_time}" onfocus="this.blur(); return showCalendar('end_time', '%Y-%m-%d %H:%M:%S', false, false, 'btn_end_time');" onclick="return showCalendar('end_time', '%Y-%m-%d %H:%M:%S', false, false, 'end_time');"/>
+<select name="zffs" class="textbox">
+			<option value="">全部支付方式</option>
+			<foreach name="zffslist" item="zffs">
+				<option value="{$zffs.zffs}" {$zffs.select} >{$zffs.name}</option>
+			</foreach>
+</select>
+ <select name="shoukuanfang" class="textbox">
+			<option value="-1"  <if condition="$shoukuanfang eq -1">selected="selected"</if>>收款方</option>
+			<option value="10" <if condition="$shoukuanfang eq 10">selected="selected"</if>>平台代收</option>
+			<option value="1" <if condition="$shoukuanfang eq 1">selected="selected"</if>>商家自收</option>
+</select>
+ <select name="zhifustatus" class="textbox">
+		<option value="">状态</option>
+			<option value="1" <if condition="$zhifustatus eq 1">selected="selected"</if>>收款</option>
+            <option value="9" <if condition="$zhifustatus eq 9">selected="selected"</if>>退款</option>
+</select>             
+<input type="hidden" value="Balance" name="m" />
+<input type="hidden" value="tongji" name="a" />
+<input type="submit" class="button" value="{%SEARCH}" />
+</form>
+</div>
+<div class="blank5"></div>
+<html:list 
+
+	id="dataTable" 
+
+	style="dataTable" 
+
+	name="location" 
+
+	datasource="list" 
+
+	show="mid:商户ID,location_name|get_view=$location:商户名称（点击名称查看详细统计）,danshu:单数,money_ys|format_price:金额,zffsname:支付方式,shoukuanfang:收款方,zhifustatus|get_zhifustatus:状态" 
+
+	actionlist = ""
+
+	 /> 
+
+<div class="blank5"></div>
+<table id="dataTable" class="dataTable" cellpadding="0" cellspacing="0"><tbody>
+<tr class="row"><td class="wtd_0">本页合计：</td><td class="wtd_2">{$total_danshu}</td><td class="wtd_3"></td><td class="wtd_4">¥{$total_money}</td><td class="wtd_5"></td><td class="wtd_6"></td></tr></tbody></table>
+
+<div class="page">{$page}</div>
+
+
+
+</div>
+
+<include file="Public:footer" />

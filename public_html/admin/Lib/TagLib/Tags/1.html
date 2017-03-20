@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gb2312">
+<title>无标题文档</title>
+</head>
+
+<body>
+</body>
+</html>
