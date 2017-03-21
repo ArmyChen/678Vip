@@ -380,7 +380,7 @@ var scmSkuSelect = {
         });
 
         $.ajax({
-            url: ctxPath + "/common/getSkuTypes",
+            url: ctxPath + "/getSkuTypes",
             data: {skuScene: _this.opts.skuScene},
             type: "post",
             async: false,
