@@ -4,7 +4,7 @@
 
 <div class="article-header">
     <div class="center-block w1200">
-        <h1><span id="orderType">入库单</span></h1>
+        <h1><span id="orderType">{$page_title}</span></h1>
 
         <div class="btn-wrap pull-right tar">
             <a code="scm:button:inventory:si:add" function="$.doForward" args="{url:'/scm_kry/asn/si/add'}" class="btn-link ml10" id="btn-create">创建</a>
@@ -79,31 +79,9 @@
                 <div>
                     <select class="form-control" name="warehouseId" id="warehouseId">
                         <option value="">请选择入库仓库</option>
-
-
-
-
                         <option value="9591">总仓库</option>
-
-
-
-
-
-
                         <option value="13260">饮品仓</option>
-
-
-
-
-
-
                         <option value="13261">酒水仓</option>
-
-
-
-
-
-
                         <option value="13262">原材料仓</option>
 
 

@@ -142,13 +142,43 @@
             <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
             <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
             <div class="input-group search-box w200 pull-left ml5">
-                <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                <div class="input-group-addon"><img width="20" height="20" src="/app/Tpl/kiz/js/scm_kry/img/scanning.png" alt=""></div>
                 <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
                 <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
             </div>
         </div>
 
-        <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+        <div id="filterGridDiv" class="pull-left cut-off-rule">
+            <form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">
+                <div class="form-container ml10">
+                    <div class="form-item filter">
+                        <div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;">
+                            <div class="select-group">
+                                <div class="select-control"><em>请选择商品分类</em></div>
+                                <ul>
+                                    <li>请选择商品分类</li>
+                                </ul>
+                                <select class="form-control select-style" name="skuTypeName" id="skuTypeName">
+                                    <option value="">请选择商品分类</option>
+                                </select></div>
+                        </div>
+                    </div>
+                    <div class="form-item filter">
+                        <div class="control-label-con1 search-box" style="width: 185px;"><input type="text"
+                                                                                                name="skuCodeOrName"
+                                                                                                class="form-control"
+                                                                                                placeholder="请输入商品编码/名称"
+                                                                                                data-format="skuName"
+                                                                                                maxlength="14">
+                            <button type="button" class="close" aria-hidden="true">×</button>
+                        </div>
+                    </div>
+                    <div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"
+                                                                   role="button"
+                                                                   onclick="$.filterGrid.filterSku(this);">查 询</a></div>
+                </div>
+            </form>
+        </div>
 
         <div class="panel-body">
             <div class="inventoryTotal mr15">
