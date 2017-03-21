@@ -2007,7 +2007,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .aside {
     position: relative;
     float: left;
-    width: 23.3333%;
+    width: 18.3333%;
     min-width: 280px;
     background-color: #fff;
     border-top: 5px solid #3887d7;
@@ -2127,7 +2127,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 /*右栏*/
 .main {
     float: right;
-    width: 75%;
+    width: 80%;
     min-width: 900px;
     background-color: #fff;
 }

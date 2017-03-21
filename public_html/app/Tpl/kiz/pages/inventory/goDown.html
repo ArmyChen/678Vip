@@ -20,29 +20,29 @@
                 <h2>模糊查询</h2>
 
                 <div class="search-box">
-                    <input type="text" name="asnNo" id="asnNo" class="form-control" placeholder="请输入单据号"
+                    <input type="text" name="danjuhao" id="danjuhao" class="form-control" placeholder="请输入单据号"
                            data-format="sn" maxlength="14">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
-                <div class="search-box mt10">
-                    <input type="text" name="sourceOrderNo" id="sourceOrderNo" class="form-control" placeholder="请输入来源单据号"
-                           data-format="sn" maxlength="50">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
+                <!--<div class="search-box mt10">-->
+                    <!--<input type="text" name="sourceOrderNo" id="sourceOrderNo" class="form-control" placeholder="请输入来源单据号"-->
+                           <!--data-format="sn" maxlength="50">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
             </div>
             <!-- 模糊查询 end -->
 
             <!-- 确认/保存日期 start -->
             <div class="aside-column">
-                <h2>保存/确认日期</h2>
+                <h2>按时间范围查询</h2>
 
                 <div class="search-box">
-                    <input type="text" name="startDay" id="startDay" class="form-control datepicker-start" data-for-element="endDay"
+                    <input type="text" name="begin_time" id="begin_time" class="form-control datepicker-start" data-for-element="begin_time"
                            placeholder="请选择开始日期" readonly>
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
                 <div class="search-box mt10">
-                    <input type="text" name="endDay" id="endDay" class="form-control datepicker-end" data-for-element="startDay"
+                    <input type="text" name="end_time" id="end_time" class="form-control datepicker-start" data-for-element="end_time"
                            placeholder="请选择结束日期" readonly>
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
@@ -51,21 +51,20 @@
 
             <!-- 入库原因 start -->
             <div class="aside-column">
-                <h2>入库原因</h2>
+                <h2>业务类型</h2>
 
                 <div>
-                    <select class="form-control" name="senderId" id="senderId">
-                        <option value="">请选择入库原因</option>
+                    <select class="form-control" name="ywsortid" id="ywsortid">
+                        <option value="99" {if $ywsortid eq 99} selected="selected" {/if}>全部</option>
+                        {foreach from=$ywsort item=ywitem key=ywkey}
 
-                        <option value="1">生产退料</option>
 
-                        <option value="2">退还入库</option>
 
-                        <option value="3">其他入库</option>
+                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
 
-                        <option value="5">预配退货</option>
 
-                        <option value="6">商户退回</option>
+
+                        {/foreach}
 
                     </select>
                 </div>
@@ -73,58 +72,58 @@
             <!-- 入库原因 end -->
 
             <!-- 入库仓库 start -->
-            <div class="aside-column">
-                <h2>入库仓库</h2>
+            <!--<div class="aside-column">-->
+                <!--<h2>入库仓库</h2>-->
 
-                <div>
-                    <select class="form-control" name="warehouseId" id="warehouseId">
-                        <option value="">请选择入库仓库</option>
-                        <option value="9591">总仓库</option>
-                        <option value="13260">饮品仓</option>
-                        <option value="13261">酒水仓</option>
-                        <option value="13262">原材料仓</option>
+                <!--<div>-->
+                    <!--<select class="form-control" name="warehouseId" id="warehouseId">-->
+                        <!--<option value="">请选择入库仓库</option>-->
+                        <!--<option value="9591">总仓库</option>-->
+                        <!--<option value="13260">饮品仓</option>-->
+                        <!--<option value="13261">酒水仓</option>-->
+                        <!--<option value="13262">原材料仓</option>-->
 
 
 
-                    </select>
-                </div>
-            </div>
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
             <!-- 入库仓库 end -->
 
             <!-- 状态 start -->
-            <div class="aside-column">
-                <h2>状态</h2>
-                <ul class="panel-list-type">
-                    <li>
-                        <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
-                            <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
-                    </li>
-                    <li>
-                        <label class="checkbox" for="status-1" id="checkbox-1"><span></span>
-                            <input type="checkbox" name="status" id="status-1" value="1">已确认</label>
-                    </li>
-                </ul>
-            </div>
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox" for="status-1" id="checkbox-1"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-1" value="1">已确认</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 状态 end -->
             <!-- 更多查询 start -->
-            <div class="aside-column panel-search" id="commercialCol" style="display:none;">
+            <!--<div class="aside-column panel-search" id="commercialCol" style="display:none;">-->
 
-                <div class="search-box">
-                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="商品名称/编码"
-                           data-format="skuName" maxlength="14">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-            </div>
-            <div class="aside-column panel-search" id="updateCol" style="display:none;">
-                <div class="search-box">
-                    <input type="text" name="creatorName" id="creatorName" class="form-control" placeholder="制单人"
-                           data-format="name" maxlength="14">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                </div>
-            </div>
+                <!--<div class="search-box">-->
+                    <!--<input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="商品名称/编码"-->
+                           <!--data-format="skuName" maxlength="14">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="aside-column panel-search" id="updateCol" style="display:none;">-->
+                <!--<div class="search-box">-->
+                    <!--<input type="text" name="creatorName" id="creatorName" class="form-control" placeholder="制单人"-->
+                           <!--data-format="name" maxlength="14">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
+            <!--</div>-->
             <!-- 更多查询 end -->
         </form>
-        <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
+        <!--<a class="link searchMore" id="searchMore" data-status="0">更多条件</a>-->
         <a class="link undo-all" id="undo-all">全部撤销</a>
         <a class="btn-blue btn-search" role="button"
            function="$.doSearch" args="{dataGridId:grid}">查 询</a>
@@ -142,6 +141,18 @@
     <!-- 右栏 end -->
 </div>
 
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/asn-si.js?v=20170315_135229"></script>
+
+<script>
+    $(function() {
+        var opts = {
+            urlRoot : "/kiz.php?ctl=inventory&act=go_down_index_ajax&type=1&id={$slid}",
+            commandType : 0
+        };
+
+        asnSi._init(opts);
+    });
+</script>
 {include file="inc/footer.html"}
 
 </body>
