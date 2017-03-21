@@ -106,7 +106,7 @@ class inventoryModule extends KizBaseModule{
         $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
 
-        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+        if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
             $begin_time = strim($_REQUEST['begin_time']);
             $end_time = strim($_REQUEST['end_time']);
         }else{	 //默认为当月的
@@ -164,6 +164,151 @@ class inventoryModule extends KizBaseModule{
         }
         $return['dataList'] = $list;
         echo json_encode($return);exit;
+    }
+
+    /**
+     * 入库保存ajax
+     */
+    public function saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $dd_detail=serialize($_REQUEST['detail']);
+        $cid=$_REQUEST['cid'];
+        $cate_id=$_REQUEST['cate_id'];
+        $gonghuoren=$_REQUEST['gonghuoren'];
+        $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
+
+        //if($unit_type==9){$unit_type==0;}
+        $datain=$_REQUEST;
+        $datain['ctime']=to_timespan($_REQUEST['ctime']);
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+
+        //更新仓库
+        $detail=$_REQUEST['detail'];
+
+        foreach($detail as $k=>$v){
+            if (intval($v['mid'])==0){
+                continue;
+            }
+            $mid=$v['mid'];
+            //0805 查询本店的ID 根据商品条码
+            if($ddbz>0){
+                if($v['barcode'] !="")  {
+                    $mid=$GLOBALS['db']->getOne("select id from fanwe_dc_menu where location_id='".$slid."' and (barcode='".$v['barcode']."')");
+                }else{
+                    $mid=$GLOBALS['db']->getOne("select id from fanwe_dc_menu where location_id='".$slid."' and (name='".$v['name']."')");
+                }
+                if (!$mid){
+                    //如果ID不存在，则自动增加商品进入产品库，返回ID
+                    $dc_menu_data=array(
+                        "location_id"=>$slid,
+                        "supplier_id"=>$supplier_id,
+                        "barcode"=>$v['barcode'],
+                        "name"=>$v['name'],
+                        "cate_id"=>$v['cate_id'],
+                        "price"=>floatval($v['price']),
+                        "unit"=>$v['unit'],
+                        "funit"=>$v['funit'],
+                        "times"=>$v['times'],
+                        "type"=>$v['type']
+                    );
+
+                    $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
+                    $mid = $GLOBALS['db']->insert_id();
+                }
+            }
+
+            $cid=$GLOBALS['db']->getOne("select cid from fanwe_cangku_bangding_cangku where slid=$slid and mid=$mid"); //取得仓库ID
+            if(!$cid){
+                $cid=$GLOBALS['db']->getOne("select id from fanwe_cangku where slid=$slid and isdisable=1 order by id asc limit 1");//取得仓库ID
+            }
+
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
+            $order_num=floatval($v['num']);
+            $cate_id=$v['cate_id'];
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+
+            //存在的话更新数量
+            if ($_REQUEST['type']==1){ //入库
+                $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstr);
+                if($check){
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+                }else{
+                    //添加
+                    $data_menu=array(
+                        "slid"=>$slid,
+                        "mid"=>$mid,
+                        "cid"=>$cid,
+                        "cate_id"=>$v['cate_id'],
+                        "mbarcode"=>$v['barcode'],
+                        "mname"=>$v['name'],
+                        "mstock"=>$order_num,
+                        "stock"=>$order_num,
+                        "minStock"=>10,
+                        "maxStock"=>10000,
+                        "unit"=>$v['unit'],
+                        "funit"=>$v['funit'],
+                        "times"=>$v['times'],
+                        "type"=>$v['type'],
+                        "ctime"=>to_date(NOW_TIME)
+                    );
+                    $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
+                }
+
+                //写入库商品明细
+                $gonghuoren=$GLOBALS['db']->getOne("select gid from fanwe_cangku_bangding_gys where slid=$slid and mid=$mid"); //取得绑定的供应商
+                if(!$cid){
+                    $gonghuoren='linshi_3'; //临时供应商3
+                }
+
+                $data_gys=array(
+                    "slid"=>$slid,
+                    "mid"=>$mid,
+                    "cid"=>$cid,
+                    "mbarcode"=>$v['barcode'],
+                    "mname"=>$v['name'],
+                    "stock"=>$order_num,
+                    "gonghuoren"=>$gonghuoren,
+                    "unit"=>$v['unit'],
+                    "funit"=>$v['funit'],
+                    "times"=>$v['times'],
+                    "type"=>$v['type'],
+                    "price"=>floatval($v['price']),
+                    "ctime"=>to_date(NOW_TIME)
+                );
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
+            }else{ //出库
+                $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+                if($order_num>$check['mstock']){
+                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
+                }else{//操作减库存
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+                }
+            }
+            //增加MENU库表
+            if ($_REQUEST['type']==1){ //入库
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
+            }else{
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+            }
+        }
+        if($res){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
+            showBizSuccess("操作成功",0,url("biz","cangku#index&id=$slid"));
+        }else{
+            showBizErr("出现错误",0,url("biz","cangku#index&id=$slid"));
+        }
+
+
     }
 
     public function index()	{
