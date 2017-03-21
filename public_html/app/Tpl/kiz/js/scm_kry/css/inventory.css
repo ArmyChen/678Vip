@@ -1,0 +1,174 @@
+/** 
+ + -------------------------- +
+ + print.css v3.0
+ + Web: http://www.keruyun.com
+ + -------------------------- +
+ + Author: Tian Xiao Yun
+ + QQ: 358926040
+ + Mail: misstian2008@163.com
+ + -------------------------- +
+ + Date: 2015-03
+ + -------------------------- +
+**/
+/*-----css icon  -----*/
+.w70 {
+    width: 70px;
+}
+
+.icon-cancellation-coupons:hover {
+    background-position: -232px 2px;
+}
+
+.icon-comfirm {
+
+}
+
+/*-----css layout-----*/
+/*库存*/
+#btnMore {
+    padding: 0 20px;
+    color: #8abdf0;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.breadCrumbs {
+    margin: 20px auto;
+}
+
+.breadCrumbs > li {
+    display: inline-block;
+    padding-left: 70px;
+    padding-right: 10px;
+    font-size: 12px;
+    background: url('../img/inventory_icon.png') no-repeat 0 -110px;
+    cursor: pointer;
+}
+
+.breadCrumbs > li:first-child {
+    padding-left: 0;
+    background-image: none;
+}
+
+.breadCrumbs > li > span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    background: url('../img/inventory_icon.png') no-repeat 0 -40px;
+}
+
+.breadCrumbs > li.current {
+    color: #4f95dc;
+
+}
+
+.breadCrumbs > li.current > span {
+    background-position: 0 0;
+}
+
+.breadCrumbs > li.notScope {
+    /*不在搜索范围内*/
+    display: none;
+}
+
+/*移库单*/
+.classificationAll > h3,
+.classificationCol {
+    padding-left: 25px;
+}
+
+.classificationCol {
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+}
+
+.classificationCol.open {
+    height: auto;
+}
+
+.classificationAll > h3,
+.classificationCol ul > li {
+    margin-bottom: 5px;
+}
+
+.notScope {
+    display: none;
+}
+
+.classificationCol ul > li em {
+    font-weight: normal;
+}
+
+.classificationCol > .icon-folding {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: url("../img/inventory-arrow.png") no-repeat 0 -26px;
+    cursor: pointer;
+}
+
+.classificationCol > .open {
+    background-position: 0 0px;
+}
+
+.inventoryTotal {
+    padding-top: 10px;
+    color: #737373;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.inventoryTotal > span {
+    margin-left: 40px;
+}
+/**/
+.additem-wrap{
+	position: relative;
+
+}
+.additem-wrap .search-box{
+	width:620px;
+}
+.additem-wrap .icon-plus{
+	position: absolute;
+	left: 630px;
+	bottom: 5px;
+	z-index: 1;
+}
+.search-box .icon-editor{
+	position: absolute;
+	right: 8px;
+	top: 5px;
+	border: 0 none;
+	cursor: pointer;
+	
+}
+.additem-wrap .search-box .close{
+	display:none;
+}
+.additem-wrap .search-box .wrong{
+	position: absolute;
+	left: 0;
+	top: 34px;
+	font-size: 12px;
+	display: none;
+}
+.additem-wrap .additem{
+	margin-bottom:20px;
+	position: relative;
+}
+.additem-wrap .additem .close-1{
+	position: absolute;
+	left: 660px;
+	top: 5px;
+}

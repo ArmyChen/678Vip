@@ -43,9 +43,78 @@ class inventoryModule extends KizBaseModule{
      * 仓库入库查询
      */
     public function go_down_index()	{
+
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+
+        $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+
+
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当月的
+            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        $page_size = 50;
+        $page = intval($_REQUEST['p']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $sqlstr="where 1=1";
+        $sqlstr.=' and ( a.slid='.$location_id.')';
+
+        if($begin_time_s){
+            $sqlstr .=" and a.ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $sqlstr .=" and a.ctime < ".$end_time_s." ";
+        }
+
+        if ($type !=99 ){
+            $sqlstr .=" and a.type = ".$type." ";
+        }
+        if ($ywsortid !=99 ){
+            $sqlstr .=" and a.ywsort = ".$ywsortid." ";
+        }
+        if($_REQUEST['danjuhao'] !=""){
+            $sqlstr .=" and a.danjuhao = '".$_REQUEST['danjuhao']."' ";
+        }
+
+
+        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
+        $sqlc="select count(a.id) from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
+
+
+        $total = $GLOBALS['db']->getOne($sqlc);
+        $page = new Page($total,$page_size);   //初始化分页对象
+        $p  =  $page->show();
+        $GLOBALS['tmpl']->assign('pages',$p);
+        $list=$GLOBALS['db']->getAll($sql);
+        foreach($list as $kl=>$vl){
+            $vl['ctime']=to_date($vl['ctime'],'m-d H:i:s');
+            $vl['detail']=unserialize($vl['dd_detail']);
+            if ($vl['type']==1){
+                $vl['type_show']	='入库';
+                $vl['gonghuo_show']	='供货人';
+            }else{
+                $vl['type_show']	='出库';
+                $vl['gonghuo_show']	='收货人';
+            }
+            $vl['ywsort']=$this->ywsort[$vl['ywsort']];
+            $vl['gonghuo']=$this->get_gonghuoren_name($supplier_id,$location_id,$vl['gonghuoren']);
+            $list[$kl]=$vl;
+        }
+
         $GLOBALS['tmpl']->assign("page_title", "入库单");
         $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
 
