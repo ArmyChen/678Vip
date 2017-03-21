@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <base href="http://b.keruyun.com:80/scm_kry/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+    <title></title>
+
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" href="/scm_kry/themes/style/img/favicon.ico?v=20170315_135229" type="image/x-icon">
+
+    <base href="/scm_kry">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    {include file="inc/css.html"}
+    {include file="inc/js.html"}
+</head>
+<body>
+<input type="hidden" id="t" name="t" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
+<input type="hidden" id="t_2" name="t_2" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
+<div id="header">
+    <input type="hidden" id="loginSessionId" value="5ea8172a3f7b40418c8a3fa77b440e52">
+    <div class="nav-tabs" id="nav-fixed">
+        <div class="center-block">
+            <h1 id="logo"></h1>
+            <ul class="nav head-new-nav"></ul>
+            <span style="background:white">
+                <!-- 登录信息 start -->
+                <div class="user-info">
+                    <div class="user-info-view">
+                        <div class="photo"
+                             style="display: inline;float:left;width:50px;height:50px;background:url('/scm_kry/themes/style/img/icon-user.png') no-repeat;background-size:50px 50px;-webkit-background-size: 50px 50px "></div>
+                        <div style="display: inline;float: left">
+                            <ul>
+                                <li title=" {insert name="load_biz_user_tip"}">&nbsp; {insert name="load_biz_user_tip"}</li>
+                                <li title="admin">&nbsp;admin</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="list-group" style="display: none;">
+                        <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
+                        <a href="#" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
+                        <a href="#" id="logout" class="list-group-item logout">退出登录</a>
+                    </div>
+                </div>
+                <!-- 登录信息 end -->
+
+                <!-- 切换门店弹窗 start -->
+                <div id="changeCommercialModal" class="modal fade in mapModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <a class="close" data-dismiss="modal">&times;</a>
+                                <h3>切换门店</h3>
+                            </div>
+                            <div class="modal-body modal-main">
+                                <div id="map_container" class="col-md-8 map-content">
+
+                                </div>
+
+                                <div class="col-md-4 search-content">
+                                    <div class="clearfix">
+                                        <div class="search-box" id="goodsTypeSearch">
+                                            <input type="text" id="searchCommercial" class="form-control" placeholder="根据门店名称或地址搜索"
+                                                   maxlength="48" value="">
+                                            <span id="js-type-search-button" class="icon-search" title="搜索">搜索</span>
+                                        </div>
+                                        <div class="shop-content" id="shop_list">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 切换门店弹窗 end -->
+		</span>
+        </div>
+    </div>
+
+</div>

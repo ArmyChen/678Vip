@@ -1,0 +1,57 @@
+[
+  {
+    "code": "scm:index",
+    "id": 1255,
+    "levelId": "001",
+    "name": "库存",
+    "parentId": 0,
+    "platform": 3,
+    "sort": 4,
+    "type": 1,
+    "url": "/index"
+  },
+  {
+    "code": "scm:inventory",
+    "id": 1262,
+    "levelId": "001001",
+    "name": "其他管理",
+    "parentId": 1255,
+    "platform": 3,
+    "sort": 8,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:inventory:si:query#",
+    "id": 1281,
+    "levelId": "001001001",
+    "name": "入库单",
+    "parentId": 1262,
+    "platform": 3,
+    "sort": 1,
+    "type": 1,
+    "url": "/asn/si/index"
+  },
+  {
+    "code": "scm:inventory:so:query#",
+    "id": 1282,
+    "levelId": "001001001",
+    "name": "出库单",
+    "parentId": 1262,
+    "platform": 3,
+    "sort": 2,
+    "type": 1,
+    "url": "/outbound/so/index"
+  },
+  {
+    "code": "scm:inventory:transfer:query#",
+    "id": 1283,
+    "levelId": "001001001",
+    "name": "移库单",
+    "parentId": 1262,
+    "platform": 3,
+    "sort": 3,
+    "type": 1,
+    "url": "/transferorder/index"
+  }
+]
