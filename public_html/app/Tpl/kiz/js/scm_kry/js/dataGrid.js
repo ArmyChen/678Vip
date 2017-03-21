@@ -72,20 +72,20 @@
             // 列设置 begin
             colNames: [],
             colModel: [],
-            showOperate: false,
-            operateColName: '操作',
-            operateColumns: {
-                cloName: '',
-                model: {
-                    name: 'ACTION',
-                    width: 130,
-                    title: false,
-                    align: "center",
-                    sortable: false,
-                    formatter: null,
-                    actionParam: null
-                }
-            },
+            // showOperate: true,
+            // operateColName: '操作',
+            // operateColumns: {
+            //     cloName: '',
+            //     model: {
+            //         name: 'ACTION',
+            //         width: 130,
+            //         title: false,
+            //         align: "center",
+            //         sortable: false,
+            //         formatter: null,
+            //         actionParam: null
+            //     }
+            // },
             //默认的操作状态,根据定义的顺序显示
             actionParam: {
                 delete: {
