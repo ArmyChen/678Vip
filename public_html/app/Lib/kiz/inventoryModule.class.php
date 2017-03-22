@@ -233,15 +233,15 @@ class inventoryModule extends KizBaseModule{
         $slid = intval($_REQUEST['slid']);
 
         $where = "where 1 and g.location_id=$slid";
-        if($_REQUEST['cate_id']){
-            $where .= " and g.cate_id=".$_REQUEST['cate_id'];
+        if($_REQUEST['skuTypeId']){
+            $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
         if($_REQUEST['skuCodeOrName']){
             $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')";
         }
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_shop_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_shop_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
@@ -303,19 +303,18 @@ class inventoryModule extends KizBaseModule{
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
         $dd_detail=serialize($_REQUEST['detail']);
-        $cid=$_REQUEST['cid'];
-        $cate_id=$_REQUEST['cate_id'];
-        $gonghuoren=$_REQUEST['gonghuoren'];
+
         $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
 
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
-        $datain['ctime']=to_timespan($_REQUEST['ctime']);
+        //$datain['ctime']=to_timespan($_REQUEST['ctime']);
+        $datain['ctime']= time();
         $datain['dd_detail']=$dd_detail;
         $datain['slid']=$slid;
 
         //更新仓库
-        $detail=$_REQUEST['detail'];
+        $detail=$_REQUEST['details'];
 
         foreach($detail as $k=>$v){
             if (intval($v['mid'])==0){
@@ -336,7 +335,7 @@ class inventoryModule extends KizBaseModule{
                         "supplier_id"=>$supplier_id,
                         "barcode"=>$v['barcode'],
                         "name"=>$v['name'],
-                        "cate_id"=>$v['cate_id'],
+                        "cate_id"=>$v['skuTypeId'],
                         "price"=>floatval($v['price']),
                         "unit"=>$v['unit'],
                         "funit"=>$v['funit'],
@@ -355,8 +354,8 @@ class inventoryModule extends KizBaseModule{
             }
 
             $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
-            $order_num=floatval($v['num']);
-            $cate_id=$v['cate_id'];
+            $order_num=floatval($v['actualQty']);
+            $cate_id=$v['skuId'];
             $unit_type=intval($v['unit_type']);
             if ($unit_type==1){  //使用的是副单位
                 $order_num=$order_num*$v['times']; //换算成主单位
@@ -373,14 +372,14 @@ class inventoryModule extends KizBaseModule{
                         "slid"=>$slid,
                         "mid"=>$mid,
                         "cid"=>$cid,
-                        "cate_id"=>$v['cate_id'],
-                        "mbarcode"=>$v['barcode'],
-                        "mname"=>$v['name'],
+                        "cate_id"=>$v['skuTypeId'],
+                        "mbarcode"=>$v['skuCode'],
+                        "mname"=>$v['skuName'],
                         "mstock"=>$order_num,
                         "stock"=>$order_num,
                         "minStock"=>10,
                         "maxStock"=>10000,
-                        "unit"=>$v['unit'],
+                        "unit"=>$v['uom'],
                         "funit"=>$v['funit'],
                         "times"=>$v['times'],
                         "type"=>$v['type'],
@@ -399,11 +398,11 @@ class inventoryModule extends KizBaseModule{
                     "slid"=>$slid,
                     "mid"=>$mid,
                     "cid"=>$cid,
-                    "mbarcode"=>$v['barcode'],
-                    "mname"=>$v['name'],
+                    "mbarcode"=>$v['skuCode'],
+                    "mname"=>$v['skuName'],
                     "stock"=>$order_num,
                     "gonghuoren"=>$gonghuoren,
-                    "unit"=>$v['unit'],
+                    "unit"=>$v['uom'],
                     "funit"=>$v['funit'],
                     "times"=>$v['times'],
                     "type"=>$v['type'],
