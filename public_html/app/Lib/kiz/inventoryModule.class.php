@@ -352,6 +352,16 @@ class inventoryModule extends KizBaseModule{
 
     }
 
+    /**
+     * 商品分类ajax
+     */
+    public function goods_category_tree_ajax(){
+        // 商品分类
+        $shop_cate_tree = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."shop_cate where is_delete = 0");
+        $shop_cate_tree = toFormatTree($shop_cate_tree,"name");
+        echo json_encode($shop_cate_tree);exit;
+    }
+
     public function index()	{
 
 	    init_app_page();
