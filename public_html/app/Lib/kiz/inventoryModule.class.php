@@ -17,21 +17,26 @@ class inventoryModule extends KizBaseModule{
 
         global_run();
 		$ywsort=array(
-		"1"=>"盘盈",
-		"2"=>"无订单入库",
-		"3"=>"要货调入",
-		"4"=>"初始库存",
-		"6"=>"盘亏",
-		"7"=>"无订单出库",
-		"8"=>"要货调出",
-		"9"=>"退货"
+            "-5"=>"生产退料",
+            "-4"=>"退还入库",
+            "-3"=>"预配退货",
+//            "-2"=>"其他入库",
+//            "-1"=>"盘盈",
+            "0"=>"盘盈",
+            "2"=>"无订单入库",
+            "3"=>"要货调入",
+            "4"=>"初始库存",
+            "6"=>"盘亏",
+            "7"=>"无订单出库",
+            "8"=>"要货调出",
+            "9"=>"退货"
 		);
 		$this->ywsort=$ywsort;
         $this->gonghuoren=array(
 		"1"=>"临时客户",
 		"2"=>"临时运输商",
 		"3"=>"临时供应商",
-		"4"=>"领料出库"		
+		"4"=>"领料出库"
 		);
 
 		
@@ -66,8 +71,9 @@ class inventoryModule extends KizBaseModule{
         }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("type", $type);
@@ -86,7 +92,13 @@ class inventoryModule extends KizBaseModule{
     public function go_down_add()	{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
-        $supplier_id = $account_info['supplier_id'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("page_title", "入库单");
         $GLOBALS['tmpl']->display("pages/inventory/goDownAdd.html");
 
