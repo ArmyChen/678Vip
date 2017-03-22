@@ -426,14 +426,21 @@ class inventoryModule extends KizBaseModule{
                 $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
             }
         }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = null;
+        $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+
         if($res){
-            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
-            showBizSuccess("操作成功",0,url("biz","cangku#index&id=$slid"));
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
         }else{
-            showBizErr("出现错误",0,url("biz","cangku#index&id=$slid"));
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
         }
-
-
+        echo json_encode($return);exit;
     }
 
     /**
