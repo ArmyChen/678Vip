@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "message": "操作成功",
+  "exception": null,
+  "flag": null,
+  "refresh": false,
+  "data": {
+    "url":"?ctl=inventory&act=go_down_index"
+  }
+}

@@ -384,11 +384,11 @@ $.detailsValidator = function (args) {
         return false;
     }
 
-    var qtyOfNoUom = $grid.find('.select-unit > .red-border').length;
-    if (qtyOfNoUom > 0) {
-        $.layerMsg('还有商品未选择单位', false);
-        return false;
-    }
+    // var qtyOfNoUom = $grid.find('.select-unit > .red-border').length;
+    // if (qtyOfNoUom > 0) {
+    //     $.layerMsg('还有商品未选择单位', false);
+    //     return false;
+    // }
 
     var qtySum = $grid.jqGrid('getCol', 'actualQty', false, 'sum');
     if (qtySum == 0) {
@@ -403,16 +403,17 @@ $.detailsValidator = function (args) {
 $.saveCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-        var $id = $("#id");
-        if (!$id.val()) {
-            $id.val(rs.data.id);
-            replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
-            $("#command-type-name").text("编辑");
-            document.title = '编辑入库单';
-
-            $("#btnCopy").removeClass("hidden");
-        }
+        // var $id = $("#id");
+        // if (!$id.val()) {
+        //     $id.val(rs.data.id);
+        //     replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
+        //     $("#command-type-name").text("编辑");
+        //     document.title = '编辑入库单';
+        //
+        //     $("#btnCopy").removeClass("hidden");
+        // }
         $.layerMsg(rs.message, true);
+        location.href=rs.data.url;
         return;
     } else {
         if (rs.data != '' && rs.data != null) {
