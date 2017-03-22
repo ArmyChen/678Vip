@@ -259,6 +259,38 @@ class inventoryModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+    /**
+     * 商品搜索（扫码）ajax
+     */
+    public function goods_search_code_ajax()
+    {
+        init_app_page();
+        $slid = intval($_REQUEST['slid']);
+        $where = "where 1 and g.location_id=$slid";
+        if($_REQUEST['cate_id']){
+            $where .= " and g.cate_id=".$_REQUEST['cate_id'];
+        }
+        if($_REQUEST['barcode']){
+            $where .= " and g.barcode='".$_REQUEST['barcode']."'";
+        }
+
+        $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_shop_cate c on c.id=g.cate_id $where";
+        $check=$GLOBALS['db']->getAll($sql);
+//print_r($sql);exit;
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = null;
+        if($check){
+            $return['data'] = $check;
+        }else{
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
     /**
      * 入库保存ajax
      */
