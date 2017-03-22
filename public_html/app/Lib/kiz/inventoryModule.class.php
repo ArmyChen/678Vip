@@ -212,6 +212,7 @@ class inventoryModule extends KizBaseModule{
      */
     public function goods_list_ajax()
     {
+
         init_app_page();
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
@@ -219,17 +220,19 @@ class inventoryModule extends KizBaseModule{
         $limit = (($page-1)*$page_size).",".$page_size;
         $slid = intval($_REQUEST['slid']);
 
-        $where = "where 1 and location_id=$slid";
+        $where = "where 1 and g.location_id=$slid";
         if($_REQUEST['cate_id']){
-            $where .= " and cate_id=".$_REQUEST['cate_id'];
+            $where .= " and g.cate_id=".$_REQUEST['cate_id'];
         }
-        if($_REQUEST['name']){
-            $where .= " and name='".$_REQUEST['name']."' or barcode='".$_REQUEST['name']."'";
+        if($_REQUEST['skuCodeOrName']){
+            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')";
         }
-        $sqlcount = "select count(id) from fanwe_dc_menu $where";
+        $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select id,name,barcode,unit,funit,times,price,pinyin,cate_id from fanwe_dc_menu $where limit $limit";
+        $sql = "select g.id,g.name,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id,c.name as skuTypeName from fanwe_dc_menu g LEFT join fanwe_shop_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
+
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_shop_cate' ");print_r($table);exit;
 
         $return['page'] = $page;
         $return['records'] = $records;
