@@ -315,12 +315,13 @@ class inventoryModule extends KizBaseModule{
 
         //更新仓库
         $detail=$_REQUEST['details'];
-
+//echo (json_encode($_REQUEST['details']));die;
         foreach($detail as $k=>$v){
-            if (intval($v['mid'])==0){
+            if (intval($v['id'])==0){
                 continue;
             }
-            $mid=$v['mid'];
+            $mid=$v['id'];
+
             //0805 查询本店的ID 根据商品条码
             if($ddbz>0){
                 if($v['barcode'] !="")  {
@@ -418,6 +419,7 @@ class inventoryModule extends KizBaseModule{
                     $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
                 }
             }
+
             //增加MENU库表
             if ($_REQUEST['type']==1){ //入库
                 $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
@@ -430,7 +432,7 @@ class inventoryModule extends KizBaseModule{
         $return['exception'] = null;
         $return['refresh'] = false;
         $return['success'] = true;
-        $return['message'] = null;
+        $return['message'] = '保存成功';
         $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
 
         if($res){
@@ -843,12 +845,12 @@ class inventoryModule extends KizBaseModule{
 	$detail=$_REQUEST['detail'];
 	
 	foreach($detail as $k=>$v){		
-	 if (intval($v['mid'])==0){
+	 if (intval($v['id'])==0){
 		continue;
 	 }
 	 //print_r($v);
 	 
-	$mid=$v['mid'];   
+	$mid=$v['id'];   
    //0805 查询本店的ID 根据商品条码 
    if($ddbz>0){
 	 if($v['barcode'] !="")  {
@@ -2359,7 +2361,7 @@ public function Excelkccx()
 			}			
 			//$v['isdisable'] = $v['isdisable'] ? '启用' : '禁用';
 			$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue('A'.intval($k+2), $v['mid'])
+				->setCellValue('A'.intval($k+2), $v['id'])
 				->setCellValue('B'.intval($k+2), $v['cname'])
 				->setCellValue('C'.intval($k+2), $v['mbarcode'])
 				->setCellValue('D'.intval($k+2), $v['mname'])

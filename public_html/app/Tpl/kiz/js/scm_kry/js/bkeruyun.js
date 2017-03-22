@@ -2018,7 +2018,7 @@ $(function () {
                     gridDataId = args.gridDataId;
                 }
                 postData[gridDataId] = gridData;
-                postData = JSON.stringify(postData);
+                // postData = JSON.stringify(postData);
             } else {
                 contentType = 'application/x-www-form-urlencoded;charset=UTF-8';
                 postData = $form.serialize();
@@ -2100,7 +2100,7 @@ $(function () {
                 }
                 $.ajax({
                     url: url,
-                    type: args.type || "post",
+                    type: args.type || "get",
                     data: postData,
                     async: (args.async != false),
                     dataType: args.dataType || "json",
