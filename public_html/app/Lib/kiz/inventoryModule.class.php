@@ -224,7 +224,7 @@ class inventoryModule extends KizBaseModule{
             $where .= " and cate_id=".$_REQUEST['cate_id'];
         }
         if($_REQUEST['name']){
-            $where .= " and name='".$_REQUEST['name']."'";
+            $where .= " and name='".$_REQUEST['name']."' or barcode='".$_REQUEST['name']."'";
         }
         $sqlcount = "select count(id) from fanwe_dc_menu $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
