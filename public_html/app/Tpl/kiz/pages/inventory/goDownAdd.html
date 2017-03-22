@@ -42,9 +42,9 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="asnNoView"
-                                           name="asnNoView" value="RK201703200005"
-                                           placeholder="系统生成单据号" data-type="word" maxlength="14"
-                                           disabled/>
+                                           name="asnNoView" value=""
+                                           placeholder="请输入单据号" data-type="word" maxlength="14" required
+                                           />
 
                                 </div>
                                 <div class="wrong"></div>
@@ -64,15 +64,16 @@
 
 
 
-                                        <option value="">请选择入库原因</option>
+                                        <!--<option value="">请选择入库原因</option>-->
+                                        {foreach from=$ywsort item=ywitem key=ywkey}
 
-                                        <option value="1" >生产退料</option>
+                                        {if $ywkey lt '5'}
 
-                                        <option value="2" >退还入库</option>
+                                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
 
-                                        <option value="3" >其他入库</option>
+                                        {/if}
 
-                                        <option value="5" >预配退货</option>
+                                        {/foreach}
 
 
 
@@ -95,15 +96,13 @@
 
 
 
-                                        <option value="">请选择入库仓库</option>
+                                        <!--<option value="">请选择入库仓库</option>-->
 
-                                        <option value="9591" >总仓库</option>
+                                        {foreach from=$cangkulist item=item}
 
-                                        <option value="13260" >饮品仓</option>
+                                        <option value="{$item.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$item.name}</option>
 
-                                        <option value="13261" >酒水仓</option>
-
-                                        <option value="13262" >原材料仓</option>
+                                        {/foreach}
 
 
 
@@ -148,37 +147,37 @@
             </div>
         </div>
 
-        <div id="filterGridDiv" class="pull-left cut-off-rule">
-            <form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">
-                <div class="form-container ml10">
-                    <div class="form-item filter">
-                        <div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;">
-                            <div class="select-group">
-                                <div class="select-control"><em>请选择商品分类</em></div>
-                                <ul>
-                                    <li>请选择商品分类</li>
-                                </ul>
-                                <select class="form-control select-style" name="skuTypeName" id="skuTypeName">
-                                    <option value="">请选择商品分类</option>
-                                </select></div>
-                        </div>
-                    </div>
-                    <div class="form-item filter">
-                        <div class="control-label-con1 search-box" style="width: 185px;"><input type="text"
-                                                                                                name="skuCodeOrName"
-                                                                                                class="form-control"
-                                                                                                placeholder="请输入商品编码/名称"
-                                                                                                data-format="skuName"
-                                                                                                maxlength="14">
-                            <button type="button" class="close" aria-hidden="true">×</button>
-                        </div>
-                    </div>
-                    <div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"
-                                                                   role="button"
-                                                                   onclick="$.filterGrid.filterSku(this);">查 询</a></div>
-                </div>
-            </form>
-        </div>
+        <!--<div id="filterGridDiv" class="pull-left cut-off-rule">-->
+            <!--<form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">-->
+                <!--<div class="form-container ml10">-->
+                    <!--<div class="form-item filter">-->
+                        <!--<div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;display: none;">-->
+                            <!--<div class="select-group">-->
+                                <!--<div class="select-control"><em>请选择商品分类</em></div>-->
+                                <!--<ul>-->
+                                    <!--<li>请选择商品分类</li>-->
+                                <!--</ul>-->
+                                <!--<select class="form-control select-style" name="skuTypeName" id="skuTypeName">-->
+                                    <!--<option value="">请选择商品分类</option>-->
+                                <!--</select></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-item filter">-->
+                        <!--<div class="control-label-con1 search-box" style="width: 185px;display: none;"><input type="text"-->
+                                                                                                <!--name="skuCodeOrName"-->
+                                                                                                <!--class="form-control"-->
+                                                                                                <!--placeholder="请输入商品编码/名称"-->
+                                                                                                <!--data-format="skuName"-->
+                                                                                                <!--maxlength="14">-->
+                            <!--<button type="button" class="close" aria-hidden="true">×</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"-->
+                                                                   <!--role="button"-->
+                                                                   <!--onclick="$.filterGrid.filterSku(this);">查 询</a></div>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
 
         <div class="panel-body">
             <div class="inventoryTotal mr15">

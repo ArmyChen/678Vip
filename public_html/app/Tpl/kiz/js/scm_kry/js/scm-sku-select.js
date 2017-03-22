@@ -380,7 +380,7 @@ var scmSkuSelect = {
         });
 
         $.ajax({
-            url: ctxPath + "/getSkuTypes",
+            url: ctxPath + "&act=goods_category_tree_ajax",
             data: {skuScene: _this.opts.skuScene},
             type: "post",
             async: false,
@@ -389,8 +389,8 @@ var scmSkuSelect = {
                 var option = '';
                 var li = '';
                 jQuery.each(data, function (index, sku) {
-                    option += '<option value="' + sku.skuTypeId + '">' + sku.skuTypeName + '</option>';
-                    li += '<li>' + sku.skuTypeName + '</li>';
+                    option += '<option value="' + sku.id + '">' + sku.title_show + '</option>';
+                    li += '<li>' + sku.title_show + '</li>';
                 });
                 $skuTypes.append(option);
                 $skuTypes.parent().find('ul').append(li);
@@ -411,10 +411,18 @@ var scmSkuSelect = {
         var $gridObj = $(_this.opts.gridTableId);
         var width = $('#skuSelectModal .modal-dialog').width() - 3;
 
-        var url = '/common/querySkuByScene';
+        var args = new Object();
+        args = getParams();
+        var slid = '';
+        if(args["id"]!=undefined)
+        {
+            slid= args["id"] ;
+        }
+
+        var url = '&act=goods_list_ajax&slid=' + slid;
         //BUG #13577 【盘点单】全部移除商品后，不能添加商品，不能保存，查询所有的商品数据
         if(scmSkuSelect.opts.skuScene == 61){
-            url = '/common/querySkuForCc'
+            url = '&act=goods_list_ajax'
         }
 
         var priceName = '价格';
@@ -431,30 +439,70 @@ var scmSkuSelect = {
             multiselectWidth: 49,
             height: 350,
             width: width,
-            colNames: ['id', 'wmType','yieldRateStr','reckonPrice','库存类型','所属分类', _this.opts.sku + '编码',
-                _this.opts.sku + '名称（规格）', '单位', '单位ID', priceName, '盘点初始库存','当前库存', '换算率', '标准单位换算率', '标准单位ID', '标准单位', '定价','库存类型'],
+            colNames: ['id',
+                // 'wmType',
+                // 'yieldRateStr',
+                // 'reckonPrice',
+                // '库存类型',
+                '所属分类',
+                _this.opts.sku + '编码',
+                _this.opts.sku + '名称（规格）',
+                '单位',
+                // '单位ID',
+                priceName,
+                // '盘点初始库存',
+                '当前库存',
+                // '换算率',
+                // '标准单位换算率',
+                // '标准单位ID',
+                // '标准单位',
+                // '定价',
+                // '库存类型'
+            ],
             colModel: [
                 {name: 'id', index: 'id', hidden: true},
-                {name: 'wmType', index: 'wmType', hidden: true},
-                {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
-                {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {
-                   return rowObject.price;
-                }},
-                {name: 'wmTypeStr', index: 'wmType', align: "center"},
+                // {name: 'wmType', index: 'wmType', hidden: true},
+                // {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
+                // {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {
+                //     return rowObject.price;
+                // }},
+                // {name: 'wmTypeStr', index: 'wmType', align: "center"},
                 {name: 'skuTypeName', index: 'skuTypeName', align: "center"},
                 {name: 'skuCode', index: 'skuCode', align: "center"},
                 {name: 'skuName', index: 'skuName', align: "center"},
                 {name: 'uom', index: 'uom', align: "center"},
-                {name: 'uomIdForTable', index: 'uomIdForTable', align: "center",hidden: true},
                 {name: 'price', index: 'price', align: "center"},
-                {name: 'originalCcInventoryQty', index: 'originalCcInventoryQty', align: "center", hidden: true},
-                {name: 'inventoryQty', index: 'inventoryQty', align: "center", hidden: true/*hideInventoryQty*/},
-                {name: 'skuConvert', index: 'skuConvert', align: "center", hidden: true},
-                {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: "center", hidden: true},
-                {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
-                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true},
-                {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
-                {name: 'wmTypeName', index: 'wmTypeName', align: "center", hidden: true}
+                {name: 'inventoryQty', index: 'inventoryQty', align: "center", hidden: false},
+                // {name: 'originalCcInventoryQty', index: 'originalCcInventoryQty', align: "center", hidden: true},
+                // {name: 'inventoryQty', index: 'inventoryQty', align: "center", hidden: true/*hideInventoryQty*/},
+                // {name: 'skuConvert', index: 'skuConvert', align: "center", hidden: true},
+                // {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: "center", hidden: true},
+                // {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
+                // {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true},
+                // {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
+                // {name: 'wmTypeName', index: 'wmTypeName', align: "center", hidden: true}
+
+                // {name: 'id', index: 'id', hidden: true},
+                // {name: 'wmType', index: 'wmType', hidden: true},
+                // {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
+                // {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {
+                //    return rowObject.price;
+                // }},
+                // {name: 'wmTypeStr', index: 'wmType', align: "center"},
+                // {name: 'skuTypeName', index: 'skuTypeName', align: "center"},
+                // {name: 'skuCode', index: 'skuCode', align: "center"},
+                // {name: 'name', index: 'name', align: "center"},
+                // {name: 'uom', index: 'uom', align: "center"},
+                // {name: 'uomIdForTable', index: 'uomIdForTable', align: "center",hidden: true},
+                // {name: 'price', index: 'price', align: "center"},
+                // {name: 'originalCcInventoryQty', index: 'originalCcInventoryQty', align: "center", hidden: true},
+                // {name: 'inventoryQty', index: 'inventoryQty', align: "center", hidden: true/*hideInventoryQty*/},
+                // {name: 'skuConvert', index: 'skuConvert', align: "center", hidden: true},
+                // {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: "center", hidden: true},
+                // {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
+                // {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true},
+                // {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
+                // {name: 'wmTypeName', index: 'wmTypeName', align: "center", hidden: true}
             ],
             sortname: 'skuCode',
             pager: "",
@@ -543,8 +591,16 @@ var scmSkuSelect = {
 
                 data = _this.serializeGridDataCallback(data);
 
+                var args = new Object();
+                args = getParams();
+                var slid = '';
+                if(args["id"]!=undefined)
+                {
+                    slid= args["id"] ;
+                }
+
                 $.ajax({
-                    url: ctxPath + "/common/querySkuByBarcode",
+                    url: ctxPath + "&act=goods_search_code_ajax&slid="+slid,
                     data: data,
                     type: "post",
                     async: false,
@@ -842,6 +898,31 @@ $.afterAdd = function(){
     }
 };
 
+function getParams() {
+    var args=new Object();
+
+    var query=location.search.substring(1);//获取查询串
+
+    var pairs=query.split("&");//在逗号处断开
+
+    for(var   i=0;i<pairs.length;i++)
+
+    {
+
+        var pos=pairs[i].indexOf('=');//查找name=value
+
+        if(pos==-1)   continue;//如果没有找到就跳过
+
+        var argname=pairs[i].substring(0,pos);//提取name
+
+        var value=pairs[i].substring(pos+1);//提取value
+
+        args[argname]=unescape(value);//存为属性
+
+    }
+
+    return args;
+}
 $(function () {
     //填充商品选择组件 start
     var tmplSkuSelect = '	<div id="skuSelectModal" class="modal fade in" aria-hidden="true">\
