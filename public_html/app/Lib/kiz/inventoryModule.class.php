@@ -284,7 +284,7 @@ class inventoryModule extends KizBaseModule{
         $return['success'] = true;
         $return['message'] = null;
         if($check){
-            $return['data'] = $check;
+            $return['data'] = $check[0];
         }else{
             $return['success'] = false;
             $return['message'] = "查无结果！";
