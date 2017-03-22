@@ -167,6 +167,43 @@ class inventoryModule extends KizBaseModule{
     }
 
     /**
+     * 商品搜索列表
+     */
+    public function goods_list_ajax()
+    {
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $slid = intval($_REQUEST['slid']);
+
+        $where = "where 1 and location_id=$slid";
+        if($_REQUEST['cate_id']){
+            $where .= " and cate_id=".$_REQUEST['cate_id'];
+        }
+        if($_REQUEST['name']){
+            $where .= " and name='".$_REQUEST['name']."'";
+        }
+        $sqlcount = "select count(id) from fanwe_dc_menu $where";
+        $records = $GLOBALS['db']->getOne($sqlcount);
+        $sql = "select id,name,barcode,unit,funit,times,price,pinyin,cate_id from fanwe_dc_menu $where limit $limit";
+        $check=$GLOBALS['db']->getAll($sql);
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if($check){
+            $return['dataList'] = $check;
+        }else{
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+    /**
      * 入库保存ajax
      */
     public function saving_ajax()
@@ -307,8 +344,6 @@ class inventoryModule extends KizBaseModule{
         }else{
             showBizErr("出现错误",0,url("biz","cangku#index&id=$slid"));
         }
-
-
     }
 
     /**
