@@ -324,7 +324,7 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '入库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: true, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
