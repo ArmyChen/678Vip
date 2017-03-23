@@ -332,10 +332,9 @@ class inventoryModule extends KizBaseModule{
         //$slid = $account_info['slid'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
-        $psid = $_REQUEST['psid']?intval($_REQUEST['psid']):'0';
-        $dhid = $_REQUEST['dhid']?intval($_REQUEST['dhid']):'0';
+        $dhid = $_REQUEST['asnNoView']?intval($_REQUEST['asnNoView']):'0';
 
-        $sqlcheck="select dd_detail from fanwe_cangku_log where slid=$slid and (danjuhao='$psid' or danjuhao='$dhid')";
+        $sqlcheck="select dd_detail from fanwe_cangku_log where slid=$slid and  danjuhao='$dhid'";
         $isRuku  =	$GLOBALS['db']->getRow($sqlcheck);
         if($isRuku){
             $return['success'] = false;
@@ -348,14 +347,20 @@ class inventoryModule extends KizBaseModule{
 
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
-        //$datain['ctime']=to_timespan($_REQUEST['ctime']);
-        $datain['ctime']= time();
+        $datain['ctime']= time()+ 60*60*8;
         $datain['dd_detail']=$dd_detail;
         $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = $_REQUEST['asnNoView'];
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
 
         //更新仓库
         $detail=$_REQUEST['details'];
-//echo (json_encode($_REQUEST['details']));die;
+
+        $amount = 0;//总金额
+
         foreach($detail as $k=>$v){
             if (intval($v['id'])==0){
                 continue;
@@ -466,6 +471,8 @@ class inventoryModule extends KizBaseModule{
             }else{
                 $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
             }
+
+            $amount += $order_num*$v['price'];
         }
 
         $return['flag'] = null;
@@ -475,6 +482,7 @@ class inventoryModule extends KizBaseModule{
         $return['message'] = '保存成功';
         $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
 
+        $datain['zmoney'] = $amount;
         if($res){
             $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
         }else{
@@ -501,6 +509,25 @@ class inventoryModule extends KizBaseModule{
 
         $listsort = toFormatTree($wmenulist,"name");
         echo json_encode($listsort);exit;
+    }
+
+    /**
+     * 门店列表ajax
+     */
+    public function location_list_ajax()
+    {
+        /* 基本参数初始化 */
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /* 业务逻辑部分 */
+        $conditions = " where is_effect = 1 and supplier_id = ".$supplier_id; // 查询条件
+        $conditions .= " and id in(" . implode(",", $account_info['location_ids']) . ") ";
+
+        $sql = " select distinct(id),name,address,concat_ws(',',ypoint,xpoint) as latlong from " . DB_PREFIX . "supplier_location";
+        $list = $GLOBALS['db']->getAll($sql.$conditions . " order by id desc");
+        echo json_encode($list);exit;
     }
 
     public function index()	{
