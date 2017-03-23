@@ -444,6 +444,7 @@ var scmSkuSelect = {
                 // 'yieldRateStr',
                 // 'reckonPrice',
                 // '库存类型',
+                '所属分类ID',
                 '所属分类',
                 _this.opts.sku + '编码',
                 _this.opts.sku + '名称（规格）',
@@ -467,6 +468,7 @@ var scmSkuSelect = {
                 //     return rowObject.price;
                 // }},
                 // {name: 'wmTypeStr', index: 'wmType', align: "center"},
+                {name: 'skuTypeId', index: 'skuTypeId', align: "center", hidden: true},
                 {name: 'skuTypeName', index: 'skuTypeName', align: "center"},
                 {name: 'skuCode', index: 'skuCode', align: "center"},
                 {name: 'skuName', index: 'skuName', align: "center"},
