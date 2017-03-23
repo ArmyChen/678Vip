@@ -448,10 +448,51 @@ class inventoryModule extends KizBaseModule{
      * 商品分类ajax
      */
     public function goods_category_tree_ajax(){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //分类
+        $sortconditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $sortconditions .= " and location_id=".$slid;
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+        $sqlsort.=$sortconditions. " order by sort desc";
+
+        $listsort = array();
+        $wsublist = array();
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $listsort[] = $wmenu0;
+
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $listsort[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $listsort[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $listsort[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+
+//        $GLOBALS['tmpl']->assign("sortlist", $listsort);
+
         // 商品分类
-        $shop_cate_tree = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."shop_cate where is_delete = 0");
-        $shop_cate_tree = toFormatTree($shop_cate_tree,"name");
-        echo json_encode($shop_cate_tree);exit;
+//        $shop_cate_tree = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."shop_cate where is_delete = 0");
+        $listsort = toFormatTree($listsort,"name");
+        echo json_encode($listsort);exit;
     }
 
     public function index()	{
