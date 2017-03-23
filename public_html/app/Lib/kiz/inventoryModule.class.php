@@ -530,6 +530,12 @@ class inventoryModule extends KizBaseModule{
         echo json_encode($list);exit;
     }
 
+    public function location_change(){
+        init_app_page();
+        //$GLOBALS['account_info']['slid'] = $_REQUEST['id'];
+        echo $_SERVER['HTTP_REFERER'];
+    }
+
     public function index()	{
 
 	    init_app_page();
