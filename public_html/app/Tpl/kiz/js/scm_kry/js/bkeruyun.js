@@ -322,7 +322,7 @@ var bkeruyun = {
                 if(p == 1){
                     return "/mind" + u;
                 }else if(p == 3){
-                    return "/scm_kry"+ u;
+                    return "/kiz.php?ctl=inventory&"+ u;
                 }else if(p == 2){
                     return "/b_kry" + u;
                 }else if(p == 5){

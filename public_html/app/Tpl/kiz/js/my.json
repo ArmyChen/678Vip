@@ -30,7 +30,7 @@
     "platform": 3,
     "sort": 1,
     "type": 1,
-    "url": "/asn/si/index"
+    "url": "act=go_down_index"
   },
   {
     "code": "scm:inventory:so:query#",
@@ -41,7 +41,7 @@
     "platform": 3,
     "sort": 2,
     "type": 1,
-    "url": "/outbound/so/index"
+    "url": "act=go_up_index"
   },
   {
     "code": "scm:inventory:transfer:query#",
@@ -52,6 +52,6 @@
     "platform": 3,
     "sort": 3,
     "type": 1,
-    "url": "/transferorder/index"
+    "url": "act=go_trans_index"
   }
 ]
