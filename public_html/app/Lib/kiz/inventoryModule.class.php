@@ -334,14 +334,16 @@ class inventoryModule extends KizBaseModule{
         $psid = $_REQUEST['psid']?intval($_REQUEST['psid']):'0';
         $dhid = $_REQUEST['dhid']?intval($_REQUEST['dhid']):'0';
 
-        $sqlcheck="select dd_detail from fanwe_cangku_log where slid=$slid and (danjuhao='$psid' or danjuhao='$dhid')";
-        $isRuku  =	$GLOBALS['db']->getRow($sqlcheck);
-        if($isRuku){
-            $return['success'] = false;
-            $return['message'] = "已经入过库了，请勿重复操作！";
-            echo json_encode($return);exit;
+        if($_REQUEST['type']==1){
+            $sqlcheck="select dd_detail from fanwe_cangku_log where slid=$slid and (danjuhao='$psid' or danjuhao='$dhid')";
+            $isRuku  =	$GLOBALS['db']->getRow($sqlcheck);
+            if($isRuku){
+                $return['success'] = false;
+                $return['message'] = "已经入过库了，请勿重复操作！";
+                echo json_encode($return);exit;
+            }
         }
-
+        
         $dd_detail=serialize($_REQUEST['detail']);
         $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
 
