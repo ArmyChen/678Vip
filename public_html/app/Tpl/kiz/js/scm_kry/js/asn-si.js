@@ -222,7 +222,7 @@ var asnSi = {
                 // {name: 'wuliu_company', index: 'wuliu_company', align: "center", width: 70},
                 // {name: 'wuliu_yunfei', index: 'wuliu_yunfei', align: "center", width: 70},
             ],
-            sortname: 'asnNo',
+            sortname: 'ctime',
             pager: "#gridPager",
             showOperate: false,
             actionParam: {

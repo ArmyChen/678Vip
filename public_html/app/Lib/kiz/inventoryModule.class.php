@@ -22,15 +22,21 @@ class inventoryModule extends KizBaseModule{
             "-3"=>"预配退货",
 //            "-2"=>"其他入库",
 //            "-1"=>"盘盈",
-            "0"=>"盘盈",
+            "1"=>"盘盈",
             "2"=>"无订单入库",
             "3"=>"要货调入",
             "4"=>"初始库存",
             "6"=>"盘亏",
             "7"=>"无订单出库",
             "8"=>"要货调出",
-            "9"=>"退货"
-		);
+            "9"=>"退货",
+            "10"=>"生产领料",
+            "11"=>"借用出库",
+            "12"=>"其他出库",
+            "13"=>"配送领料",
+            "14"=>"品牌销售出库",
+
+        );
 		$this->ywsort=$ywsort;
         $this->gonghuoren=array(
 		"1"=>"临时客户",
@@ -153,6 +159,7 @@ class inventoryModule extends KizBaseModule{
         $return = array();
         $records = $GLOBALS['db']->getOne($sqlrecords);
         $list = $GLOBALS['db']->getAll($sql);
+//        var_dump($list);die;
         $return['page'] = $page;
         $return['records'] = $records;
         $return['total'] = ceil($records/$page_size);
@@ -170,6 +177,7 @@ class inventoryModule extends KizBaseModule{
                 $v['type_show']	='出库';
                 $v['gonghuo_show']	='收货人';
             }
+
             $v['ywsort']=$this->ywsort[$v['ywsort']];
             $v['gonghuo']=$this->get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $list[$k]=$v;
@@ -179,10 +187,11 @@ class inventoryModule extends KizBaseModule{
     }
 
     /**
-     * 仓库入库查询
+     * 仓库出库查询
      */
     public function go_up_index()	{
         init_app_page();
+
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
@@ -205,8 +214,9 @@ class inventoryModule extends KizBaseModule{
         }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("type", $type);
@@ -218,7 +228,23 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->display("pages/inventory/goUp.html");
 
     }
+    /**
+     * 仓库出库添加
+     */
+    public function go_up_add()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("page_title", "出库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goUpAdd.html");
 
+    }
     /**
      * 商品搜索列表ajax
      */
@@ -226,11 +252,13 @@ class inventoryModule extends KizBaseModule{
     {
 
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-        $slid = intval($_REQUEST['slid']);
 
         $where = "where 1 and g.location_id=$slid";
         if($_REQUEST['skuTypeId']){
@@ -266,7 +294,9 @@ class inventoryModule extends KizBaseModule{
     public function goods_search_code_ajax()
     {
         init_app_page();
-        $slid = intval($_REQUEST['slid']);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $where = "where 1 and g.location_id=$slid";
         if($_REQUEST['cate_id']){
             $where .= " and g.cate_id=".$_REQUEST['cate_id'];
