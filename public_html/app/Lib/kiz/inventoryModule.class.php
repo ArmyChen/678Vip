@@ -191,6 +191,7 @@ class inventoryModule extends KizBaseModule{
      */
     public function go_up_index()	{
         init_app_page();
+
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
