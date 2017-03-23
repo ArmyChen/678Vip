@@ -520,20 +520,29 @@ class inventoryModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-
+        $slid = $GLOBALS['account_info']['slid'];
         /* 业务逻辑部分 */
         $conditions = " where is_effect = 1 and supplier_id = ".$supplier_id; // 查询条件
         $conditions .= " and id in(" . implode(",", $account_info['location_ids']) . ") ";
 
         $sql = " select distinct(id),name,address,concat_ws(',',ypoint,xpoint) as latlong from " . DB_PREFIX . "supplier_location";
         $list = $GLOBALS['db']->getAll($sql.$conditions . " order by id desc");
-        echo json_encode($list);exit;
+        $return['current'] = array();
+        $return['more'] = array();
+        foreach($list as $v){
+            if($v['id'] == $slid){
+                $return['current'] = $v;
+            }else{
+                $return['more'][] = $v;
+            }
+        }
+        echo json_encode($return);exit;
     }
 
     public function location_change(){
         init_app_page();
-        //$GLOBALS['account_info']['slid'] = $_REQUEST['id'];
-        echo $_SERVER['HTTP_REFERER'];
+        $GLOBALS['account_info']['slid'] = $_REQUEST['commercialId'];
+        echo '<script>history.back(-1);</script>';exit;
     }
 
     public function index()	{
