@@ -212,7 +212,7 @@ class KizBaseModule{
 
 	protected function check_auth()
 
-	{	    
+	{
 
 	    $ajax = intval($_REQUEST['ajax']);
 

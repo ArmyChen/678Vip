@@ -13,11 +13,12 @@ var loginInfo = {
         brandSearchInfo: '',//品牌搜索信息（品牌名称 + 地址）
         currentCommercialId: '',//当前的登录的门店id（若以门店登录）
         commercialList: [],//当前用户有权限的门店列表
-        urlRoot: '/authority',
-        getCommercialListUrl: '/getCommercialListOfCurrentBrand',
-        changeCommercialUrl: '/switchShop',
+        urlRoot: '',
+        webRoot : '/kiz.php?',
+        getCommercialListUrl: '/·',
+        changeCommercialUrl: '',
         modifyPasswordUrl: '/mind/auth/userBrand/toModifyPassword',
-        longoutUrl: '/logout',
+        longoutUrl: 'ctl=user&act=logout',
         isMapInit: false,
         mapDiv: 'map_container',
         map: {},
@@ -81,7 +82,7 @@ var loginInfo = {
         $("#logout").click(function () {
             layer.confirm('确定要退出登录吗？', {icon: 3, title: '提示', offset: '30%'}, function (index) {
                 if(window.sessionStorage){sessionStorage.clear();}
-                top.location.href = ctxPath + loginInfo.opts.longoutUrl;
+                top.location.href = loginInfo.opts.webRoot + loginInfo.opts.longoutUrl;
                 layer.close(index);
             });
         });
@@ -168,7 +169,7 @@ var loginInfo = {
             //创建信息弹框
             var btn = "</p>";
             if (isLoginAsBrand || (!isLoginAsBrand && i != 0)) {
-                var href = ctxPath + _this.opts.urlRoot + _this.opts.changeCommercialUrl + "?commercialId=" + commercialId;
+                var href = location.href + "&commercialName="+commercialName+"&commercialId=" + commercialId;
                 btn += '<p><a href="' + href + '" class="btn btn-primary btn-switch">切换</a></p>';
             }
             var content = "<p title='" + commercialName + "'><strong style='font-size: 14px;'>" + commercialName + "</strong></p><p title='" + commercialAdress + "'>" + commercialAdress + btn;
@@ -185,6 +186,7 @@ var loginInfo = {
             html += commercialAdress;
             html += "</p>";
             html += "<input class='hide commercialId' index='" + i + "' value='" + commercialId + "'/>";
+            html += "<input class='hide commercialName' index='" + i + "' value='" + commercialName + "'/>";
             if (!isLoginAsBrand && i == 0) {
                 html += htmlEnd2;
             } else {
@@ -233,9 +235,9 @@ var loginInfo = {
         //门店列表切换按钮点击事件
         $(document).delegate("#shop_list .btn-switch", "click", function () {
             var commercialId = $(this).parents(".row").find(".commercialId").val();
-            //var commercialName = $(this).parents(".row").find(".commercialName").val();
+            var commercialName = $(this).parents(".row").find(".commercialName").val();
             //window.location.href = ctxPath + _this.opts.urlRoot + _this.opts.changeCommercialUrl + "?commercialId=" + commercialId + "&commercialName=" + encodeURIComponent(commercialName);
-            window.location.href = ctxPath + _this.opts.urlRoot + _this.opts.changeCommercialUrl + "?commercialId=" + commercialId;
+            window.location.href = location.href + "&commercialName=" + commercialName+ "&commercialId=" + commercialId;
         });
 
         //门店列表行点击事件

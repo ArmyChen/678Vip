@@ -45,17 +45,30 @@ class inventoryModule extends KizBaseModule{
 		"4"=>"领料出库"
 		);
 
-		
+        $this->init();
         //$this->check_auth();
 
     }
+    public function init(){
+        $slid=$GLOBALS['account_info']['slid'];
+        $slname=$GLOBALS['account_info']['slname'];
+        $preview = $GLOBALS['sys_config']['SHOP_LOGO'];
+        define("SLIDNAME",$slname);
+        define("SLID",$slid);
+        $GLOBALS['tmpl']->assign("supplier_name",$slname);
+        $GLOBALS['tmpl']->assign("account_info",$GLOBALS['account_info']);
+        $GLOBALS['tmpl']->assign("preview",$preview);
+//        var_dump($_SESSION['fanweaccount_info']);die;
+        $GLOBALS['tmpl']->assign("biz_gen_qrcode",gen_qrcode(SITE_DOMAIN.url("biz","downapp"),app_conf("QRCODE_SIZE")));
 
+    }
     /**
      * 仓库入库查询
      */
     public function go_down_index()	{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
+//        var_dump($account_info);die;
         $supplier_id = $account_info['supplier_id'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
@@ -480,7 +493,12 @@ class inventoryModule extends KizBaseModule{
         $return['refresh'] = false;
         $return['success'] = true;
         $return['message'] = '保存成功';
-        $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+        }
+
 
         $datain['zmoney'] = $amount;
         if($res){
@@ -539,11 +557,11 @@ class inventoryModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
-    public function location_change(){
-        init_app_page();
-        $GLOBALS['account_info']['slid'] = $_REQUEST['commercialId'];
-        echo '<script>history.back(-1);</script>';exit;
-    }
+//    public function location_change(){
+//        init_app_page();
+//        $url = $_REQUEST['url'];
+//        header("location:$url");
+//    }
 
     public function index()	{
 

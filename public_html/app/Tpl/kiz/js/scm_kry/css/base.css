@@ -1631,7 +1631,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 #logo {
     float: left;
     margin-right: 40px;
-    width: 139px;
+    width: 210px;
     height: 90px;
     background: url("../img/logo.png") no-repeat left center;
 }

@@ -62,9 +62,16 @@
 <!-- 商品选择弹出窗 start -->
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-sku-select.js?v=20170315_135229"></script>
 <!-- 商品选择弹出窗 end -->
-
+<!-- 百度地图API start -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=D8fde80e0d8f96000b89da6da12e410f"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js?v=20170315_135229"></script>
+<!-- 百度地图API end -->
+<!-- 百度地图信息框样式 start -->
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css?v=20170315_135229" />
+<!-- 百度地图信息框样式 end -->
 <!-- 登录信息 start -->
-<!--<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/login-info.js?v=20170315_135229"></script>-->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/login-info.js?v=20170315_135229"></script>
 <!-- 登录信息 end -->
 
 
@@ -83,6 +90,18 @@
             win.showNav($(".nav > li,.dropdown-submenu"), ".dropdown-menu", "open");
 
         });
+
+        $.get('/kiz.php?ctl=inventory&act=location_list_ajax',function (e) {
+            var data = $.parseJSON(e);
+            loginInfo._init({
+                brandObj: data.current,
+                loginBrand: true,
+                currentCommercialId: "-1",
+                commercialList: data.more,
+                isBrandLogin: true
+            });
+        });
+
 
 
     }

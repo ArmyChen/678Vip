@@ -50,27 +50,25 @@
             <h1 id="logo" style="background-image: url({$preview})"></h1>
             <ul class="nav head-new-nav"></ul>
             <span style="background:white">
-                {if $account_info}
                 <!-- 登录信息 start -->
                 <div class="user-info">
                     <div class="user-info-view">
                         <div class="photo"></div>
                         <div style="display: inline;float: left">
                             <ul>
-                                <li title="{$account_info.account_name}">&nbsp;</li>
-                                <li title="{$supplier_name} ">&nbsp;【{$supplier_name}】 {$account_info.account_name}</li>
+                                <li title="{$account_info.account_name}">&nbsp;{$account_info.account_name}</li>
+                                <li title="{$supplier_name} ">&nbsp;{$supplier_name}</li>
                             </ul>
                         </div>
                     </div>
                     <div class="list-group" style="display: none;">
-                        <a href="href="{url x="kiz"" id="changeCommercial" class="list-group-item change-commercial">切换到商户管理</a>
+                        <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
                         <a href="{url x="biz" r="user#edit_password"}" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
-                        <a href="{url x="biz" r="user#logout"}" id="logout" class="list-group-item logout">退出登录</a>
+                        <a href="#" id="logout" class="list-group-item logout">退出登录</a>
                     </div>
                 </div>
                 <!-- 登录信息 end -->
 
-                {/if}
 
 
                 <!-- 切换门店弹窗 start -->

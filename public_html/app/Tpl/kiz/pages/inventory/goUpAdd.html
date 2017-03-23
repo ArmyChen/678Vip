@@ -15,7 +15,7 @@
             <!--<a class="btn-link ml10 hidden" code="scm:button:inventory:si:add"-->
                <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>-->
 
-            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/asn/si/index');">返回</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=inventory&act=go_up_index');">返回</a>
         </div>
     </div>
 </div>
@@ -56,7 +56,7 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="senderId">入库原因<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="senderId">出库原因<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <select id="senderId" name="senderId" class="{required:true}">
@@ -64,10 +64,10 @@
 
 
 
-                                        <!--<option value="">请选择入库原因</option>-->
+                                        <!--<option value="">请选择出库原因</option>-->
                                         {foreach from=$ywsort item=ywitem key=ywkey}
 
-                                        {if $ywkey lt '5'}
+                                        {if $ywkey gt '5'}
 
                                         <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
 
@@ -88,7 +88,7 @@
                 <div class="clear">
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="warehouseId">入库仓库<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="warehouseId">出库仓库<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <select id="warehouseId" name="warehouseId" class="{required:true}">
@@ -96,7 +96,7 @@
 
 
 
-                                        <!--<option value="">请选择入库仓库</option>-->
+                                        <!--<option value="">请选择出库仓库</option>-->
 
                                         {foreach from=$cangkulist item=item}
 
@@ -181,9 +181,9 @@
 
         <div class="panel-body">
             <div class="inventoryTotal mr15">
-                <span>入库数量合计：<span id="qtySum">
+                <span>出库数量合计：<span id="qtySum">
                     0</span></span>
-                <span>入库金额合计：<span id="amountSum">
+                <span>出库金额合计：<span id="amountSum">
                     ￥0</span></span>
             </div>
             <div class="mt20 detail-grid">
@@ -214,7 +214,7 @@
     $(function() {
         var opts = {
             urlRoot : "/scm_kry/asn/si",
-            commandType : 1,
+            commandType : 9,
             gridData : eval(),
             skuScene:72,
             skuTypes:eval([{"id":null,"uuid":null,"brandId":null,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"dishId":null,"skuName":null,"skuAliasName":null,"skuCode":null,"skuTypeId":170317,"skuDesc":null,"wmType":null,"uomId":null,"price":null,"barcode":null,"skuKey":null,"isDisable":null,"skuShops":null,"yieldRate":null,"skuTypeName":"奶慕奉茶","uom":null,"originalCcInventoryQty":null,"inventoryQty":null,"skuConvert":null,"skuConvertOfStandard":null,"standardUnitId":null,"standardUnitName":null,"standardPrice":null,"exceptShopStr":"","uomIdForTable":null,"supplierId":null,"wmTypeStr":null,"yieldRateStr":null,"skuNameSimple":null,"propStr":null,"wmTypeName":null}]),

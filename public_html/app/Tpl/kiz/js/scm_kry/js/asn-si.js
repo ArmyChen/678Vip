@@ -48,6 +48,11 @@ var asnSi = {
                 _this.initDetailGrid(true);
                 $.filterGrid.initSkuTypeNames();
                 break;
+            case 9 ://新增出库
+                _this.$detailGrid = $('#' + _this.opts.detailGridId);
+                _this.initChukuDetailGrid(true);
+                $.filterGrid.initSkuTypeNames();
+                break;
             case 2 ://编辑
                 _this.$detailGrid = $('#' + _this.opts.detailGridId);
                 _this.initDetailGrid(true);
@@ -186,9 +191,9 @@ var asnSi = {
                 'id',
                 '单据号',
                 // '来源单据号',
-                '入库原因',
-                '入库仓库',
-                '入库金额',
+                '出库原因',
+                '出库仓库',
+                '出库金额',
                 '制单人',
                 '保存日期'
                 // '供货',
@@ -303,7 +308,7 @@ var asnSi = {
         });
 
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
-            formula: ['price*actualQty=amount','standardInventoryQty*skuConvertOfStandard/skuConvert=inventoryQty'],
+            formula: ['price*actualQty=amount','actualQty+standardInventoryQty=inventoryQty'],
             summary: [
                 {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
                 {colModel: 'actualQty', objectId: 'qtySum'},
@@ -319,7 +324,98 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '入库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colModel: [
+                {name: 'id', index: 'id', width: 80, hidden: true, sortable: !editable},
+                {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
+                {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
+                {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
+                {name: 'uom', index: 'uom', width: 50, sortable: !editable,align: "center", hidden: editable},
+                {name: 'uom', index: 'uom', width: 50, sortable: !editable, align: 'center', hidden: !editable,
+                    formatter: $.unitSelectFormatter,
+                    unformat : unformatSelect
+                },
+                priceModel,
+                qtyColModel,
+                {name: 'amount', index: 'amount', width: 100, align: 'right', sorttype:'number',sortable: !editable},
+                {name: 'inventoryQty', index: 'inventoryQty', align: 'right', hidden: !editable, width: 100, sorttype:'number',sortable: !editable,
+                    formatter: customMinusToRedFormatterWithUnit,
+                    unformat: unformatSpan
+                },
+                {name: 'standardInventoryQty', index: 'standardInventoryQty', align: 'right', hidden: true},
+                {name: 'skuConvert', index: 'skuConvert', align: 'right', hidden: true},
+                {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
+                {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
+                {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
+                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true}
+            ],
+            afterInsertRow: function (rowid, aData) {
+                $gridObj.jqGrid('setRowData', rowid, {/* skuId: rowid, */ taxRate: _this.opts.taxRate});
+                $gridObj.find(":text").first().keyup();
+
+                $.removeSelectTitle(rowid); //移除下拉框列的表格title
+            }
+        });
+
+        if(editable) $.delegateClickSelectGroup($gridObj);
+    },
+    //初始化出库单据作业明细表格
+    initChukuDetailGrid : function(editable) {
+        var _this = this;
+        var $gridObj = _this.$detailGrid;
+
+        var qtyColModel = {
+            name: 'actualQty',
+            index: 'actualQty',
+            align: 'right',
+            width: 120,
+            sorttype:'number',
+            sortable: !editable
+        };
+        var priceModel = {
+            name: 'price',
+            index: 'price',
+            width: 100,
+            align: 'right',
+            sorttype:'number',
+            sortable: !editable
+        };
+
+        var editColModel = {
+            editable: true,
+            formatter: formatInputNumber,
+            unformat: unformatInput
+        };
+
+        if (editable) {
+            qtyColModel = $.extend(true, qtyColModel, editColModel || {});
+            priceModel = $.extend(true, priceModel, editColModel || {});
+        }
+
+        //构造数据 添加字段:当前库存(隐藏) = 当前库存
+        _this.opts.gridData.forEach(function(v,i){
+            v.standardInventoryQty = v.inventoryQty;
+        });
+
+        scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
+            formula: ['price*actualQty=amount','standardInventoryQty-actualQty=inventoryQty'],
+            summary: [
+                {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
+                {colModel: 'actualQty', objectId: 'qtySum'},
+                {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
+            ]
+        });
+
+        $gridObj.dataGrid({
+            data: _this.opts.gridData,
+            datatype: 'local',
+            multiselect: (editable && _this.opts.isSourceOrderIdNull),
+            showEmptyGrid: true,
+            //height: 300,
+            rownumbers: true,
+            rowNum : 10000,
+            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: true, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
@@ -393,7 +489,7 @@ $.detailsValidator = function (args) {
 
     var qtySum = $grid.jqGrid('getCol', 'actualQty', false, 'sum');
     if (qtySum == 0) {
-        $.layerMsg('入库数不能全部为0', false);
+        $.layerMsg('出库数不能全部为0', false);
         return false;
     }
 
@@ -409,7 +505,7 @@ $.saveCallback = function (args) {
         //     $id.val(rs.data.id);
         //     replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
         //     $("#command-type-name").text("编辑");
-        //     document.title = '编辑入库单';
+        //     document.title = '编辑出库单';
         //
         //     $("#btnCopy").removeClass("hidden");
         // }
