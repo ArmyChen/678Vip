@@ -521,8 +521,8 @@ class inventoryModule extends KizBaseModule{
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
         $dd_detail=serialize($_REQUEST['detail']);
-        $cid=intval($_REQUEST['cid']);
-        $cidtwo=intval($_REQUEST['cidtwo']);
+        $cid=intval($_REQUEST['fromWmId']);
+        $cidtwo=intval($_REQUEST['toWmId']);
 
         //更新仓库
         $detail=$_REQUEST['detail'];
