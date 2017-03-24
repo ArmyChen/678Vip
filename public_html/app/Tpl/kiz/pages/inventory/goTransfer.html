@@ -33,35 +33,11 @@
                 <div>
                     <select class="form-control" name="fromWmId" id="fromWmId">
                         <option value="">请选择移出仓库</option>
+                        {foreach from=$cangkulist item=item}
 
+                        <option value="{$item.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$item.name}</option>
 
-
-
-                        <option value="9591">总仓库</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
+                        {/foreach}
                     </select>
                 </div>
             </div>
@@ -74,34 +50,11 @@
                     <select class="form-control" name="toWmId" id="toWmId">
                         <option value="">请选择移入仓库</option>
 
+                        {foreach from=$cangkulist item=item}
 
+                        <option value="{$item.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$item.name}</option>
 
-
-                        <option value="9591">总仓库</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
+                        {/foreach}
                     </select>
                 </div>
             </div>
@@ -112,23 +65,23 @@
 
                 <div class="search-box">
                     <input type="text" name="createTime" id="saveDate" class="form-control datepicker-start"
-                           placeholder="请选择单据保存/确认日期" readonly>
+                           placeholder="请选择单据保存日期" readonly>
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
             </div>
             <!-- 确认/保存日期 end -->
 
             <!-- 状态 start -->
-            <div class="aside-column">
-                <h2>状态</h2>
-                <ul class="panel-list-type">
-                    <li><label class="checkbox checkbox-check" for="status-0"><span></span>
-                        <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
-                    </li>
-                    <li><label class="checkbox" for="status-1"><span></span>
-                        <input type="checkbox" name="status" id="status-1" value="1">已确认</label></li>
-                </ul>
-            </div>
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li><label class="checkbox checkbox-check" for="status-0"><span></span>-->
+                        <!--<input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>-->
+                    <!--</li>-->
+                    <!--<li><label class="checkbox" for="status-1"><span></span>-->
+                        <!--<input type="checkbox" name="status" id="status-1" value="1">已确认</label></li>-->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 状态 end -->
         </form>
 

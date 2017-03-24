@@ -215,7 +215,7 @@ var transferOrder = {
 
         //绑定表格计算
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({//表格计算
-            formula: ['price*planMoveQty=amount','standardInventoryQty-planMoveQty=inventoryQty'],
+            formula: ['price*planMoveQty=amount','standardInventoryQty=inventoryQty'],
             summary: [
                 {colModel: 'planMoveQty', objectId: 'qtySum'},
                 {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
@@ -231,9 +231,10 @@ var transferOrder = {
             rownumbers: true,
             rowNum : 10000,
             //height: 300,
-            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '移库数', '合计金额', '状态', '当前库存', '当前库存(隐藏)', '换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['skuId', '所属分类ID','所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '移库数', '合计金额', '状态', '当前库存', '当前库存(隐藏)', '换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, hidden: true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
