@@ -1,0 +1,167 @@
+
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="orderType">移库单</span></h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a code="scm:button:inventory:transfer:add" function="$.doForward" args="{url:'/kiz.php?ctl=inventory&act=go_transfer_add'}" class="btn-link ml10" id="btn-create">创建</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="transferOrderNo" id="orderNo" class="form-control" placeholder="请输入单据号"
+                           data-format="sn" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+            <!-- 移出仓库 start -->
+            <div class="aside-column">
+                <h2>移出仓库</h2>
+
+                <div>
+                    <select class="form-control" name="fromWmId" id="fromWmId">
+                        <option value="">请选择移出仓库</option>
+
+
+
+
+                        <option value="9591">总仓库</option>
+
+
+
+
+
+
+                        <option value="13260">饮品仓</option>
+
+
+
+
+
+
+                        <option value="13261">酒水仓</option>
+
+
+
+
+
+
+                        <option value="13262">原材料仓</option>
+
+
+
+                    </select>
+                </div>
+            </div>
+            <!-- 移出仓库 end -->
+            <!-- 移入仓库 start -->
+            <div class="aside-column">
+                <h2>移入仓库</h2>
+
+                <div>
+                    <select class="form-control" name="toWmId" id="toWmId">
+                        <option value="">请选择移入仓库</option>
+
+
+
+
+                        <option value="9591">总仓库</option>
+
+
+
+
+
+
+                        <option value="13260">饮品仓</option>
+
+
+
+
+
+
+                        <option value="13261">酒水仓</option>
+
+
+
+
+
+
+                        <option value="13262">原材料仓</option>
+
+
+
+                    </select>
+                </div>
+            </div>
+            <!-- 移入仓库 end -->
+            <!-- 确认/保存日期 start -->
+            <div class="aside-column">
+                <h2>确认/保存日期</h2>
+
+                <div class="search-box">
+                    <input type="text" name="createTime" id="saveDate" class="form-control datepicker-start"
+                           placeholder="请选择单据保存/确认日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 确认/保存日期 end -->
+
+            <!-- 状态 start -->
+            <div class="aside-column">
+                <h2>状态</h2>
+                <ul class="panel-list-type">
+                    <li><label class="checkbox checkbox-check" for="status-0"><span></span>
+                        <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
+                    </li>
+                    <li><label class="checkbox" for="status-1"><span></span>
+                        <input type="checkbox" name="status" id="status-1" value="1">已确认</label></li>
+                </ul>
+            </div>
+            <!-- 状态 end -->
+        </form>
+
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" role="button"
+           function="$.doSearch" args="{dataGridId:grid}">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+        <!-- 右栏 end -->
+    </div>
+</div>
+<script src="/app/Tpl/kiz/js/scm_kry/js/transferorder.js?v=20170315_135229"></script>
+<script>
+
+
+    $(function () {
+        //移除仓库不能和移入库相同
+        warehouseInOff("select[name=toWmId]", "select[name=fromWmId]");
+        warehouseInOff("select[name=fromWmId]", "select[name=toWmId]");
+
+        transferOrder._init({commandType: 0});
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

@@ -503,7 +503,7 @@ $.saveCallback = function (args) {
         // var $id = $("#id");
         // if (!$id.val()) {
         //     $id.val(rs.data.id);
-        //     replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
+            replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
         //     $("#command-type-name").text("编辑");
         //     document.title = '编辑出库单';
         //

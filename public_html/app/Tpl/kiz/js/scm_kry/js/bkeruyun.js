@@ -2188,7 +2188,7 @@ $(function () {
             if (postData) {
                 window.location.href = url + '?' + $.param(postData) + "&t=" + token;
             } else {
-                window.location.href = url + "?t=" + token;
+                window.location.href = url + "&t=" + token;
             }
         };
 
