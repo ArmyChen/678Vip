@@ -168,7 +168,7 @@ class inventoryModule extends KizBaseModule{
             $sqlstr .=" and a.ywsort = ".$ywsortid." ";
         }
         if($_REQUEST['danjuhao'] !=""){
-            $sqlstr .=" and a.danjuhao = '".$_REQUEST['danjuhao']."' ";
+            $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
 
         $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
@@ -621,7 +621,7 @@ class inventoryModule extends KizBaseModule{
         }
 
         if($_REQUEST['transferOrderNo'] !=""){
-            $sqlstr .=" and danjuhao = '".$_REQUEST['transferOrderNo']."' ";
+            $sqlstr .=" and danjuhao like '%".$_REQUEST['transferOrderNo']."%' ";
         }
         if($_REQUEST['fromWmId']){
             $sqlstr .=" and cid = ".$_REQUEST['fromWmId'];
