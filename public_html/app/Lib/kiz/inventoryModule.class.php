@@ -584,10 +584,10 @@ class inventoryModule extends KizBaseModule{
         $cidtwo=intval($_REQUEST['toWmId']);
 
         //更新仓库
-        $detail=$_REQUEST['detail'];
+        $detail=$_REQUEST['details'];
         foreach($detail as $k=>$v){
-            $mid=$v['mid'];
-            $order_num=floatval($v['num']);
+            $mid=$v['skuId'];
+            $order_num=floatval($v['planMoveQty']);
             $unit_type=intval($v['unit_type']);
             if ($unit_type==1){  //使用的是副单位
                 $order_num=$order_num*$v['times']; //换算成主单位
@@ -606,14 +606,14 @@ class inventoryModule extends KizBaseModule{
                     "slid"=>$slid,
                     "mid"=>$mid,
                     "cid"=>$cidtwo,
-                    "cate_id"=>$v['cate_id'],
-                    "mbarcode"=>$v['barcode'],
-                    "mname"=>$v['name'],
+                    "cate_id"=>$v['skuTypeId'],
+                    "mbarcode"=>$v['skuCode'],
+                    "mname"=>$v['skuTypeName'],
                     "mstock"=>$order_num,
                     "stock"=>$order_num,
                     "minStock"=>10,
                     "maxStock"=>10000,
-                    "unit"=>$v['unit'],
+                    "unit"=>$v['uom'],
                     "funit"=>$v['funit'],
                     "times"=>$v['times'],
                     "type"=>$v['type'],
