@@ -571,6 +571,100 @@ class inventoryModule extends KizBaseModule{
     }
 
     /**
+     * 调拨ajax
+     */
+    public function diaobo_saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $dd_detail=serialize($_REQUEST['detail']);
+        $cid=intval($_REQUEST['cid']);
+        $cidtwo=intval($_REQUEST['cidtwo']);
+
+        //更新仓库
+        $detail=$_REQUEST['detail'];
+        foreach($detail as $k=>$v){
+            $mid=$v['mid'];
+            $order_num=floatval($v['num']);
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+            //减库
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
+            $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
+            $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+
+            $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
+            if($check){
+                $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
+            }else{
+                //添加
+                $data_menu=array(
+                    "slid"=>$slid,
+                    "mid"=>$mid,
+                    "cid"=>$cidtwo,
+                    "cate_id"=>$v['cate_id'],
+                    "mbarcode"=>$v['barcode'],
+                    "mname"=>$v['name'],
+                    "mstock"=>$order_num,
+                    "stock"=>$order_num,
+                    "minStock"=>10,
+                    "maxStock"=>10000,
+                    "unit"=>$v['unit'],
+                    "funit"=>$v['funit'],
+                    "times"=>$v['times'],
+                    "type"=>$v['type'],
+                    "ctime"=>to_date(NOW_TIME)
+                );
+                $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
+            }
+        }
+
+        $datain=$_REQUEST;
+        $datain['ctime']= time()+ 60*60*8;
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = to_date(NOW_TIME,"YmdHis").rand(4);
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '保存成功';
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+        }
+
+        if($res1 && $res2){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain);  //写入调拨记录
+            //写出库记录
+            $datain['ywsort']=5; //仓库调拨
+            $datain['gonghuoren']='cangku_'.$cidtwo;
+            unset($datain['cidtwo']); //销毁入库的仓库ID
+            $datain['type']=2;
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+            $datain['cid']=$cidtwo;
+            $datain['type']=1;
+            $datain['gonghuoren']='cangku_'.$cid;
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
+        }else{
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
      * 商品分类ajax
      */
     public function goods_category_tree_ajax(){
