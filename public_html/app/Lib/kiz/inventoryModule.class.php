@@ -605,16 +605,6 @@ class inventoryModule extends KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
-        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
-            $begin_time = strim($_REQUEST['begin_time']);
-            $end_time = strim($_REQUEST['end_time']);
-        }else{	 //默认为当月的
-            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
-            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
-        }
-        $begin_time_s = strtotime($begin_time);
-        $end_time_s = strtotime($end_time);
-
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
@@ -623,15 +613,21 @@ class inventoryModule extends KizBaseModule{
         $sqlstr="where 1=1";
         $sqlstr.=' and slid='.$location_id;
 
-        if($begin_time_s){
-            $sqlstr .=" and ctime > ".$begin_time_s." ";
-        }
-        if($end_time_s){
-            $sqlstr .=" and ctime < ".$end_time_s." ";
+        if($_REQUEST['createTime']){
+            $begin_time=strtotime($_REQUEST['createTime']);
+            $end_time=strtotime($_REQUEST['createTime'])+24*60*60;
+            $sqlstr .=" and ctime > ".$begin_time." ";
+            $sqlstr .=" and ctime < ".$end_time." ";
         }
 
-        if($_REQUEST['danjuhao'] !=""){
-            $sqlstr .=" and danjuhao = '".$_REQUEST['danjuhao']."' ";
+        if($_REQUEST['transferOrderNo'] !=""){
+            $sqlstr .=" and danjuhao = '".$_REQUEST['transferOrderNo']."' ";
+        }
+        if($_REQUEST['fromWmId']){
+            $sqlstr .=" and cid = ".$_REQUEST['fromWmId'];
+        }
+        if($_REQUEST['toWmId']){
+            $sqlstr .=" and cidtwo = ".$_REQUEST['toWmId'];
         }
 
         $cangku_list=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$location_id);
