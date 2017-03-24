@@ -579,7 +579,7 @@ class inventoryModule extends KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
-        $dd_detail=serialize($_REQUEST['detail']);
+        $dd_detail=serialize($_REQUEST['details']);
         $cid=intval($_REQUEST['fromWmId']);
         $cidtwo=intval($_REQUEST['toWmId']);
 
