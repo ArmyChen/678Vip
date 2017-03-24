@@ -323,7 +323,6 @@ class inventoryModule extends KizBaseModule{
      */
     public function goods_list_ajax()
     {
-
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
