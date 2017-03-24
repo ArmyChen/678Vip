@@ -328,7 +328,6 @@ class inventoryModule extends KizBaseModule{
      */
     public function goods_list_ajax()
     {
-
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
@@ -350,7 +349,7 @@ class inventoryModule extends KizBaseModule{
         $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 
-        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
 
         $return['page'] = $page;
         $return['records'] = $records;
@@ -419,8 +418,24 @@ class inventoryModule extends KizBaseModule{
             $return['message'] = "已经入过库了，请勿重复操作！";
             echo json_encode($return);exit;
         }
+        $datailinfo = array();
+        foreach($_REQUEST['detail'] as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['zmoney'] = $v['uom'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+        }
 
-        $dd_detail=serialize($_REQUEST['detail']);
+        $dd_detail=serialize($datailinfo);
         $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
 
         //if($unit_type==9){$unit_type==0;}
@@ -576,6 +591,67 @@ class inventoryModule extends KizBaseModule{
     }
 
     /**
+     * 调拨列表ajax
+     */
+    public function diaobo_list_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当月的
+            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        $page_size = 50;
+        $page = intval($_REQUEST['p']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $sqlstr="where 1=1";
+        $sqlstr.=' and slid='.$location_id;
+
+        if($begin_time_s){
+            $sqlstr .=" and ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $sqlstr .=" and ctime < ".$end_time_s." ";
+        }
+
+        if($_REQUEST['danjuhao'] !=""){
+            $sqlstr .=" and danjuhao = '".$_REQUEST['danjuhao']."' ";
+        }
+
+        $cangku_list=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$location_id);
+        $cangku_names = array();
+        $cangku_names = array_reduce($cangku_list, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $sql="select * from ".DB_PREFIX."cangku_diaobo ".$sqlstr." order by id desc limit ".$limit;
+        $sqlc="select count(id) from ".DB_PREFIX."cangku_diaobo ".$sqlstr;
+
+        $total = $GLOBALS['db']->getOne($sqlc);
+        $page = new Page($total,$page_size);   //初始化分页对象
+        $p  =  $page->show();
+        $GLOBALS['tmpl']->assign('pages',$p);
+        $list=$GLOBALS['db']->getAll($sql);
+        foreach($list as $kl=>$vl){
+            $vl['ctime']=to_date($vl['ctime'],'m-d H:i:s');
+            $vl['detail']=unserialize($vl['dd_detail']);
+            $vl['cid']= $cangku_names[$vl['cid']];
+            $vl['cidtwo']= $cangku_names[$vl['cidtwo']];
+            print_r($vl['detail']);
+            $list[$kl]=$vl;
+        }
+    }
+
+    /**
      * 调拨ajax
      */
     public function diaobo_saving_ajax()
@@ -585,15 +661,34 @@ class inventoryModule extends KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
-        $dd_detail=serialize($_REQUEST['detail']);
+        $datailinfo = array();
+        foreach($_REQUEST['details'] as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['zmoney'] = $v['uom'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+        }
+        $dd_detail=serialize($datailinfo);
         $cid=intval($_REQUEST['fromWmId']);
         $cidtwo=intval($_REQUEST['toWmId']);
 
         //更新仓库
-        $detail=$_REQUEST['detail'];
+        $detail=$_REQUEST['details'];
+
+        $amount = 0;//总金额
+
         foreach($detail as $k=>$v){
-            $mid=$v['mid'];
-            $order_num=floatval($v['num']);
+            $mid=$v['skuId'];
+            $order_num=floatval($v['planMoveQty']);
             $unit_type=intval($v['unit_type']);
             if ($unit_type==1){  //使用的是副单位
                 $order_num=$order_num*$v['times']; //换算成主单位
@@ -612,14 +707,14 @@ class inventoryModule extends KizBaseModule{
                     "slid"=>$slid,
                     "mid"=>$mid,
                     "cid"=>$cidtwo,
-                    "cate_id"=>$v['cate_id'],
-                    "mbarcode"=>$v['barcode'],
-                    "mname"=>$v['name'],
+                    "cate_id"=>$v['skuTypeId'],
+                    "mbarcode"=>$v['skuCode'],
+                    "mname"=>$v['skuTypeName'],
                     "mstock"=>$order_num,
                     "stock"=>$order_num,
                     "minStock"=>10,
                     "maxStock"=>10000,
-                    "unit"=>$v['unit'],
+                    "unit"=>$v['uom'],
                     "funit"=>$v['funit'],
                     "times"=>$v['times'],
                     "type"=>$v['type'],
@@ -627,6 +722,8 @@ class inventoryModule extends KizBaseModule{
                 );
                 $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
             }
+
+            $amount += $order_num*$v['price'];
         }
 
         $datain=$_REQUEST;
@@ -638,6 +735,13 @@ class inventoryModule extends KizBaseModule{
         $datain['ywsort'] = $_REQUEST['senderId'];
         $datain['cid'] = $_REQUEST['warehouseId'];
         $datain['lihuo_user'] = $account_info['account_name'];
+        $datain['cid'] = $cid;
+        $datain['cidtwo'] = $cidtwo;
+        $datain['znum'] = $order_num;
+        $datain['zmoney'] = $amount;
+        $datain['zweight'] = 0.00;
+        $datain['ztiji'] = 0.00;
+        $datain['memo'] = $_REQUEST['memo']?$_REQUEST['memo']:"";
 
         $return['flag'] = null;
         $return['exception'] = null;
@@ -645,9 +749,9 @@ class inventoryModule extends KizBaseModule{
         $return['success'] = true;
         $return['message'] = '保存成功';
         if ($_REQUEST['type']==1){ //入库
-            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
         }else{
-            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
         }
 
         if($res1 && $res2){
