@@ -52,12 +52,17 @@ class inventoryModule extends KizBaseModule{
     public function init(){
         $slid=$GLOBALS['account_info']['slid'];
         $slname=$GLOBALS['account_info']['slname'];
-        $preview = $GLOBALS['sys_config']['SHOP_LOGO'];
         define("SLIDNAME",$slname);
         define("SLID",$slid);
+
+        $preview=$GLOBALS['db']->getOne("select preview from fanwe_supplier_location where id=".$slid);
+        if ($preview==""){
+            $preview="http://www.678sh.com/app/Tpl/biz/img/logo.jpg";
+        }
+
+        $GLOBALS['tmpl']->assign("preview",$preview);
         $GLOBALS['tmpl']->assign("supplier_name",$slname);
         $GLOBALS['tmpl']->assign("account_info",$GLOBALS['account_info']);
-        $GLOBALS['tmpl']->assign("preview",$preview);
 //        var_dump($_SESSION['fanweaccount_info']);die;
         $GLOBALS['tmpl']->assign("biz_gen_qrcode",gen_qrcode(SITE_DOMAIN.url("biz","downapp"),app_conf("QRCODE_SIZE")));
 
@@ -74,7 +79,7 @@ class inventoryModule extends KizBaseModule{
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
@@ -211,7 +216,7 @@ class inventoryModule extends KizBaseModule{
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
@@ -271,7 +276,7 @@ class inventoryModule extends KizBaseModule{
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
@@ -547,7 +552,12 @@ class inventoryModule extends KizBaseModule{
             }else{ //出库
                 $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
                 if($order_num>$check['mstock']){
-                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
+                    $return['flag'] = null;
+                    $return['exception'] = null;
+                    $return['refresh'] = false;
+                    $return['success'] = false;
+                    $return['message'] ="库存不足,非法提交！";
+//                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
                 }else{//操作减库存
                     $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
                 }
