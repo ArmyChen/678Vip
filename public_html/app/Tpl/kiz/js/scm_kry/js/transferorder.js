@@ -2,8 +2,8 @@ var transferOrder = {
     $gridObj: '',
     //default opts
     opts: {
-        urlRoot: ctxPath + '/transferorder',
-        queryUrl: '/query',
+        urlRoot: ctxPath,
+        queryUrl: '&act=diaobo_list_ajax',
         editUrl: '/edit',
         deleteUrl: '/delete',
         viewUrl: '/view',
@@ -279,7 +279,35 @@ var transferOrder = {
         if(editable) $.delegateClickSelectGroup($gridObj);
     }
 };
+//保存回调
+$.saveCallback = function (args) {
+    var rs = args.result;
+    if (rs.success) {
+        // var $id = $("#id");
+        // if (!$id.val()) {
+        //     $id.val(rs.data.id);
+        //    replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
+        //     $("#command-type-name").text("编辑");
+        //     document.title = '编辑出库单';
+        //
+        //     $("#btnCopy").removeClass("hidden");
+        // }
+        // $.layerMsg(, true);
+        if(confirm(rs.message + ",是否继续添加？")){
+            location.reload();
+        }else{
+            location.href=rs.data.url;
+        }
 
+        return;
+    } else {
+        if (rs.data != '' && rs.data != null) {
+            $.layerOpen("操作失败:" + rs.message, rs.data);
+        } else {
+            $.layerMsg("操作失败:" + rs.message, false);
+        }
+    }
+};
 
 //保存后回调函数
 $.showOrderNo = function (args) {
