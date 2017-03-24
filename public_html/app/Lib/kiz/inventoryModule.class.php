@@ -643,6 +643,7 @@ class inventoryModule extends KizBaseModule{
         $datain['zmoney'] = $amount;
         $datain['zweight'] = 0.00;
         $datain['ztiji'] = 0.00;
+        $datain['memo'] = $_REQUEST['memo']?$_REQUEST['memo']:"";
 
         $return['flag'] = null;
         $return['exception'] = null;
