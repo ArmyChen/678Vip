@@ -651,9 +651,9 @@ class inventoryModule extends KizBaseModule{
         $return['success'] = true;
         $return['message'] = '保存成功';
         if ($_REQUEST['type']==1){ //入库
-            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
         }else{
-            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
         }
 
         if($res1 && $res2){
