@@ -344,7 +344,7 @@ class inventoryModule extends KizBaseModule{
         $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 
-        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
 
         $return['page'] = $page;
         $return['records'] = $records;
@@ -585,6 +585,9 @@ class inventoryModule extends KizBaseModule{
 
         //更新仓库
         $detail=$_REQUEST['details'];
+
+        $amount = 0;//总金额
+
         foreach($detail as $k=>$v){
             $mid=$v['skuId'];
             $order_num=floatval($v['planMoveQty']);
@@ -621,6 +624,8 @@ class inventoryModule extends KizBaseModule{
                 );
                 $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
             }
+
+            $amount += $order_num*$v['price'];
         }
 
         $datain=$_REQUEST;
@@ -632,6 +637,12 @@ class inventoryModule extends KizBaseModule{
         $datain['ywsort'] = $_REQUEST['senderId'];
         $datain['cid'] = $_REQUEST['warehouseId'];
         $datain['lihuo_user'] = $account_info['account_name'];
+        $datain['cid'] = $cid;
+        $datain['cidtwo'] = $cidtwo;
+        $datain['znum'] = $order_num;
+        $datain['zmoney'] = $amount;
+        $datain['zweight'] = 0.00;
+        $datain['ztiji'] = 0.00;
 
         $return['flag'] = null;
         $return['exception'] = null;
