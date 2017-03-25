@@ -828,6 +828,28 @@ class inventoryModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    public function dc_cangku_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id']);
+        $isdd = $_REQUEST['isdd'];
+        $kw = $_REQUEST['kw'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $where="where 1=1";
+        $where.=' and slid='.$slid;
+
+        if($kw){
+            $where = " and name='$kw'";
+        }
+        if(isset($isdd)){
+            $where .= " and isdisable=$isdd";
+        }
+
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku $where order by id desc ");
+    }
 //    public function location_change(){
 //        init_app_page();
 //        $url = $_REQUEST['url'];
