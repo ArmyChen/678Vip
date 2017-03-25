@@ -810,6 +810,11 @@ class inventoryModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $GLOBALS['account_info']['slid'];
+        $account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
         /* 业务逻辑部分 */
         $conditions = " where is_effect = 1 and supplier_id = ".$supplier_id; // 查询条件
         $conditions .= " and id in(" . implode(",", $account_info['location_ids']) . ") ";
