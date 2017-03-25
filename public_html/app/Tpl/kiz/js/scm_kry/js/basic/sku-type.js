@@ -154,12 +154,12 @@ var skuType = {
             formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id', '大类编码', '大类名称', '中类编码', '中类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
+            colNames: ['id', '大类编码', '上级分类名称', '中类编码', '分类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
-                {name: 'parentTypeCode', index: 'parentTypeCode', align: "left", width: 120},
+                {name: 'parentTypeCode', index: 'parentTypeCode', align: "left", width: 120,hidden:true},
                 {name: 'parentTypeName', index: 'parentTypeName', align: "left", width: 170},
-                {name: 'typeCode', index: 'typeCode', align: "left", width: 120},
+                {name: 'typeCode', index: 'typeCode', align: "left", width: 120,hidden:true},
                 {name: 'typeName', index: 'typeName', align: "left", width: 170},
                 {name: 'updateTime', index: 'updateTime', align: "center", width: 160},
                 {
@@ -180,7 +180,7 @@ var skuType = {
             ],
             sortname: 'id',
             pager: "#gridPager",
-            showOperate: true,
+            showOperate: false,
             actionParam: {
                 view: {
                     url: _this.opts.urlRoot + _this.opts.viewUrl
