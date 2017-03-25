@@ -209,7 +209,7 @@ var skulist = {
             formId: _this.opts.queryConditionsId,
             //serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id', 'wmType','商品中类', '库存类型', '商品编码', '商品名称(规格)', '单位(标准)','售卖价'+opts.priceMsg,'采购价'+opts.purchasePriceMsg,'成本价'+opts.costPriceMsg,'结算价'+opts.balancePriceMsg,'状态', '操作'],
+            colNames: ['id', 'wmType','商品分类', '库存类型', '商品编码', '商品名称(规格)', '单位(标准)','售卖价'+opts.priceMsg,'采购价'+opts.purchasePriceMsg,'成本价'+opts.costPriceMsg,'结算价'+opts.balancePriceMsg,'状态', '操作'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
                 {name: 'wmType', index: 'wmType', width: 50, hidden: true},
@@ -291,7 +291,7 @@ var skulist = {
             sortname: 'skuCode',
             sortorder: "asc",
             pager: _this.opts.pager,
-            showOperate: true,
+            showOperate: false,
             actionParam: {
                 view: {
                     url: _this.opts.urlRoot + _this.opts.viewUrl

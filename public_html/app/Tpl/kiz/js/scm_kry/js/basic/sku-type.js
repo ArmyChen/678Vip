@@ -142,7 +142,7 @@ var skuType = {
     	   var opts = {
     		   callBack: $.doDeleteOrLockTask,
     		   callBackArgs:dataArgs,
-			   hint:isDelete?((typeCode==""?'商品大类':'商品中类')+'删除后不可恢复,确认删除？'):'确定停用？'
+			   hint:isDelete?((typeCode==""?'商品上级分类':'商品分类')+'删除后不可恢复,确认删除？'):'确定停用？'
     	    };
     	   $.message.showDialog(opts);
     	   $("#typeCodeOrName").focus().blur();
@@ -154,7 +154,7 @@ var skuType = {
             formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id', '大类编码', '上级分类名称', '中类编码', '分类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
+            colNames: ['id', '上级分类编码', '上级分类名称', '分类编码', '分类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
                 {name: 'parentTypeCode', index: 'parentTypeCode', align: "left", width: 120,hidden:true},
@@ -288,7 +288,7 @@ var skuType = {
         });
     },
     
-    //重置大类列表
+    //重置上级分类列表
     doResetType:function(){
 		  $.ajax({
 	          url: skuType.opts.urlRoot+'/real/type',
@@ -299,7 +299,7 @@ var skuType = {
 	             if(res.length>0){
 	            	 var taget = $("#parentId"),isChange = true,
 	            	 oldVal = taget.parent().find("em").html(),
-	            	 realList='<li>请选择所属大类</li>',
+	            	 realList='<li>请选择所属上级分类</li>',
 	            	 realOpt='';
 	            	 
 	            	 for(var i=0;i<res.length;i++){
@@ -308,9 +308,9 @@ var skuType = {
 	            		 realOpt+='<option '+(res[i].typeName==oldVal?"selected":"")+' value="'+res[i].id+'">'+res[i].typeName+'</option>';
 	            	 }
 	            	 
-	            	taget.html("").append('<option '+(isChange?"selected":"")+' value="">请选择所属大类</option>'+realOpt);
+	            	taget.html("").append('<option '+(isChange?"selected":"")+' value="">请选择所属上级分类</option>'+realOpt);
 	             	taget.parent().find("ul").html("").append(realList);
-	             	if(isChange) taget.parent().find("em").html("请选择所属大类");
+	             	if(isChange) taget.parent().find("em").html("请选择所属上级分类");
 	             }
 	          },
 	          error: function () {
@@ -319,7 +319,7 @@ var skuType = {
 	      });
     },
 
-    //大类、中类选择切换
+    //上级分类、分类选择切换
     changeType : function(flag) {
         var _this = this;
 
