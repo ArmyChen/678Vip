@@ -1,0 +1,1161 @@
+
+{include file="inc/header.html"}
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/chosen.css?v=20170315_135229">
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>新增商品-原料</h1>
+        <div class="btn-wrap pull-right tar">
+            <a href="JavaScript:;" class="btn-link ml10" id="btn-create">保存</a>
+            <!--<a href="JavaScript:;" class="btn-link ml10" id="btn-copy">保存并复制</a>-->
+            <a href="/scm_kry/sku/index" class="btn-link ml10" id="btn-cancel">返回</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <input id="cacheUnit" type="hidden" value='[{"id":64497,"name":"杯"},{"id":67729,"name":"份"},{"id":74711,"name":"瓶"},{"id":74712,"name":"串"},{"id":74713,"name":"盘"},{"id":74714,"name":"位"}]'>
+    <input id="cacheProperty" type="hidden" value='[{"dishProperty":[{"id":143976,"name":"大杯","typeId":19548,"version":0},{"id":143977,"name":"中杯","typeId":19548,"version":0}],"hide":false,"id":19548,"name":"默认"}]'>
+    <!-- 右栏 start -->
+    <div class="panel">
+        <form id="skuForm">
+            <!-- 基础数据开始 -->
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>基础数据 </em></h3>
+            </div>
+            <div class="panel-body">
+                <table class="table-fixed">
+                    <tbody class="base_info">
+                    <tr>
+                        <th style="padding-left: 56px;">商品名称<strong class="red vam"> *</strong></th>
+                        <td>
+                            <div class="search-box pull-left">
+                                <input id="skuName" data-format="skuName" name="skuName" type="text" maxlength="64"
+                                       value="" class="baseInfo_dish" placeholder="第一语言"><br>
+                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                <span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
+                        </td>
+                        <th>商品编码<strong class="red vam"> &ensp;</strong></th>
+                        <td>
+                            <div class="search-box pull-left">
+                                <input placeholder="若不填写，则系统自动生成" id="skuCode" data-format="code" name="skuCode"
+                                       maxlength="16" class="baseInfo_dish" type="text" value=""><br>
+                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                <span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
+                            <div class="pull-left code-question">
+								<span class="iconfont question"
+                                      data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span>
+                            </div>
+                        </td>
+                        <th>商品中类<strong class="red vam"> *</strong></th>
+                        <td id="skuType">
+                            <select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;"
+                                    class="chosen-select select-style" tabindex="5">
+                                <option value=""></option>
+
+                                <optgroup label="火锅">
+
+                                    <option value="211181">火锅跟</option>
+
+                                    <option value="211182">uuu</option>
+
+                                </optgroup>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr style="margin-top: 13px;">
+                        <th style="padding-left: 56px;">&nbsp;</th>
+                        <td>
+                            <div class="search-box pull-left">
+                                <input id="skuAliasName" data-format="name" name="aliasName" type="text" maxlength="64"
+                                       value="" class="baseInfo_dish" placeholder="第二语言">
+                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                <br><span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
+                        </td>
+                        <th>库存类型<strong class="red vam"> *</strong></th>
+                        <td>
+                            <select id="goodsWm" name="wmType">
+                                <option value="4" selected="selected">原物料</option>
+                                <option value="5">半成品</option>
+                            </select>
+                        </td>
+                        <th>条&nbsp;&nbsp;形&nbsp;&nbsp;码<span>&nbsp;</span></th>
+                        <td>
+                            <div class="search-box pull-left">
+                                <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="barCode" name="barcode"
+                                       maxlength="16" class="baseInfo_dish" type="text" value="">
+                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                <br><span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
+                            <div class="wrong pull-left" style="margin-top: 5px"></div>
+                        </td>
+                    </tr>
+                    <!-- 出成率 -->
+                    <tr style="margin-top: 13px;" id="showRate">
+                        <th style="padding-left: 56px;">出成率<strong class="red vam"> *</strong></th>
+                        <td>
+                            <div class="input-group pull-left" style="width: 299px;">
+                                <input type="text" data-format="float" data-limit="{5,3}" data-range="{0,10000}"
+                                       class="form-control required" name="yieldRate" id="yieldRate" maxlength="14"
+                                       value="100" placeholder="请输入出成率">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                            <div class="pull-left code-question">
+                                <span class="iconfont question" data-content="原物料/外购商品经过初加工后，净料重量和毛料重量的百分比。"></span>
+                            </div>
+                        </td>
+                        <th></th>
+                        <td>
+
+                        </td>
+                        <th></th>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>
+                        <td colspan="3" id="goods_standard">
+                            <div id="gdd_standard" style="padding-top: 10px; display: none;" class="gd_standard">
+                                <input type="text" value="0" style="width:250px;" disabled="disabled">
+                                <div class="select-group" style="width:250px;">
+                                    <div class="select-control">
+                                        <em class="gg_cache"></em>
+                                    </div>
+                                    <ul class="gg_list" style="display: none;"></ul>
+                                </div>
+                                <span class="icon-plus gd_add">添加</span>
+                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
+                            </div>
+
+                            <div style="padding-top: 10px;" class="gd_standard">
+                                <input type="text" data-id="19548" value="默认" style="width:250px;"
+                                       disabled="disabled">
+                                <div class="select-group" style="width:250px;">
+                                    <div class="select-control">
+                                        <em class="gg_cache"></em>
+                                    </div>
+                                    <ul class="gg_list" style="display: none;">
+
+                                        <li onclick="clickStopPropagation(event)">
+                                            <div class="select-search-box" style="float: none;margin-left: 0;">
+                                                <input class="select-filter-ipt" onkeyup="filterSelect(this)"
+                                                       onclick="clickStopPropagation(event)" style="width: 100%;"
+                                                       class="form-control" type="text" autocomplete="off">
+                                                <span class="glyphicon glyphicon-search search-icon"></span>
+                                            </div>
+                                        </li>
+
+                                        <li data-id="143976">大杯</li>
+
+                                        <li data-id="143977">中杯</li>
+
+                                    </ul>
+                                </div>
+                                <span class="icon-plus gd_add">添加</span>
+                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 基础数据end -->
+        </form>
+
+        <!-- 商品单位开始 -->
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>商品单位 </em><span style="font-size: 12px;color: rgb(140, 139, 139);">备注：1、换算率以<最小单位>为准，一经设定，无法修改     2、单位和换算率设定完成后，一经保存，即绑定，无法修改</span>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table cellpadding="0" cellspacing="0" style="width: 92%;margin-bottom: 20px;table-layout: fixed;"
+                   class="text-center">
+                <thead>
+                <tr>
+                    <th style="text-align: center;" width="5%">序号</th>
+                    <th style="text-align: center;" width="15%">单位名称</th>
+                    <th style="text-align: center;" width="10"></th>
+                    <th style="text-align: center;" width="15%">换算率</th>
+                    <th style="text-align: center;" width="50"></th>
+                    <th style="text-align: center;" width="10%">
+                        最小单位<strong class="red vam"> *</strong>
+                        <span class="iconfont question color-g" data-content="用于配方设置"></span>
+                    </th>
+                    <th style="text-align: center;" width="10%">
+                        标准单位<strong class="red vam"> *</strong>
+                        <span class="iconfont question color-g" data-content="商品的标准单位，除采购、配方单据外商品使用的单位"></span>
+                    </th>
+                    <th style="text-align: center;" width="10%">
+                        采购单位<strong class="red vam"> *</strong>
+                        <span class="iconfont question color-g" data-content="商品的采购单位，用于采购单据"></span>
+                    </th>
+                    <th width=""></th>
+                </tr>
+                </thead>
+                <tbody id="crm_unit">
+                <tr id="crm_unit_seed" style="display: none;">
+                    <td style="height: 38px;" class="crm_num"></td>
+                    <td class="scm_input">
+                        <div class="select-group" style="width: 165px;">
+                            <div class="select-control">
+                                <em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>
+                            </div>
+                            <ul class="unit_list" style="display: none;" name="unit_list">
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        =
+                    </td>
+                    <td>
+                        <input class="crm_unit_convert" data-type="number" data-left-max="8" data-right-max="5"
+                               style="height:34px;text-align: center;" type="text" value="">
+                    </td>
+                    <td>
+                        <span name="unit" class="unit"></span>
+                    </td>
+                    <td>
+                        <!-- 如果有设置最小单位，则添加gerv属性 -->
+                        <label class="checkbox crm_unitSmall" style="cursor: pointer;">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="checkbox crm_unitStander" style="cursor: pointer;">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="checkbox crm_unitPurchase" style="cursor: pointer;">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td style="text-align: left;">
+                        <span class="icon-plus" style="float: left;">添加</span>
+                        <a href="#" class="close-1 ml10"
+                           style="display: none;margin-left: 41px;margin-top: 3px;">删除此项</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 商品单位end -->
+
+        <!-- 商品价格-->
+        <div id="crm_all_price">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <em>商品价格 </em>
+                    <span style="font-size: 12px;color: rgb(140, 139, 139);">
+					备注：原物料和外购商品价格栏位取值采购价；半成品、预制商品和现制商品价格栏位取值成本价
+					</span>
+                </h3>
+            </div>
+            <div id="scm_price_default" class="panel-body">
+                <div class="crm_price">
+                    <div style="float: left;margin-left: 56px;min-width: 660px;">
+                        <div class="fl">
+                            售卖价<strong class="white vam"> *</strong>
+                            <span id="test" class="iconfont question color-g"
+                                  data-content="预制商品、现制商品、外购商品的售价"></span>
+                        </div>
+                        <div class="fl">
+                            <div class="search-box pull-left">
+                                <input placeholder="0" data-limit="{8,5}" id="fixedPrice" disabled type="text"
+                                       value="—">
+                                <!-- <button type="button" class="close" data-val="0" name="close" aria-hidden="true">&times;</button> -->
+                            </div>
+                        </div>
+                        <span class="remark">元/<span name="unitStander" class="unitStander"></span></span>
+                    </div>
+                    <div>
+                        <div class="fl">
+                            采购价<strong id="purchase_name" class="red vam"> *</strong>
+                            <span class="iconfont question color-g" data-content="用于采购、配方明细"></span>
+                        </div>
+                        <div class="fl">
+                            <div class="search-box pull-left">
+                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="purchasePrice"
+                                       name="purchasePrice" type="text" value="0">
+                                <button type="button" class="close" data-val="0" name="close"
+                                        aria-hidden="true">&times;</button>
+                            </div>
+                        </div>
+                        <span class="remark">元/<span name="unitStander" class="unitStander"></span></span>
+                    </div>
+                </div>
+                <div class="crm_price">
+                    <div style="float: left;margin-left: 56px;min-width: 660px;">
+                        <div class="fl">
+                            成本价<strong class="white vam" id="costPrice_name"> *</strong>
+                            <span class="iconfont question color-g" data-content="用于自产、报废单据"></span>
+                        </div>
+                        <div class="fl">
+                            <div class="search-box pull-left">
+                                <input placeholder="0" data-limit="{8,5}" id="costPrice" type="text" value="—"
+                                       disabled="disabled">
+                                <button style="display: none;" type="button" class="close" data-val="0" name="close"
+                                        aria-hidden="true">&times;</button>
+                            </div>
+                        </div>
+                        <span class="remark">元/<span name="unitStander" class="unitStander"></span></span>
+                    </div>
+                    <div>
+                        <div class="fl">
+                            结算价<strong class="red vam"> *</strong>
+                            <span class="iconfont question color-g" data-content="用于配送、调拨、退回单据"></span>
+                        </div>
+                        <div class="fl">
+                            <div class="search-box pull-left">
+                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="balancePrice"
+                                       type="text" value="0">
+                                <button type="button" class="close" data-val="0" name="close"
+                                        aria-hidden="true">&times;</button>
+                            </div>
+                        </div>
+                        <span class="remark">元/<span name="unitStander" class="unitStander"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 商品价格end -->
+    </div>
+</div>
+
+<!-- 弹出层 -->
+<div class="panel-popover" id="popover-attribute"
+     style="width: 600px; margin-left: -300px; margin-top: -100px; display: none;">
+    <div class="panel-popover-heading">
+        <div class="panel-popover-title">请您选择要添加的规格类别</div>
+    </div>
+    <div class="panel-popover-body">
+        <ul class="attribute-list" id="attribute-list">
+
+
+            <li style="display: none;" class="using" data-id="19548">默认</li>
+
+
+
+
+        </ul>
+    </div>
+    <div class="panel-popover-footer">
+        <div class="btn-wrap text-center"><a class="btn-blue mr30" role="button" id="creatAttribute">确认</a><a
+                class="btn-blue btn-cancel" role="button">取消</a></div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function ($) {
+        var Base = {
+            /* 缓存当前单位集合  */
+            cache: new Array(),
+            cacheProperty: {},
+            /* 规格 hover*/
+            standerHover: function () {
+                $("#goods_standard").find(".gd_standard").off('hover').hover(
+                    function () {
+                        $(this).find(".close-1").show();
+                    },
+                    function () {
+                        $(this).find(".close-1").hide();
+                    }
+                );
+            },
+            /*单位  hover */
+            trHover: function () {
+                $("#crm_unit").find("tr").off('hover').hover(
+                    function () {
+                        $(this).find(".close-1").show();
+                    },
+                    function () {
+                        $(this).find(".close-1").hide();
+                    }
+                );
+            },
+            /* 操作单位时载入全部单位和已选单位的差集 */
+            initSelect: function () {
+                var newList = '<li onclick="clickStopPropagation(event)">\
+				<div class="select-search-box" style="float: none;margin-left: 0;">\
+						<input class="select-filter-ipt" onkeyup="filterSelect(this)" \
+						onclick="clickStopPropagation(event)" style="width: 100%;" class="form-control" type="text" autocomplete="off">\
+						<span class="glyphicon glyphicon-search search-icon"></span>\
+						</div>\
+						</li>', oldList = $(".unit_cache");//获取页面已选择的单位
+                for (var i = 0; i < Base.cache.length; i++) {
+                    var flag = true, each = Base.cache[i];
+                    for (var j = 1; j < oldList.length; j++) {
+                        var eachId = $(oldList[j]).attr("data-id");
+                        if (each.id == eachId) flag = false;
+                    }
+                    if (flag) newList += '<li style="cursor:pointer;" data-id="' + each.id + '" data-name="' + each.name + '" data-convert="' +
+                        (each.skuConvert == null ? "" : each.skuConvert) + '">' + each.name + '</li>';
+                }
+                return newList;
+            },
+            /* 单位 add */
+            add: function () {
+                $("#crm_unit").on('click', '.icon-plus', function () {
+                    var num = $("#crm_unit").find('tr');
+                    if (num.length <= 5) {
+                        var obj = $("#crm_unit_seed").clone(true).show();
+                        obj.find(".crm_num").html(parseInt(num.length));
+                        obj.find(".unit_list").html(Base.initSelect());//增加时载入新的互斥列表
+                        if (num.length == 5) {
+                            obj.find(".icon-plus").hide();
+                            obj.find(".close-1").attr('style', 'display: none;margin-left: 68px;margin-top: 3px;');
+                        }
+                        $("#crm_unit").append(obj);
+                        $(this).hide();
+                        $(this).parent().find(".close-1").attr('style', 'display: none;margin-left: 68px;margin-top: 3px;');
+                    }
+                    selectEvent();//注册新的下拉列表事件
+                });
+            },
+            /* 单位 remove */
+            remove: function () {
+                $("#crm_unit").on("click", ".close-1", function () {
+                    var tr = $(this).parent().parent(), isHave = tr.find(".checkbox-check");
+                    if (isHave.length > 0) {
+//					Message.alert({title:"提示信息",describe:"该单位已被勾选，无法删除！"});
+                        $.layerMsg("该单位已被勾选，无法删除！", false);
+                    } else {
+                        var oldId = $("#plantDeleteId").val(),
+                            tempTrId = tr.find(".crm_num").attr("id");
+                        if (tempTrId) {
+                            oldId += "," + tempTrId;
+                            $("#plantDeleteId").val(oldId);
+                        }
+                        tr.remove();
+
+                        var allTr = $("#crm_unit").find('tr'), newList = Base.initSelect();//删除时载入新的互斥列表
+                        for (var i = 0; i < allTr.length; i++) {
+                            var each = $(allTr[i]), tempNewList = newList;
+                            each.find(".crm_num").html(i);
+                            if (i == allTr.length - 1) {
+                                each.find('.close-1').attr('style', 'display: none;margin-left: 41px;margin-top: 3px;');
+                                each.find(".icon-plus").show();
+                            }
+                            //=========加载新的列表=========
+                            var temp = each.find(".unit_cache");
+                            if (temp.attr("data-id") && temp.attr("data-id") != -1) {
+                                tempNewList += '<li data-id="' + temp.attr("data-id") + '" data-name="' + temp.attr("data-name") +
+                                    '" data-convert="' + temp.attr("data-convert") + '">' + temp.attr("data-name") + '</li>';
+                            }
+                            each.find(".unit_list").html(tempNewList);
+                        }
+                        selectEvent();//注册新的下拉列表事件
+                    }
+                    return false;
+                });
+            },
+            /* 复选框转单选框 */
+            checkBoxToRido: function () {
+                $(".crm_unitSmall").off('click').on('click', function () {
+                    $(".crm_unitSmall").removeClass("checkbox-check");
+                    $(".crm_unit_convert").removeAttr("disabled");
+                    $(this).addClass("checkbox-check").parent().parent().find(".crm_unit_convert").val(1).attr("disabled", "disabled");
+                    //设定最小单位
+                    setPriceRemark();
+                });
+                $(".crm_unitStander").off('click').on('click', function () {
+                    $(".crm_unitStander").removeClass("checkbox-check");
+                    $(this).addClass("checkbox-check");
+                    //设定最小单位
+                    setPriceRemark();
+                });
+                $(".crm_unitPurchase").off('click').on('click', function () {
+                    $(".crm_unitPurchase").removeClass("checkbox-check");
+                    $(this).addClass("checkbox-check");
+                });
+            },
+            /* 输入框内容验证  内容检查*/
+            inputCheck: function () {
+                $(document).delegate("input[data-type='number']", "blur", function (e) {
+                    var value = $(this);
+                    if (value.hasClass("crm_unit_convert")) {
+                        if (value.val() == "" || isNaN(value.val()) || value.val() < 1) value.val("");
+                    } else {
+                        if (value.val() == "" || isNaN(value.val())) value.val("");
+                    }
+                });
+                $(document).delegate("input[data-type='number']", "focus", function (e) {
+                    var value = $(this);
+                    if (value.val() == 0) value.val("");
+                });
+            },
+            /*载入单位数据*/
+            initData: function () {
+                var oldSeed = $("#crm_unit_seed"), crm_unit = $("#crm_unit");
+                Base.cache = eval('(' + $("#cacheUnit").val() + ')');//有用
+
+                crm_unit.html(oldSeed.clone(true));//增加新的模板  IE
+                var each = oldSeed.clone(true).show();
+                each.find(".crm_unit_convert").attr("disabled", "disabled");
+                each.find(".crm_unitSmall").addClass("checkbox-check");
+                each.find('.crm_unitStander').addClass("checkbox-check");
+                each.find(".crm_unitPurchase").addClass("checkbox-check");
+                each.find(".unit_list").html(Base.initSelect());
+                each.find('.crm_num').html(1);
+                crm_unit.append(each);
+                selectEvent();//注册新的下拉列表事件
+
+                //初始化规格列表数据
+                var cProperty = $("#cacheProperty").val();
+                if (cProperty && cProperty != "") {
+                    var proArray = eval('(' + cProperty + ')');
+                    for (var i = 0; i < proArray.length; i++) {
+                        Base.cacheProperty[proArray[i].id] = proArray[i].dishProperty;
+                    }
+                }
+            },
+            init: function () {
+                Base.initData();
+                Base.add();
+                Base.remove();
+                Base.trHover();
+                Base.standerHover();
+                Base.inputCheck();
+                Base.checkBoxToRido();
+            }
+        }
+        Base.init();
+        $('#skuName').focus();
+
+        //设置换算最小单位及商品价格中价格备注
+        function setPriceRemark() {
+            //最小单位
+            var unitSmall = $('#crm_unit').find('.crm_unitSmall.checkbox-check').parents('tr').find('.select-control>em').html();
+            //标准单位
+            var unitStander = $('#crm_unit').find('.crm_unitStander.checkbox-check').parents('tr').find('.select-control>em').html();
+            //采购单位
+            //var unitPurchase  = $('#crm_unit').find('.crm_unitPurchase.checkbox-check').parents('tr').find('.select-control>em').html();
+            $('span[name="unit"]').html(unitSmall);
+            $('span[name="unit"]').attr('title', unitSmall);
+            $('span[name="unitStander"]').each(function () {
+                $(this).html(unitStander);
+                var $remark = $(this).parent();
+                $remark.attr('title', $remark.text());
+            });
+        }
+
+        //下拉框选择事件注册及改变
+        function selectEvent() {
+            $(".unit_list > li").off("click").on("click", function () {
+                var taget = $(this), id = taget.data("id"), name = taget.data("name"), convert = taget.data("convert"),
+                    num = taget.parent().parent().parent().parent().find(".crm_num").html();
+
+                //排除筛选行
+                if (taget.find(':text').length == 1) {
+                    return false;
+                }
+
+                //回显选择框
+                taget.parent().parent().find("div > em").attr("data-id", id ? id : "-1")
+                    .attr("data-name", name ? name : "").attr("data-convert", convert);
+
+                //如果带有换算率对应关系且为最小单位，换算率取值1，否则回显固有换算率关系
+                var isSmallUnit = taget.parents('tr').find(".crm_unitSmall").hasClass("checkbox-check");
+                if (!isSmallUnit) {
+                    if (convert && convert != "") {
+                        taget.parent().parent().parent().parent().find(".crm_unit_convert").attr("disabled", "disabled").val(convert);
+                    } else {
+                        var oldValue = taget.parent().parent().parent().parent().find(".crm_unit_convert");
+                        oldValue.removeAttr("disabled").val(oldValue.val());
+                    }
+                } else {
+                    taget.parent().parent().parent().parent().find(".crm_unit_convert").attr("disabled", "disabled").val(1);
+                }
+                //设置最小单位和标准单位
+                if (isSmallUnit) {
+                    //最小单位
+                    $('span[name="unit"]').html(taget.html());
+                    $('span[name="unit"]').attr('title', taget.html());
+                }
+                var isUnitStander = taget.parents('tr').find(".crm_unitStander").hasClass("checkbox-check");
+                if (isUnitStander) {
+                    //标准单位
+                    $('span[name="unitStander"]').each(function () {
+                        $(this).html(taget.html());
+                        var $remark = $(this).parent();
+                        $remark.attr('title', $remark.text());
+                    });
+                }
+
+                //重新计算下拉列表
+                unitList = $(".unit_list");
+                newList = Base.initSelect();
+                for (var i = 1; i < unitList.length; i++) {
+                    var each = $(unitList[i]);
+                    var temp = each.parent().find("em");
+                    var nnum = each.parent().parent().parent().find(".crm_num").html();
+                    if (num != nnum) {
+                        var tempNewList = newList;//为每一个下拉列表复制一个中间变量
+                        if (temp.attr("data-id") && temp.attr("data-id") != -1) {
+                            tempNewList += '<li data-id="' + temp.attr("data-id") + '" data-name="' + temp.attr("data-name") +
+                                '" data-convert="' + temp.attr("data-convert") + '">' + temp.attr("data-name") + '</li>';
+                        }
+                        each.html(tempNewList);
+                    }
+                }
+                selectEvent();//重新注册下拉列表事件
+            });
+        }
+
+        /*商品规格删除*/
+        $("#goods_standard").on("click", ".close-1", function () {
+            var num = $("#goods_standard").find(".gd_standard").length;
+            if (num > 2) {
+                var parent = $(this).parent();
+                var delId = parent.find("input").data("id");
+                var oldList = $("#attribute-list").find("li");
+                for (var i = 0; i < oldList.length; i++) {
+                    if ($(oldList[i]).data("id") == delId) $(oldList[i]).removeClass("using").show();
+                }
+                parent.remove();
+                var oldTr = $("#goods_standard").find(".gd_standard");
+                $(oldTr[oldTr.length - 1]).find(".gd_add").show();
+                $(oldTr[oldTr.length - 1]).find("a").attr("style", "margin-left: 18px; display: none;");
+            } else {
+                $($(".gg_cache")[1]).removeAttr("data-id").html("");
+            }
+
+            return false;
+        });
+        /*商品规格增加*/
+        $("#goods_standard").on("click", ".gd_add", function () {
+            var currentLi = $("#attribute-list");
+            if (currentLi.find("li").length > currentLi.find(".using").length) {
+                $("#popover-attribute").show();
+                bkeruyun.showLayer();
+            } else {
+                $.layerMsg("已无可添加的商品规格类别！", false);
+            }
+        });
+
+        /* 选择规格类型 */
+        $("#attribute-list").on("click", "li", function () {
+                $(".current").removeClass("current");
+                $(this).addClass("current")
+            }
+        );
+
+        /* 确定 添加规格 */
+        $("#creatAttribute").on("click", function () {
+            if ($(".current").data("id")) {
+                var name = $(".current").html(), id = $(".current").data("id");
+                $(".current").removeClass("current").addClass("using").hide();
+                $(".gd_add").hide();
+                $(".close-1").attr("style", "margin-left: 49px; display: none;");
+                var seed = $("#gdd_standard").clone(true).show();
+                seed.find(".gd_add").show();
+                seed.find(".close-1").attr("style", "margin-left: 18px; display: none;");
+                seed.find("input").val(name).attr("data-id", id);
+                var list = Base.cacheProperty[id];
+                var tempList = '';
+
+                //添加筛选行
+                var li = '<li onclick="clickStopPropagation(event)">\
+						<div class="select-search-box" style="float: none;margin-left: 0;">\
+						<input class="select-filter-ipt" onkeyup="filterSelect(this)" onclick="clickStopPropagation(event)"\
+						 style="width: 100%;" class="form-control" type="text" autocomplete="off">\
+						<span class="glyphicon glyphicon-search search-icon"></span>\
+						</div>\
+						</li>';
+                tempList += li;
+
+                for (var i = 0; i < list.length; i++) {
+                    tempList += '<li data-id="' + list[i].id + '">' + list[i].name + '</li>';
+                }
+                seed.find(".gg_list").html(tempList);
+                $("#goods_standard").append(seed);
+                $(".btn-cancel").trigger("click");
+            }
+        });
+
+        /*规格选择 增加Id*/
+        $(".gg_list").on("click", "li", function () {
+            $(this).parent().parent().find("em").attr("data-id", $(this).data("id"));
+        });
+
+        //保存请求
+        function toSave(isCopy) {
+            var skuList = {};
+            skuList.skuName = $("#skuName").val();
+            skuList.skuCode = $("#skuCode").val();
+            skuList.wmType = $("#goodsWm").val();
+            skuList.barCode = $("#barCode").val();
+            skuList.price = $("#fixedPrice").val();
+            skuList.yieldRate = $("#yieldRate").val();
+            skuList.skuAliasName = $("#skuAliasName").val(),
+                skuList.skuTypeId = $("#skuTypeId").val();
+
+            if (skuList.skuTypeId <= 0) {
+                $.layerMsg("请选择商品中类！", false);
+                return false;
+            }
+
+            //规格
+            var gdStandard = $(".gd_standard");
+            var standard = new Array();
+            for (var i = 1; i < gdStandard.length; i++) {
+                var each = $(gdStandard[i]), temp = {};
+                var pId = each.find(".gg_cache").attr("data-id");
+                var typeId = each.find("input").attr("data-id");
+                temp.typeId = typeId;
+                temp.propertyId = pId;
+                if (pId) {
+                    standard.push(temp);
+                }
+            }
+
+            //单位
+            var crm_unit = $("#crm_unit");
+            var unitObj = new Array(), skuPrice = {}, allTr = $("#crm_unit").find("tr");
+            for (var i = 1; i < allTr.length; i++) {
+                var each = {}, temp = $(allTr[i]), unitIds = temp.find('.unit_cache').attr("data-id");
+                if (unitIds == "-1") {
+                    $.layerMsg("请选择单位名称！", false);
+                    return false;
+                }
+                each.unitId = temp.find('.unit_cache').attr("data-id");
+                each.unitName = temp.find('.unit_cache').attr("data-name");
+                each.skuConvert = temp.find('.crm_unit_convert').val();
+                if(each.skuConvert==""){
+                    $.layerMsg("请填写换算率！", false);
+                    return false;
+                }
+                each.unitSmall = temp.find(".crm_unitSmall").hasClass("checkbox-check") ? 1 : 0;
+                each.unitStander = temp.find(".crm_unitStander").hasClass("checkbox-check") ? 1 : 0;
+                each.unitPurchase = temp.find(".crm_unitPurchase").hasClass("checkbox-check") ? 1 : 0;
+                each.unitType = 1;
+                unitObj.push(each);
+            }
+
+            //出成率
+            if (skuList.wmType == 4) {//原物料
+                if (skuList.yieldRate == "" || parseFloat(skuList.yieldRate) <= 0) {
+                    $.layerMsg("出成率必填，且大于0！", false);
+                    return false;
+                }
+            } else {//外购品
+                skuList.yieldRate = "";
+            }
+
+            //价格
+            var skuPrice = {};
+            skuPrice.purchasePrice = $("#purchasePrice").val();
+            skuPrice.costPrice = $("#costPrice").val();
+            skuPrice.balancePrice = $("#balancePrice").val();
+            skuPrice.price = $("#fixedPrice").val();
+
+            if (skuPrice.price == "" || skuPrice.price == "—") {
+                skuPrice.price = 0;
+                skuList.price = 0;
+            }
+            if (skuPrice.costPrice == "" || skuPrice.costPrice == "—") skuPrice.costPrice = 0;
+            if (skuPrice.balancePrice == "" || skuPrice.balancePrice == "—")skuPrice.balancePrice = 0;
+            if (skuPrice.purchasePrice == "" || skuPrice.purchasePrice == "—")skuPrice.purchasePrice = 0;
+
+            bkeruyun.showLoading();
+            $.ajax({
+                url: "/scm_kry/sku/add/sku",
+                type: "post",
+                async: true,
+                data: {
+                    skuPrice: JSON.stringify(skuPrice),
+                    skuUnit: JSON.stringify(unitObj),
+                    standard: JSON.stringify(standard),
+                    skuList: JSON.stringify(skuList)
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        var oldName = $("#skuName").val(), standStr = "", allStand = $("#goods_standard").find(".gg_cache");
+                        for (var i = 0; i < allStand.length; i++) {
+                            var each = $(allStand[i]).html();
+                            if (each != "") standStr += each + ",";
+                        }
+                        if (standStr != "") oldName += "(" + standStr.substring(0, standStr.length - 1) + ")";
+                        var showMsg = $("#skuCode").val().length == 0;
+                        if (isCopy) {
+                            if (showMsg) {
+                                $.layerMsg("操作成功，" + oldName + "编码是：<span style='color:red;'>" + data.code + "</span>", true, {shade: 0.3});
+                            } else {
+                                $.layerMsg("操作成功！", true, {shade: 0.3});
+                            }
+                            doResetType();
+                        } else {
+                            if (showMsg) {
+                                $.layerMsg("保存成功，" + oldName + "编码是：<span style='color:red;'>" + data.code + "</span>", true, {
+                                    end: function () {
+                                        window.location.href = "/scm_kry/sku/index";
+                                    }, shade: 0.3
+                                });
+                            } else {
+                                $.layerMsg("保存成功！", true, {
+                                    end: function () {
+                                        window.location.href = "/scm_kry/sku/index";
+                                    }, shade: 0.3
+                                });
+                            }
+                        }
+                    } else {
+                        $.layerMsg(data.message, false);
+                    }
+                    bkeruyun.hideLoading();
+                },
+                error: function () {
+                    $.layerMsg("网络错误", false);
+                    bkeruyun.hideLoading();
+                }
+            });
+        }
+
+
+        //保存并复制按钮
+        $("#btn-copy").on("click", function () {
+            if (!check()) return false;
+            toSave(true);//要copy
+        });
+
+
+        //保存按钮
+        $("#btn-create").on("click", function () {
+            if (!check() || !$("#barCode").valid()) return false;
+            if ($("#barCode").val() && !checkBarcodeExist($("#barCode").val(), false,false)) return false;
+            toSave(false);//不要copy
+        });
+
+        /*范本编码验证*/
+        function check() {
+            var sign = true, name = $("#skuName"),
+                code = $("#skuCode"), aName = $("#skuAliasName");
+
+            //name
+            if (name.val().trim() == "") {
+                sign = false;
+                name.parent().find("span").html("此栏位为必填");
+            }
+
+
+            //验证code非重复
+            if (code.val().trim() != "") {
+                if (sign) {
+                    $.ajax({
+                        url: "/scm_kry/sku/check/code",
+                        type: "post",
+                        async: false,
+                        data: {skuCode: code.val().trim()},
+                        success: function (data) {
+                            if (data == true) {
+                                sign = false;
+                                code.parent().find("span").html("商品编码重复");
+                            }
+                        },
+                        error: function () {
+                            $.layerMsg("网络错误", false);
+                        }
+                    });
+                }
+            }
+            return sign;
+        }
+
+        /* 输入框还原事件 */
+        $(".baseInfo_dish").on("keypress keyup change", function (e) {
+            $(this).parent().find("span").html("");
+        });
+
+        //保存并复制加载新的类型
+        function doResetType() {
+            $.ajax({
+                url: '/scm_kry/sku/real/type',
+                type: "post",
+                async: false,
+                data: {},
+                success: function (res) {
+                    if (res.length > 0) {
+                        var oldId = $("#skuTypeId").val(),
+                            oldText = $("#skuTypeId").parent().find("span").html();
+
+                        var newSelect = '<select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;" class="chosen-select select-style" tabindex="5">';
+                        newSelect += '<option value="' + oldId + '">' + oldText + '</option>';
+
+                        for (var i = 0; i < res.length; i++) {
+                            var name = res[i].name, node = res[i].nodes;
+                            newSelect += '<optgroup label="' + name + '">';
+                            for (var j = 0; j < node.length; j++) {
+                                newSelect += '<option value="' + node[j].id + '">' + node[j].name + '</option>';
+                            }
+                            newSelect += '</optgroup>';
+                        }
+                        $("#skuType").html("").append(newSelect);
+                        $("#skuTypeId").chosen();
+                    }
+                },
+                error: function () {
+                    //DO ...
+                }
+            });
+        }
+
+//		$("input[name='barcode']").blur(function () {
+//			var value = $(this).val();
+//			getSkuInfo(value);
+//		})
+
+        var ajaxFlag = true;
+        $("input[name='barcode']").keypress(function (e) {
+            var value = $(this).val();
+            var key = e.charCode || e.keyCode || 0;
+            if (key == 13) {
+                if (!$("#barCode").valid() || !checkBarcodeExist(value, false,false)) {
+                    return;
+                }
+                getSkuInfo(value);
+            }
+        })
+
+
+        /**
+         * 通过条形码获取商品信息
+         */
+
+        var validate = $("#skuForm").validate({
+            rules: {
+                barcode: {
+                    barcode: true,
+                }
+            },
+            messages: {
+                barcode: {}
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().siblings(".wrong"));
+            }
+        })
+
+        $.validator.addMethod("barcode", function (value, element) {
+            var reg = /^[a-zA-Z0-9]{1,12}-?[a-zA-Z0-9]{1,12}$/;
+            if (reg.test(value) && value.length >=8 && value.length <= 13 || value == "") {
+                if(value) {
+                    checkBarcodeExist(value, true,true);
+                }
+                return true;
+            }
+            return false;
+        }, "条形码格式有误");
+
+        function checkBarcodeExist(value, autoReturn, async) {
+            if(autoReturn && ajaxFlag == false)
+                return true;
+            ajaxFlag = false;
+            var result = false;
+            $.ajax({
+                type: "POST",
+                url: "/scm_kry/sku/checkBarcode",
+                data: {barcode: value },
+                dataType: "json",
+                async: async,
+                success: function (data) {
+                    if (!data) {
+                        validate.showErrors({
+                            "barcode": "条形码已存在"
+                        });
+                    }
+                    result = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Message.alert({title: "提示", describe: '网络异常'});
+                },
+                complete: function() {
+                    ajaxFlag = true;
+                }
+            });
+            return result;
+        }
+
+        function getSkuInfo(barcode) {
+
+            $.ajax({
+                url: "/scm_kry/sku/skuInfo",
+                type: "post",
+                async: true,
+                data: {barcode: barcode},
+                dataType: "json",
+                success: function (result) {
+                    if (result.success == false) {
+                        validate.showErrors({
+                            "barcode": result.message
+                        });
+                    } else {
+                        showSkuInfo(result.data);
+                    }
+                },
+                error: function () {
+                    $.layerMsg("网络错误", false);
+                }
+            });
+        }
+
+        /**
+         * 商品信息显示
+         * @param data
+         */
+        function showSkuInfo(data) {
+            if (data == null) {
+                validate.showErrors({
+                    "barcode": "未检索到该条形码信息"
+                });
+                return false;
+            }
+            setupFormElementVal($(".panel"), data);
+            $('#barCode').select();
+        }
+
+        /**
+         * 装载表单元素数据
+         * @param form 表单
+         * @param aData 表单数据，JSON格式
+         */
+        function setupFormElementVal(form, aData) {
+            var inputElements = form.find("input[name]");
+            // 库存类型初始化
+            var selectElements = form.find("select[name]");
+            selectElements.eq(0).find('option').each(function (i, v) {
+                if($(v).val() == aData['wmType']) {
+                    selectElements.val(aData['wmType']);
+                    selectElements.parent().find('.select-control em').text($(v).text());
+                    $(v).change();
+                }
+            });
+            inputElements.each(function (i, v) {
+                //是radio单选标签
+                if ($(v).attr('type') == 'radio' || $(v).attr('type') == 'checkbox') {
+                    //标签值等于要修改数据对应的值，将标签设置为选中状态
+                    if ($(v).val() == aData[$(v).attr("name")]) {
+                        $(v).click();
+                    }
+                } else {
+                    $(v).val(aData[$(v).attr("name")]);
+                }
+
+            });
+            var textareaElements = form.find("textarea[name]");
+            textareaElements.each(function (i, v) {
+                $(v).val(aData[$(v).attr("name")])
+            });
+
+            var imgElements = form.find("img[name]");
+            imgElements.each(function (i, v) {
+                $(v).attr('src', aData[$(v).attr("name")]);
+            });
+
+            // 单位初始化
+            var unitList = $("#crm_unit .unit_list").eq(1).find('li');
+            unitList.each(function (i, v) {
+                if($(v).attr("data-name") == aData['unitName']) {
+                    $(v).click();
+                }
+            });
+        }
+
+
+    })(jQuery);
+</script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135229"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //初始化chosen
+    function loadChosen() {
+        var config = {
+            '.chosen-select': {},
+            '.chosen-select-deselect': {allow_single_deselect: true},
+            '.chosen-select-no-single': {disable_search_threshold: 10},
+            '.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
+            '.chosen-select-width': {width: "95%"}
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+
+    }
+    loadChosen();
+
+    //根据库存类型调整价格
+    $("#goodsWm").on("change", function () {
+        var type = $(this).val(),
+            purchasePrice = $("#purchasePrice"),  //采购价
+            purchase_name = $("#purchase_name"),
+            purchaseOldValue = purchasePrice.attr("data-val"),
+
+            costPrice = $("#costPrice"),
+            costPrice_name = $("#costPrice_name"),
+            costPriceOldValue = costPrice.attr("data-val");
+        if (type == "4") {//原物料
+            purchaseOldValue = purchaseOldValue == "—" ? 0 : purchaseOldValue;
+            purchasePrice.val(purchaseOldValue).removeAttr("disabled").siblings().show();
+            purchase_name.removeClass("white").addClass("red");
+
+            var costPriceNewValue = costPrice.val();
+            if (costPriceNewValue != "—") costPrice.attr("data-val", costPriceNewValue);
+            costPrice.val("—").attr("disabled", "disabled").siblings().hide();
+            costPrice_name.removeClass("red").addClass("white");
+
+            $("#showRate").show().find("input").val("100");
+        } else if (type == "5") {//半成品
+            var purchasePriceNewValue = purchasePrice.val();
+            if (purchasePriceNewValue != "—") purchasePrice.attr("data-val", purchasePriceNewValue);
+            purchasePrice.val("—").attr("disabled", "disabled").siblings().hide();
+            purchase_name.removeClass("red").addClass("white");
+
+            costPriceOldValue = costPriceOldValue == "—" ? 0 : costPriceOldValue;
+            costPrice.val(costPriceOldValue).attr("data-format", "float").removeAttr("disabled").siblings().show();
+            costPrice_name.removeClass("white").addClass("red");
+
+            $("#showRate").hide().find("input").val("");
+        }
+    });
+
+    //商品规格和商品单位添加筛选框 start
+    //阻止点击事件冒泡
+    function clickStopPropagation(e) {
+        e.stopPropagation();
+        return false;
+    }
+    ;
+    //筛选下拉选项
+    function filterSelect(target) {
+        var $this = $(target);
+        $this.parents('li').siblings("li").each(function () {
+            var $li = $(this);
+            if ($li.text().indexOf($this.val()) > -1) {
+                $li.show();
+            } else {
+                $li.hide();
+            }
+        });
+    }
+    ;
+    //点击下拉框以后还原隐藏选项
+    $(document).on('click', '.select-control', function () {
+        var $this = $(this);
+        var $ul = $this.next();
+        $ul.find(':text').val('');
+        $ul.find('li').show();
+        setTimeout(function () {
+            $ul.find(':text').focus();
+        }, 10);
+    });
+    //商品规格和商品单位添加筛选框 end
+
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

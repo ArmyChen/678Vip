@@ -9,8 +9,8 @@ var openinginventory = {
         listGridId: '#grid',
         fileId: 'file',
         queryUrl: '/query',
-        uploadFileUrl: '/uploadFile',
-        downloadFileUrl: '/downloadFile',
+        uploadFileUrl: '&act=basic_master_import_ajax',
+        downloadFileUrl: '/app/master.xls',
         warehouseId: '#warehouseId'
     },
 
@@ -47,9 +47,9 @@ var openinginventory = {
             showEmptyGrid: true,
             width: width,
             rowNum: 9999,
-            colNames: ['仓库编码', '仓库名称', '汇入日期'/*, '期初金额'*/],
+            colNames: ['操作人','仓库名称', '汇入日期'/*, '期初金额'*/],
             colModel: [
-                {name: 'warehouseCode', index: 'warehouseCode', sortable: false},
+                {name: 'username', index: 'username', sortable: false},
                 {name: 'warehouseName', index: 'warehouseName', sortable: false},
                 {name: 'createTime', index: 'createTime', align: "center", sortable: false}
                 /*,
@@ -117,7 +117,7 @@ uploadFiles = function(){
     bkeruyun.showLoading();
 
     $.ajaxFileUpload({
-        url: openinginventory.opts.urlRoot + openinginventory.opts.uploadFileUrl,
+        url: ctxPath + openinginventory.opts.uploadFileUrl,
         secureuri: false,
         fileElementId: openinginventory.opts.fileId,//file标签的id
         type: 'post',
@@ -175,7 +175,7 @@ showErrorMsgs = function(errors){
 
 downloadFile = function(){
 
-    var url = openinginventory.opts.urlRoot + openinginventory.opts.downloadFileUrl;
+    var url = openinginventory.opts.downloadFileUrl;
 
     window.open(url, '_blank');
 }

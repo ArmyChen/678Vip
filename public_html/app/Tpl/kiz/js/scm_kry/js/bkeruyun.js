@@ -452,7 +452,7 @@ var bkeruyun = {
             $("#loading").show();
         }
         else {
-            var loading = '<div id="loading"><img src="themes/style/img/loading.gif" /></div>';
+            var loading = '<div id="loading"><img src="/app/Tpl/kiz/js/scm_kry/img/loading.gif" /></div>';
             $(document.body).append(loading);
         }
         bkeruyun.showLayer();

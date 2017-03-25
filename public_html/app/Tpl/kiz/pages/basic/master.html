@@ -17,9 +17,11 @@
                             <select class="form-control" name="warehouseId" id="warehouseId">
                                 <option value="">请选择仓库</option>
 
-                                <option value="14838">4号库</option>
+                                {foreach from=$cangkulist item=item}
 
-                                <option value="14839">5号库</option>
+                                <option value="{$item.id}" >{$item.name}</option>
+
+                                {/foreach}
 
                             </select>
                         </dd>

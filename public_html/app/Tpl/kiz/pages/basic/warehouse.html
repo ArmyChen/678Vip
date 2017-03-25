@@ -8,11 +8,11 @@
 
 
         <div class="btn-wrap pull-right tar">
-            <a code="scm:button:masterdata:sku:synBrandPrice" class="btn-link ml10" id="btnSelectCommercial">价格同步</a>
-            <a code="scm:button:masterdata:sku:edit" href="#" onfocus="this.blur()" function="$.doForward" args="{url:'/scm_kry/sku/edit/prices'}" class="btn-link ml10">价格批量编辑</a>
-            <a code="scm:button:masterdata:sku:delete" href="#" onfocus="this.blur()" onclick="skulist.batchDelete();" class="btn-link ml10" id="btn-delete">批量删除</a>
-            <a href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-export">批量导出</a>
-            <a code="scm:button:masterdata:sku:add" onclick="skuupload.delegateBtnUpload();" href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-upload1">批量导入</a>
+            <!--<a code="scm:button:masterdata:sku:synBrandPrice" class="btn-link ml10" id="btnSelectCommercial">价格同步</a>-->
+            <!--<a code="scm:button:masterdata:sku:edit" href="#" onfocus="this.blur()" function="$.doForward" args="{url:'/scm_kry/sku/edit/prices'}" class="btn-link ml10">价格批量编辑</a>-->
+            <!--<a code="scm:button:masterdata:sku:delete" href="#" onfocus="this.blur()" onclick="skulist.batchDelete();" class="btn-link ml10" id="btn-delete">批量删除</a>-->
+            <!--<a href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-export">批量导出</a>-->
+            <!--<a code="scm:button:masterdata:sku:add" onclick="skuupload.delegateBtnUpload();" href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-upload1">批量导入</a>-->
             <a code="scm:button:masterdata:sku:add" onfocus="this.blur()" function="$.doForward" args="{url:'/scm_kry/sku/add'}" class="btn-link ml10" id="btn-create">创建</a>
         </div>
 
@@ -240,56 +240,12 @@
 
 <div id="commercialSelectDiv" gridId="shop_grid" showBrand="false"></div>
 
-<script type="text/javascript" src="/scm_kry/js/scm/masterdata/sku/skulist.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/masterdata/sku/skuexport.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/masterdata/sku/skuupload.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/scm_kry/js/template.min.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/scm-msg.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/masterdata/sku/sku-commercial-select.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skulist.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skuexport.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skuupload.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/sku-commercial-select.js?v=20170315_135229"></script>
 
-<script id="messageTemplate" type="text/html">
-    <div class="message-box">
-        <div class="hint">{{hint}}</div>
-        <div class="btns">
-            <button class="btn btn-primary" id="layerConfirm">确&nbsp;&nbsp;定</button>
-            {{if confirm}}
-            <button class="btn btn-default" id="layerClose">取&nbsp;&nbsp;消</button>
-            {{/if}}
-        </div>
-        {{if showDetail}}
-        <div class="hide-hint">
-            <span style="cursor: pointer;" id="hidHint">隐藏详情></span>
-        </div>
-        <div class="data-hint">{{dataHint}}</div>
-        <div class="datas">
-            {{if showTemplates}}
-            <table class="templates">
-                {{each dataList}}
-                <tr>
-                    <td>{{$value.a}}</td>
-                    <td>{{$value.b}}</td>
-                    <td>{{$value.c}}</td>
-                    <td>{{$value.d}}</td>
-                </tr>
-                {{/each}}
-            </table>
-            {{/if}}
-
-            {{if showBills}}
-            <table class="bills">
-                {{each dataList}}
-                <tr>
-                    <td title="{{$value.skuName}}">{{$value.skuName}}</td>
-                    <td title="{{$value.typeName}}">{{$value.typeName}}</td>
-                    <td title="{{$value.sn}}">{{$value.sn}}</td>
-                </tr>
-                {{/each}}
-            </table>
-            {{/if}}
-        </div>
-        {{/if}}
-    </div>
-</script>
 
 <!-- 添加通用js引入信息 -->
 <script type="text/javascript">
@@ -320,7 +276,7 @@
     })
 </script>
 
-<script type="text/javascript" src="/scm_kry/js/scm/scm-tooltip.js?v=20170315_135229" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135229" ></script>
 
 {include file="inc/footer.html"}
 
