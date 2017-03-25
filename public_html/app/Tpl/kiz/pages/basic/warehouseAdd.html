@@ -49,7 +49,7 @@
                                       data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span>
                             </div>
                         </td>
-                        <th>商品中类<strong class="red vam"> *</strong></th>
+                        <th>商品分类<strong class="red vam"> *</strong></th>
                         <td id="skuType">
                             <select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;"
                                     class="chosen-select select-style" tabindex="5">
@@ -695,7 +695,7 @@
                 skuList.skuTypeId = $("#skuTypeId").val();
 
             if (skuList.skuTypeId <= 0) {
-                $.layerMsg("请选择商品中类！", false);
+                $.layerMsg("请选择商品分类！", false);
                 return false;
             }
 
