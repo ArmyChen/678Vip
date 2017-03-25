@@ -28,25 +28,25 @@
             <input id="version" name="version" type="hidden" value="0">
 
             <div class="panel-body" style="margin-left: -25px;height: 275px;">
-                <dl class="panel-item">
-                    <dt>
-                        <label for="wareshouseCode" id="wareshouseCodeLabel" style="margin-top: 6px;">仓库编码<strong class="red vam"> &ensp;</strong></label>
-                    </dt>
+                <!--<dl class="panel-item">-->
+                    <!--<dt>-->
+                        <!--<label for="wareshouseCode" id="wareshouseCodeLabel" style="margin-top: 6px;">仓库编码<strong class="red vam"> &ensp;</strong></label>-->
+                    <!--</dt>-->
 
-                    <dd class="positionRelative">
-                        <div class="search-box w402 pull-left" style="margin-top: 6px;">
-                            <input type="text" class="form-control" id="wareshouseCode" name="wareshouseCode"
-                                   value="" placeholder="若不填写，则系统自动生成" data-format="code" maxlength="8">
-                            <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
-                            <div class="wrong"></div>
-                        </div>
-                        <div class="pull-left code-question" style="margin-top: 6px;">
-                            <span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>WH+流水号</span>"></span>
-                        </div>
-                    </dd>
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="search-box w402 pull-left" style="margin-top: 6px;">-->
+                            <!--<input type="text" class="form-control" id="wareshouseCode" name="wareshouseCode"-->
+                                   <!--value="" placeholder="若不填写，则系统自动生成" data-format="code" maxlength="8">-->
+                            <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
+                            <!--<div class="wrong"></div>-->
+                        <!--</div>-->
+                        <!--<div class="pull-left code-question" style="margin-top: 6px;">-->
+                            <!--<span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>WH+流水号</span>"></span>-->
+                        <!--</div>-->
+                    <!--</dd>-->
 
 
-                </dl>
+                <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
                         <label for="warehouseName" id="warehouseNameLabel">仓库名称<strong class="red vam"> *</strong></label>
@@ -62,13 +62,32 @@
                 </dl>
                 <dl class="panel-item">
                     <dt>
-                        <label for="note">备注信息<strong class="white vam"> *</strong></label>
+                        <label for="isDisable" id="isDisable">状态<strong class="red vam"> *</strong></label>
                     </dt>
-                    <dd>
-                        <TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"
-                                  maxlength="96" data-character="true"></TEXTAREA>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox checkbox-check" for="status-0" id="checkbox-0">
+                                        <input type="radio" name="isDisable" id="status-0" checked value="1">启用</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox" for="status-1" id="checkbox-1">
+                                        <input type="radio" name="isDisable" id="status-1" value="0">停用</label>
+                                </li>
+                            </ul>
+                        </div>
                     </dd>
                 </dl>
+                <!--<dl class="panel-item">-->
+                    <!--<dt>-->
+                        <!--<label for="note">备注信息<strong class="white vam"> *</strong></label>-->
+                    <!--</dt>-->
+                    <!--<dd>-->
+                        <!--<TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"-->
+                                  <!--maxlength="96" data-character="true"></TEXTAREA>-->
+                    <!--</dd>-->
+                <!--</dl>-->
             </div>
 
         </form>
