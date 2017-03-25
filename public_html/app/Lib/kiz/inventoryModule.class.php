@@ -818,25 +818,43 @@ class inventoryModule extends KizBaseModule{
 
     public function dc_cangku_ajax(){
         init_app_page();
-        $slid = intval($_REQUEST['id']);
-        $isdd = $_REQUEST['isdd'];
-        $kw = $_REQUEST['kw'];
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+        $isdd = $_REQUEST['isDisable'];
+        $kw = $_REQUEST['warehouseName'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
         $where="where 1=1";
         $where.=' and slid='.$slid;
 
         if($kw){
-            $where = " and name='$kw'";
+            $where = " and name like '%$kw%'";
         }
         if(isset($isdd)){
             $where .= " and isdisable=$isdd";
         }
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku $where order by id desc limit $limit ");
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."cangku ".$where);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
 
-        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku $where order by id desc ");
+        $cangkuArray = array();
+        foreach($list as $k=>$v){
+            $cangkuArray[$k]['id'] = $v['id'];
+            $cangkuArray[$k]['wareshouseCode'] = '';
+            $cangkuArray[$k]['warehouseName'] = $v['name'];
+            $cangkuArray[$k]['createTime'] = '';
+            $cangkuArray[$k]['updateTime'] = '';
+            $cangkuArray[$k]['isDisable'] = $v['isdisable'];
+            $cangkuArray[$k]['deductionName'] = '';
+        }
+
+        $return['dataList'] = $cangkuArray;
+        echo json_encode($return);exit;
     }
 //    public function location_change(){
 //        init_app_page();
