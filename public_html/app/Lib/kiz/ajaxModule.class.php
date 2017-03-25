@@ -719,4 +719,24 @@ class ajaxModule extends KizBaseModule{
         }
         return $gys_name;
     }
+
+    public function dc_cangku_add_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+        $cangkuArray['slid'] = $slid;
+        $cangkuArray['tel'] = '';
+        $cangkuArray['address'] = '';
+        $cangkuArray['contact'] = '';
+        $cangkuArray['name'] = $_REQUEST['warehouseName'];
+        $cangkuArray['isdisable'] = $_REQUEST['isDisable'];
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"INSERT");
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 }
