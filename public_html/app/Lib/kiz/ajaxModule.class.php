@@ -722,7 +722,7 @@ class ajaxModule extends KizBaseModule{
 
     public function dc_cangku_add_ajax(){
         init_app_page();
-        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];;
         $cangkuArray['slid'] = $slid;
         $cangkuArray['tel'] = '';
         $cangkuArray['address'] = '';
