@@ -53,5 +53,49 @@
     "sort": 3,
     "type": 1,
     "url": "act=go_transfer_index"
+  },
+  {
+    "code": "scm:report",
+    "id": 1263,
+    "levelId": "001001",
+    "name": "报表",
+    "parentId": 1255,
+    "platform": 3,
+    "sort": 9,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:report:inventory:query",
+    "id": 1284,
+    "levelId": "001001001",
+    "name": "库存查询",
+    "parentId": 1263,
+    "platform": 3,
+    "sort": 10,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:report:inventoryDistribution:query",
+    "id": 1538,
+    "levelId": "001001002",
+    "name": "库存分布明细表",
+    "parentId": 1263,
+    "platform": 3,
+    "sort": 15,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:report:skuIO:query",
+    "id": 1288,
+    "levelId": "001001001",
+    "name": "商品出入库明细表",
+    "parentId": 1263,
+    "platform": 3,
+    "sort": 50,
+    "type": 1,
+    "url": "#"
   }
 ]

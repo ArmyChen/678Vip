@@ -131,13 +131,13 @@ var transferOrder = {
             formId: _this.opts.queryFormId,
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id', '单据号', '保存 / 确认日期', '移出仓库', '移入仓库', '移库金额', '状态', '状态'],
+            colNames: ['id', '单据号', '保存日期', '移出仓库', '移入仓库', '移库金额', '状态', '状态'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
                 {name: 'transferOrderNo', index: 'transferOrderNo', width: 150, align: 'center'},
                 {name: 'updateTime', index: 'updateTime', width: 160, align: 'center'},
-                {name: 'fromWmName', index: 'fromWmName', width: 150},
-                {name: 'toWmName', index: 'toWmName', width: 150},
+                {name: 'fromWmName', index: 'fromWmName', width: 150, align: 'center'},
+                {name: 'toWmName', index: 'toWmName', width: 150, align: 'center'},
                 {
                     name: 'amount',
                     index: 'amount',
@@ -145,13 +145,13 @@ var transferOrder = {
                     align: "right",
                     formatter: customCurrencyFormatter
                 },
-                {name: 'statusName', index: 'status', width: 70, align: 'center'},
+                {name: 'statusName', index: 'status', width: 70, align: 'center', hidden: true},
                 {name: 'status', index: 'status', width: 100, hidden: true}
             ],
             sortname: _this.opts.sortName,
             sortorder: _this.opts.sortOrder,
             pager: _this.opts.pager,
-            showOperate: true,
+            showOperate: false,
             actionParam: {
                 editor: {
                     url: _this.opts.urlRoot + _this.opts.editUrl,

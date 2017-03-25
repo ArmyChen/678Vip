@@ -45,28 +45,11 @@ class inventoryModule extends KizBaseModule{
 		"4"=>"领料出库"
 		);
 
-        $this->init();
+        parent::init();
         //$this->check_auth();
 
     }
-    public function init(){
-        $slid=$GLOBALS['account_info']['slid'];
-        $slname=$GLOBALS['account_info']['slname'];
-        define("SLIDNAME",$slname);
-        define("SLID",$slid);
 
-        $preview=$GLOBALS['db']->getOne("select preview from fanwe_supplier_location where id=".$slid);
-        if ($preview==""){
-            $preview="http://www.678sh.com/app/Tpl/biz/img/logo.jpg";
-        }
-
-        $GLOBALS['tmpl']->assign("preview",$preview);
-        $GLOBALS['tmpl']->assign("supplier_name",$slname);
-        $GLOBALS['tmpl']->assign("account_info",$GLOBALS['account_info']);
-//        var_dump($_SESSION['fanweaccount_info']);die;
-        $GLOBALS['tmpl']->assign("biz_gen_qrcode",gen_qrcode(SITE_DOMAIN.url("biz","downapp"),app_conf("QRCODE_SIZE")));
-
-    }
     /**
      * 仓库入库查询
      */
@@ -810,6 +793,11 @@ class inventoryModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $GLOBALS['account_info']['slid'];
+        $account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
         /* 业务逻辑部分 */
         $conditions = " where is_effect = 1 and supplier_id = ".$supplier_id; // 查询条件
         $conditions .= " and id in(" . implode(",", $account_info['location_ids']) . ") ";
