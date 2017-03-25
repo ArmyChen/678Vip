@@ -739,4 +739,63 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+    //接收前台文件，
+    public function basic_master_import_ajax()
+    {
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
+        //接收前台文件
+        $ex = $_FILES['file'];
+        $warehouseName = $_REQUEST['warehouseName'];
+        //重设置文件名
+        $filename = time().substr($ex['name'],stripos($ex['name'],'.'));
+        $path = APP_ROOT_PATH.'excel/tmp/'.$filename;//设置移动路径
+        move_uploaded_file($ex['tmp_name'],$path);
+        //表用函数方法 返回数组
+        $list = $this->_readExcel(APP_ROOT_PATH.'app/master.xls');
+        $total = count($list);
+        if($total<3){
+            $return['success'] = false;
+            $return['message'] = '数据为空，不能导入！';
+        }
+        $insertSQL = "insert into ".DB_PREFIX."cangku_menu (slid,mid,cid,cate_id,stock,mstock,unit) values";
+        for($i=2;$i<$total;$i++){
+            $dc_menu_id = $total[$i][3];//编号
+            $num = $total[$i][6];//导入库存
+            $dc_menu = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=$dc_menu_id");
+            if($dc_menu){
+                $res = $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set mstock=mstock+$num,stock=stock+$num where id=$dc_menu_id");
+                $insertSQL .= '('.$dc_menu["supplier_id"].','.$dc_menu_id.','.$dc_menu["cate_id"].','.$num.','.$num.'),';
+            }
+        }
+        $insertSQL = rtrim($insertSQL,',');
+        $insertres =  $GLOBALS['db']->query($insertSQL);
+
+        //写记录表
+        $insertMaster = 'insert into '.DB_PREFIX.'master_import_log (supplier_id,location_id,account_id,warehouseName,createTime) values ('.$GLOBALS["account_info"]["supplier_id"].','.$GLOBALS["account_info"]["slid"].','.$GLOBALS["account_info"]["id"].','.$warehouseName.','.time().')';
+        $insertMres =  $GLOBALS['db']->query($insertMaster);
+        if($insertMres && $insertres){
+            $return['success'] = true;
+            $return['message'] = '操作成功！';
+        }else{
+            $return['success'] = false;
+            $return['message'] = '操作失败！';
+        }
+        echo json_encode($return);exit;
+    }
+
+    //创建一个读取excel数据，可用于入库
+    private function _readExcel($path)
+    {
+        //引用PHPexcel 类
+        require APP_ROOT_PATH . 'app/Classes/PHPExcel.php';
+        $type = 'Excel5';//设置为Excel5代表支持2003或以下版本，Excel2007代表2007版
+        $xlsReader = PHPExcel_IOFactory::createReader($type);
+        $xlsReader->setReadDataOnly(true);
+        $xlsReader->setLoadSheetsOnly(true);
+        $Sheets = $xlsReader->load($path);
+        //开始读取上传到服务器中的Excel文件，返回一个二维数组
+        $dataArray = $Sheets->getSheet(0)->toArray();
+        return $dataArray;
+    }
 }
