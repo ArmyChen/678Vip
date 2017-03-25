@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="17ca5a57-7bc9-4406-9dc2-1373689409f6" name="Default" comment="陈军">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/678Vip.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/Administrator.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/webServers.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/transferorder.js" afterPath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/transferorder.js" />
+    <list default="true" id="17ca5a57-7bc9-4406-9dc2-1373689409f6" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public_html/app/Lib/kiz/basicModule.class.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/wareHouse.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php" afterPath="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php" afterPath="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php" afterPath="$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html" afterPath="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json" afterPath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css" afterPath="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,218 +37,267 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="asn-si.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/asn-si.js">
+      <file leaf-file-name="KizApp.class.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="498" column="0" lean-forward="false" selection-start-line="498" selection-start-column="0" selection-end-line="526" selection-end-column="2" />
+            <state relative-caret-position="279">
+              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="goUp.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goUp.html">
+      <file leaf-file-name="basicModule.class.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/basicModule.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6210">
-              <caret line="345" column="0" lean-forward="false" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
+            <state relative-caret-position="512">
+              <caret line="33" column="4" lean-forward="true" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="inventoryModule.class.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="inventoryModule.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-101">
-              <caret line="132" column="38" lean-forward="false" selection-start-line="132" selection-start-column="33" selection-end-line="132" selection-end-column="38" />
+            <state relative-caret-position="306">
+              <caret line="32" column="25" lean-forward="true" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
               <folding>
-                <marker date="1490331537881" expanded="true" signature="1143:1196" ph="select previ... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="3057:3101" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="4070:4114" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="6115:6256" ph="select a.*,c... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="6287:6420" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="8760:8804" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="9768:9812" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="11485:11529" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="12505:12549" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="13731:13769" ph="select count... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="13848:14107" ph="select g.id,... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="15332:15565" ph="select g.id,... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="16446:16523" ph="select dd_de... fanwe_cangku_log" />
-                <marker date="1490331537881" expanded="true" signature="18458:18550" ph="select id fr... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="18626:18712" ph="select id fr... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="19580:19650" ph="select cid f... fanwe_cangku_bangding_cangku" />
-                <marker date="1490331537881" expanded="true" signature="19735:19819" ph="select id fr... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="20276:20308" ph="select * fro... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="21497:21564" ph="select gid f... fanwe_cangku_bangding_gys" />
-                <marker date="1490331537881" expanded="true" signature="22447:22484" ph="select mstoc... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="25543:25587" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="25768:25844" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="25869:25918" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="28417:28449" ph="select * fro... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="31854:31961" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="32677:32789" ph="select disti... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="34764:34905" ph="select a.*,c... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="34930:35056" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="37474:37516" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="37592:37738" ph="select a.*,c... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="37763:37899" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="38346:38386" ph="SELECT name fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="39347:39445" ph="select dd_de... fanwe_cangku_log" />
-                <marker date="1490331537881" expanded="true" signature="39668:39705" ph="select * fro... fanwe_dinghuo" />
-                <marker date="1490331537881" expanded="true" signature="40085:40122" ph="select * fro... fanwe_diaohuo" />
-                <marker date="1490331537881" expanded="true" signature="40474:40583" ph="select dd_de... fanwe_cangku_log" />
-                <marker date="1490331537881" expanded="true" signature="41238:41300" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="41406:41511" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="41535:41604" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="41746:41794" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="41907:41951" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="43035:43072" ph="select * fro... fanwe_dinghuo" />
-                <marker date="1490331537881" expanded="true" signature="43455:43492" ph="select * fro... fanwe_diaohuo" />
-                <marker date="1490331537881" expanded="true" signature="44265:44327" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="44433:44538" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="44562:44631" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="44773:44821" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="44935:44985" ph="select id,na... fanwe_cangku_bumen" />
-                <marker date="1490331537881" expanded="true" signature="45099:45143" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="46055:46099" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="47386:47478" ph="select id fr... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="47520:47606" ph="select id fr... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="48128:48198" ph="select cid f... fanwe_cangku_bangding_cangku" />
-                <marker date="1490331537881" expanded="true" signature="48263:48347" ph="select id fr... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="48707:48739" ph="select * fro... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="49457:49524" ph="select gid f... fanwe_cangku_bangding_gys" />
-                <marker date="1490331537881" expanded="true" signature="50094:50131" ph="select mstoc... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="51830:51874" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="52086:52176" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="53066:53258" ph="select a.*,b... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="53300:53427" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="54446:54508" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="54617:54722" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="54746:54815" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="54965:55013" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="55672:55716" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="55928:56018" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="56908:57054" ph="select a.*,b... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="57094:57225" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="58419:58481" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="58590:58695" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="58719:58788" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="58938:58986" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="59645:59689" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="59901:59991" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="60881:61203" ph="select a.*,c... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="61228:61369" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="62709:62771" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="63013:63118" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="63142:63211" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="63493:63541" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="65013:65057" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="65269:65359" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="66966:67151" ph="select a.*,b... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="67191:67337" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="68256:68306" ph="select name fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="68413:68455" ph="select user_... fanwe_user" />
-                <marker date="1490331537881" expanded="true" signature="69572:69616" ph="select id,na... fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="69726:69788" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="70030:70135" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="70159:70228" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="70510:70558" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="70929:71019" ph="select id,na... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="71909:72103" ph="select a.id,... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="72142:72284" ph="select count... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="72592:72642" ph="select * fro... fanwe_cangku_bangding_gys" />
-                <marker date="1490331537881" expanded="true" signature="73267:73317" ph="select name fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="73424:73466" ph="select user_... fanwe_user" />
-                <marker date="1490331537881" expanded="true" signature="73533:73586" ph="select * fro... fanwe_cangku_bangding_cangku" />
-                <marker date="1490331537881" expanded="true" signature="73678:73717" ph="select name fanwe_cangku" />
-                <marker date="1490331537881" expanded="true" signature="74737:74814" ph="delete from " />
-                <marker date="1490331537881" expanded="true" signature="74830:74894" ph="insert into `fanwe_cangku_bangding_cangku`... " />
-                <marker date="1490331537881" expanded="true" signature="74991:75065" ph="delete from " />
-                <marker date="1490331537881" expanded="true" signature="75081:75142" ph="insert into `fanwe_cangku_bangding_gys`... " />
-                <marker date="1490331537881" expanded="true" signature="75492:75590" ph="select id,na... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="76118:76311" ph="select a.id,... fanwe_dc_menu" />
-                <marker date="1490331537881" expanded="true" signature="76806:76870" ph="select id,te... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="77070:77137" ph="select suppl... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="77426:77551" ph="select a.use... ${$dbname}" />
-                <marker date="1490331537881" expanded="true" signature="78333:78408" ph="select mstoc... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="78894:78990" ph="SELECT * FRO... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="79877:79958" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="80269:80328" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="80924:81026" ph="SELECT * FRO... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="81936:82023" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="82352:82417" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="83018:83118" ph="SELECT * FRO... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="83173:83240" ph="SELECT name,... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="84357:84442" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="84765:84828" ph="select * fro... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="85613:85719" ph="select a.*,b... ${DB_PREFIX}" />
-                <marker date="1490331537881" expanded="true" signature="86130:86183" ph="SELECT DISTI... from" />
-                <marker date="1490331537881" expanded="true" signature="87403:87450" ph="delete from " />
-                <marker date="1490331537881" expanded="true" signature="87655:87706" ph="delete from " />
-                <marker date="1490331537881" expanded="true" signature="87932:87983" ph="update fanwe... " />
-                <marker date="1490331537881" expanded="true" signature="88016:88065" ph="update fanwe... " />
-                <marker date="1490331537881" expanded="true" signature="88416:88535" ph="select a.*,c... fanwe_cangku_log" />
-                <marker date="1490331537881" expanded="true" signature="91649:91785" ph="select a.*,b... fanwe_cangku_menu_gys" />
-                <marker date="1490331537881" expanded="true" signature="92479:92529" ph="select name fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="92636:92678" ph="select user_... fanwe_user" />
-                <marker date="1490331537881" expanded="true" signature="94949:95084" ph="select a.*,b... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="97608:97712" ph="select a.*,b... fanwe_cangku_menu" />
-                <marker date="1490331537881" expanded="true" signature="99692:99754" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="99945:100050" ph="select a.gys... fanwe_deal_city" />
-                <marker date="1490331537881" expanded="true" signature="100074:100143" ph="select id,na... fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="100376:100424" ph="select id,na... fanwe_cangku_gys" />
-                <marker date="1490331537881" expanded="true" signature="100625:100675" ph="select id,na... fanwe_cangku_bumen" />
-                <marker date="1490331537881" expanded="true" signature="101445:101495" ph="select name fanwe_supplier_location" />
-                <marker date="1490331537881" expanded="true" signature="101597:101639" ph="select user_... fanwe_user" />
+                <marker date="1490411145486" expanded="true" signature="2280:2324" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="3293:3337" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="5343:5484" ph="select a.*,c... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="5515:5648" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="7988:8032" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="8996:9040" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="10713:10757" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="11733:11777" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="12959:12997" ph="select count... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="13076:13335" ph="select g.id,... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="14560:14793" ph="select g.id,... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="15674:15751" ph="select dd_de... fanwe_cangku_log" />
+                <marker date="1490411145486" expanded="true" signature="17686:17778" ph="select id fr... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="17854:17940" ph="select id fr... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="18808:18878" ph="select cid f... fanwe_cangku_bangding_cangku" />
+                <marker date="1490411145486" expanded="true" signature="18963:19047" ph="select id fr... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="19504:19536" ph="select * fro... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="20725:20792" ph="select gid f... fanwe_cangku_bangding_gys" />
+                <marker date="1490411145486" expanded="true" signature="21675:21712" ph="select mstoc... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="24826:24870" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="25051:25127" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="25152:25201" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="27985:28017" ph="select * fro... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="31422:31529" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="32086:32139" ph="select is_ma... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="32239:32296" ph="select id fr... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="32661:32773" ph="select disti... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="34748:34889" ph="select a.*,c... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="34914:35040" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="37458:37500" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="37576:37722" ph="select a.*,c... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="37747:37883" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="38330:38370" ph="SELECT name fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="39331:39429" ph="select dd_de... fanwe_cangku_log" />
+                <marker date="1490411145486" expanded="true" signature="39652:39689" ph="select * fro... fanwe_dinghuo" />
+                <marker date="1490411145486" expanded="true" signature="40069:40106" ph="select * fro... fanwe_diaohuo" />
+                <marker date="1490411145486" expanded="true" signature="40458:40567" ph="select dd_de... fanwe_cangku_log" />
+                <marker date="1490411145486" expanded="true" signature="41222:41284" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="41390:41495" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="41519:41588" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="41730:41778" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="41891:41935" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="43019:43056" ph="select * fro... fanwe_dinghuo" />
+                <marker date="1490411145486" expanded="true" signature="43439:43476" ph="select * fro... fanwe_diaohuo" />
+                <marker date="1490411145486" expanded="true" signature="44249:44311" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="44417:44522" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="44546:44615" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="44757:44805" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="44919:44969" ph="select id,na... fanwe_cangku_bumen" />
+                <marker date="1490411145486" expanded="true" signature="45083:45127" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="46039:46083" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="47370:47462" ph="select id fr... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="47504:47590" ph="select id fr... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="48112:48182" ph="select cid f... fanwe_cangku_bangding_cangku" />
+                <marker date="1490411145486" expanded="true" signature="48247:48331" ph="select id fr... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="48691:48723" ph="select * fro... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="49441:49508" ph="select gid f... fanwe_cangku_bangding_gys" />
+                <marker date="1490411145486" expanded="true" signature="50078:50115" ph="select mstoc... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="51814:51858" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="52070:52160" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="53050:53242" ph="select a.*,b... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="53284:53411" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="54430:54492" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="54601:54706" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="54730:54799" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="54949:54997" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="55656:55700" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="55912:56002" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="56892:57038" ph="select a.*,b... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="57078:57209" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="58403:58465" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="58574:58679" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="58703:58772" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="58922:58970" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="59629:59673" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="59885:59975" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="60865:61187" ph="select a.*,c... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="61212:61353" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="62693:62755" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="62997:63102" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="63126:63195" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="63477:63525" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="64997:65041" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="65253:65343" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="66950:67135" ph="select a.*,b... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="67175:67321" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="68240:68290" ph="select name fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="68397:68439" ph="select user_... fanwe_user" />
+                <marker date="1490411145486" expanded="true" signature="69556:69600" ph="select id,na... fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="69710:69772" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="70014:70119" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="70143:70212" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="70494:70542" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="70913:71003" ph="select id,na... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="71893:72087" ph="select a.id,... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="72126:72268" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="72576:72626" ph="select * fro... fanwe_cangku_bangding_gys" />
+                <marker date="1490411145486" expanded="true" signature="73251:73301" ph="select name fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="73408:73450" ph="select user_... fanwe_user" />
+                <marker date="1490411145486" expanded="true" signature="73517:73570" ph="select * fro... fanwe_cangku_bangding_cangku" />
+                <marker date="1490411145486" expanded="true" signature="73662:73701" ph="select name fanwe_cangku" />
+                <marker date="1490411145486" expanded="true" signature="74721:74798" ph="delete from " />
+                <marker date="1490411145486" expanded="true" signature="74814:74878" ph="insert into `fanwe_cangku_bangding_cangku`... " />
+                <marker date="1490411145486" expanded="true" signature="74975:75049" ph="delete from " />
+                <marker date="1490411145486" expanded="true" signature="75065:75126" ph="insert into `fanwe_cangku_bangding_gys`... " />
+                <marker date="1490411145486" expanded="true" signature="75476:75574" ph="select id,na... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="76102:76295" ph="select a.id,... fanwe_dc_menu" />
+                <marker date="1490411145486" expanded="true" signature="76790:76854" ph="select id,te... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="77054:77121" ph="select suppl... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="77410:77535" ph="select a.use... ${$dbname}" />
+                <marker date="1490411145486" expanded="true" signature="78317:78392" ph="select mstoc... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="78878:78974" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="79861:79942" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="80253:80312" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="80908:81010" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="81920:82007" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="82336:82401" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="83002:83102" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="83157:83224" ph="SELECT name,... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="84341:84426" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="84749:84812" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="85597:85703" ph="select a.*,b... ${DB_PREFIX}" />
+                <marker date="1490411145486" expanded="true" signature="86114:86167" ph="SELECT DISTI... from" />
+                <marker date="1490411145486" expanded="true" signature="87387:87434" ph="delete from " />
+                <marker date="1490411145486" expanded="true" signature="87639:87690" ph="delete from " />
+                <marker date="1490411145486" expanded="true" signature="87916:87967" ph="update fanwe... " />
+                <marker date="1490411145486" expanded="true" signature="88000:88049" ph="update fanwe... " />
+                <marker date="1490411145486" expanded="true" signature="88400:88519" ph="select a.*,c... fanwe_cangku_log" />
+                <marker date="1490411145486" expanded="true" signature="91633:91769" ph="select a.*,b... fanwe_cangku_menu_gys" />
+                <marker date="1490411145486" expanded="true" signature="92463:92513" ph="select name fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="92620:92662" ph="select user_... fanwe_user" />
+                <marker date="1490411145486" expanded="true" signature="94933:95068" ph="select a.*,b... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="97592:97696" ph="select a.*,b... fanwe_cangku_menu" />
+                <marker date="1490411145486" expanded="true" signature="99676:99738" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="99929:100034" ph="select a.gys... fanwe_deal_city" />
+                <marker date="1490411145486" expanded="true" signature="100058:100127" ph="select id,na... fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="100360:100408" ph="select id,na... fanwe_cangku_gys" />
+                <marker date="1490411145486" expanded="true" signature="100609:100659" ph="select id,na... fanwe_cangku_bumen" />
+                <marker date="1490411145486" expanded="true" signature="101429:101479" ph="select name fanwe_supplier_location" />
+                <marker date="1490411145486" expanded="true" signature="101581:101623" ph="select user_... fanwe_user" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="goTransferAdd.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goTransferAdd.html">
+      <file leaf-file-name="KizBaseModule.class.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+            <state relative-caret-position="260">
+              <caret line="242" column="0" lean-forward="true" selection-start-line="242" selection-start-column="0" selection-end-line="242" selection-end-column="0" />
               <folding>
-                <element signature="n#style#0;n#div#0;n#div#1;n#form#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="e#4996#5003#0" expanded="true" />
+                <marker date="1490411134757" expanded="true" signature="5172:5225" ph="select previ... fanwe_supplier_location" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="transferorder.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/transferorder.js">
+      <file leaf-file-name="wareHouse.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/wareHouse.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="133" column="41" lean-forward="false" selection-start-line="133" selection-start-column="37" selection-end-line="133" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="js.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/js.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="44" column="41" lean-forward="false" selection-start-line="44" selection-start-column="41" selection-end-line="44" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="goTransfer.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goTransfer.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="112" column="25" lean-forward="false" selection-start-line="112" selection-start-column="25" selection-end-line="112" selection-end-column="25" />
+            <state relative-caret-position="108">
+              <caret line="6" column="21" lean-forward="true" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
               <folding>
-                <element signature="e#991#998#0" expanded="true" />
-                <element signature="e#2643#2650#0" expanded="true" />
+                <element signature="e#1151#1158#0" expanded="true" />
+                <element signature="e#1523#1530#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="56" column="65" lean-forward="true" selection-start-line="56" selection-start-column="65" selection-end-line="56" selection-end-column="65" />
+              <folding>
+                <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userModule.class.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/userModule.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-108">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1490410406391" expanded="true" signature="836:929" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="2247:2299" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="3470:3568" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="6891:6957" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="8263:8323" ph="DELETE FROM " />
+                <marker date="1490410406391" expanded="true" signature="8439:8526" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="11250:11314" ph="SELECT COUNT... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="11634:11719" ph="delete from " />
+                <marker date="1490410406391" expanded="true" signature="12159:12258" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="12662:12765" ph="select count... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="15264:15341" ph="select appid... fanwe_app" />
+                <marker date="1490410406391" expanded="true" signature="16071:16216" ph="select t.* f... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="16627:16718" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="17146:17221" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490410406391" expanded="true" signature="17624:17744" ph="select * fro... ${DB_PREFIX}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kiz_lib.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/kiz_lib.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="100" column="55" lean-forward="true" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+              <folding>
+                <marker date="1490260305229" expanded="true" signature="2906:3001" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="3102:3167" ph="select platf... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="3315:3400" ph="select id as... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="3509:3600" ph="select locat... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="3947:4192" ph="SELECT b.id,... fanwe_supplier_location" />
+                <marker date="1490260305229" expanded="true" signature="4350:4440" ph="SELECT id,`n... fanwe_supplier_location" />
+                <marker date="1490260305229" expanded="true" signature="5562:5651" ph="select accou... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="5776:5844" ph="select suppl... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="5908:6038" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="6111:6206" ph="select * fro... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="6319:6384" ph="select platf... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="6532:6674" ph="select id as... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="6752:6843" ph="select locat... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="7568:7623" ph="SELECT id,`n... fanwe_supplier_location" />
+                <marker date="1490260305229" expanded="true" signature="12389:12453" ph="DELETE FROM " />
+                <marker date="1490260305229" expanded="true" signature="12558:12651" ph="select sum(s... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="14064:14190" ph="SELECT count... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="16360:16439" ph="SELECT * FRO... ${DB_PREFIX}" />
+                <marker date="1490260305229" expanded="true" signature="21295:21421" ph="SELECT * FRO... ${DB_PREFIX}" />
               </folding>
             </state>
           </provider>
@@ -259,26 +309,14 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
-        <option value="HTML File" />
         <option value="tsconfig.json" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$s_account_info</find>
-      <find>changeCommercialUrl</find>
-      <find>load_biz_user_tip</find>
-      <find>location_</find>
-      <find>210px</find>
-      <find>hide commercialId</find>
-      <find>actualQty</find>
-      <find>url</find>
-      <find>formula</find>
-      <find>入库</find>
-      <find>logo</find>
-      <find>diaobo_saving</find>
       <find>diao</find>
       <find>doSave</find>
       <find>JSON</find>
@@ -296,7 +334,19 @@
       <find>slid</find>
       <find>mstock</find>
       <find>fromWnName</find>
+      <find>报表</find>
+      <find>库存查询</find>
+      <find>明细</find>
+      <find>库存分布明细表导出</find>
+      <find>&quot;id&quot;: 1263</find>
+      <find>raw_ification</find>
+      <find>cost</find>
       <find>_ajax</find>
+      <find>location_list</find>
+      <find>location_id</find>
+      <find>location_list_</find>
+      <find>.user-info ul li</find>
+      <find>pho</find>
     </findStrings>
     <replaceStrings>
       <replace>/kiz/</replace>
@@ -320,29 +370,22 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/public_html/wap/Lib/main/dcbuyModule.class.php" />
-        <option value="$PROJECT_DIR$/public_html/admin/Tpl/default/Inventory/index.html" />
-        <option value="$PROJECT_DIR$/public_html/admin/Tpl/default/GoDown/add.html" />
         <option value="$PROJECT_DIR$/public_html/admin/Tpl/default/GoDown/index.html" />
         <option value="$PROJECT_DIR$/public_html/admin/Lib/Action/InventoryAction.php" />
         <option value="$PROJECT_DIR$/public_html/admin/Lib/Action/InventoryAction.class.php" />
-        <option value="$PROJECT_DIR$/public_html/kiz.php" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/biz/pages/inventory/index.html" />
         <option value="&lt;a8a69d05-3612-4502-a1a6-1395d7477e5f&gt;/public_html/app/Lib/biz/indexModule.class.php" />
         <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/biz_lib.php" />
         <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/kiz_init.php" />
-        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php" />
         <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/ajaxModule.class.php" />
         <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/accountModule.class.php" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/biz/pages/inventory/goDown.html" />
-        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/indexModule.class.php" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/css.css" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/tsconfig.json" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/menu.js" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/menu.json" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/go_down_index.js" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/css.html" />
-        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css" />
         <option value="$USER_HOME$/Desktop/1.json" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/footer.html" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/test.json" />
@@ -353,24 +396,31 @@
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goDown.html" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/js.html" />
         <option value="&lt;a8a69d05-3612-4502-a1a6-1395d7477e5f&gt;/public_html/system/libs/biz_user.php" />
-        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/userModule.class.php" />
         <option value="$PROJECT_DIR$/public_html/system/libs/biz_user.php" />
-        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php" />
         <option value="&lt;a8a69d05-3612-4502-a1a6-1395d7477e5f&gt;/public_html/app/Lib/biz/core/biz_init.php" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/login-info.js" />
         <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/kiz_lib.php" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goDownAdd.html" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goUpAdd.html" />
-        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/bkeruyun.js" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/asn-si.js" />
-        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/base.css" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goTransfer.html" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goTransferAdd.html" />
-        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/transferorder.js" />
+        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json" />
+        <option value="&lt;a8a69d05-3612-4502-a1a6-1395d7477e5f&gt;/public_html/kiz.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/indexModule.class.php" />
+        <option value="$PROJECT_DIR$/public_html/kiz.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/wareHouse.html" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/userModule.class.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css" />
+        <option value="$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php" />
+        <option value="$PROJECT_DIR$/public_html/app/Lib/kiz/basicModule.class.php" />
       </list>
     </option>
   </component>
@@ -465,28 +515,6 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="system" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public_html" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -563,49 +591,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scm_kry" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public_html" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tpl" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kiz" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scm_kry" />
+              <option name="myItemId" value="inc" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -654,36 +640,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Tpl" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="biz" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pages" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="678" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public_html" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Lib" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -710,6 +666,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="kiz" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="678" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="678" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public_html" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lib" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kiz" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -736,18 +722,18 @@
     <property name="add_unversioned_files" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="S:\678\public_html\app\Tpl\kiz\pages\inventory" />
-      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\js" />
-      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\js\skin\default" />
-      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\img" />
-      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\images" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="S:\678\public_html\app\Tpl\kiz\js" />
       <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\img" />
       <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\css" />
       <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="S:\678\public_html\app\Lib\kiz" />
+      <recent name="S:\678\public_html\app\Tpl\kiz\pages\inventory" />
+      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\js" />
+      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\js\skin\default" />
+      <recent name="S:\678\public_html\app\Tpl\kiz\js\scm_kry\img" />
     </key>
   </component>
   <component name="RunManager">
@@ -825,7 +811,7 @@
       <workItem from="1490154094672" duration="7746000" />
       <workItem from="1490169564025" duration="13944000" />
       <workItem from="1490240351632" duration="22492000" />
-      <workItem from="1490326120175" duration="4923000" />
+      <workItem from="1490326120175" duration="12107000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1487986846012</created>
@@ -974,11 +960,25 @@
       <option name="project" value="LOCAL" />
       <updated>1490331986709</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="陈军">
+      <created>1490334311896</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1490334311896</updated>
+    </task>
+    <task id="LOCAL-00023" summary="陈军">
+      <created>1490410880126</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1490410880126</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145807000" />
+    <option name="totallyTimeSpent" value="152991000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -996,16 +996,16 @@
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23827292" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27771854" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14951245" sideWeight="0.5042644" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15059589" sideWeight="0.5042644" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14951245" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15059589" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27410617" sideWeight="0.4914712" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1035,41 +1035,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/jquery.mCustomScrollbar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/inventory.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/scm-tooltip.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/ui.jqgrid.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/resetJqGrid.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/layer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1116,24 +1081,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/kiz.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="2" lean-forward="false" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/img/failure.png">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="106" column="33" lean-forward="false" selection-start-line="106" selection-start-column="27" selection-end-line="106" selection-end-column="33" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/css.html">
@@ -1197,13 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/test.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="11" lean-forward="true" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/go_down_index.js" />
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/js/dataGrid.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -1232,16 +1175,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="36" column="44" lean-forward="true" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
-          <folding>
-            <marker date="1490256499430" expanded="true" signature="860:960" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490256499430" expanded="true" signature="970:1195" ph="SELECT b.id,... fanwe_supplier_location" />
-            <marker date="1490256499430" expanded="true" signature="1306:1396" ph="SELECT id,`n... fanwe_supplier_location" />
-            <marker date="1490256499430" expanded="true" signature="2120:2220" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490256499430" expanded="true" signature="2461:2522" ph="select platf... ${DB_PREFIX}" />
-            <marker date="1490256499430" expanded="true" signature="3126:3213" ph="select locat... ${DB_PREFIX}" />
-            <marker date="1490256499430" expanded="true" signature="3453:3678" ph="SELECT b.id,... fanwe_supplier_location" />
-            <marker date="1490256499430" expanded="true" signature="3789:3879" ph="SELECT id,`n... fanwe_supplier_location" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1249,52 +1183,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
           <caret line="86" column="36" lean-forward="true" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
-          <folding>
-            <marker date="1480396362000" expanded="true" signature="1273:1309" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1480396362000" expanded="true" signature="2993:3046" ph="select previ... fanwe_supplier_location" />
-            <marker date="1480396362000" expanded="true" signature="3473:3529" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1480396362000" expanded="true" signature="4412:4468" ph="select * fro... ${DB_PREFIX}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="214" column="5" lean-forward="true" selection-start-line="214" selection-start-column="5" selection-end-line="214" selection-end-column="5" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/indexModule.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/userModule.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="9" column="30" lean-forward="false" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
-          <folding>
-            <marker date="1490255485108" expanded="true" signature="836:929" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="2247:2299" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="3470:3568" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="6891:6957" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="8263:8323" ph="DELETE FROM " />
-            <marker date="1490255485108" expanded="true" signature="8439:8526" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="11250:11314" ph="SELECT COUNT... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="11634:11719" ph="delete from " />
-            <marker date="1490255485108" expanded="true" signature="12159:12258" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="12662:12765" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="15264:15341" ph="select appid... fanwe_app" />
-            <marker date="1490255485108" expanded="true" signature="16071:16216" ph="select t.* f... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="16627:16718" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="17146:17221" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490255485108" expanded="true" signature="17624:17744" ph="select * fro... ${DB_PREFIX}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1306,34 +1195,6 @@
             <marker date="1490259985212" expanded="true" signature="4940:4954" ph="..." />
             <marker date="1490259985212" expanded="true" signature="6515:6531" ph="..." />
             <marker date="1490259985212" expanded="true" signature="6955:6969" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/kiz_lib.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="127" column="16" lean-forward="true" selection-start-line="127" selection-start-column="16" selection-end-line="127" selection-end-column="16" />
-          <folding>
-            <marker date="1490260305229" expanded="true" signature="2906:3001" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="3102:3167" ph="select platf... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="3315:3400" ph="select id as... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="3509:3600" ph="select locat... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="3947:4192" ph="SELECT b.id,... fanwe_supplier_location" />
-            <marker date="1490260305229" expanded="true" signature="4350:4440" ph="SELECT id,`n... fanwe_supplier_location" />
-            <marker date="1490260305229" expanded="true" signature="5562:5651" ph="select accou... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="5776:5844" ph="select suppl... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="5908:6038" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="6111:6206" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="6319:6384" ph="select platf... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="6532:6674" ph="select id as... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="6752:6843" ph="select locat... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="7568:7623" ph="SELECT id,`n... fanwe_supplier_location" />
-            <marker date="1490260305229" expanded="true" signature="12389:12453" ph="DELETE FROM " />
-            <marker date="1490260305229" expanded="true" signature="12558:12651" ph="select sum(s... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="14064:14190" ph="SELECT count... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="16360:16439" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490260305229" expanded="true" signature="21295:21421" ph="SELECT * FRO... ${DB_PREFIX}" />
           </folding>
         </state>
       </provider>
@@ -1359,13 +1220,6 @@
         <state relative-caret-position="-11214">
           <caret line="26" column="16" lean-forward="false" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="41" column="14" lean-forward="true" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -1395,30 +1249,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goUp.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6210">
-          <caret line="345" column="0" lean-forward="false" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/base.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
           <caret line="1632" column="23" lean-forward="true" selection-start-line="1632" selection-start-column="23" selection-end-line="1632" selection-end-column="23" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1435,17 +1270,9 @@
         <state relative-caret-position="435">
           <caret line="112" column="25" lean-forward="false" selection-start-line="112" selection-start-column="25" selection-end-line="112" selection-end-column="25" />
           <folding>
-            <element signature="e#991#998#0" expanded="true" />
-            <element signature="e#2643#2650#0" expanded="true" />
+            <element signature="e#991#998#0" expanded="false" />
+            <element signature="e#2643#2650#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/js.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="44" column="41" lean-forward="false" selection-start-line="44" selection-start-column="41" selection-end-line="44" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1493,151 +1320,328 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/test.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="11" lean-forward="true" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/menu.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="771" column="0" lean-forward="false" selection-start-line="771" selection-start-column="0" selection-end-line="781" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/my.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="78" column="3" lean-forward="true" selection-start-line="78" selection-start-column="3" selection-end-line="78" selection-end-column="3" />
+          <folding>
+            <marker date="1490347184265" expanded="true" signature="0:1824" ph="[...]" />
+            <marker date="1490347184265" expanded="true" signature="1624:1822" ph="{&quot;id&quot;: 1288...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/goUp.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/kiz.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/js.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-243">
+          <caret line="38" column="26" lean-forward="false" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/kiz_lib.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="100" column="55" lean-forward="true" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+          <folding>
+            <marker date="1490260305229" expanded="true" signature="2906:3001" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="3102:3167" ph="select platf... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="3315:3400" ph="select id as... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="3509:3600" ph="select locat... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="3947:4192" ph="SELECT b.id,... fanwe_supplier_location" />
+            <marker date="1490260305229" expanded="true" signature="4350:4440" ph="SELECT id,`n... fanwe_supplier_location" />
+            <marker date="1490260305229" expanded="true" signature="5562:5651" ph="select accou... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="5776:5844" ph="select suppl... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="5908:6038" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="6111:6206" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="6319:6384" ph="select platf... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="6532:6674" ph="select id as... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="6752:6843" ph="select locat... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="7568:7623" ph="SELECT id,`n... fanwe_supplier_location" />
+            <marker date="1490260305229" expanded="true" signature="12389:12453" ph="DELETE FROM " />
+            <marker date="1490260305229" expanded="true" signature="12558:12651" ph="select sum(s... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="14064:14190" ph="SELECT count... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="16360:16439" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490260305229" expanded="true" signature="21295:21421" ph="SELECT * FRO... ${DB_PREFIX}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/userModule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-108">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1490410406391" expanded="true" signature="836:929" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="2247:2299" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="3470:3568" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="6891:6957" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="8263:8323" ph="DELETE FROM " />
+            <marker date="1490410406391" expanded="true" signature="8439:8526" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="11250:11314" ph="SELECT COUNT... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="11634:11719" ph="delete from " />
+            <marker date="1490410406391" expanded="true" signature="12159:12258" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="12662:12765" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="15264:15341" ph="select appid... fanwe_app" />
+            <marker date="1490410406391" expanded="true" signature="16071:16216" ph="select t.* f... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="16627:16718" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="17146:17221" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490410406391" expanded="true" signature="17624:17744" ph="select * fro... ${DB_PREFIX}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_9.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="149" column="9" lean-forward="false" selection-start-line="149" selection-start-column="9" selection-end-line="149" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/indexModule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="35" column="50" lean-forward="true" selection-start-line="35" selection-start-column="50" selection-end-line="35" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/js/scm_kry/css/login-info.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="21" lean-forward="false" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/inc/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="56" column="65" lean-forward="true" selection-start-line="56" selection-start-column="65" selection-end-line="56" selection-end-column="65" />
+          <folding>
+            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Tpl/kiz/pages/inventory/wareHouse.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="21" lean-forward="true" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+          <folding>
+            <element signature="e#1151#1158#0" expanded="true" />
+            <element signature="e#1523#1530#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizBaseModule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="242" column="0" lean-forward="true" selection-start-line="242" selection-start-column="0" selection-end-line="242" selection-end-column="0" />
+          <folding>
+            <marker date="1490411134757" expanded="true" signature="5172:5225" ph="select previ... fanwe_supplier_location" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/inventoryModule.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-101">
-          <caret line="132" column="38" lean-forward="false" selection-start-line="132" selection-start-column="33" selection-end-line="132" selection-end-column="38" />
+        <state relative-caret-position="306">
+          <caret line="32" column="25" lean-forward="true" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
           <folding>
-            <marker date="1490331537881" expanded="true" signature="1143:1196" ph="select previ... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="3057:3101" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="4070:4114" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="6115:6256" ph="select a.*,c... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="6287:6420" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="8760:8804" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="9768:9812" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="11485:11529" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="12505:12549" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="13731:13769" ph="select count... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="13848:14107" ph="select g.id,... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="15332:15565" ph="select g.id,... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="16446:16523" ph="select dd_de... fanwe_cangku_log" />
-            <marker date="1490331537881" expanded="true" signature="18458:18550" ph="select id fr... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="18626:18712" ph="select id fr... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="19580:19650" ph="select cid f... fanwe_cangku_bangding_cangku" />
-            <marker date="1490331537881" expanded="true" signature="19735:19819" ph="select id fr... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="20276:20308" ph="select * fro... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="21497:21564" ph="select gid f... fanwe_cangku_bangding_gys" />
-            <marker date="1490331537881" expanded="true" signature="22447:22484" ph="select mstoc... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="25543:25587" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="25768:25844" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="25869:25918" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="28417:28449" ph="select * fro... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="31854:31961" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="32677:32789" ph="select disti... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="34764:34905" ph="select a.*,c... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="34930:35056" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="37474:37516" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="37592:37738" ph="select a.*,c... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="37763:37899" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="38346:38386" ph="SELECT name fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="39347:39445" ph="select dd_de... fanwe_cangku_log" />
-            <marker date="1490331537881" expanded="true" signature="39668:39705" ph="select * fro... fanwe_dinghuo" />
-            <marker date="1490331537881" expanded="true" signature="40085:40122" ph="select * fro... fanwe_diaohuo" />
-            <marker date="1490331537881" expanded="true" signature="40474:40583" ph="select dd_de... fanwe_cangku_log" />
-            <marker date="1490331537881" expanded="true" signature="41238:41300" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="41406:41511" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="41535:41604" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="41746:41794" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="41907:41951" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="43035:43072" ph="select * fro... fanwe_dinghuo" />
-            <marker date="1490331537881" expanded="true" signature="43455:43492" ph="select * fro... fanwe_diaohuo" />
-            <marker date="1490331537881" expanded="true" signature="44265:44327" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="44433:44538" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="44562:44631" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="44773:44821" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="44935:44985" ph="select id,na... fanwe_cangku_bumen" />
-            <marker date="1490331537881" expanded="true" signature="45099:45143" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="46055:46099" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="47386:47478" ph="select id fr... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="47520:47606" ph="select id fr... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="48128:48198" ph="select cid f... fanwe_cangku_bangding_cangku" />
-            <marker date="1490331537881" expanded="true" signature="48263:48347" ph="select id fr... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="48707:48739" ph="select * fro... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="49457:49524" ph="select gid f... fanwe_cangku_bangding_gys" />
-            <marker date="1490331537881" expanded="true" signature="50094:50131" ph="select mstoc... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="51830:51874" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="52086:52176" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="53066:53258" ph="select a.*,b... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="53300:53427" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="54446:54508" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="54617:54722" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="54746:54815" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="54965:55013" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="55672:55716" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="55928:56018" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="56908:57054" ph="select a.*,b... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="57094:57225" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="58419:58481" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="58590:58695" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="58719:58788" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="58938:58986" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="59645:59689" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="59901:59991" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="60881:61203" ph="select a.*,c... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="61228:61369" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="62709:62771" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="63013:63118" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="63142:63211" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="63493:63541" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="65013:65057" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="65269:65359" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="66966:67151" ph="select a.*,b... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="67191:67337" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="68256:68306" ph="select name fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="68413:68455" ph="select user_... fanwe_user" />
-            <marker date="1490331537881" expanded="true" signature="69572:69616" ph="select id,na... fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="69726:69788" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="70030:70135" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="70159:70228" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="70510:70558" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="70929:71019" ph="select id,na... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="71909:72103" ph="select a.id,... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="72142:72284" ph="select count... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="72592:72642" ph="select * fro... fanwe_cangku_bangding_gys" />
-            <marker date="1490331537881" expanded="true" signature="73267:73317" ph="select name fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="73424:73466" ph="select user_... fanwe_user" />
-            <marker date="1490331537881" expanded="true" signature="73533:73586" ph="select * fro... fanwe_cangku_bangding_cangku" />
-            <marker date="1490331537881" expanded="true" signature="73678:73717" ph="select name fanwe_cangku" />
-            <marker date="1490331537881" expanded="true" signature="74737:74814" ph="delete from " />
-            <marker date="1490331537881" expanded="true" signature="74830:74894" ph="insert into `fanwe_cangku_bangding_cangku`... " />
-            <marker date="1490331537881" expanded="true" signature="74991:75065" ph="delete from " />
-            <marker date="1490331537881" expanded="true" signature="75081:75142" ph="insert into `fanwe_cangku_bangding_gys`... " />
-            <marker date="1490331537881" expanded="true" signature="75492:75590" ph="select id,na... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="76118:76311" ph="select a.id,... fanwe_dc_menu" />
-            <marker date="1490331537881" expanded="true" signature="76806:76870" ph="select id,te... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="77070:77137" ph="select suppl... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="77426:77551" ph="select a.use... ${$dbname}" />
-            <marker date="1490331537881" expanded="true" signature="78333:78408" ph="select mstoc... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="78894:78990" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="79877:79958" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="80269:80328" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="80924:81026" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="81936:82023" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="82352:82417" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="83018:83118" ph="SELECT * FRO... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="83173:83240" ph="SELECT name,... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="84357:84442" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="84765:84828" ph="select * fro... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="85613:85719" ph="select a.*,b... ${DB_PREFIX}" />
-            <marker date="1490331537881" expanded="true" signature="86130:86183" ph="SELECT DISTI... from" />
-            <marker date="1490331537881" expanded="true" signature="87403:87450" ph="delete from " />
-            <marker date="1490331537881" expanded="true" signature="87655:87706" ph="delete from " />
-            <marker date="1490331537881" expanded="true" signature="87932:87983" ph="update fanwe... " />
-            <marker date="1490331537881" expanded="true" signature="88016:88065" ph="update fanwe... " />
-            <marker date="1490331537881" expanded="true" signature="88416:88535" ph="select a.*,c... fanwe_cangku_log" />
-            <marker date="1490331537881" expanded="true" signature="91649:91785" ph="select a.*,b... fanwe_cangku_menu_gys" />
-            <marker date="1490331537881" expanded="true" signature="92479:92529" ph="select name fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="92636:92678" ph="select user_... fanwe_user" />
-            <marker date="1490331537881" expanded="true" signature="94949:95084" ph="select a.*,b... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="97608:97712" ph="select a.*,b... fanwe_cangku_menu" />
-            <marker date="1490331537881" expanded="true" signature="99692:99754" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="99945:100050" ph="select a.gys... fanwe_deal_city" />
-            <marker date="1490331537881" expanded="true" signature="100074:100143" ph="select id,na... fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="100376:100424" ph="select id,na... fanwe_cangku_gys" />
-            <marker date="1490331537881" expanded="true" signature="100625:100675" ph="select id,na... fanwe_cangku_bumen" />
-            <marker date="1490331537881" expanded="true" signature="101445:101495" ph="select name fanwe_supplier_location" />
-            <marker date="1490331537881" expanded="true" signature="101597:101639" ph="select user_... fanwe_user" />
+            <marker date="1490411145486" expanded="true" signature="2280:2324" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="3293:3337" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="5343:5484" ph="select a.*,c... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="5515:5648" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="7988:8032" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="8996:9040" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="10713:10757" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="11733:11777" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="12959:12997" ph="select count... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="13076:13335" ph="select g.id,... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="14560:14793" ph="select g.id,... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="15674:15751" ph="select dd_de... fanwe_cangku_log" />
+            <marker date="1490411145486" expanded="true" signature="17686:17778" ph="select id fr... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="17854:17940" ph="select id fr... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="18808:18878" ph="select cid f... fanwe_cangku_bangding_cangku" />
+            <marker date="1490411145486" expanded="true" signature="18963:19047" ph="select id fr... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="19504:19536" ph="select * fro... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="20725:20792" ph="select gid f... fanwe_cangku_bangding_gys" />
+            <marker date="1490411145486" expanded="true" signature="21675:21712" ph="select mstoc... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="24826:24870" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="25051:25127" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="25152:25201" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="27985:28017" ph="select * fro... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="31422:31529" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="32086:32139" ph="select is_ma... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="32239:32296" ph="select id fr... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="32661:32773" ph="select disti... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="34748:34889" ph="select a.*,c... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="34914:35040" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="37458:37500" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="37576:37722" ph="select a.*,c... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="37747:37883" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="38330:38370" ph="SELECT name fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="39331:39429" ph="select dd_de... fanwe_cangku_log" />
+            <marker date="1490411145486" expanded="true" signature="39652:39689" ph="select * fro... fanwe_dinghuo" />
+            <marker date="1490411145486" expanded="true" signature="40069:40106" ph="select * fro... fanwe_diaohuo" />
+            <marker date="1490411145486" expanded="true" signature="40458:40567" ph="select dd_de... fanwe_cangku_log" />
+            <marker date="1490411145486" expanded="true" signature="41222:41284" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="41390:41495" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="41519:41588" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="41730:41778" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="41891:41935" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="43019:43056" ph="select * fro... fanwe_dinghuo" />
+            <marker date="1490411145486" expanded="true" signature="43439:43476" ph="select * fro... fanwe_diaohuo" />
+            <marker date="1490411145486" expanded="true" signature="44249:44311" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="44417:44522" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="44546:44615" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="44757:44805" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="44919:44969" ph="select id,na... fanwe_cangku_bumen" />
+            <marker date="1490411145486" expanded="true" signature="45083:45127" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="46039:46083" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="47370:47462" ph="select id fr... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="47504:47590" ph="select id fr... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="48112:48182" ph="select cid f... fanwe_cangku_bangding_cangku" />
+            <marker date="1490411145486" expanded="true" signature="48247:48331" ph="select id fr... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="48691:48723" ph="select * fro... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="49441:49508" ph="select gid f... fanwe_cangku_bangding_gys" />
+            <marker date="1490411145486" expanded="true" signature="50078:50115" ph="select mstoc... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="51814:51858" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="52070:52160" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="53050:53242" ph="select a.*,b... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="53284:53411" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="54430:54492" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="54601:54706" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="54730:54799" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="54949:54997" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="55656:55700" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="55912:56002" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="56892:57038" ph="select a.*,b... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="57078:57209" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="58403:58465" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="58574:58679" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="58703:58772" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="58922:58970" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="59629:59673" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="59885:59975" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="60865:61187" ph="select a.*,c... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="61212:61353" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="62693:62755" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="62997:63102" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="63126:63195" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="63477:63525" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="64997:65041" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="65253:65343" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="66950:67135" ph="select a.*,b... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="67175:67321" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="68240:68290" ph="select name fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="68397:68439" ph="select user_... fanwe_user" />
+            <marker date="1490411145486" expanded="true" signature="69556:69600" ph="select id,na... fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="69710:69772" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="70014:70119" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="70143:70212" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="70494:70542" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="70913:71003" ph="select id,na... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="71893:72087" ph="select a.id,... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="72126:72268" ph="select count... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="72576:72626" ph="select * fro... fanwe_cangku_bangding_gys" />
+            <marker date="1490411145486" expanded="true" signature="73251:73301" ph="select name fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="73408:73450" ph="select user_... fanwe_user" />
+            <marker date="1490411145486" expanded="true" signature="73517:73570" ph="select * fro... fanwe_cangku_bangding_cangku" />
+            <marker date="1490411145486" expanded="true" signature="73662:73701" ph="select name fanwe_cangku" />
+            <marker date="1490411145486" expanded="true" signature="74721:74798" ph="delete from " />
+            <marker date="1490411145486" expanded="true" signature="74814:74878" ph="insert into `fanwe_cangku_bangding_cangku`... " />
+            <marker date="1490411145486" expanded="true" signature="74975:75049" ph="delete from " />
+            <marker date="1490411145486" expanded="true" signature="75065:75126" ph="insert into `fanwe_cangku_bangding_gys`... " />
+            <marker date="1490411145486" expanded="true" signature="75476:75574" ph="select id,na... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="76102:76295" ph="select a.id,... fanwe_dc_menu" />
+            <marker date="1490411145486" expanded="true" signature="76790:76854" ph="select id,te... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="77054:77121" ph="select suppl... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="77410:77535" ph="select a.use... ${$dbname}" />
+            <marker date="1490411145486" expanded="true" signature="78317:78392" ph="select mstoc... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="78878:78974" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="79861:79942" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="80253:80312" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="80908:81010" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="81920:82007" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="82336:82401" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="83002:83102" ph="SELECT * FRO... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="83157:83224" ph="SELECT name,... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="84341:84426" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="84749:84812" ph="select * fro... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="85597:85703" ph="select a.*,b... ${DB_PREFIX}" />
+            <marker date="1490411145486" expanded="true" signature="86114:86167" ph="SELECT DISTI... from" />
+            <marker date="1490411145486" expanded="true" signature="87387:87434" ph="delete from " />
+            <marker date="1490411145486" expanded="true" signature="87639:87690" ph="delete from " />
+            <marker date="1490411145486" expanded="true" signature="87916:87967" ph="update fanwe... " />
+            <marker date="1490411145486" expanded="true" signature="88000:88049" ph="update fanwe... " />
+            <marker date="1490411145486" expanded="true" signature="88400:88519" ph="select a.*,c... fanwe_cangku_log" />
+            <marker date="1490411145486" expanded="true" signature="91633:91769" ph="select a.*,b... fanwe_cangku_menu_gys" />
+            <marker date="1490411145486" expanded="true" signature="92463:92513" ph="select name fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="92620:92662" ph="select user_... fanwe_user" />
+            <marker date="1490411145486" expanded="true" signature="94933:95068" ph="select a.*,b... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="97592:97696" ph="select a.*,b... fanwe_cangku_menu" />
+            <marker date="1490411145486" expanded="true" signature="99676:99738" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="99929:100034" ph="select a.gys... fanwe_deal_city" />
+            <marker date="1490411145486" expanded="true" signature="100058:100127" ph="select id,na... fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="100360:100408" ph="select id,na... fanwe_cangku_gys" />
+            <marker date="1490411145486" expanded="true" signature="100609:100659" ph="select id,na... fanwe_cangku_bumen" />
+            <marker date="1490411145486" expanded="true" signature="101429:101479" ph="select name fanwe_supplier_location" />
+            <marker date="1490411145486" expanded="true" signature="101581:101623" ph="select user_... fanwe_user" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/basicModule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="33" column="4" lean-forward="true" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public_html/app/Lib/kiz/core/KizApp.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

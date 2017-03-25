@@ -20,25 +20,25 @@ class KizApp{
 		if($GLOBALS['pay_req'][ACT])
 			$_REQUEST[ACT] = $GLOBALS['pay_req'][ACT];
 		
-		$module = strtolower($_REQUEST[CTL]?$_REQUEST[CTL]:"index");
-		$action = strtolower($_REQUEST[ACT]?$_REQUEST[ACT]:"index");
+		$module = strtolower($_REQUEST[CTL]?$_REQUEST[CTL]:"inventory");
+		$action = strtolower($_REQUEST[ACT]?$_REQUEST[ACT]:"go_down_index");
 		
 		$module = filter_ctl_act_req($module);
 		$action = filter_ctl_act_req($action);
 		if(!file_exists(APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php"))
-		$module = "index";
+		$module = "inventory";
 
 
 		require_once APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php";
 
 		if(!class_exists($module."Module"))
 		{
-			$module = "index";
+			$module = "inventory";
 			require_once APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php";
 		}
 		if(!method_exists($module."Module",$action))
-		$action = "index";
-		
+		$action = "go_down_index";
+
 		define("MODULE_NAME",$module);
 		define("ACTION_NAME",$action);
 		
