@@ -42,8 +42,9 @@
 <![endif]-->
 <script type="text/javascript">
     <!--
-    var ctxPath = "/kiz.php?ctl=inventory";
-    var ctxFullPath = "";
+    var ctxPath = "/kiz.php?ctl=ajax";
+    var inventoryPath = "/kiz.php?ctl=inventory";
+    var basicPath =  "/kiz.php?ctl=basic";
     var _loginUrl = '';
     //-->
 </script>
@@ -91,7 +92,7 @@
 
         });
 
-        $.get('/kiz.php?ctl=inventory&act=location_list_ajax',function (e) {
+        $.get(ctxPath + '&act=location_list_ajax',function (e) {
             var data = $.parseJSON(e);
             loginInfo._init({
                 brandObj: data.current,

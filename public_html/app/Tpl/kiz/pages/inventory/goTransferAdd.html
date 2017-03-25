@@ -6,7 +6,7 @@
 
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
-               args="{formId:'editForm',gridId:'grid',url:'/kiz.php?ctl=inventory&act=diaobo_saving_ajax',customValidator:'$.transferOrderValidator',gridDataId:'details',submitCallback:'$.saveCallback'}">保存</a>
+               args="{formId:'editForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=diaobo_saving_ajax',customValidator:'$.transferOrderValidator',gridDataId:'details',submitCallback:'$.saveCallback'}">保存</a>
             <!--<a code="scm:button:inventory:transfer:confirm" class="btn-link ml10" id="btnConfirm" function="$.doConfirmOrder"-->
                <!--args="{formId:'editForm',gridId:'grid',url:'/scm_kry/transferorder/confirm',customValidator:'$.transferOrderValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>-->
             <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=inventory&act=go_transfer_index');">返回</a>

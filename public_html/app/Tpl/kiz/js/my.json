@@ -1,5 +1,60 @@
 [
   {
+    "code": "scm:masterdata",
+    "id": 1256,
+    "levelId": "001001",
+    "name": "基础管理",
+    "parentId": 1255,
+    "platform": 3,
+    "sort": 1,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:masterdata:warehouse:query#",
+    "id": 1264,
+    "levelId": "001001001",
+    "name": "仓库设定",
+    "parentId": 1256,
+    "platform": 3,
+    "sort": 10,
+    "type": 1,
+    "url": "act=basic_setting_index"
+  },
+  {
+    "code": "scm:masterdata:inventoryImport:import#",
+    "id": 1265,
+    "levelId": "001001001",
+    "name": "期初库存",
+    "parentId": 1256,
+    "platform": 3,
+    "sort": 20,
+    "type": 1,
+    "url": "act=basic_master_index"
+  },
+  {
+    "code": "scm:masterdata:skuType:query#",
+    "id": 1266,
+    "levelId": "001001001",
+    "name": "商品-原料类别设定",
+    "parentId": 1256,
+    "platform": 3,
+    "sort": 30,
+    "type": 1,
+    "url": "act=basic_category_index"
+  },
+  {
+    "code": "scm:masterdata:sku:query#",
+    "id": 1267,
+    "levelId": "001001001",
+    "name": "商品-原料设定",
+    "parentId": 1256,
+    "platform": 3,
+    "sort": 40,
+    "type": 1,
+    "url": "act=basic_warehouse_index"
+  },
+  {
     "code": "scm:index",
     "id": 1255,
     "levelId": "001",

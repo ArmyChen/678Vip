@@ -248,7 +248,7 @@ class KizBaseModule{
     public function init(){
         $slid=$GLOBALS['account_info']['slid'];
         $slname=$GLOBALS['account_info']['slname'];
-        $opreview = $GLOBALS['dbconfig']['SHOP_LOGO'];
+        $opreview = $GLOBALS['config']['SHOP_LOGO'];
         define("SLIDNAME",$slname);
         define("SLID",$slid);
 

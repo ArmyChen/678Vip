@@ -8,665 +8,715 @@
 // +----------------------------------------------------------------------
 
 class ajaxModule extends KizBaseModule{
-	//检查商户帐号唯一
-	public function check_field_unique(){
-		$field_name = strim($_REQUEST['field_name']);
-		$field_data = strim($_REQUEST['field_data']);
-		$data = array();
-		$data['error'] = 0;
-		$data['msg'] = '';
-		$account_name = strim($_REQUEST['account_name']);
-		$result_data = $GLOBALS['db']->getOne("SELECT id FROM ".DB_PREFIX."supplier_submit WHERE ".$field_name."='".$field_data."'");
-		if($result_data>0){ //已经存在数据
-			$data['error'] = 1;
-			$data['msg'] = "数据已经存在!";
-		}
-		ajax_return($data);
-	}
-	
-	public function check_account_name(){
-		$account_name = strim($_REQUEST['account_name']);
-		$data = array();
-		$data['error'] = 0;
-		$data['msg'] = '';
-		if($GLOBALS['db']->getOne("SELECT id FROM ".DB_PREFIX."supplier_submit WHERE account_name ='".$account_name."'")>0 || $GLOBALS['db']->getOne("SELECT id FROM ".DB_PREFIX."supplier_account WHERE account_name ='".$account_name."'")>0 ){
-			$data['error'] = 1;
-			$data['msg'] = "数据已经存在!";
-		}
-		ajax_return($data);
-	}
-	
-	
-
-	
-	public function check_account_mobile(){
-	    $account_mobile = strim($_REQUEST['account_mobile']);
-	    if(!check_mobile($account_mobile)){
-	        $result['error'] = 1;
-	        $result['msg'] = "手机号格式错误";
-	        ajax_return($result);
-	    }
-	    if($GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."supplier_account where mobile='".$account_mobile."'")){
-	        $result['error'] = 1;
-	        $result['msg'] = "手机号已经存在";
-	        ajax_return($result);
-	    }
-	    $result['error'] = 0;
-	    $result['msg'] = "";
-	    ajax_return($result);
-	}
-	
-	/**
-	 * 发送手机验证码
-	 */
-	public function send_sms_code()
-	{
-		$verify_code = strim($_REQUEST['verify_code']);
-		$mobile_phone = strim($_REQUEST['mobile']);
-		if($mobile_phone=="")
-		{
-			$data['status'] = false;
-			$data['info'] = "请输入手机号";
-			$data['field'] = "user_mobile";
-			ajax_return($data);
-		}
-		if(!check_mobile($mobile_phone))
-		{
-			$data['status'] = false;
-			$data['info'] = "手机号格式不正确";
-			$data['field'] = "user_mobile";
-			ajax_return($data);
-		}
-	
-	
-		if(intval($_REQUEST['unique'])==1)
-		{
-			if(intval($GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."supplier_submit where account_mobile = '".$mobile_phone."'"))>0)
-			{
-				$data['status'] = false;
-				$data['info'] = "手机号已被注册";
-				$data['field'] = "account_mobile";
-				ajax_return($data);
-			}
-		}
-	
-	
-		$sms_ipcount = load_sms_ipcount();
-		if($sms_ipcount>1)
-		{
-			//需要图形验证码
-			if(es_session::get("verify")!=md5($verify_code))
-			{
-				$data['status'] = false;
-				$data['info'] = "验证码错误";
-				$data['field'] = "verify_code";
-				ajax_return($data);
-			}
-		}
-	
-		if(!check_ipop_limit(CLIENT_IP, "send_sms_code",SMS_TIMESPAN))
-		{
-			showErr("请勿频繁发送短信",1);
-		}
-	
-	
-	
-		//删除失效验证码
-		$sql = "DELETE FROM ".DB_PREFIX."sms_mobile_verify WHERE add_time <=".(NOW_TIME-SMS_EXPIRESPAN);
-		$GLOBALS['db']->query($sql);
-	
-		$mobile_data = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."sms_mobile_verify where mobile_phone = '".$mobile_phone."'");
-		if($mobile_data)
-		{
-			//重新发送未失效的验证码
-			$code = $mobile_data['code'];
-			$mobile_data['add_time'] = NOW_TIME;
-			$GLOBALS['db']->query("update ".DB_PREFIX."sms_mobile_verify set add_time = '".$mobile_data['add_time']."',send_count = send_count + 1 where mobile_phone = '".$mobile_phone."'");
-		}
-		else
-		{
-			$code = rand(100000,999999);
-			$mobile_data['mobile_phone'] = $mobile_phone;
-			$mobile_data['add_time'] = NOW_TIME;
-			$mobile_data['code'] = $code;
-			$mobile_data['ip'] = CLIENT_IP;
-			$GLOBALS['db']->autoExecute(DB_PREFIX."sms_mobile_verify",$mobile_data,"INSERT","","SILENT");
-				
-		}
-		send_verify_sms($mobile_phone,$code);
-		es_session::delete("verify"); //删除图形验证码
-		$data['status'] = true;
-		$data['info'] = "发送成功";
-		$data['lesstime'] = SMS_TIMESPAN -(NOW_TIME - $mobile_data['add_time']);  //剩余时间
-		$data['sms_ipcount'] = load_sms_ipcount();
-		ajax_return($data);
-	
-	
-	}
-	
-	
-    /**
-     * 加载商品分类
-     */
-    public function load_goods_type(){
+    function __construct()
+    {
+        parent::__construct();
         global_run();
-        $sql = "select * from ".DB_PREFIX."goods_type";
-        if($GLOBALS['account_info']){//登录时候
-            $sql.= " where supplier_id=0 or supplier_id=". $GLOBALS['account_info']['supplier_id'];
-        }
-        $data = $GLOBALS['db']->getAll($sql);
-        $html = '<select class="ui-select filter_select medium" name="deal_goods_type" ><option value="0">==请选择类型==</option>';
-        foreach ($data as $k=>$v){
-            $html.='<option value="'.$v['id'].'">'.$v['name'].'</option>';
-        }
-        $html .= "</select>";
-        echo $html;
-    }
-    
-    /**
-     * 加载商品属性
-     */
-    public function load_attr_html(){
-        global_run();
-        
-        $deal_goods_type = intval($_REQUEST['deal_goods_type']);
-        $id = intval($_REQUEST['id']);
-        $edit_type = intval($_REQUEST['edit_type']); //1管理员发布 2商户发布 
-        
-        $is_data = false;
-        if($edit_type == 1 && $GLOBALS['db']->getOne("select deal_goods_type from ".DB_PREFIX."deal where id = ".$id)==$deal_goods_type){
-            $is_data = true;
-        }elseif($edit_type==2 && $GLOBALS['db']->getOne("select deal_goods_type from ".DB_PREFIX."deal_submit where id = ".$id)==$deal_goods_type){
-            $is_data = true;
-        }
-        
-        if($id>0 && $is_data)
-        {
-            $goods_type_attr = null;
-            if ($edit_type == 1){
-                
-                $goods_type_attr = $GLOBALS['db']->getAll("select a.name as attr_name,a.is_checked as is_checked,a.price as price,a.add_balance_price,b.* from ".DB_PREFIX."deal_attr as a left join ".DB_PREFIX."goods_type_attr as b on a.goods_type_attr_id = b.id where a.deal_id=".$id." order by a.id asc");
-            }else{
-                //商品分类属性
-                $goods_type_attr_data = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."goods_type_attr where goods_type_id = ".$deal_goods_type);
-                foreach($goods_type_attr_data as $k=>$v){
-                    $f_goods_type_attr[$v['id']] = $v;
-                }
-                //团购已经选择的分类属性值
-                $deal_attr_data = unserialize($GLOBALS['db']->getOne("select cache_deal_attr from ".DB_PREFIX."deal_submit where id=".$id));
-                
-                
-                
-                foreach($deal_attr_data as $k=>$v){
-                    $temp_data = array();
-                    $temp_data['attr_name'] = $v['name'];
-                    $temp_data['is_checked'] = $v['is_checked'];
-                    $temp_data['price'] = $v['price'];
-                    $temp_data['add_balance_price'] = $v['add_balance_price'];
-                    $temp_data['id'] = $v['goods_type_attr_id'];
-                    $temp_data['name'] = $f_goods_type_attr[$v['goods_type_attr_id']]['name'];
-                    $temp_data['input_type'] = 0;
-                    $temp_data['preset_value'] = '';
-                    $temp_data['goods_type_id'] = $v['goods_type_attr_id'];
-                    $temp_data['supplier_id'] = $GLOBALS['account_info']['supplier_id'];
-                
-                
-                    $goods_type_attr[] = $temp_data;
-                }
-            }
-           
 
-            $goods_type_attr_id = 0;
-            if($goods_type_attr)
-            {
-                foreach($goods_type_attr as $k=>$v)
-                {
-                    $goods_type_attr[$k]['attr_list'] = preg_split("/[ ,]/i",$v['preset_value']);
-                    if($goods_type_attr_id!=$v['id'])
-                    {
-                        $goods_type_attr[$k]['is_first'] = 1;
-                    }
-                    else
-                    {
-                        $goods_type_attr[$k]['is_first'] = 0;
-                    }
-                    $goods_type_attr_id = $v['id'];
-                }
-            }
-            else
-            {
-                $goods_type_attr = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."goods_type_attr where goods_type_id=".$deal_goods_type);
-                foreach($goods_type_attr as $k=>$v)
-                {
-                    $goods_type_attr[$k]['attr_list'] = preg_split("/[ ,]/i",$v['preset_value']);
-                    $goods_type_attr[$k]['is_first'] = 1;
-                }
-            }
-        }
-        else
-        {
-            $goods_type_attr =$GLOBALS['db']->getAll("select * from ".DB_PREFIX."goods_type_attr where goods_type_id=".$deal_goods_type);
-            foreach($goods_type_attr as $k=>$v)
-            {
-                $goods_type_attr[$k]['attr_list'] = preg_split("/[ ,]/i",$v['preset_value']);
-                $goods_type_attr[$k]['is_first'] = 1;
-            }
-        }
-        
-        //是否开启自动审核
-        $GLOBALS['tmpl']->assign('allow_publish_verify',intval($GLOBALS['db']->getOne("select allow_publish_verify from ".DB_PREFIX."supplier where id=".$GLOBALS['account_info']['supplier_id'])));
-        
-        $GLOBALS['tmpl']->assign("goods_type_attr",$goods_type_attr);
-        echo $GLOBALS['tmpl']->fetch("pages/project/load_attr_html.html");
-    }
-    
-    
-public function load_delivery_form()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    	
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    	
-    	if(!check_module_auth("goodso"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    	
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    	require_once APP_ROOT_PATH."system/model/deal_order.php";
-    	$order_item_table_name = get_supplier_order_item_table_name($supplier_id);
-    	
-    	
-    	$id = intval($_REQUEST['id']); //发货商品的ID    	
-    	$item = $GLOBALS['db']->getRow("select doi.* from ".$order_item_table_name." as doi left join ".DB_PREFIX."deal_location_link as l on doi.deal_id = l.deal_id where doi.id = ".$id." and l.location_id in (".implode(",",$s_account_info['location_ids']).")");
-    	if($item)
-    	{
+        $ywsort=array(
+            "-5"=>"生产退料",
+            "-4"=>"退还入库",
+            "-3"=>"预配退货",
+//            "-2"=>"其他入库",
+//            "-1"=>"盘盈",
+            "1"=>"盘盈",
+            "2"=>"无订单入库",
+            "3"=>"要货调入",
+            "4"=>"初始库存",
+            "6"=>"盘亏",
+            "7"=>"无订单出库",
+            "8"=>"要货调出",
+            "9"=>"退货",
+            "10"=>"生产领料",
+            "11"=>"借用出库",
+            "12"=>"其他出库",
+            "13"=>"配送领料",
+            "14"=>"品牌销售出库",
 
-    		$location_list = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."supplier_location where id in (".implode(",",$s_account_info['location_ids']).")");
-    		$express_list = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."express where is_effect = 1");
-    		$GLOBALS['tmpl']->assign("item",$item);
-    		$GLOBALS['tmpl']->assign("express_list",$express_list);
-    		$GLOBALS['tmpl']->assign("location_list",$location_list);
-    		$data['html'] = $GLOBALS['tmpl']->fetch("inc/delivery_form.html");
-    		$data['status'] = 1;
-    		ajax_return($data);
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "非法的数据";
-    		ajax_return($data);
-    	}
-    	
-    }
-    
-    public function do_verify_delivery()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    	 
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    	 
-    	if(!check_module_auth("goodso"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    	
-    	
-    	$id = intval($_REQUEST['id']);
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    		
-    	$delivery_notice = $GLOBALS['db']->getRow("select n.* from ".DB_PREFIX."delivery_notice as n left join ".DB_PREFIX."deal_location_link as l on l.deal_id = n.deal_id where n.order_item_id = ".$id." and n.is_arrival = 1 and  l.location_id in (".implode(",",$s_account_info['location_ids']).")  order by n.delivery_time desc");
-		
-		if($delivery_notice&&NOW_TIME-$delivery_notice['delivery_time']>24*3600*ORDER_DELIVERY_EXPIRE)
-    	{
-    		require_once APP_ROOT_PATH."system/model/deal_order.php";
-    		$res = confirm_delivery($delivery_notice['notice_sn'],$id);
-    		if($res)
-    		{
-    			$data['status'] = true;
-    			$data['info'] = "超期收货成功";
-    			ajax_return($data);
-    		}
-    		else
-    		{
-    			$data['status'] = 0;
-    			$data['info'] = "收货失败";
-    			ajax_return($data);
-    		}
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "订单不符合超期收货的条件";
-    		ajax_return($data);
-    	}
-    }
-    
-    public function load_filter_box(){
-        global_run();
-        $edit_type = intval($_REQUEST['edit_type']); //1管理员发布 2商户发布
-        
-        $shop_cate_id = intval($_REQUEST['shop_cate_id']);
-        $id = intval($_REQUEST['id']);
-        $ids = $this->get_parent_ids($shop_cate_id);
-
-        $filter_group = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."filter_group where cate_id in (".implode(",", $ids).")");
-
-		if($edit_type == 1){ //管理员添加数据
-    		
-    		foreach($filter_group as $k=>$v)
-    		{
-    		    
-    			$filter_group[$k]['value'] = $GLOBALS['db']->getOne("select filter from ".DB_PREFIX."deal_filter where filter_group_id = ".$v['id']." and deal_id=".$id);
-    		}
-		
-		}elseif ($edit_type == 2){//商户提交数据
-
-		    $cache_deal_filter = $GLOBALS['db']->getOne("select cache_deal_filter from ".DB_PREFIX."deal_submit where id = ".$id);
-		    $cache_deal_filter = unserialize($cache_deal_filter);
-		    foreach($filter_group as $k=>$v)
-		    {
-		        $filter_group[$k]['value'] = $cache_deal_filter[$v['id']]['filter'];
-		    }  
-		}
-        $GLOBALS['tmpl']->assign("filter_group",$filter_group);
-        echo $GLOBALS['tmpl']->fetch("pages/project/filter_box.html");
-    }
-    
-    //获取当前分类的所有父分类包含本分类的ID
-    private $cate_ids = array();
-    private function get_parent_ids($shop_cate_id)
-    {
-        $pid = $shop_cate_id;
-        do{
-            $pid = $GLOBALS['db']->getOne("select pid from ".DB_PREFIX."shop_cate where id=".$pid);
-            if($pid>0)
-                $this->cate_ids[] = $pid;
-        }while($pid!=0);
-    
-        $this->cate_ids[] = $shop_cate_id;
-    
-        return $this->cate_ids;
-    }
-    
-    
-    
-    public function do_refund_item()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    
-    	if(!check_module_auth("goodso"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}    	 
-    	 
-    	$id = intval($_REQUEST['id']);
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    	$allow_refund = $GLOBALS['db']->getOne("select allow_refund from ".DB_PREFIX."supplier where id = ".$supplier_id);
-    	if(!$allow_refund)
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    	
-    	require_once APP_ROOT_PATH."system/model/deal_order.php";
-    	$order_item_table_name = get_supplier_order_item_table_name($supplier_id);
-    
-    	$order_item = $GLOBALS['db']->getRow("select * from ".$order_item_table_name." where refund_status = 1 and id = ".$id." and supplier_id = ".$supplier_id);
-    	if($order_item)
-    	{
-    		refund_item($order_item['id']);
-    		$data['status'] = true;
-    		$data['info'] = "退款操作成功";
-    		ajax_return($data);
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "非法的数据";
-    		ajax_return($data);
-    	}
-    	
-    }
-    
-    
-    public function do_refuse_item()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    
-    	if(!check_module_auth("goodso"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    
-    	$id = intval($_REQUEST['id']);
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    	$allow_refund = $GLOBALS['db']->getOne("select allow_refund from ".DB_PREFIX."supplier where id = ".$supplier_id);
-    	if(!$allow_refund)
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    	 
-    	require_once APP_ROOT_PATH."system/model/deal_order.php";
-    	$order_item_table_name = get_supplier_order_item_table_name($supplier_id);
-    
-    	$order_item = $GLOBALS['db']->getRow("select * from ".$order_item_table_name." where refund_status = 1 and id = ".$id." and supplier_id = ".$supplier_id);
-    	if($order_item)
-    	{
-    		refuse_item($order_item['id']);
-    		$data['status'] = true;
-    		$data['info'] = "拒绝退款操作成功";
-    		ajax_return($data);
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "非法的数据";
-    		ajax_return($data);
-    	}
-    	 
-    }
-
-    public function do_refund_coupon()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    
-    	if(!check_module_auth("dealo"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    
-    	$id = intval($_REQUEST['id']);
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    	$allow_refund = $GLOBALS['db']->getOne("select allow_refund from ".DB_PREFIX."supplier where id = ".$supplier_id);
-    	if(!$allow_refund)
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    	 
-    	require_once APP_ROOT_PATH."system/model/deal_order.php";
-    	$order_item_table_name = get_supplier_order_item_table_name($supplier_id);
-    
-    	$order_item = $GLOBALS['db']->getRow("select * from ".$order_item_table_name." where refund_status = 1 and id = ".$id." and supplier_id = ".$supplier_id);
-    	if($order_item)
-    	{
-    		$coupon_list = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."deal_coupon where refund_status = 1 and order_deal_id = ".$order_item['id']);
-    		foreach($coupon_list as $c)
-    		{
-    			refund_coupon($c['id']);
-    		}
-    		$data['status'] = true;
-    		$data['info'] = "退款操作成功";
-    		ajax_return($data);
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "非法的数据";
-    		ajax_return($data);
-    	}
-    	 
-    }
-    
-    public function do_refuse_coupon()
-    {
-    	global_run();
-    	$s_account_info = $GLOBALS['account_info'];
-    
-    	if(intval($s_account_info['id'])==0)
-    	{
-    		$data['status']=1000;
-    		ajax_return($data);
-    	}
-    
-    	if(!check_module_auth("dealo"))
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    
-    	$id = intval($_REQUEST['id']);
-    	$supplier_id = intval($s_account_info['supplier_id']);
-    	$allow_refund = $GLOBALS['db']->getOne("select allow_refund from ".DB_PREFIX."supplier where id = ".$supplier_id);
-    	if(!$allow_refund)
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "权限不足";
-    		ajax_return($data);
-    	}
-    
-    	require_once APP_ROOT_PATH."system/model/deal_order.php";
-    	$order_item_table_name = get_supplier_order_item_table_name($supplier_id);
-    
-    	$order_item = $GLOBALS['db']->getRow("select * from ".$order_item_table_name." where refund_status = 1 and id = ".$id." and supplier_id = ".$supplier_id);
-    	if($order_item)
-    	{
-    		$coupon_list = $GLOBALS['db']->getAll("select * from ".DB_PREFIX."deal_coupon where refund_status = 1 and order_deal_id = ".$order_item['id']);
-    		foreach($coupon_list as $c)
-    		{
-    			refuse_coupon($c['id']);
-    		}
-    		$data['status'] = true;
-    		$data['info'] = "拒绝退款操作成功";
-    		ajax_return($data);
-    	}
-    	else
-    	{
-    		$data['status'] = 0;
-    		$data['info'] = "非法的数据";
-    		ajax_return($data);
-    	}
-    
+        );
+        $this->ywsort=$ywsort;
+        $this->gonghuoren=array(
+            "1"=>"临时客户",
+            "2"=>"临时运输商",
+            "3"=>"临时供应商",
+            "4"=>"领料出库"
+        );
     }
 
     /**
-     * 设置关联商品
+     * 入库列表ajax
      */
-    public function add_related_deal()
-    {
+    public function go_down_index_ajax(){
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
 
-//    	$deal_id=intval($_REQUEST['deal_id']);
-//    	$edit_type=intval($_REQUEST['edit_type']);
-//        if($deal_id>0){
-//        	$related_deal_id=$GLOBALS['db']->getOne("select relate_ids from ".DB_PREFIX."relate_goods where good_id = ".$deal_id);
-//        	if($edit_type==2){
-//        		$related_deal_id=$GLOBALS['db']->getOne("select cache_relate from ".DB_PREFIX."deal_submit where id = ".$deal_id);
-//        		$related_deal_id= unserialize($related_deal_id);
-//        		$related_deal_id= $related_deal_id['relate_ids'];
-//        		
-//        	}
-//        	$related_deal=$GLOBALS['db']->getAll("select id,name,icon from ".DB_PREFIX."deal where id in(".$related_deal_id.")");
-//        	$GLOBALS['tmpl']->assign("related_deal",$related_deal);
-//        	$GLOBALS['tmpl']->assign("related_deal_id",$related_deal_id);
-//        }
-        
-    	$data['html'] = $GLOBALS['tmpl']->fetch("pages/project/add_related_deal.html");
-        ajax_return($data);
-    }    
-
-      /**
-     * 加载可关联商品
-     */
-	public function load_relate()
-	{
-		global_run();
-		$account_info = $GLOBALS['account_info'];
+        $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        
-		require_once APP_ROOT_PATH . 'app/Lib/page.php';
-		$deal_id = intval($_REQUEST['deal_id']);
-		$is_shop = intval($_REQUEST['is_shop']);
-		$related_deal = strim($_REQUEST['related_deal']);
-		if($related_deal=='')$related_deal=0;
-		$page = intval($_REQUEST['p']);
-		$keyword = strim($_REQUEST['keyword']);
-		$condition=' 1=1';
-		if($keyword!='')$condition= " name like '%".$keyword."%' ";
-		
-		//print_r($_REQUEST);exit;
-		$page = intval($_REQUEST['p']);
-		$page_size = 8;
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
 
-		if($page<=0)$page = 1;
-		$limit = (($page-1)*$page_size).",".$page_size;
-		//echo "select id,name,icon from ".DB_PREFIX."deal where id <> ".$deal_id." and ".$condition." and is_shop=".$is_shop." and id not in(".$related_deal.") and  supplier_id=".$supplier_id." and is_effect = 1 and is_delete=0  and buy_type <> 1 order by sort desc limit ".$limit;
-		$list = $GLOBALS['db']->getAll("select id,name,icon from ".DB_PREFIX."deal where id <> ".$deal_id." and ".$condition." and is_shop=".$is_shop." and id not in(".$related_deal.") and  supplier_id=".$supplier_id." and is_effect = 1 and is_delete=0  and buy_type <> 1 order by sort desc limit ".$limit);
-		$count = $GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."deal where id <> ".$deal_id." and ".$condition." and is_shop=".$is_shop." and id not in(".$related_deal.") and supplier_id=".$supplier_id." and is_effect = 1 and is_delete=0  and buy_type <> 1 ");
-				
-		$GLOBALS['tmpl']->assign("list",$list);
-		$page = new Page($count,$page_size);   //初始化分页对象
-		$p  =  $page->show();
-		$GLOBALS['tmpl']->assign('pages',$p);
-		
-    	$data['html'] = $GLOBALS['tmpl']->fetch("pages/project/load_relate.html");
-        ajax_return($data);
-	}
-    
+        if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当月的
+            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        $sqlstr="where 1=1";
+        $sqlstr.=' and ( a.slid='.$location_id.')';
+
+        if($begin_time_s){
+            $sqlstr .=" and a.ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $sqlstr .=" and a.ctime < ".$end_time_s." ";
+        }
+        if ($type !=99 ){
+            $sqlstr .=" and a.type = ".$type." ";
+        }
+        if ($ywsortid !=99 ){
+            $sqlstr .=" and a.ywsort = ".$ywsortid." ";
+        }
+        if($_REQUEST['danjuhao'] !=""){
+            $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
+        }
+
+        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
+        $sqlrecords="select count(a.id) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
+
+        $return = array();
+        $records = $GLOBALS['db']->getOne($sqlrecords);
+        $list = $GLOBALS['db']->getAll($sql);
+//        var_dump($list);die;
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+
+        foreach($list as $k=>$v){
+            $v['ctime']=to_date($v['ctime'],'m-d H:i:s');
+            $v['detail']=unserialize($v['dd_detail']);
+
+            if ($v['type']==1){
+                $v['type_show']	='入库';
+                $v['gonghuo_show']	='供货人';
+            }else{
+                $v['type_show']	='出库';
+                $v['gonghuo_show']	='收货人';
+            }
+
+            $v['ywsort']=$this->ywsort[$v['ywsort']];
+            $v['gonghuo']=$this->get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
+            $list[$k]=$v;
+        }
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 商品搜索列表ajax
+     */
+    public function goods_list_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $where = "where 1 and g.location_id=$slid";
+        if($_REQUEST['skuTypeId']){
+            $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
+        }
+        if($_REQUEST['skuCodeOrName']){
+            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')";
+        }
+        $sqlcount = "select count(id) from fanwe_dc_menu g $where";
+        $records = $GLOBALS['db']->getOne($sqlcount);
+        $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $check=$GLOBALS['db']->getAll($sql);
+
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if($check){
+            $return['dataList'] = $check;
+        }else{
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 商品搜索（扫码）ajax
+     */
+    public function goods_search_code_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $where = "where 1 and g.location_id=$slid";
+        if($_REQUEST['cate_id']){
+            $where .= " and g.cate_id=".$_REQUEST['cate_id'];
+        }
+        if($_REQUEST['barcode']){
+            $where .= " and g.barcode='".$_REQUEST['barcode']."'";
+        }
+
+        $sql = "select g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where";
+        $check=$GLOBALS['db']->getAll($sql);
+//print_r($sql);exit;
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = null;
+        if($check){
+            $return['data'] = $check[0];
+        }else{
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+    /**
+     * 入库保存ajax
+     */
+    public function saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $dhid = $_REQUEST['asnNoView']?intval($_REQUEST['asnNoView']):'0';
+
+        $sqlcheck="select dd_detail from fanwe_cangku_log where slid=$slid and  danjuhao='$dhid'";
+        $isRuku  =	$GLOBALS['db']->getRow($sqlcheck);
+        if($isRuku){
+            $return['success'] = false;
+            $return['message'] = "已经入过库了，请勿重复操作！";
+            echo json_encode($return);exit;
+        }
+        $datailinfo = array();
+        foreach($_REQUEST['detail'] as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['zmoney'] = $v['uom'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+        }
+
+        $dd_detail=serialize($datailinfo);
+        $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
+
+        //if($unit_type==9){$unit_type==0;}
+        $datain=$_REQUEST;
+        $datain['ctime']= time()+ 60*60*8;
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = $_REQUEST['asnNoView'];
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
+
+        //更新仓库
+        $detail=$_REQUEST['details'];
+
+        $amount = 0;//总金额
+
+        foreach($detail as $k=>$v){
+            if (intval($v['id'])==0){
+                continue;
+            }
+            $mid=$v['id'];
+
+            //0805 查询本店的ID 根据商品条码
+            if($ddbz>0){
+                if($v['barcode'] !="")  {
+                    $mid=$GLOBALS['db']->getOne("select id from fanwe_dc_menu where location_id='".$slid."' and (barcode='".$v['barcode']."')");
+                }else{
+                    $mid=$GLOBALS['db']->getOne("select id from fanwe_dc_menu where location_id='".$slid."' and (name='".$v['name']."')");
+                }
+                if (!$mid){
+                    //如果ID不存在，则自动增加商品进入产品库，返回ID
+                    $dc_menu_data=array(
+                        "location_id"=>$slid,
+                        "supplier_id"=>$supplier_id,
+                        "barcode"=>$v['barcode'],
+                        "name"=>$v['name'],
+                        "cate_id"=>$v['skuTypeId'],
+                        "price"=>floatval($v['price']),
+                        "unit"=>$v['unit'],
+                        "funit"=>$v['funit'],
+                        "times"=>$v['times'],
+                        "type"=>$v['type']
+                    );
+
+                    $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
+                    $mid = $GLOBALS['db']->insert_id();
+                }
+            }
+
+            $cid=$GLOBALS['db']->getOne("select cid from fanwe_cangku_bangding_cangku where slid=$slid and mid=$mid"); //取得仓库ID
+            if(!$cid){
+                $cid=$GLOBALS['db']->getOne("select id from fanwe_cangku where slid=$slid and isdisable=1 order by id asc limit 1");//取得仓库ID
+            }
+
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
+            $order_num=floatval($v['actualQty']);
+            $cate_id=$v['skuId'];
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+
+            //存在的话更新数量
+            if ($_REQUEST['type']==1){ //入库
+                $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstr);
+                if($check){
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+                }else{
+                    //添加
+                    $data_menu=array(
+                        "slid"=>$slid,
+                        "mid"=>$mid,
+                        "cid"=>$cid,
+                        "cate_id"=>$v['skuTypeId'],
+                        "mbarcode"=>$v['skuCode'],
+                        "mname"=>$v['skuName'],
+                        "mstock"=>$order_num,
+                        "stock"=>$order_num,
+                        "minStock"=>10,
+                        "maxStock"=>10000,
+                        "unit"=>$v['uom'],
+                        "funit"=>$v['funit'],
+                        "times"=>$v['times'],
+                        "type"=>$v['type'],
+                        "ctime"=>to_date(NOW_TIME)
+                    );
+                    $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
+                }
+
+                //写入库商品明细
+                $gonghuoren=$GLOBALS['db']->getOne("select gid from fanwe_cangku_bangding_gys where slid=$slid and mid=$mid"); //取得绑定的供应商
+                if(!$cid){
+                    $gonghuoren='linshi_3'; //临时供应商3
+                }
+
+                $data_gys=array(
+                    "slid"=>$slid,
+                    "mid"=>$mid,
+                    "cid"=>$cid,
+                    "mbarcode"=>$v['skuCode'],
+                    "mname"=>$v['skuName'],
+                    "stock"=>$order_num,
+                    "gonghuoren"=>$gonghuoren,
+                    "unit"=>$v['uom'],
+                    "funit"=>$v['funit'],
+                    "times"=>$v['times'],
+                    "type"=>$v['type'],
+                    "price"=>floatval($v['price']),
+                    "ctime"=>to_date(NOW_TIME)
+                );
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
+            }else{ //出库
+                $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+                if($order_num>$check['mstock']){
+                    $return['flag'] = null;
+                    $return['exception'] = null;
+                    $return['refresh'] = false;
+                    $return['success'] = false;
+                    $return['message'] ="库存不足,非法提交！";
+//                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
+                }else{//操作减库存
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+                }
+            }
+
+            //增加MENU库表
+            if ($_REQUEST['type']==1){ //入库
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
+            }else{
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+            }
+
+            $amount += $order_num*$v['price'];
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '保存成功';
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+        }
+
+
+        $datain['zmoney'] = $amount;
+        if($res){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
+        }else{
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 调拨列表ajax
+     */
+    public function diaobo_list_ajax(){
+        init_app_page();
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $sqlstr="where 1=1";
+        $sqlstr.=' and slid='.$location_id;
+
+        if($_REQUEST['createTime']){
+            $begin_time=strtotime($_REQUEST['createTime']);
+            $end_time=strtotime($_REQUEST['createTime'])+24*60*60;
+            $sqlstr .=" and ctime > ".$begin_time." ";
+            $sqlstr .=" and ctime < ".$end_time." ";
+        }
+
+        if($_REQUEST['transferOrderNo'] !=""){
+            $sqlstr .=" and danjuhao like '%".$_REQUEST['transferOrderNo']."%' ";
+        }
+        if($_REQUEST['fromWmId']){
+            $sqlstr .=" and cid = ".$_REQUEST['fromWmId'];
+        }
+        if($_REQUEST['toWmId']){
+            $sqlstr .=" and cidtwo = ".$_REQUEST['toWmId'];
+        }
+
+        $cangku_list=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$location_id);
+        $cangku_names = array();
+        $cangku_names = array_reduce($cangku_list, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $sql="select * from ".DB_PREFIX."cangku_diaobo ".$sqlstr." order by id desc limit ".$limit;
+        $sqlc="select count(id) from ".DB_PREFIX."cangku_diaobo ".$sqlstr;
+
+        $records = $GLOBALS['db']->getOne($sqlc);
+        $list=$GLOBALS['db']->getAll($sql);
+        foreach($list as $kl=>$vl){
+            $vl['detail']=unserialize($vl['dd_detail']);
+            $vl['fromWmName']= $cangku_names[$vl['cid']];
+            $vl['toWmName']= $cangku_names[$vl['cidtwo']];
+            $vl['transferOrderNo'] = $vl['danjuhao'];
+            $vl['updateTime'] = to_date($vl['ctime'],'m-d H:i:s');
+            $vl['statusName'] = "";
+            $vl['status'] = "";
+            $vl['amount'] = $vl['zmoney'];
+            $list[$kl]=$vl;
+        }
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 调拨ajax
+     */
+    public function diaobo_saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $datailinfo = array();
+        foreach($_REQUEST['details'] as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['zmoney'] = $v['uom'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+        }
+        $dd_detail=serialize($datailinfo);
+        $cid=intval($_REQUEST['fromWmId']);
+        $cidtwo=intval($_REQUEST['toWmId']);
+
+        //更新仓库
+        $detail=$_REQUEST['details'];
+
+        $amount = 0;//总金额
+
+        foreach($detail as $k=>$v){
+            $mid=$v['skuId'];
+            $order_num=floatval($v['planMoveQty']);
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+            //减库
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
+            $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
+            $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+
+            $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
+            if($check){
+                $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
+            }else{
+                //添加
+                $data_menu=array(
+                    "slid"=>$slid,
+                    "mid"=>$mid,
+                    "cid"=>$cidtwo,
+                    "cate_id"=>$v['skuTypeId'],
+                    "mbarcode"=>$v['skuCode'],
+                    "mname"=>$v['skuTypeName'],
+                    "mstock"=>$order_num,
+                    "stock"=>$order_num,
+                    "minStock"=>10,
+                    "maxStock"=>10000,
+                    "unit"=>$v['uom'],
+                    "funit"=>$v['funit'],
+                    "times"=>$v['times'],
+                    "type"=>$v['type'],
+                    "ctime"=>to_date(NOW_TIME)
+                );
+                $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
+            }
+
+            $amount += $order_num*$v['price'];
+        }
+
+        $datain=$_REQUEST;
+        $datain['ctime']= time()+ 60*60*8;
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = to_date(NOW_TIME,"YmdHis").rand(4);
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
+        $datain['cid'] = $cid;
+        $datain['cidtwo'] = $cidtwo;
+        $datain['znum'] = $order_num;
+        $datain['zmoney'] = $amount;
+        $datain['zweight'] = 0.00;
+        $datain['ztiji'] = 0.00;
+        $datain['memo'] = $_REQUEST['memo']?$_REQUEST['memo']:"";
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '保存成功';
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
+        }
+
+        if($res1 && $res2){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain);  //写入调拨记录
+            //写出库记录
+            $datain['ywsort']=5; //仓库调拨
+            $datain['gonghuoren']='cangku_'.$cidtwo;
+            unset($datain['cidtwo']); //销毁入库的仓库ID
+            $datain['type']=2;
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+            $datain['cid']=$cidtwo;
+            $datain['type']=1;
+            $datain['gonghuoren']='cangku_'.$cid;
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
+        }else{
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 商品分类ajax
+     */
+    public function goods_category_tree_ajax(){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //分类
+        $sortconditions = " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $sortconditions .= " and location_id=".$slid;
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+        $sqlsort.=$sortconditions. " order by sort desc";
+
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
+        echo json_encode($listsort);exit;
+    }
+
+    /**
+     * 门店列表ajax
+     */
+    public function location_list_ajax()
+    {
+        /* 基本参数初始化 */
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $GLOBALS['account_info']['slid'];
+        $account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
+        /* 业务逻辑部分 */
+        $conditions = " where is_effect = 1 and supplier_id = ".$supplier_id; // 查询条件
+        $conditions .= " and id in(" . implode(",", $account_info['location_ids']) . ") ";
+
+        $sql = " select distinct(id),name,address,concat_ws(',',ypoint,xpoint) as latlong from " . DB_PREFIX . "supplier_location";
+        $list = $GLOBALS['db']->getAll($sql.$conditions . " order by id desc");
+        $return['current'] = array();
+        $return['more'] = array();
+        foreach($list as $v){
+            if($v['id'] == $slid){
+                $return['current'] = $v;
+            }else{
+                $return['more'][] = $v;
+            }
+        }
+        echo json_encode($return);exit;
+    }
+
+    public function dc_cangku_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+        $isdd = $_REQUEST['isDisable'];
+        $kw = $_REQUEST['warehouseName'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $where="where 1=1";
+        $where.=' and slid='.$slid;
+
+        if($kw){
+            $where = " and name like '%$kw%'";
+        }
+        if(isset($isdd)){
+            $where .= " and isdisable=$isdd";
+        }
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku $where order by id desc limit $limit ");
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."cangku ".$where);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+
+        $cangkuArray = array();
+        foreach($list as $k=>$v){
+            $cangkuArray[$k]['id'] = $v['id'];
+            $cangkuArray[$k]['wareshouseCode'] = '';
+            $cangkuArray[$k]['warehouseName'] = $v['name'];
+            $cangkuArray[$k]['createTime'] = '';
+            $cangkuArray[$k]['updateTime'] = '';
+            $cangkuArray[$k]['isDisable'] = $v['isdisable'];
+            $cangkuArray[$k]['deductionName'] = '';
+        }
+
+        $return['dataList'] = $cangkuArray;
+        echo json_encode($return);exit;
+    }
+
+    function get_gonghuoren_name($supplier_id,$slid,$gonghuoren){
+
+        $linshi=array(
+            "1"=>"临时客户",
+            "2"=>"临时运输商",
+            "3"=>"临时供应商"
+        );
+
+        $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
+        $slid_names = array();
+        $slid_names = array_reduce($slidlist, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $gys_ids=$GLOBALS['db']->getOne("select a.gys_ids from fanwe_deal_city a left join fanwe_supplier_location b on a.id=b.city_id where b.id=".$slid);
+        $sql_gys="select id,name from fanwe_supplier_location where id in(".$gys_ids.")";
+        $gyslist=$GLOBALS['db']->getAll($sql_gys);
+
+
+        $city_names = array();
+        $city_names = array_reduce($gyslist, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $location_gys=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_gys where slid=".$slid);
+        $local_names = array();
+        $local_names = array_reduce($location_gys, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
+        $local_bumen = array();
+        $local_bumen = array_reduce($location_bumen, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+
+        $gonghuoren_arr=explode('_',$gonghuoren);
+        $gonghuoren_type=$gonghuoren_arr[0];
+        $gonghuoren_id=$gonghuoren_arr[1];
+        if ($gonghuoren_type=='linshi'){
+            $gys_name=$linshi[$gonghuoren_id];
+        }elseif($gonghuoren_type=='slid'){
+            $gys_name=$slid_names[$gonghuoren_id];
+        }elseif($gonghuoren_type=='citygys'){
+            $gys_name=$city_names[$gonghuoren_id];
+        }elseif($gonghuoren_type=='localgys'){
+            $gys_name=$local_names[$gonghuoren_id];
+        }elseif($gonghuoren_type=='bumen'){
+            $gys_name=$local_bumen[$gonghuoren_id];
+        }elseif($gonghuoren_type=='other'){
+            $gys_name=$GLOBALS['db']->getOne("select name from fanwe_supplier_location where id=".$gonghuoren_id);
+        }elseif($gonghuoren_type=='user'){
+            $gys_name='存货用户：'.$GLOBALS['db']->getOne("select user_name from fanwe_user where id=".$gonghuoren_id);
+        }
+        return $gys_name;
+    }
 }

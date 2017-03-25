@@ -142,8 +142,8 @@
 
 <script>
 
-    var urlRoot = "/kiz.php?ctl=inventory&act=go_down_index_ajax&type=2&id={$slid}";
-    var queryUrl = urlRoot + "query";
+    var urlRoot = ctxPath
+    var queryUrl = urlRoot + "&act=go_down_index_ajax&type=2&id={$slid}";
     var editUrl = urlRoot + "edit";
     var withDrawUrl = urlRoot + 'withdraw';
     var deleteUrl = urlRoot + "delete";
