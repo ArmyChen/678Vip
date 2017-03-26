@@ -740,19 +740,22 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
-    //接收前台文件，
+    /**
+     * 期初库存ajax
+     */
     public function basic_master_import_ajax()
     {
-        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_menu' ");print_r($table);exit;
         //接收前台文件
         $ex = $_FILES['file'];
-        $warehouseName = $_REQUEST['warehouseName'];
+        $warehouseId = $_REQUEST['warehouseId'];
+        $cangku = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."cangku where id=$warehouseId");
         //重设置文件名
         $filename = time().substr($ex['name'],stripos($ex['name'],'.'));
-        $path = APP_ROOT_PATH.'excel/tmp/'.$filename;//设置移动路径
+        $path = APP_ROOT_PATH.'public/excel/'.$filename;//设置移动路径
         move_uploaded_file($ex['tmp_name'],$path);
         //表用函数方法 返回数组
-        $list = $this->_readExcel(APP_ROOT_PATH.'app/master.xls');
+        $list = $this->_readExcel($path);
         $total = count($list);
         if($total<3){
             $return['success'] = false;
@@ -760,20 +763,26 @@ class ajaxModule extends KizBaseModule{
         }
         $insertSQL = "insert into ".DB_PREFIX."cangku_menu (slid,mid,cid,cate_id,stock,mstock,unit) values";
         for($i=2;$i<$total;$i++){
-            $dc_menu_id = $total[$i][3];//编号
-            $num = $total[$i][6];//导入库存
+            $dc_menu_id = $list[$i][3];//编号
+            $num = $list[$i][6];//导入库存
             $dc_menu = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=$dc_menu_id");
+
+            //退商品表库存
+            $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$num where id=$dc_menu_id");
+
             if($dc_menu){
                 $res = $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set mstock=mstock+$num,stock=stock+$num where id=$dc_menu_id");
-                $insertSQL .= '('.$dc_menu["supplier_id"].','.$dc_menu_id.','.$dc_menu["cate_id"].','.$num.','.$num.'),';
+                $insertSQL .= "('".$dc_menu["supplier_id"]."','".$dc_menu_id."','".$warehouseId."','".$dc_menu["cate_id"]."','".$num."','".$num."','".$dc_menu['unit']."'),";
             }
         }
         $insertSQL = rtrim($insertSQL,',');
+        $GLOBALS['db']->query("delete from ".DB_PREFIX."cangku_menu where slid=".$dc_menu['supplier_id']." and cid=$warehouseId");
         $insertres =  $GLOBALS['db']->query($insertSQL);
 
         //写记录表
-        $insertMaster = 'insert into '.DB_PREFIX.'master_import_log (supplier_id,location_id,account_id,warehouseName,createTime) values ('.$GLOBALS["account_info"]["supplier_id"].','.$GLOBALS["account_info"]["slid"].','.$GLOBALS["account_info"]["id"].','.$warehouseName.','.time().')';
+        $insertMaster = "insert into ".DB_PREFIX."master_import_log (supplier_id,location_id,account_id,warehouseName,createTime) values (".$GLOBALS['account_info']['supplier_id'].",".$GLOBALS['account_info']['slid'].",".$GLOBALS['account_info']['id'].",'".$cangku["name"]."',".time().")";
         $insertMres =  $GLOBALS['db']->query($insertMaster);
+        //echo $insertres;echo "|";echo $insertMaster;echo $insertMres; exit;
         if($insertMres && $insertres){
             $return['success'] = true;
             $return['message'] = '操作成功！';
@@ -798,4 +807,99 @@ class ajaxModule extends KizBaseModule{
         $dataArray = $Sheets->getSheet(0)->toArray();
         return $dataArray;
     }
+
+    /**
+     * 期初库存操作日志
+     */
+    public function get_master_import_log_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $where="where 1=1";
+        $where.=' and l.location_id='.$slid;
+
+        $list = $GLOBALS['db']->getAll("SELECT l.*,from_unixtime(l.createTime) as createTime,a.account_name as username  FROM " . DB_PREFIX . "master_import_log l left join ".DB_PREFIX."supplier_account a on l.account_id=a.id $where order by l.id desc limit $limit ");
+
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."master_import_log l ".$where);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 原料类别（is_effect=0）
+     */
+    public function get_dc_menu_category_ajax(){
+        /* 基本参数初始化 */
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $GLOBALS['account_info']['slid'];
+        $account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
+
+        $conditions = " where wlevel<4 and is_effect=0"; // 查询条件
+        // 只查询支持门店的
+        $conditions .= " and location_id=$slid and location_id in(" . implode(",", $account_info['location_ids']) . ") ";
+
+        $sql = " select id,name,name as typeName, is_effect,is_effect as isDisable,null as parentTypeCode,null as typeCode,null as isDisableName,null as dishTypeId,null as updateTime,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+
+        $list = array();
+
+        $wsublist = array();
+        $wmenulist = $GLOBALS['db']->getAll($sql.$conditions . " order by sort desc");
+
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $wmenu0['parentTypeName'] = "";
+                $list[] = $wmenu0;
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $wmenu1['parentTypeName'] = $wmenu0['name'];
+                    $list[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $wmenu2['parentTypeName'] = $wmenu1['name'];
+                        $list[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $wmenu3['parentTypeName'] = $wmenu2['name'];
+                            $list[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."dc_supplier_menu_cate ".$conditions);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
 }
