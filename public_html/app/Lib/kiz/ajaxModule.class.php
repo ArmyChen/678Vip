@@ -729,6 +729,12 @@ class ajaxModule extends KizBaseModule{
         $cangkuArray['contact'] = '';
         $cangkuArray['name'] = $_REQUEST['warehouseName'];
         $cangkuArray['isdisable'] = $_REQUEST['isDisable'];
+        $cangkuexsit = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."cangku  where slid=".$slid." and name='".$_REQUEST['warehouseName']."'");
+        if($cangkuexsit){
+            $return['success'] = false;
+            $return['message'] = "仓库名已存在！";
+            echo json_encode($return);exit;
+        }
         $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"INSERT");
         if($res){
             $return['success'] = true;
@@ -823,5 +829,273 @@ class ajaxModule extends KizBaseModule{
             }
         }
 
+    }
+
+    /**
+     * 期初库存ajax
+     */
+    public function basic_master_import_ajax()
+    {
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_menu' ");print_r($table);exit;
+        //接收前台文件
+        $ex = $_FILES['file'];
+        $warehouseId = $_REQUEST['warehouseId'];
+        $cangku = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."cangku where id=$warehouseId");
+        //重设置文件名
+        $filename = time().substr($ex['name'],stripos($ex['name'],'.'));
+        $path = APP_ROOT_PATH.'public/excel/'.$filename;//设置移动路径
+        move_uploaded_file($ex['tmp_name'],$path);
+        //表用函数方法 返回数组
+        $list = $this->_readExcel($path);
+        $total = count($list);
+        if($total<3){
+            $return['success'] = false;
+            $return['message'] = '数据为空，不能导入！';
+        }
+        $insertSQL = "insert into ".DB_PREFIX."cangku_menu (slid,mid,cid,cate_id,stock,mstock,unit) values";
+        for($i=2;$i<$total;$i++){
+            $dc_menu_id = $list[$i][3];//编号
+            $num = $list[$i][6];//导入库存
+            $dc_menu = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=$dc_menu_id");
+
+            //退商品表库存
+            $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$num where id=$dc_menu_id");
+
+            if($dc_menu){
+                $res = $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set mstock=mstock+$num,stock=stock+$num where id=$dc_menu_id");
+                $insertSQL .= "('".$dc_menu["supplier_id"]."','".$dc_menu_id."','".$warehouseId."','".$dc_menu["cate_id"]."','".$num."','".$num."','".$dc_menu['unit']."'),";
+            }
+        }
+        $insertSQL = rtrim($insertSQL,',');
+        $GLOBALS['db']->query("delete from ".DB_PREFIX."cangku_menu where slid=".$dc_menu['supplier_id']." and cid=$warehouseId");
+        $insertres =  $GLOBALS['db']->query($insertSQL);
+
+        //写记录表
+        $insertMaster = "insert into ".DB_PREFIX."master_import_log (supplier_id,location_id,account_id,warehouseName,createTime) values (".$GLOBALS['account_info']['supplier_id'].",".$GLOBALS['account_info']['slid'].",".$GLOBALS['account_info']['id'].",'".$cangku["name"]."',".time().")";
+        $insertMres =  $GLOBALS['db']->query($insertMaster);
+        //echo $insertres;echo "|";echo $insertMaster;echo $insertMres; exit;
+        if($insertMres && $insertres){
+            $return['success'] = true;
+            $return['message'] = '操作成功！';
+        }else{
+            $return['success'] = false;
+            $return['message'] = '操作失败！';
+        }
+        echo json_encode($return);exit;
+    }
+
+    //创建一个读取excel数据，可用于入库
+    private function _readExcel($path)
+    {
+        //引用PHPexcel 类
+        require APP_ROOT_PATH . 'app/Classes/PHPExcel.php';
+        $type = 'Excel5';//设置为Excel5代表支持2003或以下版本，Excel2007代表2007版
+        $xlsReader = PHPExcel_IOFactory::createReader($type);
+        $xlsReader->setReadDataOnly(true);
+        $xlsReader->setLoadSheetsOnly(true);
+        $Sheets = $xlsReader->load($path);
+        //开始读取上传到服务器中的Excel文件，返回一个二维数组
+        $dataArray = $Sheets->getSheet(0)->toArray();
+        return $dataArray;
+    }
+
+    /**
+     * 期初库存操作日志
+     */
+    public function get_master_import_log_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $where="where 1=1";
+        $where.=' and l.location_id='.$slid;
+
+        $list = $GLOBALS['db']->getAll("SELECT l.*,from_unixtime(l.createTime) as createTime,a.account_name as username  FROM " . DB_PREFIX . "master_import_log l left join ".DB_PREFIX."supplier_account a on l.account_id=a.id $where order by l.id desc limit $limit ");
+
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."master_import_log l ".$where);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 原料类别（is_effect=0）
+     */
+    public function get_dc_menu_category_ajax(){
+        /* 基本参数初始化 */
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $GLOBALS['account_info']['slid'];
+        $account_info['is_main']=$GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
+        $conditions = " where wlevel<4 and is_effect=0"; // 查询条件
+        // 只查询支持门店的
+        $conditions .= " and location_id=$slid and location_id in(" . implode(",", $account_info['location_ids']) . ") ";
+        if($_REQUEST['typeCodeOrName']){
+            $conditions .= " and name like '%".$_REQUEST['typeCodeOrName']."%'";
+        }
+        $sql = " select id,name,name as typeName, is_effect,is_effect as isDisable,null as parentTypeCode,null as typeCode,null as isDisableName,null as dishTypeId,null as updateTime,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+
+        $list = array();
+
+        $wsublist = array();
+        $wmenulist = $GLOBALS['db']->getAll($sql.$conditions . " order by sort desc limit $limit");
+
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $wmenu0['parentTypeName'] = "";
+                $list[] = $wmenu0;
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $wmenu1['parentTypeName'] = $wmenu0['name'];
+                    $list[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $wmenu2['parentTypeName'] = $wmenu1['name'];
+                        $list[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $wmenu3['parentTypeName'] = $wmenu2['name'];
+                            $list[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."dc_supplier_menu_cate ".$conditions);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 原料类别添加ajax
+     */
+    public function dc_menu_category_add_ajax(){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_supplier_menu_cate' ");print_r($table);exit;
+
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];;
+        $cateArray['is_effect'] = 0;//原料为0
+        $cateArray['icon_img'] = '';
+        $cateArray['iconcolor'] = '';
+        $cateArray['iconfont'] = '';
+        $cateArray['name'] = $_REQUEST['typeName'];
+        $cateArray['sort'] = $_REQUEST['sort'];
+        $cateArray['supplier_id'] = $supplier_id;
+        $cateArray['location_id'] = $slid;
+        $cateArray['wcategory'] = $_REQUEST['parentId'];//父分类
+
+        if($_REQUEST['wcategory']){
+            $parentCategory = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."dc_supplier_menu_cate  id=".$_REQUEST['parentId']);
+            if(!$parentCategory){
+                $return['success'] = false;
+                $return['message'] = "父分类不存在！";
+                echo json_encode($return);exit;
+            }
+            $cateArray['wlevel'] = $parentCategory['wlevel']+1;
+        }else{
+            $cateArray['wlevel'] = 0;
+        }
+
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $cateArray ,"INSERT");
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 原料设置ajax
+     */
+    public function yuanliao_set_ajax(){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_menu' ");print_r($table);exit;
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $skuPrice = json_decode($_REQUEST['skuPrice']);
+        $skuUnit = json_decode($_REQUEST['skuUnit']);
+        $unit = "";
+        $funit = "";
+        $times = 0;
+        if(count($skuUnit)>1){
+            foreach($skuUnit as $k=>$v){
+                if($v->unitSmall==1){
+                    $unit = $v->unitName;
+                }else{
+                    $funit = $v->unitName;
+                    $times = $v->skuConvert;
+                }
+            }
+        }else{
+            $unit = $skuUnit[0]->unitName;
+        }
+
+        //$standard = $_REQUEST['standard'];//规格
+        $skuList = json_decode($_REQUEST['skuList']);
+
+        $dc_menu_data=array(
+            "location_id"=>$slid,
+            "supplier_id"=>$supplier_id,
+            "barcode"=>$skuList->barCode,
+            "name"=>$skuList->skuName,
+            "cate_id"=>$skuList->skuTypeId,
+            "unit"=>$unit,
+            "funit"=>$funit,
+            "times"=>$times,
+            "type"=>'',
+            "buyPrice"=>$skuPrice->purchasePrice,
+            "price"=>$skuPrice->price,
+            "customerPrice"=>$skuPrice->costPrice,
+            "sellPrice2"=>$skuPrice->balancePrice
+        );
+        if($skuList->skuCode){
+            $dc_menu_data['id'] = $skuList->skuCode;
+        }
+
+        $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
+        $mid = $GLOBALS['db']->insert_id();
+        if($mid){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
     }
 }
