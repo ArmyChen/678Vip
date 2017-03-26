@@ -969,37 +969,37 @@ class ajaxModule extends KizBaseModule{
         $times = 0;
         if(count($skuUnit)>1){
             foreach($skuUnit as $k=>$v){
-                if($v['unitSmall']==1){
-                    $unit = $v['unitName'];
+                if($v->unitSmall==1){
+                    $unit = $v->unitName;
                 }else{
-                    $funit = $v['unitName'];
-                    $times = $v['skuConvert'];
+                    $funit = $v->unitName;
+                    $times = $v->skuConvert;
                 }
             }
         }else{
-            $unit = $skuUnit[0]['unitName'];
+            $unit = $skuUnit[0]->unitName;
         }
 
         //$standard = $_REQUEST['standard'];//规格
-        $skuList = $_REQUEST['skuList'];
+        $skuList = json_decode($_REQUEST['skuList']);
 
         $dc_menu_data=array(
             "location_id"=>$slid,
             "supplier_id"=>$supplier_id,
-            "barcode"=>$skuList['barCode'],
-            "name"=>$skuList['skuName'],
-            "cate_id"=>$skuList['skuTypeId'],
+            "barcode"=>$skuList->barCode,
+            "name"=>$skuList->skuName,
+            "cate_id"=>$skuList->skuTypeId,
             "unit"=>$unit,
             "funit"=>$funit,
             "times"=>$times,
             "type"=>'',
-            "buyPrice"=>$skuPrice['purchasePrice'],
-            "price"=>$skuPrice['price'],
-            "customerPrice"=>$skuPrice['costPrice'],
-            "sellPrice2"=>$skuPrice['balancePrice']
+            "buyPrice"=>$skuPrice->purchasePrice,
+            "price"=>$skuPrice->price,
+            "customerPrice"=>$skuPrice->costPrice,
+            "sellPrice2"=>$skuPrice->balancePrice
         );
-        if($_REQUEST['skuCode']){
-            $dc_menu_data['id'] = $_REQUEST['skuCode'];
+        if($skuList->skuCode){
+            $dc_menu_data['id'] = $skuList->skuCode;
         }
 
         $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
