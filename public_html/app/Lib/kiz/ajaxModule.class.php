@@ -729,6 +729,12 @@ class ajaxModule extends KizBaseModule{
         $cangkuArray['contact'] = '';
         $cangkuArray['name'] = $_REQUEST['warehouseName'];
         $cangkuArray['isdisable'] = $_REQUEST['isDisable'];
+        $cangkuexsit = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."cangku  where slid=".$slid." and name='".$_REQUEST['warehouseName']."'");
+        if($cangkuexsit){
+            $return['success'] = false;
+            $return['message'] = "仓库名已存在！";
+            echo json_encode($return);exit;
+        }
         $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"INSERT");
         if($res){
             $return['success'] = true;
@@ -902,4 +908,45 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    /**
+     * 原料类别添加ajax
+     */
+    public function dc_menu_category_add_ajax(){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_supplier_menu_cate' ");print_r($table);exit;
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];;
+        $cateArray['is_effect'] = 0;//原料为0
+        $cateArray['icon_img'] = '';
+        $cateArray['iconcolor'] = '';
+        $cateArray['iconfont'] = '';
+        $cateArray['name'] = $_REQUEST['typeName'];
+        $cateArray['sort'] = $_REQUEST['sort'];
+        $cateArray['supplier_id'] = $supplier_id;
+        $cateArray['location_id'] = $slid;
+        $cateArray['wcategory'] = $_REQUEST['parentId'];//父分类
+
+        if($_REQUEST['wcategory']){
+            $parentCategory = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."dc_supplier_menu_cate  id=".$_REQUEST['parentId']);
+            if(!$parentCategory){
+                $return['success'] = false;
+                $return['message'] = "父分类不存在！";
+                echo json_encode($return);exit;
+            }
+            $cateArray['wlevel'] = $parentCategory['wlevel']+1;
+        }else{
+            $cateArray['wlevel'] = 0;
+        }
+
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $cateArray ,"INSERT");
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 }
