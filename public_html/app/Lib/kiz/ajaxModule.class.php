@@ -859,17 +859,18 @@ class ajaxModule extends KizBaseModule{
             $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
             $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
         }
-
         $conditions = " where wlevel<4 and is_effect=0"; // 查询条件
         // 只查询支持门店的
         $conditions .= " and location_id=$slid and location_id in(" . implode(",", $account_info['location_ids']) . ") ";
-
+        if($_REQUEST['typeCodeOrName']){
+            $conditions .= " and name like '%".$_REQUEST['typeCodeOrName']."%'";
+        }
         $sql = " select id,name,name as typeName, is_effect,is_effect as isDisable,null as parentTypeCode,null as typeCode,null as isDisableName,null as dishTypeId,null as updateTime,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
 
         $list = array();
 
         $wsublist = array();
-        $wmenulist = $GLOBALS['db']->getAll($sql.$conditions . " order by sort desc");
+        $wmenulist = $GLOBALS['db']->getAll($sql.$conditions . " order by sort desc limit $limit");
 
         foreach($wmenulist as $wmenu)
         {
@@ -913,6 +914,7 @@ class ajaxModule extends KizBaseModule{
      */
     public function dc_menu_category_add_ajax(){
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_supplier_menu_cate' ");print_r($table);exit;
+
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
@@ -948,5 +950,54 @@ class ajaxModule extends KizBaseModule{
             $return['message'] = "操作失败";
         }
         echo json_encode($return);exit;
+    }
+
+    /**
+     * 原料设置ajax
+     */
+    public function yuanliao_set_ajax(){
+        /*
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+
+        $goodsname = $_REQUEST['goodsname'];
+        $dc_menu_data=array(
+            "location_id"=>$slid,
+            "supplier_id"=>$supplier_id,
+            "barcode"=>$v['barcode'],
+            "name"=>$goodsname,
+            "cate_id"=>$v['skuTypeId'],
+            "price"=>floatval($v['price']),
+            "unit"=>$v['unit'],
+            "funit"=>$v['funit'],
+            "times"=>$v['times'],
+            "type"=>$v['type']
+        );
+
+        $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
+        $mid = $GLOBALS['db']->insert_id();
+
+        //添加
+        $cangku_menu=array(
+            "slid"=>$slid,
+            "mid"=>$mid,
+            "cid"=>$cid,
+            "cate_id"=>$v['skuTypeId'],
+            "mbarcode"=>$v['skuCode'],
+            "mname"=>$v['skuName'],
+            "mstock"=>0,
+            "stock"=>0,
+            "minStock"=>10,
+            "maxStock"=>10000,
+            "unit"=>$v['uom'],
+            "funit"=>$v['funit'],
+            "times"=>$v['times'],
+            "type"=>$v['type'],
+            "ctime"=>to_date(NOW_TIME)
+        );
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $cangku_menu ,"INSERT");
+        */
     }
 }
