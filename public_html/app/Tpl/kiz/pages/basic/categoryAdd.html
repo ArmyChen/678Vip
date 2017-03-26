@@ -19,35 +19,14 @@
 
 <div class="center-block panel-group" id="accordion">
     <div class="panel" style="padding:0; margin-top: 10px;">
-        <form method="post" action="/scm_kry/scm/skutype/save" id="baseInfoForm" autocomplete="off">
+        <form method="post" action="/kiz.php?ctl=basic&act=dc_menu_category_add_ajax" id="baseInfoForm" autocomplete="off">
             <!-- hidden start -->
             <input type="hidden" id="id" name="id" value="">
             <input type="hidden" id="version" name="version" value="">
             <!-- hidden end -->
             <div class="panel-body">
                 <div style="margin:0 auto; width: 500px">
-                    <!--<div>-->
-                        <!--<dl class="panel-item">-->
-                            <!--<dt><label for="typeCode">类别编码<strong class="red vam"> &ensp;</strong></label></dt>-->
-                            <!--<dd class="positionRelative">-->
-                                <!--<div class="search-box pull-left w260">-->
-                                    <!--<input type="text" class="form-control" id="typeCode"-->
-                                           <!--name="typeCode" value=""-->
-                                           <!--placeholder="若不填写，则系统自动生成" data-format="code" select='auto' maxlength="14"-->
-                                    <!--/>-->
 
-                                    <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
-
-                                    <!--<div class="wrong"></div>-->
-                                <!--</div>-->
-
-                                <!--<div class="pull-left code-question">-->
-                                    <!--<span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>LST/MST+流水号</span>"></span>-->
-                                <!--</div>-->
-
-                            <!--</dd>-->
-                        <!--</dl>-->
-                    <!--</div>-->
 
                     <div>
                         <dl class="panel-item">
@@ -65,40 +44,7 @@
                         </dl>
                     </div>
 
-                    <!--<div>-->
-                        <!--<dl class="panel-item">-->
-                            <!--<dt><label for="aliasName"></label></dt>-->
-                            <!--<dd class="positionRelative">-->
-                                <!--<div class="pull-left w260 search-box">-->
-                                    <!--<input type="text" class="form-control" id="aliasName"-->
-                                           <!--name="aliasName" value=""-->
-                                           <!--data-format="name" select='auto'-->
-                                           <!--placeholder="第二语言" maxlength="50"/>-->
-                                    <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
-                                <!--</div>-->
-                                <!--<div class="wrong"></div>-->
-                            <!--</dd>-->
-                        <!--</dl>-->
-                    <!--</div>-->
 
-                    <!--<div>-->
-                        <!--<dl class="panel-item">-->
-                            <!--<dt><label for="type">类别类型<strong class="red vam"> *</strong></label></dt>-->
-                            <!--<dd class="positionRelative">-->
-                                <!--<div class="pull-left w260" id="type">-->
-
-
-                                    <!--<label class="mr10 radio radio-check" for="type-1"><span></span>-->
-                                        <!--<input type="radio" name="type" value="0" id="type-1" checked>上级分类</label>-->
-                                    <!--<label class="radio" for="type-2"><span></span>-->
-                                        <!--<input type="radio" name="type" value="1" id="type-2">分类</label>-->
-
-
-
-                                <!--</div>-->
-                            <!--</dd>-->
-                        <!--</dl>-->
-                    <!--</div>-->
 
                     <div>
                         <dl class="panel-item">
@@ -106,9 +52,13 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w260">
                                     <select id="parentId" name="parentId" class="required">
-                                        <option value="">请选择所属分类</option>
+                                        <option value="0">请选择所属分类</option>
+                                        {foreach from=$listsort item=item}
 
-                                        <option value="206649" >火锅</option>
+                                        <option value="{$item.id}" >{$item.title_show}</option>
+
+                                        {/foreach}
+                                        <
 
                                     </select>
                                 </div>
@@ -117,17 +67,17 @@
                         </dl>
                     </div>
 
-                    <div>
-                        <dl class="panel-item">
-                            <dt><label for="comment">备注<strong class="white vam"> *</strong></label></dt>
-                            <dd class="positionRelative">
-                                <div class="pull-left w260">
-                                    <textarea id="comment" name="comment" class="w260" style="height: 65px;" placeholder="备注（非必填）"
-                                              data-character="true" maxlength="50"></textarea>
-                                </div>
-                            </dd>
-                        </dl>
-                    </div>
+                    <!--<div>-->
+                        <!--<dl class="panel-item">-->
+                            <!--<dt><label for="comment">备注<strong class="white vam"> *</strong></label></dt>-->
+                            <!--<dd class="positionRelative">-->
+                                <!--<div class="pull-left w260">-->
+                                    <!--<textarea id="comment" name="comment" class="w260" style="height: 65px;" placeholder="备注（非必填）"-->
+                                              <!--data-character="true" maxlength="50"></textarea>-->
+                                <!--</div>-->
+                            <!--</dd>-->
+                        <!--</dl>-->
+                    <!--</div>-->
                 </div>
             </div>
         </form>
@@ -139,8 +89,8 @@
 <script>
     $(function() {
         var opts = {
-            urlRoot : "/scm_kry/scm/skutype",
-            commandType : 0
+            urlRoot : ctxPath,
+            commandType : 1
         };
 
         skuType._init(opts);

@@ -7,17 +7,18 @@ var skuType = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '/scm/skutype',
+        urlRoot : ctxPath,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query',
+        queryUrl : '&act=get_dc_menu_category_ajax',
         editUrl : '/edit',
         viewUrl : '/view',
         lockUrl : '/lock',
-        saveUrl : '/save',
+        saveUrl : '&act=dc_menu_category_add_ajax',
         deleteUrl:'/delete',
         unlockUrl : '/unlock',
+        indexUrl : "&act=basic_category_index",
         sortName : 'parentSkuTypeCode',
         pager : '#gridPager',
         formId : 'baseInfoForm',
@@ -39,15 +40,15 @@ var skuType = {
 
             case 1 ://新增
                 _this.initSaveBtn();
-                _this.changeType(true);
-                _this.checkCodeAndName();
+                // _this.changeType(true);
+                // _this.checkCodeAndName();
                 $('#typeName').focus();
                 break;
 
             case 2 ://编辑
                 _this.initSaveBtn();
                 _this.changeType(false);
-                _this.checkCodeAndName();
+                // _this.checkCodeAndName();
                 break;
 
             default ://查看
@@ -157,11 +158,19 @@ var skuType = {
             colNames: ['id', '上级分类编码', '上级分类名称', '分类编码', '分类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
-                {name: 'parentTypeCode', index: 'parentTypeCode', align: "left", width: 120,hidden:true},
-                {name: 'parentTypeName', index: 'parentTypeName', align: "left", width: 170},
-                {name: 'typeCode', index: 'typeCode', align: "left", width: 120,hidden:true},
-                {name: 'typeName', index: 'typeName', align: "left", width: 170},
-                {name: 'updateTime', index: 'updateTime', align: "center", width: 160},
+                {name: 'parentTypeCode', index: 'parentTypeCode', align: "center", width: 120,hidden:true},
+                {name: 'parentTypeName', index: 'parentTypeName', align: "center", width: 170,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "") {
+                            return "<span style='color:red'>顶级分类</span>";
+                        } else {
+                            return cellvalue;
+                        }
+                    }
+                },
+                {name: 'typeCode', index: 'typeCode', align: "center", width: 120,hidden:true},
+                {name: 'typeName', index: 'typeName', align: "center", width: 170},
+                {name: 'updateTime', index: 'updateTime', align: "center", width: 160,hidden:true},
                 {
                     name: 'isDisableName',
                     index: 'isDisable',
@@ -169,9 +178,9 @@ var skuType = {
                     width: 60,
                     formatter: function (cellvalue, options, rowObject) {
                         if (rowObject.isDisable == 1) {
-                            return "<span style='color:red'>" + cellvalue + "</span>";
+                            return "<span style='color:red'>商品启用</span>";
                         } else {
-                            return cellvalue;
+                            return "<span style='color:black'>仓库启用</span>";
                         }
                     }
                 },
@@ -213,7 +222,7 @@ var skuType = {
     initSaveBtn : function() {
         var _this = this;
 
-        $("#btnSave,#btnSave-bak").click(function() {
+        $("#btnSave").click(function() {
         	var isBtnBak = $(this).attr("id")=="btnSave-bak";
         	
             //执行表单检查
@@ -230,55 +239,35 @@ var skuType = {
                 return false;
             }
 
-            var type = {};
-            type.id = $("#id").val();
-            type.typeCode = $("#typeCode").val();
-            type.typeName = $("#typeName").val();
-            type.aliasName = $("#aliasName").val();
-            if (_this.opts.type == 1) {
-                type.parentId = $("#parentId").val();
-            }
-            type.comment = $("#comment").val();
-            type.version = $("#version").val();
+            // var type = {};
+            // type.id = $("#id").val();
+            // type.typeCode = $("#typeCode").val();
+            // type.typeName = $("#typeName").val();
+            // type.aliasName = $("#aliasName").val();
+            // // if (_this.opts.type == 1) {
+            // //     type.parentId = $("#parentId").val();
+            // // }
+            // type.parentId = $("#parentId").val();
+            // type.comment = $("#comment").val();
+            // type.version = $("#version").val();
+
+            var type = serializeFormById("baseInfoForm");
 
             bkeruyun.showLoading();
             $.ajax({
-                url: _this.opts.urlRoot + _this.opts.saveUrl + "?r=" + new Date().getTime(),
-                type: "post",
+                url: _this.opts.urlRoot + _this.opts.saveUrl + "&"+type+ "&r=" + new Date().getTime(),
+                type: "get",
                 async: false,
-                data: JSON.stringify(type),
+                data: {},
                 dataType: "json",
                 contentType: "application/json",
                 success: function (result) {
                 	bkeruyun.hideLoading();
-                    if (result.success) {
-                    	var showMsg = $("#typeCode").val().length==0;
-                        if(isBtnBak){
-                        	if(showMsg){
-                        		$.layerMsg("操作成功，"+result.data.typeName+"编码是：<span style='color:red;'>"+result.data.typeCode+"</span>", result.success,{shade: 0.3});
-                        	}else{
-                        		$.layerMsg("操作成功！", result.success,{shade: 0.3});
-                        	}
-                        	skuType.doResetType();
-                        	return false;
-                        }else{
-                        	skuType.changeType(false);
-                        	$("#id").val(result.data.id);
-                        	if(showMsg){
-	                        	$.layerMsg("操作成功，"+result.data.typeName+"编码是：<span style='color:red;'>"+result.data.typeCode+"</span>", true,{
-	                        		end:function(){
-	                        			window.location.href = _this.opts.urlRoot + "/index";
-	                        			},shade: 0.3});
-                        	}else{
-                        		$.layerMsg("操作成功！", true,{
-	                        		end:function(){
-	                        			window.location.href = _this.opts.urlRoot + "/index";
-	                        			},shade: 0.3});
-                        	}
-                        }
-                        return false;
-                    }
-                    $.layerMsg(result.message, result.success);
+                    $.layerMsg("操作成功！", true,{
+                        end:function(){
+                            window.location.href = basicPath + _this.opts.indexUrl;
+                        },shade: 0.3});
+                    // $.layerMsg(result.message, result.success);
                 },
                 error: function () {
                     bkeruyun.hideLoading();

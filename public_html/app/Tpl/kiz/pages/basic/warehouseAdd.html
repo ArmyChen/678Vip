@@ -1,5 +1,70 @@
 
 {include file="inc/header.html"}
+
+<style type="text/css">
+    .crm_price {
+        line-height: 34px;
+        padding-top: 15px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .crm_price input {
+        height: 33px;
+        text-align: center;
+        font-size: 14px;
+        width: 250px;
+    }
+
+    /* th span{color:#f87a7a;} */
+    li div {
+        float: left;
+        margin-left: 12%;
+    }
+
+    .base_info input {
+        width: 300px;
+        height: 34px;
+    }
+
+    .base_info th {
+        padding-left: 50px;
+        padding-top: 13px;
+    }
+
+    .base_info td {
+        padding-top: 13px;
+    }
+
+    .remark {
+        font-size: 12px;
+        color: rgb(140, 139, 139);
+        white-space: nowrap;
+        max-width: 340px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .unit {
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+    }
+
+    .fl {
+        float: left;
+        margin-right: 5px;
+    }
+
+    .error {
+        color: #f87a7a;
+        font-size: 14px;
+    }
+</style>
+
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/chosen.css?v=20170315_135229">
 
 <!-- 标题 -->
@@ -49,10 +114,10 @@
                                       data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span>
                             </div>
                         </td>
-                        <th>商品分类<strong class="red vam"> *</strong></th>
+                        <th>商品中类<strong class="red vam"> *</strong></th>
                         <td id="skuType">
                             <select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;"
-                                    class="chosen-select select-style" tabindex="5">
+                                    class="chosen-select select-style" tabindex="2">
                                 <option value=""></option>
 
                                 <optgroup label="火锅">
@@ -95,28 +160,28 @@
                         </td>
                     </tr>
                     <!-- 出成率 -->
-                    <tr style="margin-top: 13px;" id="showRate">
-                        <th style="padding-left: 56px;">出成率<strong class="red vam"> *</strong></th>
-                        <td>
-                            <div class="input-group pull-left" style="width: 299px;">
-                                <input type="text" data-format="float" data-limit="{5,3}" data-range="{0,10000}"
-                                       class="form-control required" name="yieldRate" id="yieldRate" maxlength="14"
-                                       value="100" placeholder="请输入出成率">
-                                <span class="input-group-addon">%</span>
-                            </div>
-                            <div class="pull-left code-question">
-                                <span class="iconfont question" data-content="原物料/外购商品经过初加工后，净料重量和毛料重量的百分比。"></span>
-                            </div>
-                        </td>
-                        <th></th>
-                        <td>
+                    <!--<tr style="margin-top: 13px;" id="showRate">-->
+                        <!--<th style="padding-left: 56px;">出成率<strong class="red vam"> *</strong></th>-->
+                        <!--<td>-->
+                            <!--<div class="input-group pull-left" style="width: 299px;">-->
+                                <!--<input type="text" data-format="float" data-limit="{5,3}" data-range="{0,10000}"-->
+                                       <!--class="form-control required" name="yieldRate" id="yieldRate" maxlength="14"-->
+                                       <!--value="100" placeholder="请输入出成率">-->
+                                <!--<span class="input-group-addon">%</span>-->
+                            <!--</div>-->
+                            <!--<div class="pull-left code-question">-->
+                                <!--<span class="iconfont question" data-content="原物料/外购商品经过初加工后，净料重量和毛料重量的百分比。"></span>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<th></th>-->
+                        <!--<td>-->
 
-                        </td>
-                        <th></th>
-                        <td>
+                        <!--</td>-->
+                        <!--<th></th>-->
+                        <!--<td>-->
 
-                        </td>
-                    </tr>
+                        <!--</td>-->
+                    <!--</tr>-->
                     <tr>
                         <th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>
                         <td colspan="3" id="goods_standard">
@@ -182,15 +247,15 @@
                     <th style="text-align: center;" width="10"></th>
                     <th style="text-align: center;" width="15%">换算率</th>
                     <th style="text-align: center;" width="50"></th>
-                    <th style="text-align: center;" width="10%">
+                    <th style="text-align: center;display: none" width="10%">
                         最小单位<strong class="red vam"> *</strong>
                         <span class="iconfont question color-g" data-content="用于配方设置"></span>
                     </th>
-                    <th style="text-align: center;" width="10%">
+                    <th style="text-align: center;display: none" width="10%">
                         标准单位<strong class="red vam"> *</strong>
                         <span class="iconfont question color-g" data-content="商品的标准单位，除采购、配方单据外商品使用的单位"></span>
                     </th>
-                    <th style="text-align: center;" width="10%">
+                    <th style="text-align: center;display: none" width="10%">
                         采购单位<strong class="red vam"> *</strong>
                         <span class="iconfont question color-g" data-content="商品的采购单位，用于采购单据"></span>
                     </th>
@@ -219,18 +284,18 @@
                     <td>
                         <span name="unit" class="unit"></span>
                     </td>
-                    <td>
+                    <td style="display: none">
                         <!-- 如果有设置最小单位，则添加gerv属性 -->
                         <label class="checkbox crm_unitSmall" style="cursor: pointer;">
                             <span></span>
                         </label>
                     </td>
-                    <td>
+                    <td style="display: none">
                         <label class="checkbox crm_unitStander" style="cursor: pointer;">
                             <span></span>
                         </label>
                     </td>
-                    <td>
+                    <td style="display: none">
                         <label class="checkbox crm_unitPurchase" style="cursor: pointer;">
                             <span></span>
                         </label>
@@ -405,7 +470,7 @@
                         var obj = $("#crm_unit_seed").clone(true).show();
                         obj.find(".crm_num").html(parseInt(num.length));
                         obj.find(".unit_list").html(Base.initSelect());//增加时载入新的互斥列表
-                        if (num.length == 5) {
+                        if (num.length == 2) {
                             obj.find(".icon-plus").hide();
                             obj.find(".close-1").attr('style', 'display: none;margin-left: 68px;margin-top: 3px;');
                         }
@@ -695,7 +760,7 @@
                 skuList.skuTypeId = $("#skuTypeId").val();
 
             if (skuList.skuTypeId <= 0) {
-                $.layerMsg("请选择商品分类！", false);
+                $.layerMsg("请选择商品中类！", false);
                 return false;
             }
 
@@ -882,7 +947,7 @@
                         var oldId = $("#skuTypeId").val(),
                             oldText = $("#skuTypeId").parent().find("span").html();
 
-                        var newSelect = '<select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;" class="chosen-select select-style" tabindex="5">';
+                        var newSelect = '<select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;" class="chosen-select select-style" tabindex="2">';
                         newSelect += '<option value="' + oldId + '">' + oldText + '</option>';
 
                         for (var i = 0; i < res.length; i++) {

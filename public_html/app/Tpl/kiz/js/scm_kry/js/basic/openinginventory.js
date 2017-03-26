@@ -3,12 +3,12 @@
 var openinginventory = {
 
     opts: {
-        urlRoot: '',
+        urlRoot: ctxPath,
         commandType: '0',
         formId: '#openingInventoryForm',
         listGridId: '#grid',
         fileId: 'file',
-        queryUrl: '/query',
+        queryUrl: '&act=get_master_import_log_ajax',
         uploadFileUrl: '&act=basic_master_import_ajax',
         downloadFileUrl: '/app/master.xls',
         warehouseId: '#warehouseId'
@@ -82,15 +82,11 @@ var openinginventory = {
     }
 }
 
-
-
-
 /**
  * 文件上传
  * @returns {boolean}
  */
 uploadFiles = function(){
-
     var warehouseId = $(openinginventory.opts.warehouseId).val();
     if(!warehouseId){
         $.layerMsg('请选择仓库！', false);
@@ -117,7 +113,7 @@ uploadFiles = function(){
     bkeruyun.showLoading();
 
     $.ajaxFileUpload({
-        url: ctxPath + openinginventory.opts.uploadFileUrl,
+        url:  ctxPath + openinginventory.opts.uploadFileUrl,
         secureuri: false,
         fileElementId: openinginventory.opts.fileId,//file标签的id
         type: 'post',
