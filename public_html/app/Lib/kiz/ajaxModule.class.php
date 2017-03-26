@@ -1096,6 +1096,12 @@ class ajaxModule extends KizBaseModule{
         );
         if($skuList->skuCode){
             $dc_menu_data['id'] = $skuList->skuCode;
+            $dc_exsit = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where  id=".$skuList->skuCode);
+            if($dc_exsit){
+                $return['success'] = false;
+                $return['message'] = "编号重复，不能添加";
+                echo json_encode($return);exit;
+            }
         }
 
         $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
