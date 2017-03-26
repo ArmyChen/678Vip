@@ -41,6 +41,17 @@ class ajaxModule extends KizBaseModule{
             "3"=>"临时供应商",
             "4"=>"领料出库"
         );
+
+        $kcnx=array(
+            "0"=>"暂无",
+            "1"=>"现制商品",
+            "2"=>"预制商品",
+            "3"=>"外购商品",
+            "4"=>"原物料",
+            "6"=>"半成品",
+
+        );
+        $this->kcnx=$kcnx;
     }
 
     /**
@@ -814,7 +825,7 @@ class ajaxModule extends KizBaseModule{
     }
 
     function get_dc_supplier_menu($id = 30){
-        $check=$GLOBALS['db']->getOne("select * from fanwe_dc_supplier_menu_cate where id = ".$id);
+        $check=$GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id = ".$id);
         if($check){
             return $check['name'];
         }else{
