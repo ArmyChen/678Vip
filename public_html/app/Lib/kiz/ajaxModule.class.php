@@ -956,48 +956,61 @@ class ajaxModule extends KizBaseModule{
      * 原料设置ajax
      */
     public function yuanliao_set_ajax(){
-        /*
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_menu' ");print_r($table);exit;
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
 
-        $goodsname = $_REQUEST['goodsname'];
+        $skuPrice = json_decode($_REQUEST['skuPrice']);
+        $skuUnit = json_decode($_REQUEST['skuUnit']);
+        $unit = "";
+        $funit = "";
+        $times = 0;
+        if(count($skuUnit)>1){
+            foreach($skuUnit as $k=>$v){
+                if($v['unitSmall']==1){
+                    $unit = $v['unitName'];
+                }else{
+                    $funit = $v['unitName'];
+                    $times = $v['skuConvert'];
+                }
+            }
+        }else{
+            $unit = $skuUnit[0]['unitName'];
+        }
+
+        //$standard = $_REQUEST['standard'];//规格
+        $skuList = $_REQUEST['skuList'];
+
         $dc_menu_data=array(
             "location_id"=>$slid,
             "supplier_id"=>$supplier_id,
-            "barcode"=>$v['barcode'],
-            "name"=>$goodsname,
-            "cate_id"=>$v['skuTypeId'],
-            "price"=>floatval($v['price']),
-            "unit"=>$v['unit'],
-            "funit"=>$v['funit'],
-            "times"=>$v['times'],
-            "type"=>$v['type']
+            "barcode"=>$skuList['barCode'],
+            "name"=>$skuList['skuName'],
+            "cate_id"=>$skuList['skuTypeId'],
+            "unit"=>$unit,
+            "funit"=>$funit,
+            "times"=>$times,
+            "type"=>'',
+            "buyPrice"=>$skuPrice['purchasePrice'],
+            "price"=>$skuPrice['price'],
+            "customerPrice"=>$skuPrice['costPrice'],
+            "sellPrice2"=>$skuPrice['balancePrice']
         );
+        if($_REQUEST['skuCode']){
+            $dc_menu_data['id'] = $_REQUEST['skuCode'];
+        }
 
         $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
         $mid = $GLOBALS['db']->insert_id();
-
-        //添加
-        $cangku_menu=array(
-            "slid"=>$slid,
-            "mid"=>$mid,
-            "cid"=>$cid,
-            "cate_id"=>$v['skuTypeId'],
-            "mbarcode"=>$v['skuCode'],
-            "mname"=>$v['skuName'],
-            "mstock"=>0,
-            "stock"=>0,
-            "minStock"=>10,
-            "maxStock"=>10000,
-            "unit"=>$v['uom'],
-            "funit"=>$v['funit'],
-            "times"=>$v['times'],
-            "type"=>$v['type'],
-            "ctime"=>to_date(NOW_TIME)
-        );
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $cangku_menu ,"INSERT");
-        */
+        if($mid){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
     }
 }
