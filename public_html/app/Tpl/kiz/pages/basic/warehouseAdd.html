@@ -182,50 +182,50 @@
 
                         <!--</td>-->
                     <!--</tr>-->
-                    <tr>
-                        <th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>
-                        <td colspan="3" id="goods_standard">
-                            <div id="gdd_standard" style="padding-top: 10px; display: none;" class="gd_standard">
-                                <input type="text" value="0" style="width:250px;" disabled="disabled">
-                                <div class="select-group" style="width:250px;">
-                                    <div class="select-control">
-                                        <em class="gg_cache"></em>
-                                    </div>
-                                    <ul class="gg_list" style="display: none;"></ul>
-                                </div>
-                                <span class="icon-plus gd_add">添加</span>
-                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
-                            </div>
+                    <!--<tr>-->
+                        <!--<th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>-->
+                        <!--<td colspan="3" id="goods_standard">-->
+                            <!--<div id="gdd_standard" style="padding-top: 10px; display: none;" class="gd_standard">-->
+                                <!--<input type="text" value="0" style="width:250px;" disabled="disabled">-->
+                                <!--<div class="select-group" style="width:250px;">-->
+                                    <!--<div class="select-control">-->
+                                        <!--<em class="gg_cache"></em>-->
+                                    <!--</div>-->
+                                    <!--<ul class="gg_list" style="display: none;"></ul>-->
+                                <!--</div>-->
+                                <!--<span class="icon-plus gd_add">添加</span>-->
+                                <!--<a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>-->
+                            <!--</div>-->
 
-                            <div style="padding-top: 10px;" class="gd_standard">
-                                <input type="text" data-id="19548" value="默认" style="width:250px;"
-                                       disabled="disabled">
-                                <div class="select-group" style="width:250px;">
-                                    <div class="select-control">
-                                        <em class="gg_cache"></em>
-                                    </div>
-                                    <ul class="gg_list" style="display: none;">
+                            <!--<div style="padding-top: 10px;" class="gd_standard">-->
+                                <!--<input type="text" data-id="19548" value="默认" style="width:250px;"-->
+                                       <!--disabled="disabled">-->
+                                <!--<div class="select-group" style="width:250px;">-->
+                                    <!--<div class="select-control">-->
+                                        <!--<em class="gg_cache"></em>-->
+                                    <!--</div>-->
+                                    <!--<ul class="gg_list" style="display: none;">-->
 
-                                        <li onclick="clickStopPropagation(event)">
-                                            <div class="select-search-box" style="float: none;margin-left: 0;">
-                                                <input class="select-filter-ipt" onkeyup="filterSelect(this)"
-                                                       onclick="clickStopPropagation(event)" style="width: 100%;"
-                                                       class="form-control" type="text" autocomplete="off">
-                                                <span class="glyphicon glyphicon-search search-icon"></span>
-                                            </div>
-                                        </li>
+                                        <!--<li onclick="clickStopPropagation(event)">-->
+                                            <!--<div class="select-search-box" style="float: none;margin-left: 0;">-->
+                                                <!--<input class="select-filter-ipt" onkeyup="filterSelect(this)"-->
+                                                       <!--onclick="clickStopPropagation(event)" style="width: 100%;"-->
+                                                       <!--class="form-control" type="text" autocomplete="off">-->
+                                                <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
+                                            <!--</div>-->
+                                        <!--</li>-->
 
-                                        <li data-id="143976">大杯</li>
+                                        <!--<li data-id="143976">大杯</li>-->
 
-                                        <li data-id="143977">中杯</li>
+                                        <!--<li data-id="143977">中杯</li>-->
 
-                                    </ul>
-                                </div>
-                                <span class="icon-plus gd_add">添加</span>
-                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
-                            </div>
-                        </td>
-                    </tr>
+                                    <!--</ul>-->
+                                <!--</div>-->
+                                <!--<span class="icon-plus gd_add">添加</span>-->
+                                <!--<a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                    <!--</tr>-->
                     </tbody>
                 </table>
             </div>
@@ -357,8 +357,7 @@
                 <div class="crm_price">
                     <div style="float: left;margin-left: 56px;min-width: 660px;">
                         <div class="fl">
-                            成本价<strong class="white vam" id="costPrice_name"> *</strong>
-                            <span class="iconfont question color-g" data-content="用于自产、报废单据"></span>
+                            会员价<strong class="white vam" id="costPrice_name"> *</strong>
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
@@ -372,8 +371,7 @@
                     </div>
                     <div>
                         <div class="fl">
-                            结算价<strong class="red vam"> *</strong>
-                            <span class="iconfont question color-g" data-content="用于配送、调拨、退回单据"></span>
+                            批发价<strong class="red vam"> *</strong>
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
@@ -828,7 +826,7 @@
 
             bkeruyun.showLoading();
             $.ajax({
-                url: "/scm_kry/sku/add/sku",
+                url: ctxPath + "&act=yuanliao_set_ajax",
                 type: "post",
                 async: true,
                 data: {
@@ -838,36 +836,12 @@
                     skuList: JSON.stringify(skuList)
                 },
                 success: function (data) {
-                    if (data.status == 200) {
-                        var oldName = $("#skuName").val(), standStr = "", allStand = $("#goods_standard").find(".gg_cache");
-                        for (var i = 0; i < allStand.length; i++) {
-                            var each = $(allStand[i]).html();
-                            if (each != "") standStr += each + ",";
-                        }
-                        if (standStr != "") oldName += "(" + standStr.substring(0, standStr.length - 1) + ")";
-                        var showMsg = $("#skuCode").val().length == 0;
-                        if (isCopy) {
-                            if (showMsg) {
-                                $.layerMsg("操作成功，" + oldName + "编码是：<span style='color:red;'>" + data.code + "</span>", true, {shade: 0.3});
-                            } else {
-                                $.layerMsg("操作成功！", true, {shade: 0.3});
-                            }
-                            doResetType();
-                        } else {
-                            if (showMsg) {
-                                $.layerMsg("保存成功，" + oldName + "编码是：<span style='color:red;'>" + data.code + "</span>", true, {
-                                    end: function () {
-                                        window.location.href = "/scm_kry/sku/index";
-                                    }, shade: 0.3
-                                });
-                            } else {
-                                $.layerMsg("保存成功！", true, {
-                                    end: function () {
-                                        window.location.href = "/scm_kry/sku/index";
-                                    }, shade: 0.3
-                                });
-                            }
-                        }
+                    if (data.success) {
+                        $.layerMsg("保存成功", true, {
+                            end: function () {
+                                window.location.href = basicPath + "&act=basic_warehouse_index";
+                            }, shade: 0.3
+                        });
                     } else {
                         $.layerMsg(data.message, false);
                     }

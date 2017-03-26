@@ -739,4 +739,89 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+
+    public function basic_warehouse_list_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $where = "where 1 and g.location_id=$slid";
+        if($_REQUEST['skuTypeId']){
+            $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
+        }
+        if($_REQUEST['skuCodeOrName']){
+            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')";
+        }
+        if($_REQUEST['wmTypes']){
+            $where .= " and g.print=".$_REQUEST['wmTypes'];
+        }
+        $sqlcount = "select count(id) from fanwe_dc_menu g $where";
+        $records = $GLOBALS['db']->getOne($sqlcount);
+        $sql = "select * from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $check=$GLOBALS['db']->getAll($sql);
+//var_dump(count($check));
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
+//        var_dump($check[0]);exit;
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if($check){
+            $arr_list = array();
+            foreach ($check as $item) {
+                $str ='';
+                $list = array();
+                $list['id'] = $item['id'];
+                $list['wmType'] = '';
+                $list['skuTypeName'] = $this->get_dc_supplier_menu($item['cate_id']);
+                $list['wmTypeName'] = $this->get_print($item['print']);
+                $list['skuCode'] = $item['id'];
+                $list['standerStr'] = '';
+                if(!empty($item['funit'])){
+                    $str = "【".$item['funit']."(".$item['times'].")"."】";
+                }
+                $list['unitName'] = $item['unit'].$str;
+                $list['price'] = $item['price'];
+                $list['purchasePrice'] = $item['buyPrice'];
+                $list['costPrice'] = $item['customerPrice'];
+                $list['balancePrice'] = $item['sellPrice2'];
+                $list['status'] = 1;
+                $list['isDisable'] = 1;
+                array_push($arr_list,$list);
+            }
+
+
+
+            $return['dataList'] = $arr_list;
+        }else{
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
+
+    function get_dc_supplier_menu($id = 30){
+        $check=$GLOBALS['db']->getOne("select * from fanwe_dc_supplier_menu_cate where id = ".$id);
+        if($check){
+            return $check['name'];
+        }else{
+            return '';
+        }
+    }
+
+    function get_print($print){
+        foreach ($this->kcnx as $key=>$value) {
+            if($print == $key){
+                return $value;
+            }
+        }
+
+    }
 }

@@ -7,11 +7,11 @@ var skulist = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '',
+        urlRoot : ctxPath,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query',
+        queryUrl : '&act=basic_warehouse_list_ajax',
         editUrl : '/edit',
         viewUrl : '/view',
         lockUrl : '/disable?isEnable=false',
@@ -216,7 +216,7 @@ var skulist = {
                 {name: 'skuTypeName', index: 'typeName', align: "left", width: 120},
                 {name: 'wmTypeName', index: 'wmType', align: "left", width: 120},
                 {name: 'skuCode', index: 'skuCode', align: "left", width: 180},
-                {name: 'standerStr', index: 'skuName', align: "left", width: 180},
+                {name: 'standerStr', index: 'skuName', align: "left", width: 180,hidden:true},
                 {name: 'unitName', index: 'unitName', align: "center", width: 120},
                 {
 
@@ -279,7 +279,7 @@ var skulist = {
                     align: "center",
                     width: 100,
                     formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDisable == 1) {
+                        if (rowObject.isDisable == 0) {
                             return "<span style='color:red'>停用 </span>";
                         } else {
                             return "启用";
