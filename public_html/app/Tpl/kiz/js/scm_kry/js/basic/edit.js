@@ -32,7 +32,7 @@ $(function () {
             var params = $("#warehouseForm").serialize();
             $.ajax({
                 type: "POST",
-                url: "/kiz.php?ctl=basic&act=basic_setting_save",
+                url: ctxPath + "&act=dc_cangku_add_ajax",
                 data: params,
                 dataType: "json",
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -40,8 +40,8 @@ $(function () {
                 cache: false,
                 success: function (data) {
                     $("#btn-save").bind("click");
-                    if (data.message.indexOf("success") != -1) {
-                    	var showMsg = $("#wareshouseCode").val().length==0;
+                    if (data.success) {
+                    	var showMsg = $("#warehouseName").val().length==0;
                     	if(isBtnBak){
                     		if(showMsg){
                     			$.layerMsg('操作成功，'+data.warehouse.warehouseName+'的编码是：<span style="color:red;">'+data.warehouse.wareshouseCode+"</span>",true, {shade: 0.3});
@@ -52,29 +52,30 @@ $(function () {
                     		if(showMsg){
                     			$.layerMsg('操作成功，'+data.warehouse.warehouseName+'的编码是：<span style="color:red;">'+data.warehouse.wareshouseCode+"</span>", true, {
                     				end:function(){
-                    					window.location.href = getContextPath() + "/scm/warehouse/index";
+                    					window.location.href = basicPath + "&act=basic_setting_index";
                     				},shade: 0.3});
                     		}else{
                     			$.layerMsg('操作成功！', true, {
                     				end:function(){
-                    					window.location.href = getContextPath() + "/scm/warehouse/index";
+                    					window.location.href = basicPath + "&act=basic_setting_index";
                     				},shade: 0.3});
                     		}
                     	}
-                    } else {
-                        if (data.message.indexOf("编码") != -1) {
-                        	var lab = '<label for="wareshouseCode" generated="true" class="error">'+data.message+'</label>';
-                        	$("#wareshouseCode").parent().find(".wrong").html(lab);
-                        } else if (data.message.indexOf("名称") != -1) {
-                        	var lab = '<label for="warehouseName" generated="true" class="error">'+data.message+'</label>';
-                        	$("#warehouseName").parent().find(".wrong").html(lab);
-                        } else if (data.message.indexOf("过期") != -1) {
-                        	$.layerMsg(data.message, false, {
-                                end:function(){
-                                    window.location.href = getContextPath() + "/scm/warehouse/index";
-                            }});
-                        }
                     }
+                    // else {
+                    //     if (data.message.indexOf("编码") != -1) {
+                    //     	var lab = '<label for="wareshouseCode" generated="true" class="error">'+data.message+'</label>';
+                    //     	$("#wareshouseCode").parent().find(".wrong").html(lab);
+                    //     } else if (data.message.indexOf("名称") != -1) {
+                    //     	var lab = '<label for="warehouseName" generated="true" class="error">'+data.message+'</label>';
+                    //     	$("#warehouseName").parent().find(".wrong").html(lab);
+                    //     } else if (data.message.indexOf("过期") != -1) {
+                    //     	$.layerMsg(data.message, false, {
+                    //             end:function(){
+                    //                 window.location.href = getContextPath() + "/scm/warehouse/index";
+                    //         }});
+                    //     }
+                    // }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $("#btn-save").bind("click");

@@ -1,0 +1,100 @@
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>期初库存</h1>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel">
+        <!-- 条件 start -->
+        <form id="openingInventoryForm" action="#" method="post" enctype="multipart/form-data">
+            <div class="panel-body">
+                <div class="pull-left">
+                    <dl class="panel-item w500">
+                        <dt><label>请选择仓库</label></dt>
+                        <dd>
+                            <select class="form-control" name="warehouseId" id="warehouseId">
+                                <option value="">请选择仓库</option>
+
+                                {foreach from=$cangkulist item=item}
+
+                                <option value="{$item.id}" >{$item.name}</option>
+
+                                {/foreach}
+
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="pull-left" style="margin-top: 5px;">
+                    <div class="panel-item">
+                        <input type="file" name="file" id="file"/>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <div class="panel-item">
+                        <a code="scm:button:masterdata:inventoryImport:uploadFile" class="btn-blue btn-search" role="button" id="btnFileupload" onclick="uploadFiles()">确认汇入</a>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <div class="panel-item" style="margin-top:10px">
+                        <a href="#" id="downloadTemplate" name="downloadTemplate">期初库存模板下载</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- 条件 end -->
+
+        <!-- 详情start -->
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <!-- grid end -->
+        </div>
+        <!-- 详情 end -->
+    </div>
+
+    <!-- 错误弹出层 -->
+    <div id="errorMsgModal" class="modal fade in" aria-hidden="true">
+        <div class="modal-dialog"  style="width: 1000px; margin-top: 100px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">&times;</a>
+                    <h3>错误提示</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="errorMsgBody" style="overflow-y:auto; max-height: 400px;"></div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal">关 闭</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/openinginventory.js?v=20170315_135229"></script>
+
+<script>
+
+    $(function () {
+
+        var opts = {
+            commandType: 0,
+            urlRoot: ctxPath,
+            query:"&act=query"
+        };
+
+        openinginventory._init(opts);
+    });
+
+
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

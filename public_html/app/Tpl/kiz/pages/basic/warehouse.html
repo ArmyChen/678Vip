@@ -1,0 +1,278 @@
+
+{include file="inc/header.html"}
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>商品-原料</h1>
+        <div class="btn-wrap pull-right tar">
+            <!--<a code="scm:button:masterdata:sku:synBrandPrice" class="btn-link ml10" id="btnSelectCommercial">价格同步</a>-->
+            <!--<a code="scm:button:masterdata:sku:edit" href="#" onfocus="this.blur()" function="$.doForward" args="{url:'/scm_kry/sku/edit/prices'}" class="btn-link ml10">价格批量编辑</a>-->
+            <!--<a code="scm:button:masterdata:sku:delete" href="#" onfocus="this.blur()" onclick="skulist.batchDelete();" class="btn-link ml10" id="btn-delete">批量删除</a>-->
+            <!--<a href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-export">批量导出</a>-->
+            <!--<a code="scm:button:masterdata:sku:add" onclick="skuupload.delegateBtnUpload();" href="#" onfocus="this.blur()" class="btn-link ml10" id="btn-upload1">批量导入</a>-->
+            <a code="scm:button:masterdata:sku:add" onfocus="this.blur()" function="$.doForward" args="{url:'/kiz.php?ctl=basic&act=basic_warehouse_add'}" class="btn-link ml10" id="btn-create">创建</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="skuCodeOrName" id="skuCodeOrName" class="form-control" data-format="skuName" placeholder="商品编码/名称" maxlength="64">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <input type="text" class="hidden" />
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 商品分类start -->
+            <div class="aside-column multi-select">
+                <h2>商品分类</h2>
+
+                <div class="select-control"><em></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="sku-type-all">
+                                <span></span>
+                                <input type="checkbox" id="sku-type-all">全部
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-1">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-1"
+                                       value="170317" data-text="奶慕奉茶">奶慕奉茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-2">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-2"
+                                       value="170318" data-text="醇香奶茶">醇香奶茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-3">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-3"
+                                       value="170319" data-text="新鲜果茶">新鲜果茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-4">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-4"
+                                       value="176635" data-text="海鲜">海鲜
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-5">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-5"
+                                       value="211181" data-text="火锅跟">火锅跟
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-6">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-6"
+                                       value="211182" data-text="uuu">uuu
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-7">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-7"
+                                       value="211449" data-text="sdsds">sdsds
+                            </label></li>
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 商品分类end -->
+
+            <!-- 库存类型start -->
+            <div class="aside-column multi-select">
+                <h2>库存类型</h2>
+
+                <div class="select-control"><em></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="wm-type-all">
+                                <span></span>
+                                <input type="checkbox" id="wm-type-all">全部
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="checkbox" for="wm-type-1">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-1"
+                                       value="2" data-text="现制商品">现制商品
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="wm-type-2">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-2"
+                                       value="1" data-text="预制商品">预制商品
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="wm-type-3">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-3"
+                                       value="3" data-text="外购商品">外购商品
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="wm-type-4">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-4"
+                                       value="4" data-text="原物料">原物料
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="wm-type-5">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-5"
+                                       value="5" data-text="半成品">半成品
+                            </label></li>
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 库存类型end -->
+
+            <!-- 状态 start -->
+            <div class="aside-column">
+                <h2>状态</h2>
+                <ul class="panel-list-type">
+                    <li>
+                        <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
+                            <input type="checkbox" name="disabledFlags" id="status-0" checked value="0">启用</label>
+                    </li>
+                    <li>
+                        <label class="checkbox" for="status-1" id="checkbox-1"><span></span>
+                            <input type="checkbox" name="disabledFlags" id="status-1" value="1">停用</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 状态 end -->
+        </form>
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" role="button" id="btn-query">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<!-- 批量导入弹出层 -->
+<div id="skuUploadDiv" style="display: none;">
+    <div class="panel w500">
+        <div class="panel-body">
+            <div class="pull-left mt20">
+                <div class="panel-item ml10">
+                    <input type="file" name="file" id="file"/>
+                </div>
+            </div>
+            <div class="pull-left mt20">
+                <div class="panel-item">
+                    <a href="#" id="downloadTemplate" name="downloadTemplate">商品导入模板下载</a>
+                </div>
+            </div>
+            <div class="clear mt70">
+                <div class="panel-item ml10" style="text-align: center;">
+                    <a class="btn-blue btn-search" role="button" id="btnFileupload">确认汇入</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 错误弹出层 -->
+<div id="errorMsgModal" class="modal fade in" aria-hidden="true">
+    <div class="modal-dialog"  style="width: 1000px; margin-top: 100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3>错误提示</h3>
+            </div>
+            <div class="modal-body">
+                <div id="errorMsgBody" style="overflow-y:auto; max-height: 400px;"></div>
+            </div>
+
+            <div class="modal-footer" style="margin-top: 0">
+                <a href="#" class="btn btn-primary" data-dismiss="modal">关 闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="commercialSelectDiv" gridId="shop_grid" showBrand="false"></div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skulist.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skuexport.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/skuupload.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/sku-commercial-select.js?v=20170315_135229"></script>
+
+
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript">
+
+
+    $(function() {
+        var isBrand = true;
+        var opts = {
+            urlRoot : "/scm_kry/sku",
+            commandType :0
+        };
+        skulist._init(opts,isBrand);
+
+        var suOpts = {
+            urlRoot: '/scm_kry/sku',
+            commandType: 0
+        };
+
+        skuupload._init(suOpts);
+
+        skuexport._init(opts);
+    });
+
+    //重置
+    $("#undo-all").on("click",function(){
+        $(".multi-select").find("em").html("");
+        $(".multi-select").find("input[type='hidden']").val("");
+    })
+</script>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135229" ></script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

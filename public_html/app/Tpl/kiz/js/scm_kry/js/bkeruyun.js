@@ -323,6 +323,8 @@ var bkeruyun = {
                     return "/mind" + u;
                 }else if(p == 3){
                     return "/kiz.php?ctl=inventory&"+ u;
+                }else if(p == 4){
+                    return "/kiz.php?ctl=basic&"+ u;
                 }else if(p == 2){
                     return "/b_kry" + u;
                 }else if(p == 5){
@@ -450,7 +452,7 @@ var bkeruyun = {
             $("#loading").show();
         }
         else {
-            var loading = '<div id="loading"><img src="themes/style/img/loading.gif" /></div>';
+            var loading = '<div id="loading"><img src="/app/Tpl/kiz/js/scm_kry/img/loading.gif" /></div>';
             $(document.body).append(loading);
         }
         bkeruyun.showLayer();
