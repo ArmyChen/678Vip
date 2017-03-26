@@ -189,6 +189,7 @@ var skuType = {
             ],
             sortname: 'id',
             pager: "#gridPager",
+            rowNum:80,
             showOperate: false,
             actionParam: {
                 view: {

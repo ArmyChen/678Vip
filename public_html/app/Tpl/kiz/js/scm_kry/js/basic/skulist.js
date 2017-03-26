@@ -49,13 +49,13 @@ var skulist = {
             case 1 ://新增
                 _this.initSaveBtn();
                 _this.changeType(true);
-                _this.checkCodeAndName();
+                // _this.checkCodeAndName();
                 break;
 
             case 2 ://编辑
                 _this.initSaveBtn();
                 _this.changeType(false);
-                _this.checkCodeAndName();
+                // _this.checkCodeAndName();
                 break;
 
             default ://查看
