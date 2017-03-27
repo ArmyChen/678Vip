@@ -772,15 +772,19 @@ class ajaxModule extends KizBaseModule{
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
-        if($_REQUEST['skuCodeOrName']){
-            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')";
+
+        if($_REQUEST['skuTypeId']){
+            $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
-        if($_REQUEST['wmTypes']){
-            $where .= " and g.print=".$_REQUEST['wmTypes'];
+        if($_REQUEST['skuCodeOrName']){
+            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.id like'%".$_REQUEST['skuCodeOrName']."%')";
+        }
+        if($_REQUEST['wmType']){
+            $where .= " and g.print=".$_REQUEST['wmType'];
         }
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.name as standerStr from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.name as standerStr,g.id as id from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 //var_dump(count($check));
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
