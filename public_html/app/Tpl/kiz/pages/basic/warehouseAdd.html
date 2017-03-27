@@ -74,7 +74,7 @@
         <div class="btn-wrap pull-right tar">
             <a href="JavaScript:;" class="btn-link ml10" id="btn-create">保存</a>
             <!--<a href="JavaScript:;" class="btn-link ml10" id="btn-copy">保存并复制</a>-->
-            <a href="/scm_kry/sku/index" class="btn-link ml10" id="btn-cancel">返回</a>
+            <a href="/kiz.php?ctl=basic&act=basic_warehouse_index" class="btn-link ml10" id="btn-cancel">返回</a>
         </div>
     </div>
 </div>
@@ -114,20 +114,13 @@
                                       data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span>
                             </div>
                         </td>
-                        <th>商品中类<strong class="red vam"> *</strong></th>
+                        <th>商品分类<strong class="red vam"> *</strong></th>
                         <td id="skuType">
-                            <select id="skuTypeId" data-placeholder="请选择" style="width:300px;display: block;"
-                                    class="chosen-select select-style" tabindex="2">
-                                <option value=""></option>
-
-                                <optgroup label="火锅">
-
-                                    <option value="211181">火锅跟</option>
-
-                                    <option value="211182">uuu</option>
-
-                                </optgroup>
-
+                            <select id="skuTypeId" name="skuTypeId">
+                                <option value="0" selected="selected">请选择</option>
+                                {foreach from=$listsort item=item}
+                                    <option value="{$item.id}">{$item.title_show}</option>
+                                {/foreach}
                             </select>
                         </td>
                     </tr>
@@ -144,8 +137,12 @@
                         <th>库存类型<strong class="red vam"> *</strong></th>
                         <td>
                             <select id="goodsWm" name="wmType">
-                                <option value="4" selected="selected">原物料</option>
-                                <option value="5">半成品</option>
+                                <option value="0" selected="selected">请选择</option>
+                                {foreach from=$kcnx item=item key=key}
+                                {if $key gt 0}
+                                    <option value="{$key}">{$item}</option>
+                                {/if}
+                                {/foreach}
                             </select>
                         </td>
                         <th>条&nbsp;&nbsp;形&nbsp;&nbsp;码<span>&nbsp;</span></th>
@@ -182,50 +179,50 @@
 
                         <!--</td>-->
                     <!--</tr>-->
-                    <!--<tr>-->
-                        <!--<th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>-->
-                        <!--<td colspan="3" id="goods_standard">-->
-                            <!--<div id="gdd_standard" style="padding-top: 10px; display: none;" class="gd_standard">-->
-                                <!--<input type="text" value="0" style="width:250px;" disabled="disabled">-->
-                                <!--<div class="select-group" style="width:250px;">-->
-                                    <!--<div class="select-control">-->
-                                        <!--<em class="gg_cache"></em>-->
-                                    <!--</div>-->
-                                    <!--<ul class="gg_list" style="display: none;"></ul>-->
-                                <!--</div>-->
-                                <!--<span class="icon-plus gd_add">添加</span>-->
-                                <!--<a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>-->
-                            <!--</div>-->
+                    <tr style="display: none;">
+                        <th style="padding-left: 56px;vertical-align: top;padding-top: 29px;">商品规格</th>
+                        <td colspan="3" id="goods_standard">
+                            <div id="gdd_standard" style="padding-top: 10px; display: none;" class="gd_standard">
+                                <input type="text" value="0" style="width:250px;" disabled="disabled">
+                                <div class="select-group" style="width:250px;">
+                                    <div class="select-control">
+                                        <em class="gg_cache"></em>
+                                    </div>
+                                    <ul class="gg_list" style="display: none;"></ul>
+                                </div>
+                                <span class="icon-plus gd_add">添加</span>
+                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
+                            </div>
 
-                            <!--<div style="padding-top: 10px;" class="gd_standard">-->
-                                <!--<input type="text" data-id="19548" value="默认" style="width:250px;"-->
-                                       <!--disabled="disabled">-->
-                                <!--<div class="select-group" style="width:250px;">-->
-                                    <!--<div class="select-control">-->
-                                        <!--<em class="gg_cache"></em>-->
-                                    <!--</div>-->
-                                    <!--<ul class="gg_list" style="display: none;">-->
+                            <div style="padding-top: 10px;" class="gd_standard">
+                                <input type="text" data-id="19548" value="默认" style="width:250px;"
+                                       disabled="disabled">
+                                <div class="select-group" style="width:250px;">
+                                    <div class="select-control">
+                                        <em class="gg_cache"></em>
+                                    </div>
+                                    <ul class="gg_list" style="display: none;">
 
-                                        <!--<li onclick="clickStopPropagation(event)">-->
-                                            <!--<div class="select-search-box" style="float: none;margin-left: 0;">-->
-                                                <!--<input class="select-filter-ipt" onkeyup="filterSelect(this)"-->
-                                                       <!--onclick="clickStopPropagation(event)" style="width: 100%;"-->
-                                                       <!--class="form-control" type="text" autocomplete="off">-->
-                                                <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
-                                            <!--</div>-->
-                                        <!--</li>-->
+                                        <li onclick="clickStopPropagation(event)">
+                                            <div class="select-search-box" style="float: none;margin-left: 0;">
+                                                <input class="select-filter-ipt" onkeyup="filterSelect(this)"
+                                                       onclick="clickStopPropagation(event)" style="width: 100%;"
+                                                       class="form-control" type="text" autocomplete="off">
+                                                <span class="glyphicon glyphicon-search search-icon"></span>
+                                            </div>
+                                        </li>
 
-                                        <!--<li data-id="143976">大杯</li>-->
+                                        <li data-id="143976">大杯</li>
 
-                                        <!--<li data-id="143977">中杯</li>-->
+                                        <li data-id="143977">中杯</li>
 
-                                    <!--</ul>-->
-                                <!--</div>-->
-                                <!--<span class="icon-plus gd_add">添加</span>-->
-                                <!--<a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>-->
-                            <!--</div>-->
-                        <!--</td>-->
-                    <!--</tr>-->
+                                    </ul>
+                                </div>
+                                <span class="icon-plus gd_add">添加</span>
+                                <a href="#" class="close-1 ml10" style="margin-left: 18px;display: none;">删除此项</a>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -837,18 +834,14 @@
                 },
                 success: function (data) {
                     if (data.success) {
-                        $.layerMsg("保存成功", true, {
-                            end: function () {
-                                window.location.href = basicPath + "&act=basic_warehouse_index";
-                            }, shade: 0.3
-                        });
+                        Message.alert({title: "保存成功", describe: "保存成功"});
                     } else {
-                        $.layerMsg(data.message, false);
+                        Message.alert({title: "提示", describe: data.message});
                     }
                     bkeruyun.hideLoading();
                 },
                 error: function () {
-                    $.layerMsg("网络错误", false);
+                    Message.alert({title: "提示", describe: "网络错误"});
                     bkeruyun.hideLoading();
                 }
             });
@@ -1009,7 +1002,7 @@
                     result = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    Message.alert({title: "提示", describe: '网络异常'});
+//                    Message.alert({title: "提示", describe: '网络异常'});
                 },
                 complete: function() {
                     ajaxFlag = true;

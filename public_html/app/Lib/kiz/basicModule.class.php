@@ -102,8 +102,16 @@ class basicModule extends KizBaseModule
     public function basic_warehouse_add()
     {
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
 
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "新增原料");
         $GLOBALS['tmpl']->display("pages/basic/warehouseAdd.html");
     }

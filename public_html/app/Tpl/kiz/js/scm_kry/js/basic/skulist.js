@@ -203,7 +203,7 @@ var skulist = {
 
         $gridObj.dataGrid({
             rownumbers: true,
-            multiselect: isBrand,
+            // multiselect: isBrand,
             gridview:false,
 
             formId: _this.opts.queryConditionsId,
@@ -216,7 +216,7 @@ var skulist = {
                 {name: 'skuTypeName', index: 'typeName', align: "left", width: 120},
                 {name: 'wmTypeName', index: 'wmType', align: "left", width: 120},
                 {name: 'skuCode', index: 'skuCode', align: "left", width: 180},
-                {name: 'standerStr', index: 'skuName', align: "left", width: 180,hidden:true},
+                {name: 'standerStr', index: 'skuName', align: "left", width: 180},
                 {name: 'unitName', index: 'unitName', align: "center", width: 120},
                 {
 

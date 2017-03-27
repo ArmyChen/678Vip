@@ -780,7 +780,7 @@ class ajaxModule extends KizBaseModule{
         }
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select * from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.name as standerStr from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 //var_dump(count($check));
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
@@ -800,7 +800,7 @@ class ajaxModule extends KizBaseModule{
                 $list['skuTypeName'] = $this->get_dc_supplier_menu($item['cate_id']);
                 $list['wmTypeName'] = $this->get_print($item['print']);
                 $list['skuCode'] = $item['id'];
-                $list['standerStr'] = '';
+                $list['standerStr'] = $item['standerStr'];
                 if(!empty($item['funit'])){
                     $str = "【".$item['funit']."(".$item['times'].")"."】";
                 }
