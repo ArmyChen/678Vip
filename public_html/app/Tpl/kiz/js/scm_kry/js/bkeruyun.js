@@ -434,7 +434,7 @@ var bkeruyun = {
     },
 
 
-/**
+    /**
      * @description: 添加最大高度
      * @example: bkeruyun.maxHeight();
      * ? 需要扩张为外部可设置 或通过自定义属性
@@ -1014,7 +1014,7 @@ var bkeruyun = {
             }
         });
     })(),
-    
+
     //TODO===================
     minInput: (function () {
         $(document).delegate("input[min]", "keyup change", function (e) {
@@ -1738,10 +1738,10 @@ $(function () {
             var lastUrl = history[0];
             var isInUrl = false;
             arrUrl.forEach(function(url){
-               if(lastUrl.indexOf(url) > -1){
-                   isInUrl = true;
-                   return true;
-               }
+                if(lastUrl.indexOf(url) > -1){
+                    isInUrl = true;
+                    return true;
+                }
             });
             return isInUrl;
         };
@@ -1801,16 +1801,16 @@ $(function () {
                 layer.close(index);
             });
         };
-        
+
         //查看页面反确认函数(参考报废的单的按钮参数)
         $.doViewWithdraw = function(args){
-        	layer.confirm('反确认后，单据将会变更为已保存状态，是否继续？', {icon: 3, title: '提示', offset: '30%'}, function (index) {
+            layer.confirm('反确认后，单据将会变更为已保存状态，是否继续？', {icon: 3, title: '提示', offset: '30%'}, function (index) {
                 if(!args.callback) args.callback = '$.defaultWithDrawCallback';
                 $.submitWithAjax(args);
                 layer.close(index);
             });
         }
-        
+
         $.doClock = function (args) {
             var desc = $.beforeCallback(args);
             if (desc == '') {
@@ -2188,9 +2188,9 @@ $(function () {
             //var token = window.parent.document.getElementById("t").value;
             var token = getToken();
             if (postData) {
-                window.location.href = url + '?' + $.param(postData) + "&t=" + token;
+                window.location.href = url + '?' + $.param(postData) ;
             } else {
-                window.location.href = url + "&t=" + token;
+                window.location.href = url ;
             }
         };
 
@@ -2291,7 +2291,7 @@ $(function () {
                 }
             }
         };
-        
+
         /**
          * 默认的反确认成功回调，提示操作结果
          * @param rs
@@ -2299,13 +2299,13 @@ $(function () {
         $.defaultWithDrawCallback = function (args) {
             var rs = args.result;
             if (rs.success) {
-            	if(args.redirectUrl){
-            		$("#withdraw,#btnprint").remove();
-            		$.layerMsg('操作成功', true, {end:function(){$.doForward({url:args.redirectUrl,postData:args.postData});},shade: 0.3});
-            	}else{
-            		$("#withdraw,#btnprint").remove();
-            		 $.layerMsg('操作成功', true);
-            	}
+                if(args.redirectUrl){
+                    $("#withdraw,#btnprint").remove();
+                    $.layerMsg('操作成功', true, {end:function(){$.doForward({url:args.redirectUrl,postData:args.postData});},shade: 0.3});
+                }else{
+                    $("#withdraw,#btnprint").remove();
+                    $.layerMsg('操作成功', true);
+                }
             } else {
                 if (rs.data != '' && rs.data != null) {
                     $.layerOpen(rs.message, rs.data);
@@ -3052,9 +3052,9 @@ $.fn.selectForGridWithCheck = function (tableId, fCallBack, msg) {
 };
 
 /*
-* 为下拉组件添加筛选行 $('xxx').selectFilter()
-*create by zhulf 2016/8/9
-* */
+ * 为下拉组件添加筛选行 $('xxx').selectFilter()
+ *create by zhulf 2016/8/9
+ * */
 $.fn.selectFilter = function () {
     $(this).each(function () {
         var $this = $(this);
@@ -3265,7 +3265,7 @@ function unformatInputStr(cellvalue, options, cell) {
 
 /**
  * 查询页面第一个输入框获得光标，输入框绑定enter事件
-* */
+ * */
 $.setSearchFocus = function(){
     var focusDom = $('.form-control:visible:first');
     if(!focusDom.prop('readonly')){
