@@ -134,68 +134,68 @@ var skulist = {
             if(!isBrand) flag = renderEnum.hidden;
             return flag;
         };
-        
+
         $.showDelete = function(rowData){
-        	 var flag = renderEnum.normal;
-             if(rowData.wmType!=4&&rowData.wmType!=5) flag = renderEnum.disabled;
+            var flag = renderEnum.normal;
+            if(rowData.wmType!=4&&rowData.wmType!=5) flag = renderEnum.disabled;
             if(!isBrand) flag = renderEnum.hidden;
-             return flag;
+            return flag;
         };
 
         //删除前检测数据是否需要提示
-	    $.doDeleteOrLockTask = function(data){
-	    	$.ajax({
-               url: skulist.opts.urlRoot+(data.isDelete?skulist.opts.deleteUrl:skulist.opts.lockUrl),
-               type: "post",
-               async: false,
-               data: data.isDelete?{skuIds:data.postData.id}:{id:data.postData.id},
-               success: function (data) {
-            	  if(data.success==true){
-            		  $("#btn-query").trigger("click");
-            		  $.layerMsg(data.message, true);
-            	  }else{
-            		  $.layerMsg(data.message, false);
-            	  }
-               },
-               error: function () {
-                   $.layerMsg("网络错误", false);
-               }
-           });
-	    };
-	   
-	   //处理停用事件
-	   $.doClock = function(data){$.doDelete(data);};
-	    
-	   //处理删除事件
-       $.doDelete = function(dataArgs){
-    	   var isDelete = dataArgs.domId.indexOf("#delete")!=-1,
-    	       opts = {
-	    		   callBack: $.doDeleteOrLockTask,
-	    		   callBackArgs:dataArgs,
-				   hint:isDelete?'删除后不可恢复，确认删除？':'商品已被引用，确定停用？',
-				   dataHint:isDelete?'删除后会清除对应配方、模板、供货关系、库存预警等信息：':'以下为引用配方、模板、供货关系、库存预警等信息：'
-    	    }
-    	   $.ajax({
-               url: dataArgs.url,
-               type: "post",
-               async: false,
-               data: {skuIds:dataArgs.postData.id},
-               success: function (data) {
-            	   if(data.count>0){
-            		   opts.showBills = true;
-            		   opts.dataList = data.skuReferenceVO;
-            	   }else{
-            		   if(!isDelete) opts.hint='确定停用？'; 
-            	   }
-            	   dataArgs.isDelete = isDelete;
-             	   opts.callBackArgs=dataArgs;
-                   $.message.showDialog(opts);
-                   $("#skuCodeOrName").focus().blur();
-               },
-               error: function () {
-                   $.layerMsg("网络错误", false);
-               }
-           });
+        $.doDeleteOrLockTask = function(data){
+            $.ajax({
+                url: skulist.opts.urlRoot+(data.isDelete?skulist.opts.deleteUrl:skulist.opts.lockUrl),
+                type: "post",
+                async: false,
+                data: data.isDelete?{skuIds:data.postData.id}:{id:data.postData.id},
+                success: function (data) {
+                    if(data.success==true){
+                        $("#btn-query").trigger("click");
+                        $.layerMsg(data.message, true);
+                    }else{
+                        $.layerMsg(data.message, false);
+                    }
+                },
+                error: function () {
+                    $.layerMsg("网络错误", false);
+                }
+            });
+        };
+
+        //处理停用事件
+        $.doClock = function(data){$.doDelete(data);};
+
+        //处理删除事件
+        $.doDelete = function(dataArgs){
+            var isDelete = dataArgs.domId.indexOf("#delete")!=-1,
+                opts = {
+                    callBack: $.doDeleteOrLockTask,
+                    callBackArgs:dataArgs,
+                    hint:isDelete?'删除后不可恢复，确认删除？':'商品已被引用，确定停用？',
+                    dataHint:isDelete?'删除后会清除对应配方、模板、供货关系、库存预警等信息：':'以下为引用配方、模板、供货关系、库存预警等信息：'
+                }
+            $.ajax({
+                url: dataArgs.url,
+                type: "post",
+                async: false,
+                data: {skuIds:dataArgs.postData.id},
+                success: function (data) {
+                    if(data.count>0){
+                        opts.showBills = true;
+                        opts.dataList = data.skuReferenceVO;
+                    }else{
+                        if(!isDelete) opts.hint='确定停用？';
+                    }
+                    dataArgs.isDelete = isDelete;
+                    opts.callBackArgs=dataArgs;
+                    $.message.showDialog(opts);
+                    $("#skuCodeOrName").focus().blur();
+                },
+                error: function () {
+                    $.layerMsg("网络错误", false);
+                }
+            });
         }
 
         var $gridObj = $("#" + _this.opts.listGridId);
@@ -314,20 +314,20 @@ var skulist = {
                     url: _this.opts.urlRoot + _this.opts.unlockUrl
                 },
                 delete:{
-                	 render : $.showDelete,
-                     code: "scm:button:masterdata:sku:delete",
-                	 beforeCallback:'$.doDelete',
-                     url: _this.opts.urlRoot + _this.opts.referencesUrl
+                    render : $.showDelete,
+                    code: "scm:button:masterdata:sku:delete",
+                    beforeCallback:'$.doDelete',
+                    url: _this.opts.urlRoot + _this.opts.referencesUrl
                 }
             },
 
             afterInsertRow: function (rowid, rowData) {
-            	 if(rowData.wmType!=4&&rowData.wmType!=5) {
-                     $('#jqg_grid_' +  rowid).prop('disabled',true).css('opacity','0.3');
+                if(rowData.wmType!=4&&rowData.wmType!=5) {
+                    $('#jqg_grid_' +  rowid).prop('disabled',true).css('opacity','0.3');
                 }
             },
-           beforeSelectRow : function (rowid, e){
-            	var rowData =$gridObj.getRowData(rowid);
+            beforeSelectRow : function (rowid, e){
+                var rowData =$gridObj.getRowData(rowid);
                 if(rowData.wmType!=4&&rowData.wmType!=5){
                     return false;
                 }else{
@@ -437,7 +437,7 @@ var skulist = {
      *    @param  object         element     需要操作对象
      *    @param  className      class       切换的样式
      **/
-     checkboxChang: function(element,className){
+    checkboxChang: function(element,className){
         if(element.readOnly){return false;}
         if(element.checked){
             $(element).parent().addClass(className);
@@ -516,25 +516,25 @@ var skulist = {
             $(element).parent().removeClass(className);
         }
     },
-   //批量删除事件
+    //批量删除事件
     batchDelete : function(){
-    	var skuIdsStr = "",skuIds = $("#grid").jqGrid("getGridParam", "selarrrow");
-    	for(var i=0;i<skuIds.length;i++) skuIdsStr+=","+skuIds[i];
-    	
-    	if(skuIdsStr.length<=0){
-    		$.message.showDialog({confirm:false,hint:'请至少选择一个商品！'});
-    	}else{
-    		var args = {
-    			url:'/scm_kry/sku/references/get',
-    			dataGridId:"grid",
-    			beforeCallback:"$.doDelete",
-    			domId:"#delete_batch",
-    			postData:{
-    				id:skuIdsStr.substring(1)
-    			}
-    		};
-    		$.doDelete(args);
-    	}
+        var skuIdsStr = "",skuIds = $("#grid").jqGrid("getGridParam", "selarrrow");
+        for(var i=0;i<skuIds.length;i++) skuIdsStr+=","+skuIds[i];
+
+        if(skuIdsStr.length<=0){
+            $.message.showDialog({confirm:false,hint:'请至少选择一个商品！'});
+        }else{
+            var args = {
+                url:'/scm_kry/sku/references/get',
+                dataGridId:"grid",
+                beforeCallback:"$.doDelete",
+                domId:"#delete_batch",
+                postData:{
+                    id:skuIdsStr.substring(1)
+                }
+            };
+            $.doDelete(args);
+        }
     }
 };
 
