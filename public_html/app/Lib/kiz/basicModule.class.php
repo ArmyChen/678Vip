@@ -118,6 +118,7 @@ class basicModule extends KizBaseModule
 
     public function index1(){
         init_app_page();
+//        $sql = "alter table fanwe_cangku_menu auto_increment  =  1075;";
         $sql = "";
         var_dump($GLOBALS['db']->query($sql));
     }
