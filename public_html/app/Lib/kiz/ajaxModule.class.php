@@ -768,7 +768,7 @@ class ajaxModule extends KizBaseModule{
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
-        $where = "where 1 and is_stock=1 and g.location_id=$slid";
+        $where = "where 1 and g.is_stock=1 and g.location_id=$slid";
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
