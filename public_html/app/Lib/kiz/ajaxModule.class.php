@@ -768,7 +768,7 @@ class ajaxModule extends KizBaseModule{
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
-        $where = "where 1 and g.location_id=$slid";
+        $where = "where 1 and is_stock=1 and g.location_id=$slid";
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
@@ -1093,7 +1093,8 @@ class ajaxModule extends KizBaseModule{
             "price"=>$skuPrice->price,
             "customerPrice"=>$skuPrice->costPrice,
             "sellPrice2"=>$skuPrice->balancePrice,
-            "print"=>$skuList->wmType
+            "print"=>$skuList->wmType,
+            "is_stock"=>1
         );
         if($skuList->skuCode){
             $dc_menu_data['id'] = $skuList->skuCode;
