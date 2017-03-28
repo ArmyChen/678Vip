@@ -115,7 +115,7 @@
     "levelId": "001001",
     "name": "报表",
     "parentId": 1255,
-    "platform": 3,
+    "platform": 5,
     "sort": 9,
     "type": 1,
     "url": "#"
@@ -126,10 +126,10 @@
     "levelId": "001001001",
     "name": "库存查询",
     "parentId": 1263,
-    "platform": 3,
+    "platform": 5,
     "sort": 10,
     "type": 1,
-    "url": "#"
+    "url": "act=report_stock_index"
   },
   {
     "code": "scm:report:inventoryDistribution:query",
@@ -137,10 +137,10 @@
     "levelId": "001001002",
     "name": "库存分布明细表",
     "parentId": 1263,
-    "platform": 3,
+    "platform": 5,
     "sort": 15,
     "type": 1,
-    "url": "#"
+    "url": "act=report_stock_detail_index"
   },
   {
     "code": "scm:report:skuIO:query",
@@ -148,9 +148,9 @@
     "levelId": "001001001",
     "name": "商品出入库明细表",
     "parentId": 1263,
-    "platform": 3,
+    "platform": 5,
     "sort": 50,
     "type": 1,
-    "url": "#"
+    "url": "act=report_stock_dubbo_index"
   }
 ]
