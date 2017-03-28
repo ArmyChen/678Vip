@@ -1,0 +1,505 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>库存查询</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="#" class="btn-link ml10" onfocus="this.blur();" onclick="exportResult()">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control"
+                           placeholder="请输入商品名称/编码" data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <input type="text" class="hidden">
+
+            <!-- 商户仓库级联 start -->
+            <div class="aside-column">
+                <h2>商户</h2>
+                <select id="firstSelectCascading" name="commercialId">
+
+                    <option value="-1">(品牌)</option>
+
+                    <option value="810019565">客如云电  商部1号演示门店</option>
+
+                </select>
+            </div>
+            <div class="aside-column">
+                <h2>仓库</h2>
+                <select id="secondSelectCascading" name="warehouseId">
+
+
+                    <option name="options-of--1" value="9591">总仓库</option>
+
+                    <option name="options-of--1" value="13260">饮品仓</option>
+
+                    <option name="options-of--1" value="13261">酒水仓</option>
+
+                    <option name="options-of--1" value="13262">原材料仓</option>
+
+                    <option name="options-of--1" value="14838">4号库</option>
+
+                    <option name="options-of--1" value="14839">5号库</option>
+
+
+
+                    <option name="options-of-810019565" value="9604">总仓库</option>
+
+
+                </select>
+            </div>
+            <!-- 商户仓库级联 end -->
+
+            <!-- 库存类型start -->
+            <div class="aside-column multi-select">
+                <h2>库存类型</h2>
+
+                <div class="select-control"><em></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="wm-type-all">
+                                <span></span>
+                                <input type="checkbox" id="wm-type-all">全部
+                            </label>
+                        </li>
+
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-2">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-2"
+                                       value="1" data-text="预制商品">预制商品
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-3">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-3"
+                                       value="3" data-text="外购商品">外购商品
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-4">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-4"
+                                       value="4" data-text="原物料">原物料
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-5">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-5"
+                                       value="5" data-text="半成品">半成品
+                            </label></li>
+
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 库存类型end -->
+            <!-- 商品中类start -->
+            <div class="aside-column multi-select">
+                <h2>商品中类</h2>
+
+                <div class="select-control"><em></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="sku-type-all">
+                                <span></span>
+                                <input type="checkbox" id="sku-type-all">全部
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-1">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-1"
+                                       value="170317" data-text="奶慕奉茶">奶慕奉茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-2">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-2"
+                                       value="170318" data-text="醇香奶茶">醇香奶茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-3">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-3"
+                                       value="170319" data-text="新鲜果茶">新鲜果茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-4">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-4"
+                                       value="176635" data-text="海鲜">海鲜
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-5">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-5"
+                                       value="211181" data-text="火锅跟">火锅跟
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-6">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-6"
+                                       value="211182" data-text="uuu">uuu
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-7">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-7"
+                                       value="211449" data-text="sdsds">sdsds
+                            </label></li>
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 商品中类end -->
+            <!-- 商品状态 start -->
+            <div class="aside-column">
+                <h2>商品状态</h2>
+                <ul class="panel-list-type">
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
+                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
+                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 商品状态 end -->
+        </form>
+
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" onclick="load()">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/scm-select-cascading.js?v=20170315_135229" ></script>
+<script>
+    var _gridTable = '#grid';
+
+    var cachedQueryConditions = ''; //缓存页面条件
+
+    $(function () {
+        initDates();
+        delegateMultiSelect();
+
+        $(_gridTable).dataGrid({
+            formId: "queryConditions",
+            url: '/scm_kry/inventory/query',
+            colNames: ['', '商户', '仓库', '商品编码', '商品名称（规格）', '单位', '价格', '库存', '库存金额'],
+            colModel: [
+                {name: 'id', index: 'id', hidden: true},
+                {name: 'commercialName', index: 'commercialName', width: 160, align: 'left'},
+                {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
+                {name: 'skuCode', index: 'skuCode', width: 160, align: 'left'},
+                {name: 'skuName', index: 'skuName', width: 160, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.isDelete == 1) {
+                            return cellvalue + "<span style='color:red'>(已删除)</span>";
+                        } else if (rowObject.isDisable == 1) {
+                            return cellvalue + "<span style='color:red'>(已停用)</span>";
+                        } else {
+                            return cellvalue;
+                        }
+                    }
+                },
+                {name: 'uom', index: 'uom', width: 100, align: 'center'},
+                {
+                    name: 'marketPrice',
+                    index: 'marketPrice',
+                    width: 120,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                },
+                {name: 'qty', index: 'qty', width: 150, align: "right", formatter: customMinusToRedFormatter},
+                {
+                    name: 'cost',
+                    index: 'cost',
+                    width: 120,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                }
+            ],
+            sortname: 'skuCode',
+            pager: "#gridPager",
+            showOperate: false,
+            dataType: 'local'
+        });
+
+        //重置表单
+        $("#undo-all").on("click", function () {
+            $("#skuNameOrCode").val("");
+            $(".multi-select").find("em").html("");
+            $(".multi-select").find("input[type='hidden']").val("");
+        });
+
+
+        cachedQueryConditions = serializeFormById('queryConditions');
+
+        $.setSearchFocus();
+    });
+
+    function initDates() {
+        var currentDate = new Date().Format('yyyy-MM-dd');
+        $('#updateDateStart').val(currentDate);
+        $('#updateDateEnd').val(currentDate);
+    }
+    function delegateMultiSelect(){
+        var _this = this;
+
+        // 交互
+        $(".multi-select > .select-control").on("click",function(){
+            var showList = $(this).next(".multi-select-con");
+            if(showList.is(":hidden")){
+                $(".multi-select-con").hide();
+                showList.show();
+            }else{
+                showList.hide();
+            }
+        });
+
+
+        //任意点击隐藏下拉层
+        $(document).bind("click",function(e){
+            var target = $(e.target);
+            //当target不在popover/coupons-set 内是 隐藏
+            if(target.closest(".multi-select-con").length == 0 && target.closest(".select-control").length == 0){
+                $(".multi-select-con").hide();
+            }
+        });
+
+
+        _this.delegateCheckbox('skuTypes', '#sku-type-all');
+        _this.delegateCheckbox('wmTypes', '#wm-type-all');
+    }
+    /**
+     * 监听下拉选框的checkbox
+     * @param name
+     */
+    function delegateCheckbox(name, id){
+
+        var _this = this;
+
+        $(document).delegate(":checkbox[name='"+ name + "']","change",function(){
+            _this.associatedCheckAll(this, $(id));
+            _this.filterConditions(name,
+                $(this).parents(".multi-select-con").prev(".select-control").find("em"),
+                $(this).parents(".multi-select-con").next(":hidden"));
+        });
+
+        $(document).delegate(id,"change",function(){
+            _this.checkAll(this,name);
+            _this.filterConditions(name,
+                $(this).parents(".multi-select-con").prev(".select-control").find("em"),
+                $(this).parents(".multi-select-con").next(":hidden"));
+        });
+    }
+    /**
+     *    associatedCheckAll     //关联全选
+     *    @param  object         e           需要操作对象
+     *    @param  jqueryObj      $obj        全选对象
+     **/
+    function associatedCheckAll(e, $obj){
+        var _this = this;
+        var flag = true;
+        var $name = $(e).attr("name");
+        _this.checkboxChange(e,'checkbox-check');
+        $("[name='"+ $name +"']:checkbox").not(":disabled").each(function(){
+            if(!this.checked){
+                flag = false;
+            }
+        });
+        $obj.get(0).checked = flag;
+        _this.checkboxChange($obj.get(0),'checkbox-check');
+    }
+
+    /**
+     *    checkbox               //模拟checkbox功能
+     *    @param  object         element     需要操作对象
+     *    @param  className      class       切换的样式
+     **/
+    function checkboxChang(element,className){
+        if(element.readOnly){return false;}
+        if(element.checked){
+            $(element).parent().addClass(className);
+        }else{
+            $(element).parent().removeClass(className);
+        }
+    }
+    /**
+     * 条件选择
+     * @param checkboxName      string                  checkbox name
+     * @param $textObj          jquery object           要改变字符串的元素
+     * @param $hiddenObj        jquery object           要改变的隐藏域
+     */
+    function filterConditions(checkboxName, $textObj, $hiddenObj){
+        var checkboxs = $(":checkbox[name='" + checkboxName + "']");
+        var checkboxsChecked = $(":checkbox[name='" + checkboxName + "']:checked");
+        var len = checkboxs.length;
+        var lenChecked = checkboxsChecked.length;
+        var str = '';
+        var value1 = '';
+
+        for(var i=0;i<lenChecked;i++){
+            if(i==0){
+                str += checkboxsChecked.eq(i).attr("data-text");
+                value1 += checkboxsChecked.eq(i).attr("value");
+            }else{
+                str += ',' + checkboxsChecked.eq(i).attr("data-text");
+                value1 += "," + checkboxsChecked.eq(i).attr("value");
+            }
+        }
+        $textObj.text(str);
+        $hiddenObj.val(value1);
+
+        if(lenChecked == len){
+            $textObj.text("全部");
+        }
+
+    }
+
+
+    /**
+     *    checked all            //全选
+     *    @param  object         e           需要操作对象
+     *    @param  nameGroup      string      checkbox name
+     **/
+    function checkAll(e,nameGroup){
+
+        var _this = this;
+
+        if(e.checked){
+            //alert($("[name='"+ nameGroup+"']:checkbox"));
+            $("[name='"+ nameGroup+"']:checkbox").not(":disabled").each(function(){
+                this.checked = true;
+                _this.checkboxChange(this,'checkbox-check');
+            });
+        }else{
+            $("[name='"+ nameGroup+"']:checkbox").not(":disabled").each(function(){
+                this.checked = false;
+                _this.checkboxChange(this,'checkbox-check');
+            });
+        }
+        _this.checkboxChange(e,'checkbox-check');
+    }
+
+    /**
+     *    checkbox               //模拟checkbox功能
+     *    @param  object         element     需要操作对象
+     *    @param  className      class       切换的样式
+     **/
+    function checkboxChange(element,className){
+        if(element.readOnly){return false;}
+        if(element.checked){
+            $(element).parent().addClass(className);
+        }else{
+            $(element).parent().removeClass(className);
+        }
+    }
+
+
+    function exportResult(){
+
+        var currentQueryConditions = serializeFormById('queryConditions');
+
+        if(currentQueryConditions != cachedQueryConditions){
+            $.layerMsg('条件已改变，请先点击查询按钮！', false);
+            return false;
+        }
+
+        var $gridObj = $(_gridTable);
+
+
+        var totalSize = $gridObj.jqGrid('getGridParam','records');
+
+        if(totalSize > 0){
+
+            var sidx = $gridObj.jqGrid('getGridParam','sortname');
+            var sord = $gridObj.jqGrid('getGridParam','sortorder');
+
+            //rows=0将获取所有记录，不分页
+            var exportUrl = "/scm_kry/inventory/export?rows=0&sidx=" + sidx + "&sord=" + sord;
+
+            $("#queryConditions").attr("action", exportUrl).attr("target", "_blank");
+            $("#queryConditions").submit();
+        } else{
+            $.layerMsg('导出记录为空！', false);
+        }
+    }
+
+
+    function load() {
+        //验证
+        var commercialId = $('select[name=commercialId]').val();
+        var warehouseId = $('select[name=warehouseId]').val();
+        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+//            bkeruyun.promptMessage('请选择商户!');
+            $.layerMsg('请选择商户!', false);
+            return;
+        }
+        if (warehouseId == null || warehouseId == undefined || warehouseId.length < 1) {
+//            bkeruyun.promptMessage('请选择仓库!');
+            $.layerMsg('请选择仓库!', false);
+            return;
+        }
+
+        cachedQueryConditions = serializeFormById('queryConditions');
+        $(_gridTable).refresh(-1);
+    }
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
