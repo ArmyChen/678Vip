@@ -92,6 +92,55 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
 
     }
+    /**
+     * 仓库入库查询
+     */
+    public function go_down_index_view()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $account_info['slid'];
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+
+        /*获取入库信息*/
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $sql = "select * from fanwe_cangku_log where id=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+
+            $datailinfo = array();
+            foreach(unserialize($result['dd_detail']) as $k=>$v){
+                var_dump($v);
+                $datailinfo[$k]['skuId'] = $v['mid'];
+                $datailinfo[$k]['uom'] = $v['unit'];
+                $datailinfo[$k]['funit'] = $v['funit'];
+                $datailinfo[$k]['times'] = $v['times'];
+                $datailinfo[$k]['price'] = $v['yuan_price'];
+                $datailinfo[$k]['skuName'] = $v['name'];
+                $datailinfo[$k]['skuCode'] = $v['barcode'];
+                $datailinfo[$k]['type'] = $v['type'];
+                $datailinfo[$k]['unit_type'] = $v['unit_type'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['inventoryQty'] = $v['num'];
+                $datailinfo[$k]['uom'] = $v['zmoney'];
+                $datailinfo[$k]['memo'] = $v['memo'];
+            }
+            $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
+
+        }else{
+            $GLOBALS['tmpl']->assign("page_title", "入库单");
+            $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
+        }
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
+        $GLOBALS['tmpl']->assign("page_title", "查看/编辑入库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goDownAdd.html");
+
+    }
 
     /**
      * 仓库入库添加

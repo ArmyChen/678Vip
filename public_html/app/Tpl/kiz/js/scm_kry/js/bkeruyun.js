@@ -2188,7 +2188,7 @@ $(function () {
             //var token = window.parent.document.getElementById("t").value;
             var token = getToken();
             if (postData) {
-                window.location.href = url + '?' + $.param(postData) ;
+                window.location.href = url + '&' + $.param(postData) ;
             } else {
                 window.location.href = url ;
             }
@@ -2217,7 +2217,7 @@ $(function () {
          *
          * */
         $.doExport = function(args){
-            var url = args.url + '?id=' + args.postData.id;
+            var url = args.url + '&id=' + args.postData.id;
             window.open(url);
         };
 
@@ -2921,7 +2921,7 @@ function initToken() {
     if (!token || token.length == 0) {
         $.ajax({
             type: 'get',
-            url:  ctxPath + '/token/get?r=' + new Date().getTime(),//fix bug 【12991】 : 点浏览器回退后，再操作可能跳到首页。---由于请求没有真正发出，取的浏览器的缓存造成的
+            url:  ctxPath + '&r=' + new Date().getTime(),//fix bug 【12991】 : 点浏览器回退后，再操作可能跳到首页。---由于请求没有真正发出，取的浏览器的缓存造成的
             async: false,
             dataType: 'text',
             success: function (t) {

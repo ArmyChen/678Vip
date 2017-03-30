@@ -7,15 +7,15 @@ var asnSi = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '/scm/template/delivery',
+        urlRoot : ctxPath,
         templateId : -1,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '',
-        editUrl : '/edit',
-        deleteUrl : '/delete',
-        viewUrl : '/view',
+        queryUrl : '&act=go_down_index_ajax&type=1',
+        editUrl : '&act=go_down_index_view',
+        deleteUrl :'&act=go_down_delete_ajax',
+        viewUrl : '&act=go_down_index_view',
         confirmUrl : '/doconfirm',
         withdrawUrl : '/withdraw',
         copyUrl: '/copy',
@@ -131,51 +131,31 @@ var asnSi = {
         };
 
         $.showEditor = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showConfirm = function (rowData) {
-            if(rowData.status==0) return renderEnum.normal;
-            if(rowData.status==1) return renderEnum.hidden;
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showWithDraw = function(rowData){
-       	    if (rowData.status == 1) {
-                return (rowData.sourceType==null||rowData.sourceType =="")?renderEnum.normal:renderEnum.disabled;
-            }
             return renderEnum.hidden;
        };
        
         $.showDelete = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showCopy = function (rowData) {
-            if (rowData.senderId <= 3 || rowData.senderId == 5) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
         //更多查询
         $("#searchMore").on("click",function(){
@@ -229,40 +209,40 @@ var asnSi = {
             ],
             sortname: 'ctime',
             pager: "#gridPager",
-            showOperate: false,
+            showOperate: true,
             actionParam: {
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
-                    code: "scm:button:inventory:si:edit",
+                    url: inventoryPath + _this.opts.editUrl,
+                    // code: "scm:button:inventory:si:edit",
                     render: $.showEditor
                 },
                 view: {
-                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    url: inventoryPath + _this.opts.viewUrl,
                     render: $.showView
                 },
                 confirm: {
-                    url: _this.opts.urlRoot + _this.opts.confirmUrl,
-                    code: "scm:button:inventory:si:confirm",
+                    url: inventoryPath + _this.opts.confirmUrl,
+                    // code: "scm:button:inventory:si:confirm",
                     render: $.showConfirm
                 },
                 withdraw: {
-                	url:_this.opts.urlRoot + _this.opts.withdrawUrl,
-                	code: "scm:button:inventory:si:withdraw",
+                	url:inventoryPath + _this.opts.withdrawUrl,
+                	// code: "scm:button:inventory:si:withdraw",
                     render: $.showWithDraw,
                     redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
                 },
                 delete: {
-                    url: _this.opts.urlRoot + _this.opts.deleteUrl,
-                    code: "scm:button:inventory:si:delete",
+                    url: inventoryPath + _this.opts.deleteUrl,
+                    // code: "scm:button:inventory:si:delete",
                     render: $.showDelete
                 },
                 print: {
-                    url: _this.opts.urlRoot,
+                    url: inventoryPath,
                     render: $.showPrint
                 },
                 copy: {
-                    url: _this.opts.urlRoot + _this.opts.copyUrl,
-                    code: "scm:button:inventory:si:add",
+                    url: inventoryPath + _this.opts.copyUrl,
+                    // code: "scm:button:inventory:si:add",
                     render: $.showCopy
                 }
             }
