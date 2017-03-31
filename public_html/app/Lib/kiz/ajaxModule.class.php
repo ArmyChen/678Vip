@@ -597,7 +597,7 @@ class ajaxModule extends KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         //分类
-        $sortconditions = " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $sortconditions = " where is_effect = 0 and  wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
         $sortconditions .= " and location_id=".$slid;
         $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
         $sqlsort.=$sortconditions. " order by sort desc";
