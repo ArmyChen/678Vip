@@ -489,7 +489,7 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['type'] = $v['type'];
             $datailinfo[$k]['unit_type'] = $v['unit_type'];
             $datailinfo[$k]['price'] = $v['price'];
-            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['num'] = $v['planMoveQty'];
             $datailinfo[$k]['zmoney'] = $v['uom'];
             $datailinfo[$k]['memo'] = $v['memo'];
         }

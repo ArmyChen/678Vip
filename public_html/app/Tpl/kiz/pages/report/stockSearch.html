@@ -238,9 +238,9 @@
         $(_gridTable).dataGrid({
             formId: "queryConditions",
             url: '/scm_kry/inventory/query',
-            colNames: ['', '商户', '仓库', '商品编码', '商品名称（规格）', '单位', '价格', '库存', '库存金额'],
+            colNames: ['商品编码', '商户', '仓库', '商品条码', '商品名称（规格）', '单位', '价格', '库存', '库存金额'],
             colModel: [
-                {name: 'id', index: 'id', hidden: true},
+                {name: 'id', index: 'id', hidden: false},
                 {name: 'commercialName', index: 'commercialName', width: 160, align: 'left'},
                 {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 160, align: 'left'},

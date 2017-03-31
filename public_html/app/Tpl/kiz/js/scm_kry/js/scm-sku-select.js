@@ -439,14 +439,14 @@ var scmSkuSelect = {
             multiselectWidth: 49,
             height: 350,
             width: width,
-            colNames: ['id',
+            colNames: [  _this.opts.sku + '编码',
                 // 'wmType',
                 // 'yieldRateStr',
                 // 'reckonPrice',
                 // '库存类型',
                 '所属分类ID',
                 '所属分类',
-                _this.opts.sku + '编码',
+                _this.opts.sku + '条码',
                 _this.opts.sku + '名称（规格）',
                 '单位',
                 // '单位ID',
@@ -461,7 +461,7 @@ var scmSkuSelect = {
                 // '库存类型'
             ],
             colModel: [
-                {name: 'id', index: 'id', hidden: true},
+                {name: 'id', index: 'id', hidden: false},
                 // {name: 'wmType', index: 'wmType', hidden: true},
                 // {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
                 // {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {

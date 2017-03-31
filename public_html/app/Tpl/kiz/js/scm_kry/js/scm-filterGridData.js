@@ -155,7 +155,7 @@ $(function () {
             </div>\
             <div class="form-item filter">\
                 <div class="control-label-con1 search-box" style="width: 185px;">\
-                    <input type="text" name="skuCodeOrName" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="14">\
+                    <input type="text" name="skuCodeOrName" class="form-control" placeholder="请输入商品条码/名称" data-format="skuName" maxlength="14">\
                     <button type="button" class="close" aria-hidden="true">&times;</button>\
                 </div>\
             </div>\

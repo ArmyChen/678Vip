@@ -266,8 +266,51 @@ class KizBaseModule{
 
     }
 
-	
+    /**
+     * 根据mid查询仓库信息
+     * @param $id
+     * @return mixed
+     */
+	public function getCangkuMenuInfoByMid($mid){
+        if($mid > 0){
+            $sql = "select * from fanwe_cangku_menu where mid=".$mid;
+            $result = $GLOBALS['db']->getRow($sql);
+            return $result;
+        }
+        return null;
+    }
 
+    /**
+     * 根据mid查询商品信息
+     * @param $id
+     * @return mixed
+     */
+    public function getDcMenuInfoByMid($id){
+        if($id > 0){
+            $sql = "select * from fanwe_dc_menu where id=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+            return $result;
+        }
+        return null;
+    }
+
+
+    /**
+     * 根据id查询分类信息
+     * @param $id
+     * @return mixed
+     */
+    function get_dc_supplier_menu($id){
+        if($id > 0) {
+            $check = $GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id = " . $id);
+            if ($check) {
+                return $check;
+            } else {
+                return '';
+            }
+        }
+        return null;
+    }
 }
 
 ?>

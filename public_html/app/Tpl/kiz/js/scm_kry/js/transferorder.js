@@ -6,7 +6,7 @@ var transferOrder = {
         queryUrl: '&act=diaobo_list_ajax',
         editUrl: '/edit',
         deleteUrl: '/delete',
-        viewUrl: '/view',
+        viewUrl: '&act=go_transfer_index_view',
         confirmUrl: '/doconfirm',
         withdrawUrl: '/withdraw',
         //查询条件表单id
@@ -88,43 +88,31 @@ var transferOrder = {
         };
 
         $.showEditor = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showConfirm = function (rowData) {
-            if(rowData.status==0) return renderEnum.normal;
-            if(rowData.status==1) return renderEnum.hidden;
-            return renderEnum.disabled;//防止其他类型时，没有确认按钮
-        };
-        $.showWithDraw = function(rowData){
-       	 if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
-       };
-        
+        };
+
+        $.showWithDraw = function(rowData){
+            return renderEnum.hidden;
+        };
+
         $.showDelete = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
+        };
+
+        $.showCopy = function (rowData) {
+            return renderEnum.hidden;
         };
 
         $gridObj.dataGrid({
@@ -151,7 +139,7 @@ var transferOrder = {
             sortname: _this.opts.sortName,
             sortorder: _this.opts.sortOrder,
             pager: _this.opts.pager,
-            showOperate: false,
+            showOperate: true,
             actionParam: {
                 editor: {
                     url: _this.opts.urlRoot + _this.opts.editUrl,
@@ -159,7 +147,7 @@ var transferOrder = {
                     render: $.showEditor
                 },
                 view: {
-                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    url: inventoryPath + _this.opts.viewUrl,
                     render: $.showView
                 },
                 confirm: {
@@ -231,9 +219,9 @@ var transferOrder = {
             rownumbers: true,
             rowNum : 10000,
             //height: 300,
-            colNames: ['skuId', '所属分类ID','所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '移库数', '合计金额', '状态', '当前库存', '当前库存(隐藏)', '换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码', '所属分类ID','所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '移库数', '合计金额', '状态', '当前库存', '当前库存(隐藏)', '换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
-                {name: 'skuId', index: 'skuId', width: 80, hidden: true},
+                {name: 'skuId', index: 'skuId', width: 80, hidden: false},
                 {name: 'skuTypeId', index: 'skuTypeId', width: 80, hidden: true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},

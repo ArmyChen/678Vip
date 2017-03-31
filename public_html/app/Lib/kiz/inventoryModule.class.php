@@ -101,32 +101,31 @@ class inventoryModule extends KizBaseModule{
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
-
         /*获取入库信息*/
         $id = $_REQUEST['id'];
         if($id > 0){
             $sql = "select * from fanwe_cangku_log where id=".$id;
             $result = $GLOBALS['db']->getRow($sql);
-
+//var_dump($result);
             $datailinfo = array();
             foreach(unserialize($result['dd_detail']) as $k=>$v){
-                var_dump($v);
-                $datailinfo[$k]['skuId'] = $v['mid'];
-                $datailinfo[$k]['uom'] = $v['unit'];
-                $datailinfo[$k]['funit'] = $v['funit'];
-                $datailinfo[$k]['times'] = $v['times'];
-                $datailinfo[$k]['price'] = $v['yuan_price'];
-                $datailinfo[$k]['skuName'] = $v['name'];
-                $datailinfo[$k]['skuCode'] = $v['barcode'];
-                $datailinfo[$k]['type'] = $v['type'];
-                $datailinfo[$k]['unit_type'] = $v['unit_type'];
+                $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+                $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+                $datailinfo[$k]['id'] = $v['mid'];//24733
+                $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+                $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+                $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+                $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+                $datailinfo[$k]['uom'] = $dc_menu['unit'];
                 $datailinfo[$k]['price'] = $v['price'];
-                $datailinfo[$k]['inventoryQty'] = $v['num'];
-                $datailinfo[$k]['uom'] = $v['zmoney'];
-                $datailinfo[$k]['memo'] = $v['memo'];
+                $datailinfo[$k]['actualQty'] = $v['num'];
+                $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+                $datailinfo[$k]['standardInventoryQty'] = $dc_menu2['stock'];
+                $datailinfo[$k]['inventoryQty'] = $v['num'] + $dc_menu2['stock'];
+
             }
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
-
+            $GLOBALS['tmpl']->assign("result", $result);
         }else{
             $GLOBALS['tmpl']->assign("page_title", "入库单");
             $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
@@ -137,8 +136,109 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
-        $GLOBALS['tmpl']->assign("page_title", "查看/编辑入库单");
-        $GLOBALS['tmpl']->display("pages/inventory/goDownAdd.html");
+        $GLOBALS['tmpl']->assign("page_title", "查看入库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goDownView.html");
+
+    }
+
+
+    /**
+     * 仓库移库查询
+     */
+    public function go_transfer_index_view()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $account_info['slid'];
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        /*获取入库信息*/
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $sql = "select * from fanwe_cangku_diaobo where id=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+
+            $datailinfo = array();
+            foreach(unserialize($result['dd_detail']) as $k=>$v){
+                $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+                $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+//var_dump($result);
+                $datailinfo[$k]['id'] = $v['mid'];//24733
+                $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+                $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+                $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+                $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+                $datailinfo[$k]['uom'] = $dc_menu['unit'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['planMoveQty'] = $v['num'];
+                $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+                $datailinfo[$k]['standardInventoryQty'] = $dc_menu2['stock'];
+                $datailinfo[$k]['inventoryQty'] = $v['num'] + $dc_menu2['stock'];
+
+            }
+
+            $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
+            $GLOBALS['tmpl']->assign("result", $result);
+        }else{
+            $GLOBALS['tmpl']->assign("page_title", "移库单");
+            $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
+        }
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
+        $GLOBALS['tmpl']->assign("page_title", "查看移库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goTransferView.html");
+
+    }
+
+    /**
+     * 仓库出库查询
+     */
+    public function go_up_index_view()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $account_info['slid'];
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        /*获取入库信息*/
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $sql = "select * from fanwe_cangku_log where id=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+//var_dump($result);
+            $datailinfo = array();
+            foreach(unserialize($result['dd_detail']) as $k=>$v){
+                $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+                $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+                $datailinfo[$k]['id'] = $v['mid'];//24733
+                $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+                $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+                $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+                $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+                $datailinfo[$k]['uom'] = $dc_menu['unit'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['actualQty'] = $v['num'];
+                $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+                $datailinfo[$k]['standardInventoryQty'] = $dc_menu2['stock'];
+                $datailinfo[$k]['inventoryQty'] = $v['num'] + $dc_menu2['stock'];
+
+            }
+            $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
+            $GLOBALS['tmpl']->assign("result", $result);
+        }else{
+            $GLOBALS['tmpl']->assign("page_title", "出库单");
+            $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
+        }
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
+        $GLOBALS['tmpl']->assign("page_title", "查看出库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goUpView.html");
 
     }
 

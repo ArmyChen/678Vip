@@ -147,7 +147,7 @@
     var editUrl = urlRoot + "edit";
     var withDrawUrl = urlRoot + 'withdraw';
     var deleteUrl = urlRoot + "delete";
-    var viewUrl = urlRoot + "view";
+    var viewUrl =inventoryPath + "&act=go_up_index_view";
     var confirmUrl = urlRoot + "doconfirm";
     var copyUrl = urlRoot + "copy";
 
@@ -168,62 +168,32 @@
             }
             return formData;
         };
-
         $.showEditor = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showConfirm = function (rowData) {
-            if (rowData.status==0) return renderEnum.normal;
-            if(rowData.status==1) return renderEnum.hidden;
-            return renderEnum.disabled;
-        };
-
-        $.showWithDraw = function(rowData){
-            console.debug(rowData);
-            if (rowData.status == 1) {
-                if(rowData.referenceType!=2&&rowData.referenceType!=3&&rowData.referenceType!=4&&rowData.referenceType!=6 && rowData.referenceType!=7){
-                    return renderEnum.normal;
-                }else{
-                    return renderEnum.disabled;
-                }
-            }
             return renderEnum.hidden;
         };
 
+        $.showWithDraw = function(rowData){
+            return renderEnum.hidden;
+        };
 
         $.showDelete = function (rowData) {
-            if((rowData.reasonId == 4 || rowData.reasonId == 8)&& rowData.referenceNo && rowData.referenceNo.length > 0){ // 预配发货单确认后生成的出库单，不可删除，reasonId == 4
-                return renderEnum.disabled;
-            }
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
+
         $.showCopy = function (rowData) {
-            if (rowData.referenceType!=null){
-                return renderEnum.disabled;
-            }else {
-                return renderEnum.normal;
-            }
+            return renderEnum.hidden;
         };
         //更多查询
         $("#searchMore").on("click",function(){
@@ -296,7 +266,7 @@
             ],
             sortname: 'ctime',
             pager: "#gridPager",
-            showOperate:false,
+            showOperate:true,
             actionParam: {
                 editor: {
                     url: editUrl,
