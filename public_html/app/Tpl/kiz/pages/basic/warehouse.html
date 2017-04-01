@@ -35,28 +35,34 @@
             <div class="aside-column multi-select">
                 <h2>商品分类</h2>
 
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items">
-                        <li>
-                            <label class="checkbox" for="sku-type-all">
-                                <span></span>
-                                <input type="checkbox" id="sku-type-all">全部
-                            </label>
-                        </li>
-
-
+                <!--<div class="select-control"><em></em></div>-->
+                <div>
+                    <select id="skuTypeId" name="skuTypeId">
+                        <option value="0" selected="selected">请选择</option>
                         {foreach from=$listsort item=item}
-                        <li>
-                            <label class="checkbox" for="sku-type-1">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-1"
-                                       value="{$item.id}" data-text="{$item.title_show}">{$item.title_show}
-                            </label></li>
-
+                        <option value="{$item.id}">{$item.title_show}</option>
                         {/foreach}
+                    </select>
+                    <!--<ul class="multi-select-items">-->
+                    <!--<li>-->
+                    <!--<label class="checkbox" for="sku-type-all">-->
+                    <!--<span></span>-->
+                    <!--<input type="checkbox" id="sku-type-all">全部-->
+                    <!--</label>-->
+                    <!--</li>-->
 
-                    </ul>
+
+                    <!--{foreach from=$listsort item=item}-->
+                    <!--<li>-->
+                    <!--<label class="checkbox" for="sku-type-1">-->
+                    <!--<span></span>-->
+                    <!--<input type="checkbox" name="skuTypes" id="sku-type-1"-->
+                    <!--value="{$item.id}" data-text="{$item.title_show}">{$item.title_show}-->
+                    <!--</label></li>-->
+
+                    <!--{/foreach}-->
+
+                    <!--</ul>-->
                 </div>
                 <input type="hidden" value="" />
             </div>
@@ -65,32 +71,39 @@
             <!-- 库存类型start -->
             <div class="aside-column multi-select">
                 <h2>库存类型</h2>
+                <select id="goodsWm" name="wmType">
+                    <option value="0" selected="selected">请选择</option>
+                    {foreach from=$kcnx item=item key=key}
+                    {if $key gt 0}
+                    <option value="{$key}">{$item}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+                <!--<div class="select-control"><em></em></div>-->
+                <!--<div class="multi-select-con" style="display:none;">-->
+                <!--<ul class="multi-select-items">-->
+                <!--<li>-->
+                <!--<label class="checkbox" for="wm-type-all">-->
+                <!--<span></span>-->
+                <!--<input type="checkbox" id="wm-type-all">全部-->
+                <!--</label>-->
+                <!--</li>-->
+                <!--{foreach from=$kcnx item=item key=key}-->
 
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items">
-                        <li>
-                            <label class="checkbox" for="wm-type-all">
-                                <span></span>
-                                <input type="checkbox" id="wm-type-all">全部
-                            </label>
-                        </li>
-                        {foreach from=$kcnx item=item key=key}
+                <!--<li>-->
+                <!--<label class="checkbox" for="wm-type-1">-->
+                <!--<span></span>-->
+                <!--<input type="checkbox" name="wmTypes" id="wm-type-1"-->
+                <!--value="{$key}" data-text="{$item}">{$item}-->
+                <!--</label></li>-->
 
-                        <li>
-                            <label class="checkbox" for="wm-type-1">
-                                <span></span>
-                                <input type="checkbox" name="wmTypes" id="wm-type-1"
-                                       value="{$key}" data-text="{$item}">{$item}
-                            </label></li>
-
-                        {/foreach}
+                <!--{/foreach}-->
 
 
 
 
-                    </ul>
-                </div>
+                <!--</ul>-->
+                <!--</div>-->
                 <input type="hidden" value="" />
             </div>
             <!-- 库存类型end -->
