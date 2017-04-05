@@ -847,6 +847,76 @@ class ajaxModule extends KizBaseModule{
     }
 
     /**
+     * 期初库存导入分类处理
+     * @param $catename
+     * @return mixed
+     */
+    private function basic_master_category($catename){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_supplier_menu_cate' ");print_r($table);exit;
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $GLOBALS['account_info']['slid'];
+
+        $account_info['is_main'] = $GLOBALS['db']->getOne("select is_main from fanwe_supplier_location where id=".$slid);
+        if ($account_info['is_main']=='1'){
+            $slidlist=$GLOBALS['db']->getAll("select id from fanwe_supplier_location where supplier_id=".$supplier_id);
+            $account_info['location_ids']= array_reduce($slidlist, create_function('$v,$w', '$v[]=$w["id"];return $v;'));
+        }
+        $conditions = " where wlevel<4 and is_effect=0"; // 查询条件
+        // 只查询支持门店的
+        $conditions .= " and location_id=$slid and location_id in(" . implode(",", $account_info['location_ids']) . ") ";
+        $conditions .= " and name='".$catename."'";
+        $sql = " select id,name from " . DB_PREFIX . "dc_supplier_menu_cate ".$conditions;
+        $categoryinfo = $GLOBALS['db']->getRow($sql);
+        if($categoryinfo){
+            return $categoryinfo['id'];
+        }else{
+            $data['name'] = $catename;
+            $data['sort'] = 0;
+            $data['is_effect'] = 0;
+            $data['supplier_id'] = $supplier_id;
+            $data['location_id'] = $slid;
+            $data['wcategory'] = 0;
+            $data['wlevel'] = 0;
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $data ,"INSERT");
+            $cate_id = $GLOBALS['db']->insert_id();
+            return $cate_id;
+        }
+    }
+
+    /**
+     * 期初库存导入
+     * @param $name
+     * @param $cate_id
+     * @param $price
+     * @param $unit
+     * @param $num
+     * @param $print
+     * @return mixed
+     */
+    private function basic_master_dc_menu($name,$cate_id,$price,$unit,$num,$print){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_dc_menu' ");print_r($table);exit;
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $GLOBALS['account_info']['slid'];
+        $dc_menu_data=array(
+            "location_id"=>$slid,
+            "supplier_id"=>$supplier_id,
+            "barcode"=>'',
+            "name"=>$name,
+            "cate_id"=>$cate_id,
+            "price"=>$price,
+            "unit"=>$unit,
+            "stock"=>$num,
+            "print"=>$print,
+            "is_stock" =>1
+        );
+        $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"INSERT");
+        $dc_menu_id = $GLOBALS['db']->insert_id();
+        return $dc_menu_id;
+    }
+    /**
      * 期初库存ajax
      */
     public function basic_master_import_ajax()
@@ -869,8 +939,17 @@ class ajaxModule extends KizBaseModule{
         }
         $insertSQL = "insert into ".DB_PREFIX."cangku_menu (slid,mid,cid,cate_id,stock,mstock,unit) values";
         for($i=2;$i<$total;$i++){
+            $print = $list[$i][2];//类型
             $dc_menu_id = $list[$i][3];//编号
-            $num = $list[$i][6];//导入库存
+            $dc_menu_name = $list[$i][4];//名称
+            $dc_unit = $list[$i][5];//单位
+            $num = $list[$i][6];//数量
+            $dc_price = $list[$i][7];//价格
+            if(!$dc_menu_id){
+                $dc_cate_id = $this->basic_master_category($list[$i][1]);
+                $dc_menu_id = $this->basic_master_dc_menu($dc_menu_name,$dc_cate_id,$dc_price,$dc_unit,$num,$print);
+            }
+
             $dc_menu = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=$dc_menu_id");
 
             //退商品表库存
