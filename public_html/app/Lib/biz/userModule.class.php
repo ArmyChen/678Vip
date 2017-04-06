@@ -146,7 +146,7 @@ class userModule extends BizBaseModule{
 				if (isset($_COOKIE['userurl'])){
 				$jump_url=$_COOKIE['userurl'];	
 				}else{
-			    $jump_url = url("biz",$biz_account_auth[1]);//第一个页面数据量大故改到量小的页面
+			    $jump_url = url("biz",$biz_account_auth[47]);//第一个页面数据量大故改到量小的页面
 				}
 			}
 			
