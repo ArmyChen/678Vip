@@ -33,6 +33,26 @@ class reportModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/report/stockDetailSearch.html");
     }
 
+    #库存预警表
+    public function report_stock_warning_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "库存预警表");
+        $GLOBALS['tmpl']->display("pages/report/stockWarning.html");
+    }
+
+    #库存交易凭证
+    public function report_stock_trade_cert_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "库存交易凭证（日志）");
+        $GLOBALS['tmpl']->display("pages/report/stockTradeCert.html");
+    }
+
     #出入库明细
     public function report_stock_dubbo_index()
     {

@@ -1,0 +1,502 @@
+{include file="inc/header.html"}
+<style type="text/css">
+    .tab-nav {
+        /*height: 60px;*/
+        /*line-height: 60px;*/
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+
+    .tab-nav .btn-active {
+        color: #fff!important;
+        background-color: #4084CA;
+    }
+    .tab1{
+        color: #FF634D!important;
+    }
+    .tab1.btn-active,.tab1:hover{
+        background-color: #FF634D;
+        color: white!important;
+    }
+    .tab2{
+        color: #FF9257!important;
+    }
+    .tab2.btn-active,.tab2:hover{
+        background-color: #FF9257;
+        color: white!important;
+    }
+    .tab3{
+        color: #FFBA00!important;
+    }
+    .tab3.btn-active,.tab3:hover{
+        background-color: #FFBA00;
+        color: white!important;
+    }
+    .btn-default:hover{
+        border-color: #cccccc!important;
+    }
+    .btn-transform{
+        float: right;
+        text-align: center;
+        color: #ffffff!important;
+        background-color: #FFBE55;
+        border-color: #FFB645;
+        width: 100px!important;;
+        margin: 10px 10px 0px 10px;
+    }
+    .btn-transform:hover, .btn-transform:focus, .btn-transform:active, .btn-transform.active, .open .dropdown-toggle.btn-transform {
+        color: #ffffff;
+        background-color: #FFAA3C;
+        border-color: #FFAC27;
+    }
+    .tran-dropdown-menu {
+        position: absolute;
+        top: 3px;
+        left: 10px;
+        z-index: 10000;
+        display: none;
+        /*float: left;*/
+        min-width: 100px;
+        /*margin: 2px 50px 0;*/
+        font-size: 14px;
+        list-style: none;
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        background-clip: padding-box;
+    }
+    .tran-dropdown-menu:hover{
+        display: block;
+    }
+
+    .tran-dropdown-menu .divider {
+        height: 1px;
+        /*margin: 9px 0;*/
+        overflow: hidden;
+        background-color: #e5e5e5;
+    }
+
+    .tran-dropdown-menu > li > a {
+        display: block;
+        padding: 3px 10px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.428571429;
+        color: #333333;
+        white-space: nowrap;
+    }
+
+    .tran-dropdown-menu > li > a:hover,
+    .tran-dropdown-menu > li > a:focus {
+        color: #262626;
+        text-decoration: none;
+        background-color: #f5f5f5;
+    }
+
+    .tran-dropdown-menu > .active > a,
+    .tran-dropdown-menu > .active > a:hover,
+    .tran-dropdown-menu > .active > a:focus {
+        color: #ffffff;
+        text-decoration: none;
+        background-color: #428bca;
+        outline: 0;
+    }
+
+    .tran-dropdown-menu > .disabled > a,
+    .tran-dropdown-menu > .disabled > a:hover,
+    .tran-dropdown-menu > .disabled > a:focus {
+        color: #999999;
+    }
+
+    .tran-dropdown-menu > .disabled > a:hover,
+    .tran-dropdown-menu > .disabled > a:focus {
+        text-decoration: none;
+        cursor: not-allowed;
+        background-color: transparent;
+        background-image: none;
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    }
+
+    .open > .tran-dropdown-menu {
+        display: block;
+    }
+    .tran-dropdown-menu > li > a {
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        color: #fff;
+        padding: 0 10px;
+        background-color: #FF792A;
+    }
+    .tran-dropdown-menu > li > a {
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        color: #fff;
+        padding: 0 10px;
+        background-color: #FF792A;
+    }
+
+    .tran-dropdown-menu.pull-right {
+        right: 0;
+        /*left: auto;*/
+    }
+
+    .tran-dropdown-menu > li > a:hover,
+    .tran-dropdown-menu > li > a:focus,
+    .tran-dropdown-menu > .open > a,
+    .tran-dropdown-menu > .open > a:hover {
+        color: #fff;
+        background-color: #FF481F;
+    }
+    .badge{
+        background: #ff9257!important;
+        color: #FFF;
+        margin-left: 20px;
+    }
+</style>
+<style type="text/css">
+    .button-disable{
+        cursor:default;
+        opacity: 0.4
+    }
+</style>
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>库存预警表</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="#" class="btn-link ml10" onfocus="this.blur();" id="export">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="tab-nav">
+        <div class="btn-group" role="group">
+            <button id="tabNav1" data-box-id="tabBox_1" down-excel-id="freeDownExcel_1" type="button" class="tab1 btn tab-btn isNotInit btn-default need-to-refresh">库存短缺<span class="badge"></span></button>
+            <button id="tabNav2" data-box-id="tabBox_2" down-excel-id="freeDownExcel_2" type="button" class="tab2 btn tab-btn isNotInit btn-default need-to-refresh">库存预警<span class="badge"></span></button>
+            <button id="tabNav3" data-box-id="tabBox_3" down-excel-id="freeDownExcel_3" type="button" class="tab3 btn tab-btn isNotInit btn-default need-to-refresh">库存积压<span class="badge"></span></button>
+        </div>
+        <div class="pull-right">
+            <div class="pull-right">
+                <span style="font-size: 24px;" data-content="转采购申请单只会对原物料和外购品进行转单" class="iconfont question color-g pull-right"></span>
+                <label class="btn btn-large btn-transform" id="transformBtn">预警转单</label>
+            </div>
+            <div style="position: relative" class="clear pull-left">
+                <ul class="tran-dropdown-menu pull-right">
+                    <li class="dropdown-submenu" id="transform"><a href="">采购申请单</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div>
+
+    </div>
+
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control"
+                           placeholder="请输入商品编码/名称" data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <input type="text" class="hidden">
+
+            <!-- 门店 start -->
+            <div class="aside-column panel-search">
+
+                <h2>品牌/商户<strong class="red vam"> *</strong></h2>
+
+
+                <select id="commercialId" name="commercialId">
+
+                    <option value="-1">(品牌)</option>
+
+                    <option value="810019565">客如云电商部1号演示门店</option>
+
+                </select>
+            </div>
+            <!-- 门店 end -->
+
+            <!-- 仓库 start -->
+            <div class="aside-column multi-select">
+                <h2>仓库</h2>
+                <div class="select-control"><em id="wmId-all-em"></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items" id="wmId-all-ul">
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 仓库 end -->
+
+            <!-- 库存类型start -->
+            <div class="aside-column multi-select">
+                <h2>库存类型</h2>
+
+                <div class="select-control" data-default="请选择库存类型"><em id="wmTypeId-all-em">请选择库存类型</em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="wm-type-all">
+                                <span></span>
+                                <input type="checkbox" id="wm-type-all">全部
+                            </label>
+                        </li>
+
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-2">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-2"
+                                       value="1" data-text="预制商品">预制商品
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-3">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-3"
+                                       value="3" data-text="外购商品">外购商品
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-4">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-4"
+                                       value="4" data-text="原物料">原物料
+                            </label></li>
+
+
+
+                        <li>
+                            <label class="checkbox" for="wm-type-5">
+                                <span></span>
+                                <input type="checkbox" name="wmTypes" id="wm-type-5"
+                                       value="5" data-text="半成品">半成品
+                            </label></li>
+
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 库存类型end -->
+            <!-- 商品中类start -->
+            <div class="aside-column multi-select">
+                <h2>商品中类</h2>
+
+                <div class="select-control" data-default="请选择商品中类"><em id="skuTypeId-all-em">请选择商品中类</em></div>
+                <div class="multi-select-con" style="display:none;max-height: 180px;">
+                    <ul class="multi-select-items">
+                        <li>
+                            <label class="checkbox" for="sku-type-all">
+                                <span></span>
+                                <input type="checkbox" id="sku-type-all">全部
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-1">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-1"
+                                       value="170317" data-text="奶慕奉奶">奶慕奉奶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-2">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-2"
+                                       value="170318" data-text="醇香奶茶">醇香奶茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-3">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-3"
+                                       value="170319" data-text="新鲜果茶">新鲜果茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-4">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-4"
+                                       value="176635" data-text="海鲜">海鲜
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-5">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-5"
+                                       value="211181" data-text="火锅跟">火锅跟
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-6">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-6"
+                                       value="211182" data-text="uuu">uuu
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-7">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-7"
+                                       value="326162" data-text="丸子">丸子
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-8">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-8"
+                                       value="326168" data-text="茶">茶
+                            </label></li>
+
+                        <li>
+                            <label class="checkbox" for="sku-type-9">
+                                <span></span>
+                                <input type="checkbox" name="skuTypes" id="sku-type-9"
+                                       value="326213" data-text="无">无
+                            </label></li>
+
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 商品中类end -->
+            <!-- 商品状态 start -->
+            <div class="aside-column">
+                <h2>商品状态</h2>
+                <ul class="panel-list-type">
+                    <li style="width: 50%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                    </li>
+                    <li style="width: 50%;"><label class="checkbox" for="isDisable"><span></span>
+                        <input type="checkbox" name="isDisable" id="isDisable" value="1">停用</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 商品状态 end -->
+        </form>
+
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" onclick="load()">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div id="tabBox_1" class="panel-body tab-box">
+            <!-- grid start -->
+            <table id="grid_shortage"></table>
+            <div id="gridPager_shortage"></div>
+            <!-- grid end -->
+        </div>
+
+        <div id="tabBox_2" class="panel-body tab-box" style="display: none;">
+            <!-- grid start -->
+            <table id="grid_warn"></table>
+            <div id="gridPager_warn"></div>
+            <!-- grid end -->
+        </div>
+
+        <div id="tabBox_3" class="panel-body tab-box" style="display: none;">
+            <!-- grid start -->
+            <table id="grid_overstock"></table>
+            <div id="gridPager_overstock"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+
+</div>
+<script>
+    var wareHouseJson = '[{"id":9591,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-25 13:15:02","version":2,"wareshouseCode":"WH001","warehouseName":"-1_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0},{"id":13260,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:31","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-21 16:28:18","version":1,"wareshouseCode":"WH002","warehouseName":"-1_饮品仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13261,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:43","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:11:15","version":1,"wareshouseCode":"WH003","warehouseName":"-1_酒水仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13262,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:50:57","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:12:49","version":1,"wareshouseCode":"WH004","warehouseName":"-1_原材料仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":14838,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:09","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:09","version":1,"wareshouseCode":"WH005","warehouseName":"-1_4号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":14839,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:37","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:37","version":1,"wareshouseCode":"WH006","warehouseName":"-1_5号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":9604,"uuid":null,"brandId":12566,"brandName":null,"commercialId":810019565,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 15:11:38","updaterId":-1,"updaterName":null,"updateTime":"2016-12-29 19:15:24","version":1,"wareshouseCode":"WH001","warehouseName":"810019565_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0}]';
+    $(function(){
+
+        function transformShow() {
+            var flag = false;
+            $(" .btn-transform").click(function(){
+                flag = true;
+                $(" .tran-dropdown-menu").show();
+            });
+            $(" .btn-transform").mouseout(function () {
+                flag = false;
+                setTimeout(function () {
+                    if (flag == false) {
+                        $(" .tran-dropdown-menu").hide();
+                    }
+                }, 100);
+            });
+            $(" .btn-transform").mouseover(function(){
+                flag = true;
+            });
+            $(" .tran-dropdown-menu").mouseover(function(){
+                flag = true;
+            });
+            $(" .tran-dropdown-menu").mouseout(function () {
+                flag = false;
+                setTimeout(function () {
+                    if (flag == false) {
+                        $(" .tran-dropdown-menu").hide();
+                    }
+                }, 100);
+            });
+        }
+
+        transformShow();
+
+        var opts = {
+            urlRoot: '/scm_kry'
+        };
+        initUrl(opts);
+
+        //库存预警
+        $.ajax({
+            url: ctxPath + "/report/inventoryWarn/warmingCount",
+            type: "post",
+            data: {},
+            async: false,
+            success: function (result) {
+                var data = result.data;
+                if(result.data[0]>0)
+                    $('.badge').eq(0).text(data[0]);
+                if(result.data[1]>0)
+                    $('.badge').eq(1).text(data[1]);
+                if(result.data[2]>0)
+                    $('.badge').eq(2).text(data[2]);
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="/scm_kry/js/scm/scm-tooltip.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/scm_kry/js/scm/commercial-wm-associate.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/scm_kry/js/scm/report/inventory-warn.js?v=20170406_201331" ></script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>
