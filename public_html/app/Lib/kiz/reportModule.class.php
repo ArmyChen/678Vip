@@ -52,6 +52,24 @@ class reportModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "库存交易凭证（日志）");
         $GLOBALS['tmpl']->display("pages/report/stockTradeCert.html");
     }
+    #盘点盈亏表导出
+    public function report_stock_diff_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "盘点盈亏表导出");
+        $GLOBALS['tmpl']->display("pages/report/stockDiff.html");
+    }
+    #调拨差异分析表导出
+    public function report_allocation_difference_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "调拨差异分析表导出");
+        $GLOBALS['tmpl']->display("pages/report/allocationDifference.html");
+    }
 
     #出入库明细
     public function report_stock_dubbo_index()

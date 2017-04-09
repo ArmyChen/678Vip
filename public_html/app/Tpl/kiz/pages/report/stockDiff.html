@@ -1,0 +1,418 @@
+
+{include file="inc/header.html"}
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>盘点盈亏表</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="#" class="btn-link ml10" onclick="exportResult()">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="on">
+
+            <input type="text" class="hidden">
+
+            <!-- 门店 start -->
+            <div class="aside-column panel-search">
+                <h2>品牌/商户<strong class="red vam"> *</strong></h2>
+                <select id="commercialId" name="commercialId">
+
+                    <option value="">请先选择品牌/商户</option>
+
+
+                    <option value="-1">(品牌)</option>
+
+                    <option value="810019565">客如云电商部1号演示门店</option>
+
+                </select>
+            </div>
+            <!-- 门店 end -->
+
+            <!-- 仓库 start -->
+            <div class="aside-column multi-select">
+                <h2>仓库</h2>
+                <div class="select-control"><em id="wmId-all-em"></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items" id="wmId-all-ul">
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 仓库 end -->
+
+            <!-- 盘点模板start -->
+            <div class="aside-column multi-select">
+                <h2>盘点模板</h2>
+                <div class="select-control"><em id="template-all-em"></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items" id="template-all-ul">
+
+                    </ul>
+                </div>
+                <input id="taskTemplateIds" name="taskTemplateIds" type="hidden" value="" />
+            </div>
+            <input id="templateName" name="templateName" type="hidden" value="">
+            <!-- 盘点模板end -->
+
+            <!-- 盘点日期 start -->
+            <div class="aside-column">
+                <h2>查询日期</h2>
+
+                <div class="search-box">
+                    <input type="text" name="confirmDateStart" id="confirmDateStart"
+                           class="form-control datepicker-start" data-for-element="confirmDateEnd" placeholder="请选择开始日期"
+                           readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="confirmDateEnd" id="confirmDateEnd" class="form-control datepicker-end"
+                           data-for-element="confirmDateStart" placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 盘点日期 end -->
+
+            <!-- 商品状态 start -->
+            <div class="aside-column">
+                <h2>商品状态</h2>
+                <ul class="panel-list-type">
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
+                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
+                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 商品状态 end -->
+        </form>
+
+        <a class="link undo-all" id="undo-all1">全部撤销</a>
+        <a class="btn-blue btn-search" onclick="load()">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <!-- <div id="gridPager"></div> -->
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/commercial-wm-associate.js?v=20170406_201331" ></script>
+<script>
+
+    var _gridTable = '#grid';
+    var templateList = '{"-1":[{"id":7766,"name":"是是是","shopId":-1,"status":0}],"810019565":[{"id":7766,"name":"是是是","shopId":810019565,"status":0}]}';
+    var wareHouseJson = '[{"id":9591,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-25 13:15:02","version":2,"wareshouseCode":"WH001","warehouseName":"-1_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0},{"id":13260,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:31","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-21 16:28:18","version":1,"wareshouseCode":"WH002","warehouseName":"-1_饮品仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13261,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:43","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:11:15","version":1,"wareshouseCode":"WH003","warehouseName":"-1_酒水仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13262,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:50:57","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:12:49","version":1,"wareshouseCode":"WH004","warehouseName":"-1_原材料仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":14838,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:09","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:09","version":1,"wareshouseCode":"WH005","warehouseName":"-1_4号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":14839,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:37","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:37","version":1,"wareshouseCode":"WH006","warehouseName":"-1_5号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":9604,"uuid":null,"brandId":12566,"brandName":null,"commercialId":810019565,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 15:11:38","updaterId":-1,"updaterName":null,"updateTime":"2016-12-29 19:15:24","version":1,"wareshouseCode":"WH001","warehouseName":"810019565_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0}]';
+    var currentShopId = '-1';
+
+    var cachedQueryConditions = ''; //缓存页面条件
+
+    $(function () {
+        initDates();
+
+        //查询页面第一个输入框获得光标，输入框绑定enter事件
+        $.setSearchFocus();
+
+        refreshWms($('select[name=commercialId]').val());
+
+        $(_gridTable).dataGrid({
+            formId: "queryConditions",
+            url: '/scm_kry/report/cc/query',
+            colNames: ['商品大类', '商品中类', '商品编码', '商品名称（规格）', '单位',
+                '盘盈金额合计', '盘亏金额合计', '差异金额合计', '盘盈数', '盘盈金额', '盘亏数', '盘亏金额', '差异数', '差异金额'],
+            colModel: [
+                {name: 'typeBigName', index: 'typeBigName', width: 180, align: 'left'},
+                {name: 'typeMiddleName', index: 'typeMiddleName', width: 180, align: 'left'},
+                {name: 'skuCode', index: 'skuCode', width: 180, align: 'left'},
+                {name: 'skuName', index: 'skuName', width: 240, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.isDelete == 1) {
+                            return cellvalue + "<span style='color:red'>(已删除)</span>";
+                        } else if (rowObject.isDisable == 1) {
+                            return cellvalue + "<span style='color:red'>(已停用)</span>";
+                        } else {
+                            return cellvalue;
+                        }
+                    }
+                },
+                {name: 'uom', index: 'uom', width: 120, align: 'center'},
+                {
+                    name: 'amountOverage',
+                    align: "right",hidden:true
+                },
+                {
+                    name: 'amountLoss',
+                    align: "right",hidden:true
+                },
+                {
+                    name: 'amountDiff',
+                    align: "right",hidden:true
+                },
+                {name: 'qtyOverage', index: 'qtyOverage', width: 150, align: "right"},
+                {
+                    name: 'amountOverage',
+                    index: 'amountOverage',
+                    width: 150,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                },
+                {name: 'qtyLoss', index: 'qtyLoss', width: 150, align: "right"},
+                {
+                    name: 'amountLoss',
+                    index: 'amountLoss',
+                    width: 150,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                },
+                {name: 'qtyDiff', index: 'qtyDiff', width: 150, align: "right"},
+                {
+                    name: 'amountDiff',
+                    index: 'amountDiff',
+                    width: 150,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                }
+            ],
+            sortname: 'skuCode',
+            sortorder:'asc',
+            //pager: "#gridPager",
+            footerrow: true,
+            rowNum:9999,
+            gridComplete: function() {
+                var rowNum = parseInt($(this).getGridParam('records'),10);
+                if(rowNum > 0){
+                    $(".ui-jqgrid-sdiv").show();
+                    var qtyOverage  = jQuery(this).getCol('qtyOverage',false,'sum');
+                    var amountOverage  = jQuery(this).getCol('amountOverage',false,'sum');
+                    var qtyLoss  = jQuery(this).getCol('qtyLoss',false,'sum');
+                    var amountLoss  = jQuery(this).getCol('amountLoss',false,'sum');
+                    var qtyDiff  = jQuery(this).getCol('qtyDiff',false,'sum');
+                    var amountDiff  = jQuery(this).getCol('amountDiff',false,'sum');
+                    $(this).footerData("set",{uom:"合计:",qtyOverage:qtyOverage,
+                        amountOverage:amountOverage,qtyLoss:qtyLoss,amountLoss:amountLoss,
+                        qtyDiff:qtyDiff,amountDiff:amountDiff
+                    });
+                }else{
+                    $(".ui-jqgrid-sdiv").hide();
+                }
+            },
+            showOperate: false,
+            dataType: 'local',
+            jsonReader:{id:'skuCode'},
+            localReader:{id:'skuCode'}
+        });
+
+        jQuery("#grid").jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
+            groupHeaders:[
+                {startColumnName: 'qtyOverage', numberOfColumns: 2, titleText: '盘盈'},
+                {startColumnName: 'qtyLoss', numberOfColumns: 2, titleText: '盘亏'},
+                {startColumnName: 'qtyDiff', numberOfColumns: 2, titleText: '盘点盈亏差异'}
+            ]
+        });
+
+        delegateSelect('#commercialId');
+
+        cachedQueryConditions = serializeFormById('queryConditions');
+    });
+
+    function initDates() {
+        var currentDate = new Date().Format('yyyy-MM-dd');
+        $('#confirmDateStart').val(currentDate);
+        $('#confirmDateEnd').val(currentDate);
+    }
+
+
+    function exportResult(){
+
+        var currentQueryConditions = serializeFormById('queryConditions');
+
+        if(currentQueryConditions != cachedQueryConditions){
+            $.layerMsg('条件已改变，请先点击查询按钮！', false);
+            return false;
+        }
+
+        var commercialId = $('select[name=commercialId]').val();
+
+        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+//          bkeruyun.promptMessage('请选择门店!');
+            $.layerMsg('请选择品牌/商户!', false);
+            return;
+        }
+
+        var $gridObj = $(_gridTable);
+
+
+        var totalSize = $gridObj.jqGrid('getGridParam','records');
+
+        if(totalSize > 0){
+
+            var sidx = $gridObj.jqGrid('getGridParam','sortname');
+            var sord = $gridObj.jqGrid('getGridParam','sortorder');
+
+            //rows=0将获取所有记录，不分页
+            var exportUrl = "/scm_kry/report/cc/export?rows=0&sidx=" + sidx + "&sord=" + sord;
+
+            $("#queryConditions").attr("action", exportUrl).attr("target", "_blank");
+            $("#queryConditions").submit();
+        } else{
+            $.layerMsg('查询条件已改变，请先点击查询按钮！', false);
+        }
+    }
+
+
+    function load() {
+        //验证
+        var commercialId = $('select[name=commercialId]').val();
+        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+//            bkeruyun.promptMessage('请选择门店!');
+            $.layerMsg('请选择品牌/商户!', false);
+            return;
+        }
+        var tpNames = "",allTpOld = $("#template-all-ul").find(".checkbox-check");
+        for(var i = 0;i<allTpOld.length;i++){
+            var each = $(allTpOld[i]).find("input").attr("data-text");
+            if(!each||each=="") continue;
+            if(i==allTpOld.length-1){
+                tpNames+=each;
+            }else{
+                tpNames+=each+',';
+            }
+        }
+
+        $("#templateName").val(tpNames);
+        cachedQueryConditions = serializeFormById('queryConditions');
+        $(_gridTable).refresh(-1);
+    }
+    /**
+     * 监听下拉选框
+     * @param name
+     * @param id
+     */
+    function delegateSelect(id){
+        //业务类型 条件选择
+        $(document).delegate(id, "change", function(){
+            refreshWms($('select[name=commercialId]').val());
+        });
+    }
+    /**
+     * 自定义的金额表示格式：货币符号￥为前缀，千分位分隔符，删除多余的小数位0（或.0）。如“￥ 123,456,789,000”、“￥ 13.2”
+     * @param cellvalue
+     * @param options
+     * @param rowObject
+     * @returns {string}
+     */
+    function customCurrencyFormatter(cellvalue, options, rowObject) {
+
+        if (!cellvalue && cellvalue != 0) {
+            cellvalue = '';
+        }
+
+        var numberstr = (typeof cellvalue == 'string' ? cellvalue : cellvalue.toString());
+
+        if(numberstr.indexOf('合计')==0){
+            return numberstr;
+        }
+
+        //处理负数（影响千分位的计算）
+        var minus = numberstr.indexOf('-') == 0 ? '-' : '';
+        if (minus === '-') {
+            numberstr = numberstr.substring(1);
+        }
+
+        numberstr = returnWithoutDecimalZero(numberstr);
+
+        var index = numberstr.lastIndexOf('.');
+
+        var left = index > 0 ? numberstr.substring(0, index) : numberstr;
+        var right = index > 0 ? numberstr.substring(index + 1) : '';
+
+        var count = 1;
+        for (var pointer = left.length - 1; pointer > 0; pointer--) {
+            if (count % 3 == 0) {
+                var replace_left = left.substring(0, pointer);
+                //var replace = left.substring(pointer, pointer + 1);
+                var replace_right = left.substring(pointer + 1);
+                var withstr = ',' + left.charAt(pointer);
+                left = replace_left + withstr + replace_right;
+            }
+            count++;
+        }
+
+        return "￥" + minus + left + (index > 0 ? '.' : "") + right;
+    }
+    //重置表单
+    $("#undo-all1").on("click", function (e) {
+        e.preventDefault();
+        bkeruyun.clearData($(this).parents('.aside'));
+
+        if (!bkeruyun.isPlaceholder()) {
+            JPlaceHolder.init();
+        }
+
+        initDates();
+
+
+    });
+
+    //========================for template begin==============================
+    $("#commercialId").on("change",function(){
+        var shopId = $(this).val();
+        reloadTemplate(shopId);
+    });
+
+    //加载模板数据
+    function reloadTemplate(shopId){
+        if(templateList=="") return false;
+        var templateEm = $("#template-all-em"),
+                templateAll = $("#template-all-ul"),
+                taskTemplateId = $("#taskTemplateIds");
+
+        if(shopId==""){
+            templateAll.html("");
+        }else{
+            var templateListObj = eval('(' + templateList + ')'),templateOne = templateListObj[shopId];
+            if(templateOne){
+                var str = '<li><label class="checkbox" for="template-all"><span></span><input type="checkbox" id="template-all">全部</label></li>';
+                str+='<li><label class="checkbox" for="template-00"><span></span><input type="checkbox" name="template" id="template-00" value="-1" data-text="未选择模板(-)">未选择模板(-)</label></li>';
+                for(var i = 0;i<templateOne.length;i++){
+                    var id = templateOne[i].id,name = templateOne[i].name+(templateOne[i].status==0?'':'(已停用)');
+                    str+='<li><label class="checkbox" for="template-'+i+'"><span></span>';
+                    str+='<input type="checkbox" name="template" id="template-'+i+'" value="'+id+'" data-text="'+name+'">';
+                    str+=name+'</label></li>';
+                }
+                templateAll.html(str);
+            }else{
+                var str2 = '<li><label class="checkbox" for="template-all"><span></span><input type="checkbox" id="template-all">全部</label></li>';
+                str2+='<li><label class="checkbox" for="template-00"><span></span><input type="checkbox" name="template" id="template-00" value="-1" data-text="未选择模板(-)">未选择模板(-)</label></li>';
+                templateAll.html(str2);
+            }
+        }
+        templateEm.html("");
+        taskTemplateId.val("");
+        delegateCheckbox('template', '#template-all', false);  // 开始监听盘点模板的checkbox
+    }
+
+    $(document).ready(function(){
+        if(currentShopId!="-1") reloadTemplate(currentShopId);
+    });
+    //========================for template end==============================
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

@@ -165,6 +165,28 @@
     "url": "act=report_stock_trade_cert_index"
   },
   {
+    "code": "scm:report:ccReport:query",
+    "id": 1286,
+    "levelId": "001001001",
+    "name": "盘点盈亏表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 30,
+    "type": 1,
+    "url": "act=report_stock_diff_index"
+  },
+  {
+    "code": "scm:report:allocation:query",
+    "id": 1287,
+    "levelId": "001001001",
+    "name": "调拨差异分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 40,
+    "type": 1,
+    "url": "act=report_allocation_difference_index"
+  },
+  {
     "code": "scm:report:skuIO:query",
     "id": 1288,
     "levelId": "001001001",

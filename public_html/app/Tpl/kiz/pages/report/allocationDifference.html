@@ -1,0 +1,123 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>调拨差异分析表</h1>
+        <div class="btn-wrap pull-right tar">
+            <a href="javascript:;" class="btn-link ml10" onclick="exportResult();">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <input id="houseCache" type="hidden" value='[{"brandId":12566,"commercialId":-1,"id":9591,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"总仓库","wareshouseCode":"WH001"},{"brandId":12566,"commercialId":-1,"id":13260,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"饮品仓","wareshouseCode":"WH002"},{"brandId":12566,"commercialId":-1,"id":13261,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"酒水仓","wareshouseCode":"WH003"},{"brandId":12566,"commercialId":-1,"id":13262,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"原材料仓","wareshouseCode":"WH004"},{"brandId":12566,"commercialId":-1,"id":14838,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"4号库","wareshouseCode":"WH005"},{"brandId":12566,"commercialId":-1,"id":14839,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"5号库","wareshouseCode":"WH006"},{"brandId":12566,"commercialId":810019565,"id":9604,"isDefault":false,"isDisable":false,"version":0,"warehouseName":"总仓库","wareshouseCode":"WH001"}]'>
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <input id="comName" name="comName" type="hidden">
+            <input id="houseName" name="houseName" type="hidden">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="skuCodeOrName" id="skuCodeOrName" class="form-control" placeholder="请输入商品编码/名称"
+                           data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 调出门店 start -->
+            <div class="aside-column">
+                <h2>调出商户<strong class="red vam"> *</strong></h2>
+                <select class="form-control" id="commericalId" name="commericalId">
+
+                    <option value="-999">请先选择商户</option>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <option value="810019565">客如云电商部1号演示门店</option>
+
+
+
+
+                </select>
+            </div>
+            <!-- 调出门店 end -->
+
+            <!-- 调出仓库 -->
+            <div class="aside-column">
+                <h2>调出仓库</h2>
+                <div>
+                    <select class="form-control" name="warehouseId" id="warehouseId">
+                        <option value="">请选择调出仓库</option>
+                    </select>
+                </div>
+            </div>
+            <!-- 调出仓库 end -->
+
+            <!-- 确认/保存日期 start -->
+            <div class="aside-column">
+                <h2>查询日期</h2>
+                <div class="search-box">
+                    <input type="text" name="startDate" id="startDate" class="form-control datepicker-start" data-for-element="endDate"
+                           placeholder="请选择开始日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="endDate" id="endDate" class="form-control datepicker-end" data-for-element="startDate"
+                           placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 确认/保存日期 end -->
+
+            <!-- 商品状态 start -->
+            <div class="aside-column">
+                <h2>商品状态</h2>
+                <ul class="panel-list-type">
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
+                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
+                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 商品状态 end -->
+        </form>
+        <a class="link undo-all" id="undo-all1">全部撤销</a>
+        <a class="btn-blue btn-search" onclick="queryData();">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/allocation-export.js?v=20170406_201331"></script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
