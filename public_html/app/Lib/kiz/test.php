@@ -6,4 +6,5 @@
  * Time: 23:30
  */
 phpinfo();
+echo "I ame "
 ?>
