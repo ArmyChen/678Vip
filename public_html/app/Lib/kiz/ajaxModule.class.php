@@ -995,6 +995,7 @@ class ajaxModule extends KizBaseModule{
 
     /**
      * 期初库存操作日志
+     * 这里做了修改，如果用这个编辑器，那么文件颜色会变，然后右键可以提交
      */
     public function get_master_import_log_ajax(){
         init_app_page();
