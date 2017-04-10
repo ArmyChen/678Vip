@@ -58,29 +58,118 @@ class reportModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "盘点盈亏表导出");
+        $GLOBALS['tmpl']->assign("page_title", "盘点盈亏表");
         $GLOBALS['tmpl']->display("pages/report/stockDiff.html");
     }
-    #调拨差异分析表导出
+    #调拨差异分析表
     public function report_allocation_difference_index()
     {
         init_app_page();
 
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "调拨差异分析表导出");
+        $GLOBALS['tmpl']->assign("page_title", "调拨差异分析表");
         $GLOBALS['tmpl']->display("pages/report/allocationDifference.html");
     }
 
-    #出入库明细
+    #商品月出入库汇总明细表
     public function report_stock_dubbo_index()
     {
         init_app_page();
 
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "商品出入库明细表");
+        $GLOBALS['tmpl']->assign("page_title", "商品月出入库汇总明细表");
         $GLOBALS['tmpl']->display("pages/report/stockDubboSearch.html");
     }
 
+    #商品生产分析表
+    public function report_product_analysis_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "商品生产分析表");
+        $GLOBALS['tmpl']->display("pages/report/productAnalysis.html");
+    }
+
+    #退回报废分析表
+    public function report_return_and_scrap_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "退回报废分析表");
+        $GLOBALS['tmpl']->display("pages/report/returnScrap.html");
+    }
+
+    #配送差异分析表
+    public function report_delivery_difference_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "配送差异分析表");
+        $GLOBALS['tmpl']->display("pages/report/deliveryDifference.html");
+    }
+
+    #商品出入库原因分析表
+    public function report_ioreason_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "商品出入库原因分析表");
+        $GLOBALS['tmpl']->display("pages/report/ioreason.html");
+    }
+
+    #采购分析表
+    public function report_purchase_analysis_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "采购分析表");
+        $GLOBALS['tmpl']->display("pages/report/purchaseAnalysis.html");
+    }
+
+    #采购明细表
+    public function report_purchase_detail_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "采购明细表");
+        $GLOBALS['tmpl']->display("pages/report/purchaseDetail.html");
+    }
+
+    #配方估算成本分析表
+    public function report_cost_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "配方估算成本分析表");
+        $GLOBALS['tmpl']->display("pages/report/cost.html");
+    }
+
+    #商品销售成本分析表
+    public function report_selling_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "商品销售成本分析表");
+        $GLOBALS['tmpl']->display("pages/report/selling.html");
+    }
+
+    #销售明细表
+    public function report_sale_detail_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "销售明细表");
+        $GLOBALS['tmpl']->display("pages/report/saleDetail.html");
+    }
 
 }
 

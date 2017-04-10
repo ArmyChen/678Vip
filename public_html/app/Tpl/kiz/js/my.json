@@ -138,7 +138,7 @@
     "name": "库存分布明细表",
     "parentId": 1263,
     "platform": 5,
-    "sort": 15,
+    "sort": 11,
     "type": 1,
     "url": "act=report_stock_detail_index"
   },
@@ -149,7 +149,7 @@
     "name": "库存预警表",
     "parentId": 1263,
     "platform": 5,
-    "sort": 16,
+    "sort": 12,
     "type": 1,
     "url": "act=report_stock_warning_index"
   },
@@ -160,7 +160,7 @@
     "name": "库存交易凭证",
     "parentId": 1263,
     "platform": 5,
-    "sort": 20,
+    "sort": 13,
     "type": 1,
     "url": "act=report_stock_trade_cert_index"
   },
@@ -171,7 +171,7 @@
     "name": "盘点盈亏表",
     "parentId": 1263,
     "platform": 5,
-    "sort": 30,
+    "sort": 14,
     "type": 1,
     "url": "act=report_stock_diff_index"
   },
@@ -182,7 +182,7 @@
     "name": "调拨差异分析表",
     "parentId": 1263,
     "platform": 5,
-    "sort": 40,
+    "sort": 15,
     "type": 1,
     "url": "act=report_allocation_difference_index"
   },
@@ -190,11 +190,110 @@
     "code": "scm:report:skuIO:query",
     "id": 1288,
     "levelId": "001001001",
-    "name": "商品出入库明细表",
+    "name": "商品月出入库汇总明细表",
     "parentId": 1263,
     "platform": 5,
-    "sort": 50,
+    "sort": 16,
     "type": 1,
     "url": "act=report_stock_dubbo_index"
+  },
+  {
+    "code": "scm:report:productanalysis:query",
+    "id": 1289,
+    "levelId": "001001001",
+    "name": "商品生产分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 17,
+    "type": 1,
+    "url": "act=report_product_analysis_index"
+  },
+  {
+    "code": "scm:report:returnandscrap:query",
+    "id": 1290,
+    "levelId": "001001001",
+    "name": "退回报废分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 18,
+    "type": 1,
+    "url": "act=report_return_and_scrap_index"
+  },
+  {
+    "code": "scm:report:deliveryDifference:query",
+    "id": 1291,
+    "levelId": "001001001",
+    "name": "配送差异分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 19,
+    "type": 1,
+    "url": "act=report_delivery_difference_index"
+  },
+  {
+    "code": "scm:report:ioreason:query",
+    "id": 1292,
+    "levelId": "001001001",
+    "name": "商品出入库原因分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 20,
+    "type": 1,
+    "url": "act=report_ioreason_index"
+  },
+  {
+    "code": "scm:report:purchaseanalysis:query",
+    "id": 1293,
+    "levelId": "001001001",
+    "name": "采购分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 21,
+    "type": 1,
+    "url": "act=report_purchase_analysis_index"
+  },
+  {
+    "code": "scm:report:purchasedetail:query",
+    "id": 1294,
+    "levelId": "001001001",
+    "name": "采购明细表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 22,
+    "type": 1,
+    "url": "act=report_purchase_detail_index"
+  },
+  {
+    "code": "scm:report:cost:query",
+    "id": 1295,
+    "levelId": "001001001",
+    "name": "配方估算成本分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 23,
+    "type": 1,
+    "url": "act=report_cost_index"
+  },
+  {
+    "code": "scm:report:selling:query",
+    "id": 1296,
+    "levelId": "001001001",
+    "name": "商品销售成本分析表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 24,
+    "type": 1,
+    "url": "act=report_selling_index"
+  },
+  {
+    "code": "scm:report:saledetail:query",
+    "id": 1297,
+    "levelId": "001001001",
+    "name": "销售明细表",
+    "parentId": 1263,
+    "platform": 5,
+    "sort": 25,
+    "type": 1,
+    "url": "act=report_sale_detail_index"
   }
 ]
