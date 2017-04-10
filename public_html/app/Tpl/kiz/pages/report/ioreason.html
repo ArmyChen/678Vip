@@ -1,0 +1,143 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>商品出入库原因分析表</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="#" class="btn-link ml10" id="export">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+
+            <input type="text" class="hidden">
+
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="keyword" id="keyword" class="form-control" placeholder="请输入商品名称/编码"
+                           data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 门店 start -->
+            <div class="aside-column panel-search">
+                <h2>品牌/商户<strong class="red vam"> *</strong></h2>
+                <select id="commercialId" name="commercialId">
+
+                    <option value="">请先选择品牌/商户</option>
+
+
+                    <option value="-1">(品牌)</option>
+
+                    <option value="810019565">客如云电商部1号演示门店</option>
+
+                </select>
+            </div>
+            <!-- 门店 end -->
+
+            <!-- 仓库 start -->
+            <div class="aside-column multi-select">
+                <h2>仓库</h2>
+                <div class="select-control"><em id="wmId-all-em"></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items" id="wmId-all-ul">
+                    </ul>
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 仓库 end -->
+
+            <!-- 单据类型 start -->
+            <div class="aside-column">
+                <h2>单据类型</h2>
+                <ul class="panel-list-type">
+                    <li>
+                        <label class="checkbox checkbox-check" for="orderType-0" id="checkbox-0"><span></span>
+                            <input type="checkbox" name="orderType" id="orderType-0" checked value="0">出库单</label>
+                    </li>
+                    <li>
+                        <label class="checkbox checkbox-check" for="orderType-1" id="checkbox-1"><span></span>
+                            <input type="checkbox" name="orderType" id="orderType-1" checked value="1">入库单</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 单据类型 end -->
+
+            <!-- 查询日期 start -->
+            <div class="aside-column">
+                <h2>查询日期</h2>
+
+                <div class="search-box">
+                    <input type="text" name="startDay" id="startDay" class="form-control datepicker-start"
+                           data-for-element="endDay" placeholder="请选择开始日期" value="2017-04-07" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="endDay" id="endDay" class="form-control datepicker-end"
+                           data-for-element="startDay" placeholder="请选择结束日期" value="2017-04-07" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 查询日期 end -->
+
+            <!-- 商品状态 start -->
+            <div class="aside-column">
+                <h2>商品状态</h2>
+                <ul class="panel-list-type">
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
+                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
+                    </li>
+                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
+                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 商品状态 end -->
+        </form>
+
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" id="search">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <div id="gridDiv">
+                <table id="grid"></table>
+            </div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<script type="text/javascript" src="/scm_kry/js/scm/commercial-wm-associate.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/scm_kry/js/scm/report/ioreason-report.js?v=20170406_201331" ></script>
+<script>
+    var wareHouseJson = '[{"id":9591,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-25 13:15:02","version":2,"wareshouseCode":"WH001","warehouseName":"-1_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0},{"id":13260,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:31","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-21 16:28:18","version":1,"wareshouseCode":"WH002","warehouseName":"-1_饮品仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13261,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:43","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:11:15","version":1,"wareshouseCode":"WH003","warehouseName":"-1_酒水仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13262,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:50:57","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:12:49","version":1,"wareshouseCode":"WH004","warehouseName":"-1_原材料仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":14838,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:09","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:09","version":1,"wareshouseCode":"WH005","warehouseName":"-1_4号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":14839,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:37","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:37","version":1,"wareshouseCode":"WH006","warehouseName":"-1_5号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":9604,"uuid":null,"brandId":12566,"brandName":null,"commercialId":810019565,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 15:11:38","updaterId":-1,"updaterName":null,"updateTime":"2016-12-29 19:15:24","version":1,"wareshouseCode":"WH001","warehouseName":"810019565_总仓库","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0}]';
+
+    $(function() {
+        ioReasonReport._init();
+    });
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

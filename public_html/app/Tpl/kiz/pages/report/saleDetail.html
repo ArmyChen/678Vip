@@ -1,0 +1,250 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>销售明细表</h1>
+        <div class="btn-wrap pull-right tar">
+            <a href="javascript:void(0);" id="export" class="btn-link ml10">导出</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div id="tabBox_1" class="tab-box">
+        <!-- 左栏 start -->
+        <div class="aside">
+            <form id="queryConditions" action="#" method="post" autocomplete="off">
+                <input type="text" class="hidden">
+                <!-- 单据号 start -->
+                <div class="aside-column panel-search">
+                    <h2>模糊查询</h2>
+                    <div class="search-box">
+                        <input type="text" name="skuName" id="skuName" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="64">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="search-box mt10">
+                        <input type="text" name="orderNo" id="orderNo" class="form-control" placeholder="请输入单据号" data-format="sn" maxlength="14">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </div>
+                </div>
+                <!-- 单据号 end -->
+
+                <!-- 商户 start -->
+
+
+
+                <div class="aside-column multi-select">
+                    <h2>销售门店</h2>
+                    <div class="select-control"><em></em></div>
+                    <div class="multi-select-con" style="display:none;">
+                        <ul class="multi-select-items">
+                            <li>
+                                <label class="checkbox" for="commercialId-all">
+                                    <span></span>
+                                    <input type="checkbox" id="commercialId-all">全部
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="checkbox" for="commercialId-1">
+                                    <span></span>
+                                    <input type="checkbox" name="commercialIds" id="commercialId-1"
+                                           value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店
+                                </label></li>
+
+                        </ul>
+                    </div>
+                    <input id="commercial" name="commercial" type="hidden" value="" />
+                </div>
+
+
+                <!-- 商户 end -->
+
+                <!-- 库存类型start -->
+                <div class="aside-column multi-select">
+                    <h2>库存类型</h2>
+
+                    <div class="select-control"><em></em></div>
+                    <div class="multi-select-con" style="display:none;">
+                        <ul class="multi-select-items">
+                            <li>
+                                <label class="checkbox" for="wm-type-all">
+                                    <span></span>
+                                    <input type="checkbox" id="wm-type-all">全部
+                                </label>
+                            </li>
+
+
+                            <li>
+                                <label class="checkbox" for="wm-type-1">
+                                    <span></span>
+                                    <input type="checkbox" name="wmTypes" id="wm-type-1"
+                                           value="1" data-text="预制商品">预制商品
+                                </label></li>
+
+
+
+                            <li>
+                                <label class="checkbox" for="wm-type-2">
+                                    <span></span>
+                                    <input type="checkbox" name="wmTypes" id="wm-type-2"
+                                           value="3" data-text="外购商品">外购商品
+                                </label></li>
+
+
+
+                            <li>
+                                <label class="checkbox" for="wm-type-3">
+                                    <span></span>
+                                    <input type="checkbox" name="wmTypes" id="wm-type-3"
+                                           value="4" data-text="原物料">原物料
+                                </label></li>
+
+
+
+                            <li>
+                                <label class="checkbox" for="wm-type-4">
+                                    <span></span>
+                                    <input type="checkbox" name="wmTypes" id="wm-type-4"
+                                           value="5" data-text="半成品">半成品
+                                </label></li>
+
+
+                        </ul>
+                    </div>
+                    <input id="wmType" name="wmType" type="hidden" value="" />
+                </div>
+                <!-- 库存类型end -->
+
+                <!-- 商品类别 start -->
+                <div class="aside-column panel-search" id="skuTypeIds">
+                    <h2>商品大类/中类</h2>
+                    <select id="skuTypeId" name="skuTypeId" data-placeholder="所有商品类别" style="width:100%;display: block;" class="chosen-select select-style" tabindex="5">
+                        <option value="">所有商品类别</option>
+
+                        <optgroup label="火锅">
+
+                            <option value="211181">火锅跟</option>
+
+                            <option value="211182">uuu</option>
+
+                        </optgroup>
+
+                        <optgroup label="默认">
+
+                            <option value="170317">奶慕奉奶</option>
+
+                            <option value="170318">醇香奶茶</option>
+
+                            <option value="170319">新鲜果茶</option>
+
+                            <option value="176635">海鲜</option>
+
+                            <option value="326168">茶</option>
+
+                        </optgroup>
+
+                        <optgroup label="CC">
+
+                            <option value="326213">无</option>
+
+                        </optgroup>
+
+                        <optgroup label="啊啊啊">
+
+                            <option value="326162">丸子</option>
+
+                        </optgroup>
+
+                    </select>
+                </div>
+                <!-- 商品类别 end -->
+
+                <!-- 商品状态 start -->
+                <div class="aside-column">
+                    <h2>商品状态</h2>
+                    <ul class="panel-list-type">
+                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
+                            <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
+                        </li>
+                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
+                            <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
+                        </li>
+                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDelete"><span></span>
+                            <input type="checkbox" name="isDelete" id="isDelete" checked value="1">删除</label>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 商品状态 end -->
+
+                <!-- 单据日期 start -->
+                <div class="aside-column">
+                    <h2>查询日期</h2>
+                    <div class="search-box">
+                        <input type="text" name="billDateStart" id="billDateStart" class="form-control datepicker-start" data-date-endDate="2017-04-07"
+                               data-for-element="billDateEnd" placeholder="请选择开始日期" value="2017-04-01" readonly>
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="search-box mt10">
+                        <input type="text" name="billDateEnd" id="billDateEnd" class="form-control datepicker-end" data-date-endDate="2017-04-07"
+                               data-for-element="billDateStart" placeholder="请选择结束日期" value="2017-04-07" readonly>
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                    </div>
+                </div>
+                <!-- 单据日期 end -->
+            </form>
+            <a class="link undo-all" id="undo-all_1">全部撤销</a>
+            <a class="btn-blue btn-search" id="search">查 询</a>
+        </div>
+        <!-- 左栏 end -->
+
+        <!-- 右栏 start -->
+        <div class="panel main">
+            <div class="panel-body">
+                <div class="coupons-content" id="noData" style="display: none">
+                    <div class="notSearchContent">没有查到数据，试试其他查询条件吧！</div>
+                </div>
+
+                <div id="showData" style="display: none">
+                    <!-- grid start -->
+                    <div id="gridDiv">
+                        <table id="grid"></table>
+                    </div>
+                    <!-- grid end -->
+                </div>
+            </div>
+        </div>
+        <!-- 右栏 end -->
+    </div>
+</div>
+
+<script type="text/javascript" src="/scm_kry/js/chosen.jquery.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/scm_kry/js/scm/commercial-wm-associate.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/scm_kry/js/scm/scm-select-cascading.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/scm_kry/js/scm/report/sale-detail-report.js?v=20170406_201331" ></script>
+<script>
+    var wareHouseJson = '[]';
+    $(function() {
+        //初始化chosen
+        function loadChosen(){
+            var config = {
+                '.chosen-select'           : {},
+                '.chosen-select-deselect'  : {allow_single_deselect:true},
+                '.chosen-select-no-single' : {disable_search_threshold:10},
+                '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+                '.chosen-select-width'     : {width:"100%"}
+            };
+            for (var selector in config) {
+                $(selector).chosen(config[selector]);
+            }
+
+            $('.chosen-container').css({"width" : "100%"});
+        }
+        loadChosen();
+        saleDetailReport._init();
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
