@@ -837,6 +837,7 @@ class ajaxModule extends KizBaseModule{
         }
     }
 
+
     function get_print($print){
         foreach ($this->kcnx as $key=>$value) {
             if($print == $key){
@@ -1198,6 +1199,50 @@ class ajaxModule extends KizBaseModule{
             $return['success'] = false;
             $return['message'] = "操作失败";
         }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 库存查询
+     */
+    public function stock_search_ajax(){
+        //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_menu' ");print_r($table);exit;
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $where = "where g.is_effect=0 and g.is_stock = 1 and aa.slid=$slid";
+
+        $sqlrecords="select count(0) from fanwe_cangku_menu a".$where." limit ".$limit;;
+        $sql="select * from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid ".$where;
+        $return = array();
+        $records = $GLOBALS['db']->getOne($sqlrecords);
+        $list = $GLOBALS['db']->getAll($sql);
+//        var_dump($list);die;
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            $arr[$key]['mid'] =$item['mid'];
+            $arr[$key]['commercialName'] =$account_info['slname'];
+            $arr[$key]['warehouseName'] = $item['name'];
+            $arr[$key]['skuCode'] =$item['mbarcode'];
+            $arr[$key]['skuName'] =$item['mname'];
+            $arr[$key]['marketPrice'] =$item['buyPrice'];
+            $arr[$key]['cost'] =$item['price'];
+            $arr[$key]['uom'] =$item['unit'];
+            $arr[$key]['qty'] =$item['stock'];
+        }
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $arr;
+
         echo json_encode($return);exit;
     }
 }
