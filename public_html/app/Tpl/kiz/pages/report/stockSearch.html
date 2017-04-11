@@ -31,7 +31,7 @@
             <!-- 商户仓库级联 start -->
             <div class="aside-column">
                 <h2>商户</h2>
-                <select id="firstSelectCascading" name="commercialId">
+                <select id="firstSelectCascading" name="storeId">
 
                     <option value="-1">(品牌)</option>
 
@@ -190,22 +190,7 @@
                 <input type="hidden" value="" />
             </div>
             <!-- 商品中类end -->
-            <!-- 商品状态 start -->
-            <div class="aside-column">
-                <h2>商品状态</h2>
-                <ul class="panel-list-type">
-                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
-                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
-                    </li>
-                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
-                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
-                    </li>
-                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
-                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
-                    </li>
-                </ul>
-            </div>
-            <!-- 商品状态 end -->
+
         </form>
 
         <a class="link undo-all" id="undo-all">全部撤销</a>
@@ -232,29 +217,28 @@
     var cachedQueryConditions = ''; //缓存页面条件
 
     $(function () {
-        initDates();
-        delegateMultiSelect();
+//        initDates();
+//        delegateMultiSelect();
 
         $(_gridTable).dataGrid({
             formId: "queryConditions",
-            url: '/scm_kry/inventory/query',
-            colNames: ['商品编码', '商户', '仓库', '商品条码', '商品名称（规格）', '单位', '价格', '库存', '库存金额'],
+            url: ctxPath+"&act=stock_search_ajax",
+            colNames: ['商品编码',
+                '商户',
+                '仓库',
+                '商品条码',
+                '商品名称（规格）',
+                '单位',
+                '价格',
+                '库存',
+                '库存金额'
+            ],
             colModel: [
-                {name: 'id', index: 'id', hidden: false},
+                {name: 'mid', index: 'mid', hidden: false},
                 {name: 'commercialName', index: 'commercialName', width: 160, align: 'left'},
                 {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 160, align: 'left'},
-                {name: 'skuName', index: 'skuName', width: 160, align: 'left',
-                    formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDelete == 1) {
-                            return cellvalue + "<span style='color:red'>(已删除)</span>";
-                        } else if (rowObject.isDisable == 1) {
-                            return cellvalue + "<span style='color:red'>(已停用)</span>";
-                        } else {
-                            return cellvalue;
-                        }
-                    }
-                },
+                {name: 'skuName', index: 'skuName', width: 160, align: 'left'},
                 {name: 'uom', index: 'uom', width: 100, align: 'center'},
                 {
                     name: 'marketPrice',
@@ -275,7 +259,6 @@
             sortname: 'skuCode',
             pager: "#gridPager",
             showOperate: false,
-            dataType: 'local'
         });
 
         //重置表单
@@ -482,9 +465,9 @@
 
     function load() {
         //验证
-        var commercialId = $('select[name=commercialId]').val();
+        var storeId = $('select[name=storeId]').val();
         var warehouseId = $('select[name=warehouseId]').val();
-        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+        if (storeId == null || storeId == undefined || storeId.length < 1) {
 //            bkeruyun.promptMessage('请选择商户!');
             $.layerMsg('请选择商户!', false);
             return;

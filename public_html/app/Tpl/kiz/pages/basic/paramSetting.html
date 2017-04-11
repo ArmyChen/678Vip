@@ -1,0 +1,444 @@
+
+{include file="inc/header.html"}
+<style>
+    table{
+        width: 98%;
+        margin-left: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    table>thead{
+        background-color: #f3f5f7;
+        font-weight: bold;
+    }
+
+    tr{
+        height: 40px;
+    }
+
+    td{
+        border:1px solid #cac8c8;
+    }
+    .rest-btn{
+        float: right;
+        margin: 0px 20px 0 0;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #cac8c8;
+        cursor: pointer;
+    }
+    .span-link{
+        width: 150px;
+        display: inline-block;
+    }
+    .active{
+        color: #84b5e5;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    #sortable {
+        list-style-type: none;
+        margin: 0; padding: 0;
+    }
+    #sortable li {
+        margin: 0 3px 3px 3px;
+        padding: 0.4em;
+        padding-left: 1.5em;
+        height: 18px;
+        box-sizing: content-box;
+        cursor: move;
+    }
+    #sortable li span {
+        position: absolute;
+        margin-left: -1.3em;
+    }
+    .panel-item > dt{
+        width:auto;
+        padding-left: 15px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .select-control{
+        font-size: 16px;
+    }
+
+    [name="explanation"]:after {
+        font-family: iconfont;
+        content: '\e606';
+        font-weight: bold;
+    }
+
+    [name="explanation"]:hover {
+        color: #84b5e5;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .datetimepicker tr {
+        height: 20px;
+    }
+
+    .datetimepicker tfoot {
+        display: none;
+    }
+</style>
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>库存参数设定</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnSave" function="$.saveSettings"
+               args="{url:'/scm_kry/setting/save',submitCallback:'$.saveCallback'}">保存</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block panel-group" id="accordion">
+    <div class="panel" style="padding:0; margin-top: 10px;">
+        <!-- 单据明细信息 start -->
+        <div class="panel">
+            <!-- 基本信息 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <em id="explanation" name="explanation">系统单据、报表价格取值设定<span></span></em>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="panel-item">
+                    <dt><label>※&nbsp;品牌</label></dt>
+                    <div onclick="reseTable(0)" class="rest-btn">
+                        恢复默认选择
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <td>库存类型</td>
+                        <td>价格类型</td>
+                        <td>计算规则</td>
+                    </tr>
+                    </thead>
+
+                    <tbody id="brandTable" name="saleCostSettings">
+
+                    </tbody>
+                </table>
+                <div class="panel-body">
+                    <div class="panel-item">
+                        <dt><label>※&nbsp;商户</label></dt>
+                        <div onclick="reseTable(1)" class="rest-btn">
+                            恢复默认选择
+                        </div>
+                        <span style="margin: 5px 10px 0 0;font-size:16px;" id="costExplain" name="explanation" class="pull-right">商品销售成本分析表取值说明</span>
+                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>库存类型</td>
+                            <td>价格类型</td>
+                            <td>计算规则</td>
+                        </tr>
+                        </thead>
+
+                        <tbody id="commercialTable" name="saleCostSettings">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <em>价格同步设定</em>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="panel-item" style="padding-left: 30px">
+                    <dt style="color: #00CCFF; margin-bottom: 5px;"><label>采购价同步</label></dt>
+                </div>
+                <div style="padding-left: 45px;">
+                    <dl class="panel-item">
+                        <dt><label>品牌</label></dt>
+                        <dd style="margin-left: 75px;">
+                            <input type="checkbox" name="switch-checkbox-setting" id="type_31" autocomplete="off" data-order-source="1"
+                                   data-id="" data-type="31" data-version="0"
+                            >
+                            <span class="gray-1 promptTxt"><span class="is-closed">开启后，</span>品牌的采购单据价格将会实时同步到品牌商品的【采购价】栏位</span>
+                        </dd>
+                    </dl>
+
+                    <dl class="panel-item">
+                        <dt><label>门店</label></dt>
+                        <dd style="margin-left: 75px;">
+                            <input type="checkbox" name="switch-checkbox-setting" id="type_32" autocomplete="off" data-order-source="1"
+                                   data-id="" data-type="32" data-version="0"
+                            >
+                            <span class="gray-1 promptTxt"><span class="is-closed">开启后，</span>门店的采购单据价格将会实时同步到门店商品的【采购价】栏位</span>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="panel-item" style="padding-left: 30px; margin-top: 30px;">
+                    <dt style="color: #00CCFF; margin-bottom: 5px;"><label>成本价同步</label></dt>
+                </div>
+                <div style="padding-left: 45px;">
+                    <dl class="panel-item">
+                        <dt><label>品牌</label></dt>
+                        <dd style="margin-left: 75px;">
+                            <input type="checkbox" name="switch-checkbox-setting" id="type_41" autocomplete="off" data-order-source="1"
+                                   data-id="" data-type="41" data-version="0"
+                            >
+                            <span class="gray-1 promptTxt"><span class="is-closed">开启后，</span>品牌的估算成本将会每日同步到品牌商品的【成本价】栏位</span>
+                        </dd>
+                    </dl>
+
+                    <dl class="panel-item">
+                        <dt><label>门店</label></dt>
+                        <dd style="margin-left: 75px;">
+                            <input type="checkbox" name="switch-checkbox-setting" id="type_42" autocomplete="off" data-order-source="1"
+                                   data-id="" data-type="42" data-version="0"
+                            >
+                            <span class="gray-1 promptTxt"><span class="is-closed">开启后，</span>门店的估算成本将会每日同步到门店商品的【成本价】栏位</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <em>会计期设定</em>
+                    <span id="ruleExplain" name="explanation" class="pull-right">会计期设定规则说明</span>
+                </h3>
+            </div>
+            <div class="panel-body" id="accountingPeriod">
+
+            </div>
+        </div>
+        <!-- 单据明细信息 end -->
+    </div>
+</div>
+
+
+<script type="text/html" id="accountingPeriodTemplate">
+    <table>
+        <thead>
+        <tr>
+            <td>会计期</td>
+            <td>期初日期</td>
+            <td>期末日期</td>
+            <td>天数</td>
+        </tr>
+        </thead>
+        <tbody>
+        {{each data as item i}}
+        <tr>
+            {{if item.isNow == false}}
+            <td width="20%">{{item.periouds}}</td>
+            {{/if}}
+            {{if item.isNow == true}}
+            <td width="20%" style="background-color:#43b0f0;">{{item.periouds}}</td>
+            {{/if}}
+
+            <td width="30%">{{item.dateStart}}</td>
+            <td width="30%">
+                {{if item.disable == false}}
+                <input style="width: 210px" type="text"
+                       name="dateEnd"
+                       class="form-control datepicker-start" data-for-element="dateEnd"
+                       placeholder="请选择开始日期" readonly
+                       value={{item.dateEnd}}
+                       data-index={{i}}
+                       data-date-startdate={{item.minDay}}
+                       data-date-enddate={{item.maxDay}}
+                >
+                {{/if}}
+                {{if item.disable == true}}
+                {{item.dateEnd}}
+                {{/if}}
+            </td>
+            <td width="20%">{{item.dateCnt}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
+
+
+<script type="text/html" id="settingTemplate">
+    {{each data as item i}}
+    <tr>
+        <td style="display: none;">
+            <input name="brandId" type="hidden" value="{{item.brandId}}"/>
+            <input name="commercialId" type="hidden" value="{{item.commercialId}}"/>
+            <input name="wmType" type="hidden" value="{{item.wmType}}"/>
+            <input name="wmTypeName" type="hidden" value="{{item.wmTypeName}}"/>
+        </td>
+        <td name="wmTypeName">{{item.wmTypeName}}</td>
+        <td>
+            <div style="width: 200px;margin:0 auto;">
+                <select name="costCase">
+                    {{each item.priceTypeVos as priceTypeVo i}}
+                    <option value="{{priceTypeVo.costCase}}" data-linkdata="{{priceTypeVo.orderVos | toString}}">{{priceTypeVo.costCaseName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </td>
+        <td>
+            <input name="costRule" type="hidden" value=""/>
+            <span class="span-link"></span>
+            <span class="iconfont question color-g" data-content=""></span>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="costRuleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">计算规则优先级设定</h4>
+            </div>
+
+            <div class="modal-body">
+                <div style="margin-bottom: 20px;font-size: 16px;color: grey;">以下内容可拖动进行优先级排序，默认使用优先级靠前的计算规则</div>
+                <div id="orderVos">
+                    <ul id="sortable">
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="text-align: center;margin-top: 0;">
+                <button id="costRuleOk" type="button" class="btn btn-primary" >确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+            <input id="defaultDateStart" type="hidden" value="2016-09-11"/>
+            <input id="defaultDateEnd" type="hidden" value="2016-09-17"/>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!-- 价格取值说明模态框（Modal） -->
+<div class="modal fade" id="explanationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">价格取值说明</h4>
+            </div>
+
+            <div class="modal-body">
+                <div style="margin-bottom: 20px;font-size: 16px;color: #00CCFF; width: 100%; background-color: beige">※&nbsp;品牌</div>
+                <div >
+                    <div>1.单据取值：</div>
+                    <div>
+                        出库单（配送）、报废单、盘点模版、盘点单、入库单、出库单、移库单的商品取以下自定义规则。
+                    </div>
+
+                    <div style="margin-top: 10px;">2.报表取值：</div>
+                    <div>
+                        库存查询报表、库存分布明细表的商品取以下自定义规则。
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px; margin-top: 20px; font-size: 16px;color: #00CCFF; width: 100%; background-color: beige">※&nbsp;商户</div>
+                <div >
+                    <div>1.单据取值：</div>
+                    <div>
+                        出库单（配送）、报废单、盘点单、入库单、出库单、移库单的商品取以下自定义规则。
+                    </div>
+
+                    <div style="margin-top: 10px;">2.报表取值：</div>
+                    <div>
+                        库存查询报表、库存分布明细表的商品取以下自定义规则。
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- /.modal -->
+</div>
+
+<!-- 会计期设定说明模态框（Modal） -->
+<div class="modal fade" id="ruleExplainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">会计期设定规则说明</h4>
+            </div>
+
+            <div class="modal-body">
+                <div style="margin-bottom: 20px;font-size: 16px;color: #00CCFF; width: 100%; background-color: beige">※&nbsp;品牌、门店</div>
+                <div>
+                    <div>更改期末日期，则本次会计期的时间会变更（有可能延长或者缩短）。设定后，次月及以后期初、期末日期会对应改变。</div>
+                    <div style="margin-top: 10px;">
+                        例如：三月期初为3月1日，期末为3月31日。
+                        <br/>
+                        情况一：在3月25日时期末更改为4月16日，则三月会计期时间延长，天数为47天。四月会计期为4月17日-5月16日，以此类推。
+                    </div>
+                    <div style="margin-top: 10px;">
+                        情况二：在3月25号时期末更改为3月28日，则三月会计期时间缩短，天数为28天。四月会计期为3月29日-4月28日，以此类推。
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- /.modal -->
+</div>
+<!-- 商品销售成本分析表取值说明模态框（Modal） -->
+<div class="modal fade" id="costExplainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">《商品销售成本分析表》价格取值说明</h4>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <div>《商品销售成本分析表》的外购商品、预制商品、现制商品取值参考商户下设定值。</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- /.modal -->
+</div>
+<!-- 单据作业 end -->
+<script type="text/javascript">
+    $(":checkbox[name='switch-checkbox-setting']").on("change",function(){
+        var isClosedSpan = $(this).parents("dd").find(".is-closed").eq(0);
+        if(this.checked){
+            isClosedSpan.addClass("hidden");
+        }else{
+            isClosedSpan.removeClass("hidden");
+        }
+    });
+</script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/moment.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/cost_setting.js"></script>
+<script>
+    defaultData = {data : eval([{"id":null,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":2,"wmTypeName":"现制商品"},{"id":null,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":1,"wmTypeName":"预制商品"},{"id":null,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":13,"costRuleName":"采购价栏位值","priority":1},{"costRule":11,"costRuleName":"采购加权平均值","priority":2},{"costRule":12,"costRuleName":"最新采购单据值","priority":3}]}],"wmType":3,"wmTypeName":"外购商品"},{"id":null,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":13,"costRuleName":"采购价栏位值","priority":1},{"costRule":11,"costRuleName":"采购加权平均值","priority":2},{"costRule":12,"costRuleName":"最新采购单据值","priority":3}]}],"wmType":4,"wmTypeName":"原物料"},{"id":null,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":5,"wmTypeName":"半成品"},{"id":null,"brandId":12566,"commercialId":0,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":2,"wmTypeName":"现制商品"},{"id":null,"brandId":12566,"commercialId":0,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]},{"costCase":2,"costCaseName":"结算价","orderVos":[{"costRule":2,"costRuleName":"结算价栏位值","priority":1}]}],"wmType":1,"wmTypeName":"预制商品"},{"id":null,"brandId":12566,"commercialId":0,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":13,"costRuleName":"采购价栏位值","priority":1},{"costRule":11,"costRuleName":"采购加权平均值","priority":2},{"costRule":12,"costRuleName":"最新采购单据值","priority":3}]},{"costCase":2,"costCaseName":"结算价","orderVos":[{"costRule":2,"costRuleName":"结算价栏位值","priority":1}]}],"wmType":3,"wmTypeName":"外购商品"},{"id":null,"brandId":12566,"commercialId":0,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":13,"costRuleName":"采购价栏位值","priority":1},{"costRule":11,"costRuleName":"采购加权平均值","priority":2},{"costRule":12,"costRuleName":"最新采购单据值","priority":3}]},{"costCase":2,"costCaseName":"结算价","orderVos":[{"costRule":2,"costRuleName":"结算价栏位值","priority":1}]}],"wmType":4,"wmTypeName":"原物料"},{"id":null,"brandId":12566,"commercialId":0,"priceTypeVos":[{"costCase":3,"costCaseName":"成本价","orderVos":[{"costRule":3,"costRuleName":"成本价栏位值","priority":1}]},{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]},{"costCase":2,"costCaseName":"结算价","orderVos":[{"costRule":2,"costRuleName":"结算价栏位值","priority":1}]}],"wmType":5,"wmTypeName":"半成品"}])};
+    selectData = {data : eval([{"id":433571,"brandId":12566,"commercialId":810019565,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":1,"wmTypeName":"预制商品"},{"id":433572,"brandId":12566,"commercialId":810019565,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":2,"wmTypeName":"现制商品"},{"id":433573,"brandId":12566,"commercialId":810019565,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":11,"costRuleName":"采购加权平均值","priority":1},{"costRule":12,"costRuleName":"最新采购单据值","priority":2},{"costRule":13,"costRuleName":"采购价栏位值","priority":3}]}],"wmType":3,"wmTypeName":"外购商品"},{"id":433576,"brandId":12566,"commercialId":810019565,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":11,"costRuleName":"采购加权平均值","priority":1},{"costRule":12,"costRuleName":"最新采购单据值","priority":2},{"costRule":13,"costRuleName":"采购价栏位值","priority":3}]}],"wmType":4,"wmTypeName":"原物料"},{"id":433579,"brandId":12566,"commercialId":810019565,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":5,"wmTypeName":"半成品"},{"id":433562,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":1,"wmTypeName":"预制商品"},{"id":433563,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":2,"wmTypeName":"现制商品"},{"id":433564,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":11,"costRuleName":"采购加权平均值","priority":1},{"costRule":12,"costRuleName":"最新采购单据值","priority":2},{"costRule":13,"costRuleName":"采购价栏位值","priority":3}]}],"wmType":3,"wmTypeName":"外购商品"},{"id":433567,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":1,"costCaseName":"采购价","orderVos":[{"costRule":11,"costRuleName":"采购加权平均值","priority":1},{"costRule":12,"costRuleName":"最新采购单据值","priority":2},{"costRule":13,"costRuleName":"采购价栏位值","priority":3}]}],"wmType":4,"wmTypeName":"原物料"},{"id":433570,"brandId":12566,"commercialId":-1,"priceTypeVos":[{"costCase":4,"costCaseName":"配方估算成本","orderVos":[{"costRule":4,"costRuleName":"预估计算","priority":1}]}],"wmType":5,"wmTypeName":"半成品"}])};
+    setting.saveUrl = ctxPath + '/setting/save';
+    var templateData = {data: eval([{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":1,"dateStart":"2017-01-01 00:00:00","dateEnd":"2017-01-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":2,"dateStart":"2017-02-01 00:00:00","dateEnd":"2017-02-28 00:00:00","dateCnt":28},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":3,"dateStart":"2017-03-01 00:00:00","dateEnd":"2017-03-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":4,"dateStart":"2017-04-01 00:00:00","dateEnd":"2017-04-30 00:00:00","dateCnt":30},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":5,"dateStart":"2017-05-01 00:00:00","dateEnd":"2017-05-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":6,"dateStart":"2017-06-01 00:00:00","dateEnd":"2017-06-30 00:00:00","dateCnt":30},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":7,"dateStart":"2017-07-01 00:00:00","dateEnd":"2017-07-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":8,"dateStart":"2017-08-01 00:00:00","dateEnd":"2017-08-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":9,"dateStart":"2017-09-01 00:00:00","dateEnd":"2017-09-30 00:00:00","dateCnt":30},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":10,"dateStart":"2017-10-01 00:00:00","dateEnd":"2017-10-31 00:00:00","dateCnt":31},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":11,"dateStart":"2017-11-01 00:00:00","dateEnd":"2017-11-30 00:00:00","dateCnt":30},{"id":null,"uuid":null,"brandId":12566,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"fiscalYear":2017,"fiscalPeriod":12,"dateStart":"2017-12-01 00:00:00","dateEnd":"2017-12-31 00:00:00","dateCnt":31}])};
+    for(var i in templateData.data){
+        var row = templateData.data[i];
+        row.dateStart = row.dateStart.replace(' 00:00:00','');
+        row.dateEnd = row.dateEnd.replace(' 00:00:00','');
+    }
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

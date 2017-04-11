@@ -124,7 +124,10 @@ class KizBaseModule{
 
 				MODULE_NAME=="youhuiv"&&ACTION_NAME=="index"||
 
-                MODULE_NAME=="inventory"&&ACTION_NAME=="index"
+                MODULE_NAME=="inventory"&&ACTION_NAME=="index"||
+
+                MODULE_NAME=="report"&&ACTION_NAME=="index"
+
 
 		)
 

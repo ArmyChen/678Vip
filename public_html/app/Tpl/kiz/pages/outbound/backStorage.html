@@ -1,0 +1,293 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="orderType">退回入库单</span></h1>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="backNo" id="backNo" class="form-control" placeholder="请输入单据号"
+                           data-format="sn" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <div class="aside-column panel-search">
+                <div class="search-box">
+                    <input type="text" name="sourceOutNo" id="sourceOutNo" class="form-control" placeholder="请输入商户退回单号"
+                           data-format="sn" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 退回商户 start -->
+            <div class="aside-column">
+                <h2>退回商户</h2>
+
+                <div>
+                    <select class="form-control" name="commercialId" id="commercialId">
+                        <option value="">请选择退回商户</option>
+
+                        <option value="810019565">客如云电商部1号演示门店</option>
+
+                    </select>
+                </div>
+            </div>
+            <!-- 退回商户 end -->
+            <!-- 退回日期 start -->
+            <div class="aside-column">
+                <h2>退回日期</h2>
+                <div class="search-box">
+                    <input type="text" name="backDateStart" id="backDateStart" class="form-control datepicker-start"
+                           data-for-element="backDateEnd" placeholder="请选择开始日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="backDateEnd" id="backDateEnd" class="form-control datepicker-end"
+                           data-for-element="backDateStart" placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 退回日期 end -->
+            <!-- 保存/确认日期 start -->
+            <div class="aside-column">
+                <h2>保存/确认日期</h2>
+                <div class="search-box">
+                    <input type="text" name="confirmDateStart" id="confirmDateStart" class="form-control datepicker-start"
+                           data-for-element="confirmDateEnd" placeholder="请选择开始日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="confirmDateEnd" id="confirmDateEnd" class="form-control datepicker-end"
+                           data-for-element="confirmDateStart" placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 保存/确认日期 end -->
+            <!-- 状态 start -->
+            <div class="aside-column">
+                <h2>状态</h2>
+                <ul class="panel-list-type">
+                    <li><label class="checkbox checkbox-check" for="status-0"><span></span>
+                        <input type="checkbox" name="statusArray" id="status-0" checked value="-1">未编辑</label>
+                    </li>
+                    <li><label class="checkbox checkbox-check" for="status-1"><span></span>
+                        <input type="checkbox" name="statusArray" id="status-1" checked value="0">已保存</label>
+                    </li>
+                    <li><label class="checkbox" for="status-2"><span></span>
+                        <input type="checkbox" name="statusArray" id="status-2" value="1">已确认</label></li>
+                </ul>
+            </div>
+            <!-- 状态 end -->
+            <!-- 更多查询 start -->
+            <div class="aside-column panel-search" id="commercialCol" style="display:none;">
+
+                <div class="search-box">
+                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="商品名称/编码"
+                           data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <div class="aside-column panel-search" id="updateCol" style="display:none;">
+                <div class="search-box">
+                    <input type="text" name="updaterName" id="updaterName" class="form-control" placeholder="编辑人"
+                           data-format="name" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 更多查询 end -->
+        </form>
+        <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" role="button"
+           function="$.doSearch" args="{dataGridId:grid}">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+        <!-- 右栏 end -->
+    </div>
+</div>
+
+<script>
+
+    var urlRoot = "/scm_kry/backstorage/";
+    var queryUrl = urlRoot + "query";
+    var editUrl = urlRoot + "edit";
+    var withDrawUrl = urlRoot + 'withdraw';
+    var viewUrl = urlRoot + "view";
+    var confirmUrl = urlRoot + "doconfirm";
+
+    $(function () {
+        //需要保存查询条件的页面
+        var arrUrl = [
+            'scm_kry/backstorage/edit',
+            'scm_kry/backstorage/view',
+            'scm_kry/backstorage/add'
+        ];
+        //保存查询条件
+        $.setQueryData(arrUrl);
+
+        $.showEditor = function (rowData) {
+            if (rowData.status != 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.hidden;
+        };
+
+        $.showView = function (rowData) {
+            if (rowData.status == 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.hidden;
+        };
+
+        $.showConfirm = function (rowData) {
+            if(rowData.status==0) return renderEnum.normal;
+            if(rowData.status==1) return renderEnum.hidden;
+            return renderEnum.disabled;
+        };
+
+        $.showWithDraw = function(rowData){
+            if (rowData.status == 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.hidden;
+        };
+
+        $.showPrint = function (rowData) {
+            if (rowData.status == 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.disabled;
+        };
+
+        //更多查询
+        $("#searchMore").on("click",function(){
+            bkeruyun.searchMore(this,$("#commercialCol,#updateCol"),"更多条件","隐藏更多");
+        });
+
+        var $gridObj = $("#grid");
+        $gridObj.dataGrid({
+            formId: "queryConditions",
+            serializeGridDataCallback: $.serializeGridDataCallback,
+            url: queryUrl,
+            shrinkToFit:false,
+            autoScroll: true,
+            colNames: ['单据号','来源商户','来源单号', '退回数量', '退回金额', '退回日期', '入库数量', '入库金额', '编辑人', '保存 / 确认日期',  '状态', '状态'],
+            colModel: [
+                {name: 'backNo', index: 'backNo', width: 140, align: "center"},
+                {name: 'commercialName', index: 'commercialname', width: 120, align: "center"},
+                {name: 'sourceOutNo', index: 'sourceOutNo', width: 140, align: "center"},
+                {name: 'backQty', index: 'backQty', width: 100, align: "right"},
+                {name: 'backAmount', index: 'backAmount', width: 100, align: "right",formatter: customCurrencyFormatter},
+                {name: 'backTime', index: 'backTime', width: 160, align: "center"},
+                {name: 'inputQty', index: 'inputQty', width: 100, align: "right"},
+                {name: 'inputAmount', index: 'inputAmount', width: 100, align: "right",formatter: customCurrencyFormatter},
+                {name: 'updaterName', index: 'updaterName', width: 80, align: "center"},
+                {name: 'updateTime', index: 'updateTime', width: 160, align: "center"},
+                {name: 'statusName', index: 'status', width: 60, align: "center"},
+                {name: 'status', index: 'status', width: 100, align: "center", hidden:true}
+            ],
+            sortname: 'backNo',
+            pager: "#gridPager",
+            showOperate:true,
+            actionParam: {
+                editor: {
+                    url: editUrl,
+                    code: "scm:button:scrap:back:edit",
+                    render: $.showEditor
+                },
+                view: {
+                    url: viewUrl,
+                    render: $.showView
+                },
+                confirm: {
+                    url: confirmUrl,
+                    code: "scm:button:scrap:back:confirm",
+                    render: $.showConfirm
+                },
+                withdraw: {
+                    url: withDrawUrl,
+                    code: "scm:button:scrap:back:withdraw",
+                    render: $.showWithDraw,
+                    redirectUrl: editUrl
+                },
+                print: {
+                    url: urlRoot,
+                    render: $.showPrint
+                }
+            }
+        });
+
+        $.setSearchFocus();
+    });
+    /**
+     * 自定义的金额表示格式：货币符号￥为前缀，千分位分隔符，删除多余的小数位0（或.0）。如“￥ 123,456,789,000”、“￥ 13.2”
+     * @param cellvalue
+     * @param options
+     * @param rowObject
+     * @returns {string}
+     */
+    function customCurrencyFormatter(cellvalue, options, rowObject) {
+
+        if (!cellvalue && cellvalue != 0) {
+            return cellvalue = '';
+        }
+
+        var numberstr = (typeof cellvalue == 'string' ? cellvalue : cellvalue.toString());
+
+        if(numberstr.indexOf('合计')==0){
+            return numberstr;
+        }
+
+        //处理负数（影响千分位的计算）
+        var minus = numberstr.indexOf('-') == 0 ? '-' : '';
+        if (minus === '-') {
+            numberstr = numberstr.substring(1);
+        }
+
+        numberstr = returnWithoutDecimalZero(numberstr);
+
+        var index = numberstr.lastIndexOf('.');
+
+        var left = index > 0 ? numberstr.substring(0, index) : numberstr;
+        var right = index > 0 ? numberstr.substring(index + 1) : '';
+
+        var count = 1;
+        for (var pointer = left.length - 1; pointer > 0; pointer--) {
+            if (count % 3 == 0) {
+                var replace_left = left.substring(0, pointer);
+                //var replace = left.substring(pointer, pointer + 1);
+                var replace_right = left.substring(pointer + 1);
+                var withstr = ',' + left.charAt(pointer);
+                left = replace_left + withstr + replace_right;
+            }
+            count++;
+        }
+
+        return "￥" + minus + left + (index > 0 ? '.' : "") + right;
+    }
+
+
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>退回报废原因设定</h1>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel" style="min-height:400px;">
+        <form name="whyForm" id="whyForm" method="post" action="#">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>退回报废原因 </em></h3>
+            </div>
+            <div class="panel-body">
+                <!-- 退回原因 start -->
+                <dl class="panel-item">
+                    <dt><label for="backSet">退回原因</label></dt>
+                    <dd>
+                        <div class="additem-wrap" id="backSet">
+                            <span class="icon-plus">添加</span>
+
+                            <div class="additem">
+                                <div class="search-box">
+                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13554" value="过期商品退回" old-value="过期商品退回" reason-type="1" placeholder="请输入退回原因" readonly disabled>
+                                    <span class="icon-editor"></span>
+                                    <span class="wrong" style="display:none;">此项必填，为空不保存</span>
+                                </div>
+                                <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
+                            </div>
+
+                        </div>
+                    </dd>
+                </dl>
+                <!-- 退回原因 end -->
+                <!-- 报废原因 start -->
+                <dl class="panel-item" style="margin-top:30px;">
+                    <dt><label for="scrapSet">报废原因</label></dt>
+                    <dd>
+                        <div class="additem-wrap" id="scrapSet">
+                            <span class="icon-plus">添加</span>
+
+                            <div class="additem">
+                                <div class="search-box">
+                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13559" value="不良商品报废" old-value="不良商品报废" reason-type="2" placeholder="请输入报废原因" readonly disabled>
+                                    <span class="icon-editor"></span>
+                                    <span class="wrong" style="display:none;">此项必填，为空不保存</span>
+                                </div>
+                                <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
+                            </div>
+
+                            <div class="additem">
+                                <div class="search-box">
+                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13560" value="其他原因报废" old-value="其他原因报废" reason-type="2" placeholder="请输入报废原因" readonly disabled>
+                                    <span class="icon-editor"></span>
+                                    <span class="wrong" style="display:none;">此项必填，为空不保存</span>
+                                </div>
+                                <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
+                            </div>
+
+                        </div>
+                    </dd>
+                </dl>
+                <!-- 报废原因 end -->
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var ctx = "/scm_kry";
+    var brandId =12566;
+    var commercialId =-1;
+
+    var isSaveSuccess = true;//标记是否保存成功
+    var isMouseOnNav = false;//标记鼠是否在菜单栏上
+
+    $(function(){
+        showMenu(".additem",".close-1");//绑定鼠标移除事件
+        showClass(".additem", ".form-control", "redBorder");
+        //退回原因
+        var backHtml = '<div class="additem"><div class="search-box">';
+        backHtml += '<input type="text" class="form-control required" name="backWhy" maxlength="36" id="" reason-type="1" placeholder="请输入退回原因">';
+        backHtml += '<span class="icon-editor" style="display:none;"></span><span class="wrong">此项必填，为空不保存</span></div>';
+        backHtml += '<a href="#" class="close-1 ml10" style="display:none;">删除此项</a>';
+        backHtml += '</div>';
+        addItem("#backSet .icon-plus","click",backHtml);
+        //报废原因
+        var scrapHtml = '<div class="additem"><div class="search-box">';
+        scrapHtml += '<input type="text" class="form-control required" name="scrapWhy" maxlength="36" id="" reason-type="2" placeholder="请输入报废原因">';
+        scrapHtml += '<span class="icon-editor" style="display:none;"></span><span class="wrong">此项必填，为空不保存</span></div>';
+        scrapHtml += '<a href="#" class="close-1 ml10" style="display:none;">删除此项</a>';
+        scrapHtml += '</div>';
+
+        addItem("#scrapSet .icon-plus","click",scrapHtml);
+        //删除
+        $(document).delegate(".additem-wrap .close-1","click",function(){
+            var parentDiv = $(this).parents(".additem-wrap");
+            var item = $(this).parents(".additem");
+            var inputObj = item.find("input");
+            if ($.trim(inputObj.attr("id")) == "" || del(inputObj)) {
+                item.remove();
+                if (parentDiv.find(".additem").length == 0) {
+                    window.location.reload(true);
+                }
+                if ($(".additem-wrap .error").length == 0) {
+                    isSaveSuccess = true;
+                    isAllowNavClick = true;
+                    $(".icon-editor").removeClass("disabled");
+                    $(".icon-plus").removeClass("disabled");
+                }
+            }
+
+        });
+        //编辑
+        $(document).delegate(".additem-wrap .icon-editor","click",function(){
+            if (!isSaveSuccess) {
+                return;
+            }
+            var inputObj = $(this).parent().find(":text");
+            var closeObj = $(this).parent().find(".close");
+            var inputVal = $.trim(inputObj.val());
+            inputObj.removeAttr("readonly disabled").focus().val(inputVal);//获取焦点后重新赋值使光标移动到最后
+            $(this).hide();
+            if(inputObj.val() != ""){
+                closeObj.show();
+            }
+        });
+        //移出输入框
+        $(document).delegate(".search-box :text","blur",function(event){
+            var checkResult = true;
+            var wrongObj =  $(this).parent().find(".wrong");
+            var inputVal = $.trim($(this).val());
+            if (inputVal == "" || inputVal == $(this).attr("placeholder")) {
+                checkResult = false;
+                if ($(this).attr("id") == "") {
+                    wrongObj.html("此项必填，为空不保存");
+                } else {
+                    wrongObj.html("");
+                    inputVal = $(this).attr("old-value");
+                    $(this).parent().find(".icon-editor").show();
+                    isSaveSuccess = true;
+                    $(".icon-editor").removeClass("disabled");
+                    $(".icon-plus").removeClass("disabled");
+                    $("a").removeAttr("disabled");
+                    $(this).attr("readonly","readonly");
+                    $(this).attr("disabled","disabled");
+                    $(this).removeClass("error");
+                }
+            } else if (inputVal.length > 16) {
+                checkResult = false;
+                isSaveSuccess = false;
+                $(this).addClass("error");
+                $(".icon-editor").addClass("disabled");
+                $(".icon-plus").addClass("disabled");
+                wrongObj.html("长度超过16，请重新录入");
+                if (!isMouseOnNav) {
+                    $(this).focus();
+                }
+            }
+
+            if (!checkResult) {
+                $(this).val(inputVal);
+                wrongObj.show();
+            } else {
+                wrongObj.hide();
+                save(this);
+            }
+
+        });
+
+        //输入框获取焦点时去除红边框，显示蓝边框
+        $(".additem-wrap").on("focus", ":text", function() {
+            $(this).removeClass("redBorder");
+        });
+
+        //未保存成功时，禁止菜单栏的跳转
+//        $("#nav-fixed a").on("click", function() {
+//            if (!isAllowNavClick) {
+//                return false;
+//            }
+//        });
+
+        $("#nav-fixed").mouseover(function() {
+            isMouseOnNav = true;
+        });
+
+        $("#nav-fixed").mouseout(function() {
+            isMouseOnNav = false;
+        });
+    });
+    /**
+     *添加退回/报废原因
+     *@Method     addItem
+     *@expression {string}
+     *@eventType  {string}
+     *@html       {string}
+     */
+    function addItem(expression,eventType,html){
+        $(expression).on(eventType,function(){
+            if (!isSaveSuccess) {
+                return;
+            }
+            var addWrapObj = $(this).parent();
+            addWrapObj.append(html);
+            showMenu(".additem",".close-1");//绑定鼠标移除事件
+            showClass(".additem", ".form-control", "redBorder");
+            addWrapObj.find(":text:last").focus();
+        });
+    }
+
+    /**
+     * 保存原因
+     * @param obj
+     *
+     */
+    function save(obj) {
+        var reason = {};
+        reason.id = $(obj).attr("id");
+        reason.content = $(obj).val();
+        reason.reasonType = $(obj).attr("reason-type");
+
+        $.ajax({
+            url: ctx + "/reason/save",
+            type: "post",
+            async: false,
+            data: JSON.stringify(reason),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                if (result.success) {
+                    isSaveSuccess = true;
+                    $("a").removeAttr("disabled");
+                    $(obj).attr("id", result.data.id);
+                    $(obj).attr("old-value", result.data.content);
+                    $(obj).val(result.data.content);
+                    $(obj).attr("readonly","readonly");
+                    $(obj).attr("disabled","disabled");
+                    $(obj).removeClass("error");
+                    $(obj).parent().find(".icon-editor").show();
+                    $(".icon-editor").removeClass("disabled");
+                    $(".icon-plus").removeClass("disabled");
+                    $.layerMsg(result.message, true);
+                } else {
+                    if(result.message.indexOf("数据已过期")>0) {
+                        $.layerMsg("数据已过期", false);
+                        setInterval(function(){
+                            window.location.href="reason/index";
+                        },1000*3);
+                    }else{
+                        isSaveSuccess = false;
+                        $(obj).addClass("error");
+                        $(obj).nextAll(".wrong").html(result.message).show();
+                        if (result.flag == 1) {
+                            $(".icon-editor").addClass("disabled");
+                            $(".icon-plus").addClass("disabled");
+                            if (!isMouseOnNav) {
+                                $(obj).focus();
+                            }
+                        }
+                    }
+                }
+            },
+            error: function () {
+                isSaveSuccess = false;
+                $(obj).nextAll(".wrong").html("保存失败，请检查网络连接").show();
+                $.layerMsg("网络错误", false);
+            }
+        });
+    }
+
+    /**
+     * 删除原因
+     * @param obj
+     * @returns {boolean}
+     */
+    function del(obj) {
+        var opResult = false;
+        var reason = {};
+        reason.id = obj.attr("id");
+        reason.content = obj.val();
+        reason.reasonType = obj.attr("reason-type");
+
+        $.ajax({
+            url: ctx + "/reason/delete",
+            type: "post",
+            async: false,
+            data: JSON.stringify(reason),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                if (result.success) {
+                    opResult = true;
+                }
+                if(result.message.indexOf("数据已过期")>-1){
+                    $.layerMsg("数据已过期", false);
+                    setInterval(function(){
+                        window.location.href="reason/index";
+                    },1000*3);
+                }else{
+                    $.layerMsg(result.message, result.success);
+                }
+            },
+            error: function () {
+                $.layerMsg("网络错误", false);
+            }
+        });
+
+        return opResult;
+    }
+
+    //鼠标移上去的元素 要显示的元素 要添加样式的元素 样式名
+    function showClass(overObjs, showObj, className) {
+        var overObjs = $(overObjs);
+        //当鼠标移到每一个的时候执行
+        overObjs.each(function () {
+            var flag = false;
+            var that = $(this);
+            var $showObj = that.find(showObj);
+            that.mouseover(function () {
+                if (!$showObj.is(":focus")) {
+                    flag = true;
+                    $showObj.addClass(className);
+                }
+            }).mouseout(function () {
+                setTimeout(function () {
+                    if (flag == false) {
+                        $showObj.removeClass(className);
+                    }
+                }, 100);
+
+                flag = false;
+            });
+            $showObj.mouseover(function () {
+                flag = true;
+            }).mouseout(function () {
+                setTimeout(function () {
+                    if (flag == false) {
+                        $showObj.removeClass(className);
+                    }
+                }, 100);
+                flag = false;
+            });
+        });
+    }
+
+    //显示删除链接
+    function showMenu(objs, showStr) {
+        var objs = $(objs);
+        //当鼠标移到每一个的时候执行
+        objs.each(function () {
+            var showObj = $(this).find(showStr);
+            var flag = false;
+            $(this).mouseover(function () {
+                flag = true;
+                showObj.fadeIn(100);
+            });
+            $(this).mouseout(function () {
+                setTimeout(function () {
+                    if (flag == false) {
+                        showObj.fadeOut(100);
+                    }
+                }, 0);
+
+                flag = false;
+            });
+            showObj.mouseover(function () {
+                flag = true;
+            });
+            showObj.mouseout(function () {
+                setTimeout(function () {
+                    if (flag == false) {
+                        showObj.fadeOut(100);
+                    }
+                }, 0);
+                flag = false;
+            });
+        });
+    }
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
