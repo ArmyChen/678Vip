@@ -1,4 +1,16 @@
 [
+
+  {
+    "code": "scm:index",
+    "id": 1255,
+    "levelId": "001",
+    "name": "库存",
+    "parentId": 0,
+    "platform": 3,
+    "sort": 4,
+    "type": 1,
+    "url": "act=go_down_index"
+  },
   {
     "code": "scm:masterdata",
     "id": 1256,
@@ -55,15 +67,81 @@
     "url": "act=basic_warehouse_index"
   },
   {
-    "code": "scm:index",
-    "id": 1255,
-    "levelId": "001",
-    "name": "库存",
-    "parentId": 0,
-    "platform": 3,
-    "sort": 4,
+    "code": "scm:masterdata:skuBom:query#",
+    "id": 1268,
+    "levelId": "001001001",
+    "name": "商品配方设定",
+    "parentId": 1256,
+    "platform": 4,
+    "sort": 50,
     "type": 1,
-    "url": "act=go_down_index"
+    "url": "act=basic_skuBom_index"
+  },
+  {
+    "code": "scm:masterdata:reason:edit",
+    "id": 1269,
+    "levelId": "001001001",
+    "name": "退回、报废原因设定",
+    "parentId": 1256,
+    "platform": 4,
+    "sort": 60,
+    "type": 1,
+    "url": "act=basic_reason_index"
+  },
+  {
+    "code": "scm:masterdata:setting:edit",
+    "id": 1577,
+    "levelId": "001001002",
+    "name": "库存参数设定",
+    "parentId": 1256,
+    "platform": 4,
+    "sort": 70,
+    "type": 1,
+    "url": "act=basic_param_setting_index"
+  },
+  {
+    "code": "scm:masterdata:inventoryWarning:query#",
+    "id": 1630,
+    "levelId": "001001002",
+    "name": "库存预警设定",
+    "parentId": 1256,
+    "platform": 4,
+    "sort": 80,
+    "type": 1,
+    "url": "act=basic_inventoryWarning_index"
+  },
+  {
+    "code": "scm:scrap",
+    "id": 1259,
+    "levelId": "001001",
+    "name": "报废管理",
+    "parentId": 1255,
+    "platform": 6,
+    "sort": 5,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:scrap:scrap:query#",
+    "id": 1278,
+    "levelId": "001001001",
+    "name": "报废单",
+    "parentId": 1259,
+    "platform": 6,
+    "sort": 1,
+    "type": 1,
+    "url": "act=outbound_scrap_index"
+  },
+  {
+    "code": "scm:scrap:back:query#",
+    "id": 1427,
+    "levelId": "001001001",
+    "name": "退回入库单",
+    "parentId": 1259,
+    "platform": 6,
+    "sort": 1,
+    "type": 1,
+    "url": "act=outbound_backstorage_index"
   },
   {
     "code": "scm:inventory",

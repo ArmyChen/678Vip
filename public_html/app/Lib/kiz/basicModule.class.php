@@ -116,6 +116,42 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/basic/warehouseAdd.html");
     }
 
+    #商品配方设定
+    public function basic_skuBom_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "商品配方设定");
+        $GLOBALS['tmpl']->display("pages/basic/skuBom.html");
+    }
+    #退回、报废原因设定
+    public function basic_reason_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "退回、报废原因设定");
+        $GLOBALS['tmpl']->display("pages/basic/reason.html");
+    }
+    #库存参数设定
+    public function basic_param_setting_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "库存参数设定");
+        $GLOBALS['tmpl']->display("pages/basic/paramSetting.html");
+    }
+    #库存预警设定
+    public function basic_inventoryWarning_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "库存预警设定");
+        $GLOBALS['tmpl']->display("pages/basic/inventoryWarning.html");
+    }
     public function index1(){
         init_app_page();
 //        $sql = "alter table fanwe_cangku_menu auto_increment  =  1075;";

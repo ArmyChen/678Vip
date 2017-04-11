@@ -328,7 +328,7 @@ var bkeruyun = {
                 }else if(p == 5){
                     return "/kiz.php?ctl=report&"+ u;
                 }else if(p == 6){
-                    return "/portalbiz" + u;
+                    return "/kiz.php?ctl=outbound&"+ u;
                 }else{
                     //return "/ww"
                     throw new Error("菜单未知参数p="+p);

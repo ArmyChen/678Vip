@@ -1,0 +1,164 @@
+
+{include file="inc/header.html"}
+<style type="text/css">
+    .tab-nav {
+        /*height: 60px;*/
+        /*line-height: 60px;*/
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+
+    .tab-nav .btn-active {
+        color: #fff;
+        background-color: #4084CA;
+    }
+
+    .commercials-span {
+        max-width: 400px;
+    }
+
+    .supplier-sku-span {
+        max-width: 400px;
+    }
+</style>
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>查看库存预警设定</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="javascript:void(0);" id="freeDownExcel_1" class="btn-link ml10 freeDownExcel" name="freeDownExcel" data-gridId="grid" data-title="库存预警设定导出-单仓库"
+               show-title="true" show-Sum="true" call-format="getFormat();" call-head="getTableHead('grid')" call-condition="inventoryWarning.getExportConditions();">导出</a>
+
+            <a href="javascript:void(0);" id="freeDownExcel_2" class="btn-link ml10 freeDownExcel" name="freeDownExcel" data-gridId="grid_2" data-title="库存预警设定导出-多仓库" style="display: none"
+               show-title="true" show-Sum="true" call-format="getFormat2();" call-head="getTableHead('grid_2')" call-condition="inventoryWarning.getExportConditions2();">导出</a>
+
+            <a code="scm:button:masterdata:inventoryWarning:edit" class="btn-link ml10 edit" id="btnEdit1" onclick="$.gotoEdit(1)">编辑</a>
+            <a code="scm:button:masterdata:inventoryWarning:edit" class="btn-link ml10 edit" id="btnEdit2" onclick="$.gotoEdit(2)" style="display: none">编辑</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 选项卡组 start -->
+    <div class="tab-nav">
+        <div class="btn-group" role="group">
+            <button id="tabNav1" data-box-id="tabBox_1" down-excel-id="freeDownExcel_1" edit-id="btnEdit1"  type="button" class="btn btn-active tab-btn isNotInit">单仓库设定</button>
+            <button id="tabNav2" data-box-id="tabBox_2" down-excel-id="freeDownExcel_2" edit-id="btnEdit2"  type="button" class="btn btn-default tab-btn isNotInit">多仓库设定</button>
+        </div>
+    </div>
+    <!-- 选项卡组 end -->
+
+    <div class="panel">
+
+        <div id="tabBox_1" class="tab-box" style="padding-top: 10px;">
+
+            <div class="pull-left">
+                <dl class="panel-item">
+                    <dt style="width: 90px"><label for="warehouseId">设定仓库<strong class="red vam"> *</strong></label></dt>
+                    <dd style="margin-left: 125px">
+                        <div class="pull-left w240">
+
+
+                            <select class="form-control" name="warehouseId" id="warehouseId">
+                                <option value="-1">请选择设定仓库</option>
+                            </select>
+
+
+
+                        </div>
+                    </dd>
+
+                    <dd style="width: 500px;margin-left: 380px;margin-top: 5px"><label for="warehouseId"><font color="red">未进行库存预警设定，请点击【编辑】按钮设定！</font></label></dd>
+
+                </dl>
+            </div>
+
+            <!-- 库存预警信息 start -->
+            <div class="panel-heading clear" style="overflow: visible;padding-left: 0;">
+
+                <div id="filterGridDiv" data-showinventory="1"></div>
+            </div>
+
+            <div class="panel-body" style="margin-top: -20px">
+
+                <div id="skuDetailsTab" class="clear detail-grid">
+                    <table id="grid"></table>
+                </div>
+            </div>
+            <!-- 库存预警信息 end -->
+
+        </div>
+
+        <div id="tabBox_2" class="tab-box" style="display: none;">
+
+            <!-- 库存预警信息 start -->
+
+
+            <div id="filterGridDiv1" data-showinventory="1" data-tableid="grid_2"></div>
+
+
+            <div style="margin-left: 720px;">
+                <dd><label style="margin-top: 15px"><font color="red">未进行库存预警设定，请点击【编辑】按钮设定！</font></label></dd>
+            </div>
+
+
+            <div class="panel-body">
+
+                <div id="skuDetailsTab2" class="clear detail-grid">
+                    <table id="grid_2"></table>
+                </div>
+            </div>
+            <!-- 库存预警信息 end -->
+        </div>
+
+    </div>
+    <input type="hidden" id="editable" name="editable" value="false">
+    <input type="hidden" id="commercialName" name="commercialName" value="品牌">
+
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/inventory-warning.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/freeDownloadExcel.js?v=20170406_201331"></script>
+<script>
+    $(function() {
+        var warehouses=eval([]);
+        var warehouseIds=[];
+        if(warehouses!=null&&warehouses.length>0){
+            for(var i=0;i<warehouses.length;i++) {
+                warehouseIds.push(warehouses[i].id);
+            }
+        }
+        var opts = {
+            warehouseId : $('#warehouseId').val(),
+            warehouseIds:warehouseIds,
+            warehouses : warehouses
+        };
+        inventoryWarning._init(opts);
+    });
+
+    function getFormat(){
+        var obj = {};
+        obj["F6"]=1;obj["F7"]=1;obj["F8"]=1;
+        return JSON.stringify(obj);
+    }
+
+    function getFormat2(){
+        var arrayList=$("#grid_2").find("tr");
+        //var obj = inventoryWarning.opts.excelNum;
+        var obj = {};
+        for(var i=6;i<100;i++) obj['F'+i]=1;
+        return JSON.stringify(obj);
+    }
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
