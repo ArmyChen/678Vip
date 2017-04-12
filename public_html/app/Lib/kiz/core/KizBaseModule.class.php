@@ -270,6 +270,37 @@ class KizBaseModule{
     }
 
     /**
+     * 商品分类ajax
+     */
+    public function goods_category_tree_ajax(){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //分类
+        $sortconditions = " where is_effect = 0 and  wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $sortconditions .= " and location_id=".$slid;
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+        $sqlsort.=$sortconditions. " order by sort desc";
+
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
+        return $listsort;
+    }
+
+    /**
+     * 获取仓库列表
+     */
+    public function get_cangku_list(){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        /* 系统默认 */
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        return $cangkulist;
+    }
+
+    /**
      * 根据mid查询仓库信息
      * @param $id
      * @return mixed

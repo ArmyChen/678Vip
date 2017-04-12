@@ -218,7 +218,7 @@
     "platform": 5,
     "sort": 11,
     "type": 1,
-    "url": "act=report_stock_detail_index"
+    "url": "act=report_stock_dubbo_index"
   },
   {
     "code": "scm:report:inventoryWarn:query",
@@ -273,7 +273,7 @@
     "platform": 5,
     "sort": 16,
     "type": 1,
-    "url": "act=report_stock_dubbo_index"
+    "url": "act=report_stock_detail_index"
   },
   {
     "code": "scm:report:productanalysis:query",

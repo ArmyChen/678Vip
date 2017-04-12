@@ -16,11 +16,11 @@ var skuioreport = {
 
         _this.opts = $.extend(true, this.opts, args || {});
 
-        _this.initDates();
+        // _this.initDates();
 
         _this.delegateReset();
 
-        refreshWms($('select[name=commercialId]').val());
+       // refreshWms($('select[name=commercialId]').val());
 
         _this.initQueryList();
 
@@ -41,10 +41,10 @@ var skuioreport = {
 
         $(_this.opts.listGridId).dataGrid({
             formId: _this.opts.queryConditionsId,
-            url: _this.opts.urlRoot + '/query',
+            url: ctxPath + '&act=report_stock_detail_ajax',
             shrinkToFit:false,
             autoScroll: true,
-            colNames: ['商品大类', '商品中类', '商品编码', '商品名称（规格）', '单位', /*'价格',*/
+            colNames: ['商品一级分类', '商品分类', '商品编码', '商品名称（规格）', '单位', /*'价格',*/
                 '采购入库数', '采购退货数', '销售出库数', '销售退货数', '盘盈数', '盘亏数', '移库数（出）', '移库数（入）',
                 '调拨数', '收货数', '在途数', '生产入库数', '生产用料数<br/><span style="font-size:12px; ">(净料)</span>',
                 '生产用料数<br/><span style="font-size:12px; ">(毛料)</span>', '退回数', '报废数', '出库数（配送）', '配送数',
@@ -192,7 +192,7 @@ var skuioreport = {
             if (!bkeruyun.isPlaceholder()) {
                 JPlaceHolder.init();
             }
-            _this.initDates();
+            // _this.initDates();
         });
     },
 
@@ -222,10 +222,10 @@ function exportResult(){
 
     var commercialId = $('select[name=commercialId]').val();
 
-    if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
-        $.layerMsg('请选择品牌/商户!', false);
-        return;
-    }
+    // if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+    //     $.layerMsg('请选择品牌/商户!', false);
+    //     return;
+    // }
 
     var $gridObj = $(skuioreport.opts.listGridId);
 
@@ -249,10 +249,10 @@ function exportResult(){
 function load() {
     //验证
     var commercialId = $('select[name=commercialId]').val();
-    if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
-        $.layerMsg('请选择品牌/商户!', false);
-        return;
-    }
+    // if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+    //     $.layerMsg('请选择品牌/商户!', false);
+    //     return;
+    // }
     skuioreport.opts.cachedQueryConditions = serializeFormById(skuioreport.opts.queryConditionsId);
     $(skuioreport.opts.listGridId).refresh(-1);
 };
@@ -266,6 +266,6 @@ function load() {
 function delegateSelect(id){
     //业务类型 条件选择
     $(document).delegate(id, "change", function(){
-        refreshWms($('select[name=commercialId]').val());
+    //    refreshWms($('select[name=commercialId]').val());
     });
 };

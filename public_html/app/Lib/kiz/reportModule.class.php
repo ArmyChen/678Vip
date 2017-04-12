@@ -23,13 +23,17 @@ class reportModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/report/stockSearch.html");
     }
 
-    #库存分布明细表
+    #商品月出入库汇总明细表
     public function report_stock_detail_index()
     {
         init_app_page();
 
+
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "库存分布明细表");
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("listsort", parent::goods_category_tree_ajax());
+//        var_dump($listsort);die;
+        $GLOBALS['tmpl']->assign("page_title", "商品月出入库汇总明细表");
         $GLOBALS['tmpl']->display("pages/report/stockDetailSearch.html");
     }
 
@@ -71,13 +75,13 @@ class reportModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/report/allocationDifference.html");
     }
 
-    #商品月出入库汇总明细表
+    #库存分布明细表
     public function report_stock_dubbo_index()
     {
         init_app_page();
 
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "商品月出入库汇总明细表");
+        $GLOBALS['tmpl']->assign("page_title", "库存分布明细表");
         $GLOBALS['tmpl']->display("pages/report/stockDubboSearch.html");
     }
 
