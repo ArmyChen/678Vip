@@ -1245,4 +1245,18 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($return);exit;
     }
+    //出入库汇总明细表
+    public function report_stock_detail_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+
+
+    }
 }
