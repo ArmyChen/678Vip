@@ -1,0 +1,136 @@
+
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="command-type-name">新增</span>商品需求汇总单</h1>
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" tabNo="tab1" id="btnPrev" style="display: none;">上一步</a>
+            <a class="btn-link ml10" tabNo="tab2" id="btnNext">下一步</a>
+            <a class="btn-link ml10" id="btnSave" style="display: none;" onclick="doSaveOrConfim(1);">保存</a>
+            <a code="scm:button:delivery:aggregate:confirm" class="btn-link ml10" id="btnConfirm" style="display: none;" onclick="doSaveOrConfim(2);">确认</a>
+            <a class="btn-link ml10" onclick="$.notifyLeaving('/scm_kry/supply/aggregate/index')" id="btncancle">返回</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block text-center">
+    <ul class="breadCrumbs" id="scmBreadCrumbs">
+        <li tabNo="tab1" id="tab1_li" class="current"><span>1</span>单据选择</li>
+        <li tabNo="tab2" id="tab2_li"><span>2</span>明细数据</li>
+    </ul>
+</div>
+
+<div id="my_info_tab">
+    <!-- 基本信息 start -->
+    <div id="tab1">
+        <form method="post" action="#">
+            <div class="center-block panel-group mt20">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><em>基本信息</em></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="clear">
+                            <div class="pull-left">
+                                <dl class="panel-item">
+                                    <dt class="basic"><label for="orderNo" class="w120">单据号<strong class="red vam"> *</strong></label></dt>
+                                    <dd class="positionRelative basic">
+                                        <input type="text" class="form-control w240 required dfdfdf" id="orderNo"
+                                               value="XQ201704120002"
+                                               placeholder="系统生成" data-type="word" maxlength="14" readonly disabled>
+                                        <input type="hidden" name="id" id="id" value=""/>
+                                        <input type="hidden" name="orderNo" id="orderNo" value="XQ201704120002"/>
+                                        <div class="wrong"></div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div name="detail" class="clear">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><em>单据明细</em></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="mr10 ml10" style="float: left">
+                                <a class="btn btn-primary btn-large" id="btnSelectOrder" callAfterSuccessFunc="$.reloadOrderData();">添加单据</a>
+                                <a class="btn btn-primary btn-large" id="btnDeleteOrder" callAfterSuccessFunc="$.reloadOrderData();">移除单据</a>
+                            </div>
+                            <div class="inventoryTotal"><sapn>&nbsp;</sapn></div>
+                            <div class="mt20 detail-grid">
+                                <table id="order_grid"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 基本信息 end -->
+
+    <!-- 明细数据 start -->
+    <div class="center-block panel-group mt20" id="tab2" style="display:none;">
+        <div class="panel">
+            <div class="panel-body">
+                <ul class="reservation-tab" id="reservation-tab">
+                    <li id="reservation-tab-li1" class="current ml10" data-id="skuDetailsTab" data-name="reservation-tab"><em>商品明细</em></li>
+                    <li data-id="orderDetailsTab" data-name="reservation-tab"><em>单据明细</em></li>
+                </ul>
+                <div>
+                    <div id="skuDetailsTab" class="panel-body" style="margin-left: 11px;">
+                        <div style="margin-top: 10px;">
+                            <div id="wmTypeNameDiv" style="width: 185px;margin-left: 15px;float: left;"></div>
+                            <div id="skuTypeNameDiv" style="width: 185px;margin-left: 6px;float: left;"></div>
+                            <div class="search-box" style="width: 185px;margin-left: 6px;float: left;">
+                                <input type="text" name="skuCodeOrName" id="skuCodeOrName" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="14">
+                                <button type="button" class="close" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="form-item" style="width: 80px;margin-left: 6px;float: left;">
+                                <a id="filterSearch" class="btn-blue btn-search" role="button" data-tableid="sku_detail_grid" onclick="filterSku();">查 询</a>
+                            </div>
+                        </div>
+                        <div class="clear">
+                            <div class="inventoryTotal"></div>
+                            <table id="sku_detail_grid"></table>
+                        </div>
+                    </div>
+
+                    <div id="orderDetailsTab" class="panel-body" style="display: none;margin-left: 11px;">
+                        <table id="order_detail_grid"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 明细数据 end -->
+</div>
+
+<div>
+    <input id="orderDetailData" type="hidden" value='[]'>
+
+</div>
+
+<!-- 配送单据选择 begin -->
+<div id="orderSelectDiv" gridId="order_grid" orderId=""></div>
+<!-- 配送单据选择 end -->
+
+<script src="/app/Tpl/kiz/js/scm_kry/js/scm.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/supplier/aggregate_edit.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-order-select.js?v=20170406_201331"></script>
+<script type="text/javascript">
+    $(function() {
+
+        var	initOrderData = [],
+            initSkuData = [],
+            commandType = 1;
+
+        supplyAggregate._init({commandType : commandType,gridOrderData:initOrderData,gridSkuDetailData:initSkuData});
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
