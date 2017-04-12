@@ -1251,12 +1251,16 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $cid = $_REQUEST['cid']; //仓库ID
+        $cate_id = $_REQUEST['cate_id']; //分类ID
+
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
-
+        $sql="select id,name,barcode,cate_id,is_delete,unit,funit,time from fanwe_dc_menu where $sqltr limit ".$limit;
+        $records = $GLOBALS['db']->getOne($sql);
+        echo json_encode($records);exit;
 
     }
 }
