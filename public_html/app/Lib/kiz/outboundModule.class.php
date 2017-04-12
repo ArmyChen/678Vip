@@ -22,6 +22,14 @@ class outboundModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "报废单");
         $GLOBALS['tmpl']->display("pages/outbound/scrap.html");
     }
+    public function outbound_scrap_add()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增报废单");
+        $GLOBALS['tmpl']->display("pages/outbound/scrapAdd.html");
+    }
     #退回入库单
     public function outbound_backstorage_index()
     {

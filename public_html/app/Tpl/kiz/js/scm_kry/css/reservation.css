@@ -1,0 +1,355 @@
+/** 
+ + -------------------------- +
+ + reservation.css v3.0
+ + Web: http://www.keruyun.com
+ + -------------------------- +
+ + Author: Tian Xiao Yun
+ + QQ: 358926040
+ + Mail: misstian2008@163.com
+ + -------------------------- +
+ + Date: 2014-10
+ + -------------------------- +
+**/
+.divider-line{
+	float:left;
+	margin-top:15px;
+	margin-right:15px;
+	width:20px;
+	border-top:1px solid #ccc;
+	}
+/*预订列表*/
+.link-seniorSearch{
+	float:left;
+	margin-left:20px;
+	margin-top:15px;
+	cursor:pointer;
+	}
+.reservation-tab{
+	width:100%;
+	overflow:hidden;
+	zoom:1;
+	background-color:#f5f5f5;
+	}
+.reservation-tab li{
+	float:left;
+	height:33px;
+	line-height:33px;
+	padding:0 10px;
+	margin-right:5px;
+	min-width:110px;
+	color:#5d5d5d;
+	cursor:pointer;
+	font-size:16px;
+	text-align:center;
+	background-color:#dfdfdf;
+	}
+.reservation-tab li.current{
+	color:#fff;
+	background-color:#3786d7;
+	}
+.reservation-tab li span{
+	font-size:12px;
+	vertical-align:top;
+	}
+/*预订详情*/
+.view-detail{
+	}
+.view-detail .panel-title{
+	line-height:24px;
+	background-image:none;
+	}
+.view-detail .panel-title em{
+	padding:2px 10px 4px;
+	color:#919191;
+	font-size:16px;
+	background-color:#d5d5d5;
+	}
+.view-detail .panel-body{
+	margin: 0 30px;
+	padding-left: 35px;
+	padding-right: 35px;
+	}
+.table-nobd > tbody > tr > th, .table-nobd > tbody > tr > td{
+	font-size:14px;
+	}
+.view-state{
+	padding:20px;
+	}
+.view-state .weixin{
+	color:transparent;
+	}
+.view-state span[class^='icon']{
+	padding:5px 20px 6px;
+}
+/*预订设置*/
+.reservation .panel-title{
+	padding:20px 0 10px 0;
+	line-height:normal;
+	background-image:none;
+	}
+.source-list{
+	margin:0 20px;
+	padding-left:35px;
+	}
+.source-list > li{
+	display:inline-block;
+	}
+.source-name{
+	display:inline-block;
+	width:160px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	vertical-align:middle;
+	}
+.switching-item{
+	position:relative;
+	padding-top:40px;
+	margin:0 20px;
+	}
+.switching-tab-wrap{
+	position:absolute;
+	left:0;
+	right:0;
+	top:0;
+	overflow:hidden;
+	border-top:1px solid #ddd;
+	border-right:1px solid #ddd;
+	height:41px;
+	width:100%;
+	}
+.switching-tab{
+	position:absolute;
+	left:0;
+	top:0;
+	/*width:1200px;*/
+	overflow:hidden;
+	zoom:1;
+	}
+
+.switching-tab > li{
+	float:left;
+	display:inline-block;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+	background-color:#f7f7f7;
+	border-top:1px solid #ddd;
+	border-left:1px solid #ddd;
+	cursor:pointer;
+	}
+.switching-tab > li:last-child{
+	border-right:1px solid #ddd;
+	}
+.switching-tab > li.current{
+	height:41px;
+	background-color:#fff;
+	}
+.switching-tab-wrap > .switching-tab{
+	left:0;
+	top:-1px;
+	}
+.switching-tab-wrap > .switching-tab > li{
+	border-top:0 none;
+	}
+.switching-tab-wrap > .switching-tab > li:first-child{
+	border-left:1px solid #ddd;
+	}
+.switching-item .next,
+.switching-item .prev{
+	position:absolute;
+	top:0;
+	z-index:10;
+	display:inline-block;
+	width:20px;
+	height:41px;
+	cursor:pointer;
+	background:#fff url("../img/nextprev.png") no-repeat;
+	border:1px solid #ddd;
+	}
+.switching-item .next{
+	right:0;
+	background-position:-25px 15px;
+	}
+.switching-item .next[data-status="disabled"]{
+	background-position:-25px -24px;
+	background-color:#e3e3e3;
+	}
+.switching-item .prev{
+	left:0;
+	background-position:4px 15px;
+	}
+.switching-item .prev[data-status="disabled"]{
+	background-position:4px -24px;
+	background-color:#e3e3e3;
+	}
+.switching-item .switching-con{
+	display:none;
+	height:340px;
+	padding:20px 30px;
+	border:1px solid #ddd;
+	overflow:auto;
+	}
+.switching-item .switching-con.current{display:block;}
+#switchBooking .switching-tab > li,
+#queue-details .switching-tab > li,
+#switchQueue .switching-tab > li{
+	/*padding:0 25px;*/
+	width:232px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	}
+#switchQueue .switching-tab > li{
+	width:178px;
+}
+#queue-details .switching-tab > li{
+	padding:0 15px;
+}
+#switchQueue{width:712px;}
+#queue-details .switching-con{
+	min-height:300px;
+}
+.tables-items > li{
+	display:inline-block;
+	width:33%;
+	overflow:hidden;
+	}
+.tables-items > li label{
+	display:inline-block;
+	width:100%;
+	}
+.tables-items > li i{
+	display:inline-block;
+	width:80%;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	vertical-align:middle;
+	}
+.additem-wrap{
+	position:relative;
+	}
+.additem-wrap .icon-plus{
+	position: absolute;
+	left: 630px;
+	top: 3px;
+	}
+.additem-wrap .additem{
+	margin-top:20px;
+	}
+/*门店设置*/
+.set-time{
+	position:relative;
+	padding:8px 0;
+	color:#909090;
+	}
+.set-time .close-1{
+	position:absolute;
+	top:8px;
+	right:0;
+	display:none;
+	}
+.has-time{
+	color:#555;
+}
+.has-time:hover .close-1{
+	display:block;
+	}
+#time-config .set-time,
+#business-config .set-time{
+	width:300px;
+}
+.business-set{
+	float:left;
+	padding-right:20px;
+	overflow:hidden;
+	zoom:1;
+}
+.business-set label{
+	font-weight:bold;
+	float:left;
+	margin:8px 8px 8px 0;
+}
+.business-set .set-time{
+}
+/*排队设置*/
+.queue-operation{
+	position:relative;
+	padding:0 20px 0 56px;
+	height:30px;
+	}
+.queue-operation > p{
+	margin-bottom:0;
+}
+.queue-operation a{
+	position:absolute;
+	z-index:10;
+	margin-left:20px;
+	}
+.queue-operation a.addQueue{
+	top:-40px;
+	right:20px;
+	color:#444;
+	}
+.queue-operation a.editQueue,.queue-operation a.delQueue{
+	top:80px;
+}
+.queue-operation a.editQueue{
+	right:100px;
+}
+.queue-operation a.delQueue{
+	right:50px;
+}
+.queue-title{
+	padding:10px 0 10px;
+	}
+.queue-items{
+	margin:0 30px;
+	}
+.queue-items li{
+	display:inline-block;
+	margin-top:10px;
+	width:30%;
+	white-space:nowrap;
+	overflow:hidden;
+	color:#999;
+	text-overflow:ellipsis;
+	}
+.switching-item .hta{
+	height:auto;
+	}
+.panel-popover .switching-item{
+	margin-right:61px;
+	margin-left:0;
+	padding-left:0;
+	padding-right:0;
+	padding-bottom:0;
+	}
+.panel-popover .switching-tab{
+	left:0;
+	}
+.panel-popover .tables-items li{
+	width:48%;
+	}
+.panel-popover .tables-items li em{
+	vertical-align:middle;
+	}
+.panel-popover .tables-items li i{
+	width:78%;
+	}
+.queue-con-tables{
+	border:1px solid #ddd;
+	border-radius:5px;
+	height:260px;
+	width:718px;
+	padding:15px;
+	overflow-y:auto;
+}
+.queue-con-tables > dl > dt{
+	margin:10px 0;
+	font-weight:normal;
+}
+.queue-con-tables > dl > dd{
+	padding-left:2em;
+}

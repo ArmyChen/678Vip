@@ -471,7 +471,7 @@ var inventoryWarning = {
  * @returns {boolean}
  */
 $.gotoEdit = function (type) {
-    var url = ctxPath + inventoryWarning.opts.urlRoot+'/edit';
+    var url = basicPath + '&act=basic_inventoryWarning_edit';
     $.doForward({url:url,postData:{warehouseId:inventoryWarning.opts.warehouseId,type:type}});
 };
 

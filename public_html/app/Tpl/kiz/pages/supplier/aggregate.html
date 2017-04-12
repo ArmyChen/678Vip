@@ -1,0 +1,163 @@
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="orderType">商品需求汇总单</span></h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a code="scm:button:delivery:aggregate:add" function="$.doForward" args="{url:'/kiz.php?ctl=supplier&&act=supplier_aggregate_add'}" class="btn-link ml10" id="btn-create">创建</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+                <div class="search-box">
+                    <input type="text" name="orderNo" id="orderNo" class="form-control" placeholder="请输入单据号" data-format="sn" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+            <!-- 配送模板 start -->
+            <div class="aside-column panel-search">
+                <h2>配送线路</h2>
+                <div class="search-box">
+                    <select id="dlId" name="dlId">
+                        <option value="">请选择配送线路</option>
+
+
+
+                        <option value="2234">默认配送线路</option>
+
+
+
+
+                        <option value="3503">火车站</option>
+
+
+                    </select>
+                </div>
+            </div>
+            <!-- 配送模板 end -->
+
+            <!-- 保存/确认日期 start -->
+            <div class="aside-column">
+                <h2>最后修改日期</h2>
+                <div class="search-box">
+                    <input type="text" name="dateStart" id="dateStart" class="form-control datepicker-start"
+                           data-for-element="dateEnd" placeholder="请选择开始日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="dateEnd" id="dateEnd" class="form-control datepicker-end"
+                           data-for-element="dateStart" placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 保存/确认日期 end -->
+
+            <!-- 转单 start -->
+            <div class="aside-column">
+                <h2>是否转单</h2>
+                <ul class="panel-list-type">
+                    <li><label class="checkbox checkbox-check" for="status-0"><span></span>
+                        <input type="checkbox" name="isChange" id="status-0" checked value="0">未转采购</label>
+                    </li>
+                    <li><label class="checkbox" for="status-1"><span></span>
+                        <input type="checkbox" name="isChange" id="status-1" value="1">已转采购</label></li>
+                </ul>
+            </div>
+            <!-- 转单 end -->
+
+            <!-- 状态 start -->
+            <div class="aside-column">
+                <h2>状态</h2>
+                <ul class="panel-list-type">
+                    <li><label class="checkbox checkbox-check" for="isGeneral-1"><span></span>
+                        <input type="checkbox" name="status" id="isGeneral-1" checked value="0">已保存</label></li>
+                    <li><label class="checkbox checkbox-check" for="isGeneral-0"><span></span>
+                        <input type="checkbox" name="status" id="isGeneral-0" checked value="1">已确认</label>
+                    </li>
+                </ul>
+            </div>
+            <!-- 状态 end -->
+
+            <!-- 更多查询 start -->
+            <div class="aside-column panel-search" id="commercialCol" style="display:none;">
+                <h2>编码/商品名称</h2>
+                <div class="search-box">
+                    <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="请输入编码/商品名称"
+                           data-format="skuName" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <div class="aside-column panel-search" id="updateCol" style="display:none;">
+                <h2>编辑人</h2>
+                <div class="search-box">
+                    <input type="text" name="editName" id="editName" class="form-control" placeholder="请输入编辑人名称"
+                           data-format="name" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 更多查询 end -->
+        </form>
+        <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" id="btnQuery" role="button" function="$.doSearch" args="{dataGridId:grid}">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/supplier/aggregate_list.js?v=20170406_201331"></script>
+
+<!-- 展示生成采购申请单弹出层内容 -->
+<script type="text/html" id="showLayerMsg">
+    <div>
+        <span style="font-size: 18px;">请选择生成采购申请单的方式：</span>
+        <div style="font-size: 16px;margin-top: 10px;">
+            <label class="radio radio-check">
+                <span></span>
+                <input type="radio" name="type" checked value="1">只汇总原物料和外购品
+            </label>
+            <label class="radio">
+                <span></span>
+                <input type="radio" name="type" value="2">汇总所有原物料和外购商品(半成品和预制商品将会被拆解)
+            </label>
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function() {
+        //初始化
+        var opts = {
+            urlRoot : "/scm_kry/supply/aggregate",
+        };
+        aggregateList._init(opts);
+
+        //更多查询
+        $("#searchMore").on("click",function(){
+            bkeruyun.searchMore(this,$("#commercialCol,#updateCol"),"更多条件","隐藏更多");
+        });
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
