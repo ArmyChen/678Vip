@@ -137,7 +137,7 @@
                         <th>库存类型<strong class="red vam"> *</strong></th>
                         <td>
                             <select id="goodsWm" name="wmType">
-                                <option value="0" selected="selected">请选择</option>
+                                <!--<option value="0" selected="selected">请选择</option>-->
                                 {foreach from=$kcnx item=item key=key}
                                 {if $key gt 0}
                                     <option value="{$key}">{$item}</option>
@@ -329,7 +329,7 @@
                         <div class="fl">
                             <div class="search-box pull-left">
                                 <input placeholder="0" data-limit="{8,5}" id="fixedPrice" type="text"
-                                       value="">
+                                       value="" disabled>
                                 <!-- <button type="button" class="close" data-val="0" name="close" aria-hidden="true">&times;</button> -->
                             </div>
                         </div>
