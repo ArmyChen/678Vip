@@ -152,6 +152,14 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "库存预警设定");
         $GLOBALS['tmpl']->display("pages/basic/inventoryWarning.html");
     }
+    public function basic_inventoryWarning_edit()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "编辑库存预警设定");
+        $GLOBALS['tmpl']->display("pages/basic/inventoryWarningEdit.html");
+    }
     public function index1(){
         init_app_page();
 //        $sql = "alter table fanwe_cangku_menu auto_increment  =  1075;";

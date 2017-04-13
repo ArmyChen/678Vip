@@ -6,9 +6,9 @@
 var inventorydistribution = {
     //默认参数
     opts : {
-        urlRoot : "",
-        queryUrl : "/query",
-        exportUrl : "/export",
+        urlRoot : ctxPath,
+        queryUrl : "&act=report_stock_dubbo_ajax",
+        exportUrl : "&act=report_stock_dubbo_export",
         queryData : "",
         footerData : {},
         oldCommercialId : "",

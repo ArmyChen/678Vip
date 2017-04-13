@@ -145,7 +145,10 @@ class ajaxModule extends KizBaseModule{
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
-        $where = "where g.is_effect=0 and g.is_stock = 1 and g.location_id=$slid";
+        $where = "where  g.location_id=$slid";
+        $where .=" and g.is_effect = 0";//是否现实在终端
+        $where .= " and g.is_stock = 1 ";//是否是库存商品
+        $where .= " and g.print <> 1";//库存类型不等于现制商品
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
@@ -1244,5 +1247,23 @@ class ajaxModule extends KizBaseModule{
         $return['dataList'] = $arr;
 
         echo json_encode($return);exit;
+    }
+    //出入库汇总明细表
+    public function report_stock_detail_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $cid = $_REQUEST['cid']; //仓库ID
+        $cate_id = $_REQUEST['cate_id']; //分类ID
+
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $sql="select id,name,barcode,cate_id,is_delete,unit,funit,time from fanwe_dc_menu where $sqltr limit ".$limit;
+        $records = $GLOBALS['db']->getOne($sql);
+        echo json_encode($records);exit;
+
     }
 }

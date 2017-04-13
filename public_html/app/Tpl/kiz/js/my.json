@@ -111,6 +111,39 @@
     "url": "act=basic_inventoryWarning_index"
   },
   {
+    "code": "scm:purchase",
+    "id": 1257,
+    "levelId": "001001",
+    "name": "采购管理",
+    "parentId": 1255,
+    "platform": 7,
+    "sort": 2,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:purchase:supplier:query#",
+    "id": 1271,
+    "levelId": "001001001",
+    "name": "供应商设定",
+    "parentId": 1257,
+    "platform": 7,
+    "sort": 20,
+    "type": 1,
+    "url": "&act=supplier_index"
+  },
+  {
+    "code": "scm:delivery:aggregate:query#",
+    "id": 1610,
+    "levelId": "001001002",
+    "name": "商品需求汇总单",
+    "parentId": 1257,
+    "platform": 7,
+    "sort": 22,
+    "type": 1,
+    "url": "&act=supplier_aggregate_index"
+  },
+  {
     "code": "scm:scrap",
     "id": 1259,
     "levelId": "001001",
@@ -218,7 +251,7 @@
     "platform": 5,
     "sort": 11,
     "type": 1,
-    "url": "act=report_stock_detail_index"
+    "url": "act=report_stock_dubbo_index"
   },
   {
     "code": "scm:report:inventoryWarn:query",
@@ -273,7 +306,7 @@
     "platform": 5,
     "sort": 16,
     "type": 1,
-    "url": "act=report_stock_dubbo_index"
+    "url": "act=report_stock_detail_index"
   },
   {
     "code": "scm:report:productanalysis:query",

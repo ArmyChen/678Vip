@@ -1,0 +1,358 @@
+
+{include file="inc/header.html"}
+<style type="text/css">
+    .tab-nav {
+        height: 40px;
+        /*line-height: 60px;*/
+        text-align: center;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+
+    .tab-nav .btn-active {
+        color: #fff;
+        background-color: #4084CA;
+    }
+
+    .commercials-span {
+        max-width: 400px;
+    }
+
+    .supplier-sku-span {
+        max-width: 400px;
+    }
+    .err{
+        border: 1px solid #c43c35!important;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(179,41,41,0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(179,41,41,0.6);
+    }
+    .err:focus{
+        border: 1px solid #c43c35!important;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(179,41,41,0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(179,41,41,0.6);
+    }
+    table{
+        border-collapse: separate;
+    }
+    .set-btn{
+        float: right;
+        margin: 10px 0 0 0;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 2px solid #84b5e5;
+        color: #84b5e5;
+        cursor: pointer;
+    }
+    /*批量设置模版*/
+    #batchSetModal .modal-row{
+        height: 34px;
+        line-height: 34px;
+        margin: 10px 0;
+        clear: both;
+    }
+    #batchSetModal label{
+        font-size: 16px;
+    }
+    #batchSetModal .form-control{
+        width: 150px;
+        padding-left: 20px;
+    }
+    #batchSetModal .search-box{
+        float: left;
+    }
+    #batchSetModal .space{
+        float: left;
+        height: 34px;
+        margin: 0 10px;
+    }
+</style>
+<!-- css end -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>编辑库存预警设定</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10 save"  id="btnSave" onclick="$.doSaveSingle()">保存</a>
+            <a class="btn-link ml10 save"  id="btnSave2" style="display: none" onclick="$.doSaveMulti()">保存</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 选项卡组 start -->
+    <div class="tab-nav">
+        <div class="btn-group" role="group" style="margin-left: 250px">
+            <button id="tabNav1" data-box-id="tabBox_1" down-excel-id="freeDownExcel_1" save-id="btnSave" type="button" class="btn btn-default tab-btn isNotInit">单仓库设定</button>
+            <button id="tabNav2" data-box-id="tabBox_2" down-excel-id="freeDownExcel_2" save-id="btnSave2" type="button" class="btn btn-default tab-btn isNotInit">多仓库设定</button>
+        </div>
+        <div style="float: right;margin-top: 10px;">
+            <span class="iconfont question color-g" data-content="1.库存上限/安全库存/库存下限不填写，则不进行库存提醒<br/>2.设置项必须满足库存上限>安全库存>库存下限>=0。"></span>
+            库存上限/安全库存/库存下限设定规则
+        </div>
+    </div>
+    <!-- 选项卡组 end -->
+    <div class="panel">
+
+        <div id="tabBox_1" class="tab-box" style="padding-top: 10px;">
+
+            <form method="post" action="/scm_kry/inventoryWarning/saveSingle" id="baseInfoForm">
+
+                <div class="pull-left">
+                    <dl class="panel-item">
+                        <dt style="width: 90px"><label for="warehouseId">设定仓库<strong class="red vam"> *</strong></label></dt>
+                        <dd style="margin-left: 125px">
+                            <div class="pull-left w240">
+
+
+
+                                <select class="form-control" name="warehouseId" id="warehouseId">
+                                    <option value="">请选择设定仓库</option>
+
+                                    <option value="9591" >总仓库</option>
+
+                                    <option value="13260" >饮品仓</option>
+
+                                    <option value="13261" >酒水仓</option>
+
+                                    <option value="13262" >原材料仓</option>
+
+                                    <option value="14838" >4号库</option>
+
+                                    <option value="14839" >5号库</option>
+
+                                </select>
+
+
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+            </form>
+
+            <!-- 库存预警信息 start -->
+            <div class="panel-heading clear" style="overflow: visible;padding-left: 0;">
+                <div class="ml10 mt10 mr20" style="float: left">
+                    <a class="btn btn-primary btn-large" id="btnSelectSku" afterAdd="$.afterAdd" data-gridid="grid" data-addrowwithrealod="1">添加商品</a>
+                    <a class="btn btn-primary btn-large" id="btnDeleteSku" afterRemoved="$.afterRemoved" data-gridid="grid">移除商品</a>
+                </div>
+
+                <div id="filterGridDiv" data-showinventory="1"></div>
+                <div class="set-btn" onclick="$.batchSet()">批量设定</div>
+            </div>
+
+            <div class="panel-body" style="margin-top: -20px">
+
+                <div id="skuDetailsTab" class="clear detail-grid">
+                    <table id="grid"></table>
+                </div>
+            </div>
+            <!-- 库存预警信息 end -->
+
+        </div>
+
+        <div id="tabBox_2" class="tab-box" style="display: none;">
+
+            <form method="post" action="/scm_kry/inventoryWarning/saveMulti" id="baseInfoForm_2">
+
+                <input type="hidden" id="warehouseIds" name="warehouseIds">
+
+                <!-- 库存预警信息 start -->
+                <div class="ml10 mt10 mr20" style="float: left">
+                    <a class="btn btn-primary btn-large" id="btnSelectSku" afterAdd="$.afterAdd" data-gridid="grid_2" data-addrowwithrealod="1" data-nowarehouse="1">添加商品</a>
+                    <a class="btn btn-primary btn-large" id="btnDeleteSku" afterRemoved="$.afterRemoved" data-gridid="grid_2">移除商品</a>
+                </div>
+
+
+                <div id="filterGridDiv1" data-showinventory="1" data-tableid="grid_2"></div>
+
+                <div class="panel-body">
+
+                    <div id="skuDetailsTab2" class="clear detail-grid">
+                        <table id="grid_2"></table>
+                    </div>
+                </div>
+                <!-- 库存预警信息 end -->
+            </form>
+        </div>
+        <input type="hidden" id="editable" name="editable" value="true">
+
+    </div>
+</div>
+
+<!-- 批量设置模态框 -->
+<div class="modal fade" id="batchSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:560px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">批量设置</h4>
+            </div>
+
+            <div class="modal-body">
+                <div id="choseTypeHead" style="margin: 10px 20px 20px 20px;">
+                    <label class="radio radio-check" style="margin-right: 100px;" for="modal-type-1" data-id="hand">
+                        <span></span>
+                        <input type="radio" name="type" value="1" id="modal-type-1" checked>
+                        自定义设置
+                    </label>
+                    <label class="radio" for="modal-type-2" data-id="auto">
+                        <span></span>
+                        <input type="radio" name="type" value="2" id="modal-type-2">
+                        根据出库总数计算
+                    </label>
+                </div>
+
+                <div id="hand">
+                    <div style="padding: 10px 30px;background-color: #f1f1f1;">
+                        <form action="#" method="post" autocomplete="off">
+                            <div class="modal-row">
+                                <label for="">库存下限：</label>
+                                <input style="width:70%;" name="lowerLimit" id="lowerLimit" autocomplete="off" data-limit="{8,5}" class="form-control number" data-format="float" type="text" />
+                            </div>
+                            <div class="modal-row">
+                                <label for="safe">安全库存：</label>
+                                <input style="width:70%;" name="safeLimit" id="safeLimit"  autocomplete="off" data-limit="{8,5}" class="form-control number" data-format="float" type="text" />
+                            </div>
+                            <div class="modal-row">
+                                <label for="">库存上限：</label>
+                                <input style="width:70%;" name="upperLimit" id="upperLimit"  autocomplete="off" data-limit="{8,5}" class="form-control number" data-format="float" type="text" />
+                            </div>
+                        </form>
+                    </div>
+                    <div id="handMsg" style="color: red;display: none;font-size: 16px;text-align: center;margin-top:20px;">
+                        不满足库存上限>安全库存>库存下限>=0!
+                    </div>
+                </div>
+                <div id="auto" style="display: none;">
+                    <div style="padding: 10px 30px;background-color: #f1f1f1;">
+                        <form action="#" method="post" autocomplete="off">
+                            <div class="modal-row">
+                                <label style="float:left;line-height: 34px;" for="">选择时间段：</label>
+                                <div class="search-box" style="float: left;">
+                                    <input type="text" name="arriveDateStart" id="arriveDateStart" class="form-control datepicker-start" data-for-element="arriveDateEnd" data-date-endDate="2017-04-07" value="2017-03-31" placeholder="请选择开始日期" readonly>
+                                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="space">~</div>
+                                <div class="search-box">
+                                    <input type="text" name="arriveDateEnd" id="arriveDateEnd" class="form-control datepicker-end" data-for-element="arriveDateStart" data-date-endDate="2017-04-07"  value="2017-04-06" placeholder="请选择结束日期" readonly>
+                                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                                </div>
+                                <div style="float:left;margin-left: 10px;">
+
+                                    <span class="iconfont question color-g" data-content="品牌下统计时间段内的出库总数。出库总数= 生产用料数（毛料）+其他出库数"></span>
+
+
+                                </div>
+                            </div>
+                            <div class="modal-row">
+                                <label for="">安全库存：</label>
+                                <span style="font-size: 16px;color: #888888;margin-left: 10px;">时间段内的出库总数</span>
+                            </div>
+                            <div class="modal-row">
+                                <label for="">最低库存根据安全库存推算上限下限：</label>
+                            </div>
+                            <div class="modal-row">
+                                <div style="float: left;">
+                                    <label for="">1.安全库存：</label>
+                                </div>
+                                <input style="width: 333px;" class="form-control" type="text" value="时间段内的出库总数" disabled/>
+                            </div>
+                            <div class="modal-row">
+                                <div style="float: left;">
+                                    <label for="">2.库存下限：</label>
+                                </div>
+                                <div style="float:left;">
+                                    <input class="form-control" type="text" value="安全库存" disabled/>
+                                </div>
+                                <div class="space">X</div>
+                                <div style="float:left;width: 100px;" class="input-group">
+                                    <input name="lowerLimitPercent" id="lowerLimitPercent" style="width: 115px" type="text" autocomplete="off" data-limit="{2,5}" class="form-control number" data-format="float" type="text" />
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                            <div class="modal-row">
+                                <div style="float: left;">
+                                    <label for="">3.库存上限：</label>
+                                </div>
+                                <div style="float:left;">
+                                    <input class="form-control" type="text" value="安全库存" disabled/>
+                                </div>
+                                <div class="space">X</div>
+                                <div style="float:left;width: 100px;" class="input-group">
+                                    <input name="upperLimitPercent" id="upperLimitPercent" style="width: 115px" type="text" autocomplete="off" data-limit="{4,5}" class="form-control number" data-format="float" type="text" />
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="autoMsg" style="color: red;display: none;font-size: 16px;text-align: center;margin-top:20px;">
+                        不满足库存上限>安全库存>库存下限>=0!
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="text-align: center;margin-top: 0;">
+                <button id="batchSetOk" type="button" class="btn btn-primary" >确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+            <input id="defaultDateStart" type="hidden" value="2017-03-31"/>
+            <input id="defaultDateEnd" type="hidden" value="2017-04-06"/>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+
+<div id="scmSkuSelectDiv" gridId="grid" skuScene="72" warehouseId="warehouseId"></div>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/inventory-warning.js?v=20170406_201331" ></script>
+<script>
+    $(function() {
+        var warehouses=eval([{"id":9591,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-25 13:15:02","version":2,"wareshouseCode":"WH001","warehouseName":"总仓库","memo":"12313","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0},{"id":13260,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:31","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-21 16:28:18","version":1,"wareshouseCode":"WH002","warehouseName":"饮品仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13261,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:43","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:11:15","version":1,"wareshouseCode":"WH003","warehouseName":"酒水仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13262,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:50:57","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:12:49","version":1,"wareshouseCode":"WH004","warehouseName":"原材料仓","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":14838,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:09","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:09","version":1,"wareshouseCode":"WH005","warehouseName":"4号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":14839,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:37","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:37","version":1,"wareshouseCode":"WH006","warehouseName":"5号库","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1}]);
+        var exWahouseId=-1;
+        if(exWahouseId!=''){
+            $('#warehouseId').val(exWahouseId);
+            $('#warehouseId').siblings('.select-control').find('em').text($('#warehouseId').find('option:checked').text());
+        }
+        var warehouseIds=[];
+        if(warehouses!=null&&warehouses.length>0){
+            for(var i=0;i<warehouses.length;i++) {
+                warehouseIds.push(warehouses[i].id);
+            }
+            $('#warehouseIds').val(warehouseIds.join(','));
+        }
+        var type=2;
+        var opts = {
+            warehouseId : $('#warehouseId').val(),
+            warehouseIds:warehouseIds,
+            editable : true,
+            commandType :'2',
+            type : type,
+            warehouses : warehouses
+        };
+        inventoryWarning._init(opts);
+
+        $.doSave = function (args) {
+            if($('#grid').find('td.err').length > 0){
+                $.layerMsg(inventoryWarning.opts.errorMsg,false);
+                $('#grid').find('td.err').eq(0).find('input').focus();
+                return;
+            }
+
+            $.formSubmitWithAjax(args);
+        };
+    });
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
