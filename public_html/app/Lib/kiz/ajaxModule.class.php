@@ -145,7 +145,10 @@ class ajaxModule extends KizBaseModule{
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
-        $where = "where g.is_effect=0 and g.is_stock = 1 and g.location_id=$slid";
+        $where = "where  g.location_id=$slid";
+        $where .=" and g.is_effect = 0";//是否现实在终端
+        $where .= " and g.is_stock = 1 ";//是否是库存商品
+        $where .= " and g.print <> 1";//库存类型不等于现制商品
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
