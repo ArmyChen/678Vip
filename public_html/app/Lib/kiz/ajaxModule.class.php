@@ -815,7 +815,7 @@ class ajaxModule extends KizBaseModule{
                 $list['price'] = $item['price'];
                 $list['purchasePrice'] = $item['buyPrice'];
                 $list['costPrice'] = $item['customerPrice'];
-                $list['balancePrice'] = $item['sellPrice2'];
+                $list['balancePrice'] = $item['sellPrice'];
                 $list['status'] = 1;
                 $list['isDisable'] = 1;
                 array_push($arr_list,$list);
@@ -1178,8 +1178,8 @@ class ajaxModule extends KizBaseModule{
             "type"=>'',
             "buyPrice"=>$skuPrice->purchasePrice,
             "price"=>$skuPrice->price,
-            "customerPrice"=>$skuPrice->costPrice,
-            "sellPrice2"=>$skuPrice->balancePrice,
+            "customerPrice"=>$skuPrice->costPrice,//结算价
+            "sellPrice"=>$skuPrice->balancePrice,//成本价
             "print"=>$skuList->wmType,
             "is_stock"=>1,
             "chupinliu"=>$skuList->yieldRate

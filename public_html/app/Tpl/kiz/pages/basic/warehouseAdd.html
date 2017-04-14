@@ -354,7 +354,7 @@
                 <div class="crm_price">
                     <div style="float: left;margin-left: 56px;min-width: 660px;">
                         <div class="fl">
-                            会员价<strong class="white vam" id="costPrice_name"> *</strong>
+                            成本价<strong class="white vam" id="costPrice_name"> *</strong>
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
@@ -368,7 +368,7 @@
                     </div>
                     <div>
                         <div class="fl">
-                            批发价<strong class="red vam"> *</strong>
+                            结算价<strong class="red vam"> *</strong>
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
@@ -1140,7 +1140,7 @@
             costPrice_name.removeClass("red").addClass("white");
 
             $("#showRate").show().find("input").val("100");
-        } else if (type == "5") {//半成品
+        } else if (type == "6") {//半成品
             var purchasePriceNewValue = purchasePrice.val();
             if (purchasePriceNewValue != "—") purchasePrice.attr("data-val", purchasePriceNewValue);
             purchasePrice.val("—").attr("disabled", "disabled").siblings().hide();
