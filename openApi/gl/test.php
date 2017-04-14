@@ -4,10 +4,16 @@ $name = array (
 		"spy-20170414100644-6159"
 );
 $type = "cmd";
-$content = '{"title":"\u63d0\u793a","description":"\u6709\u65b0\u8ba2\u5355","custom_content":{"code":1009,"data":{"psid":450}}}';
+$description=array('code'=>'1001');
+$message = array (
+    'title' => '提示',
+    'description' =>'有菜品更新' ,
+    'custom_content'=>$description
+);
 
 $ht = new HyTool ();
-$error = $ht->sendMessage ( $name, $type,$content );
+$error = $ht->sendMessage_NEW ( $name, $type,$message);
+var_dump($error);
 if (isset ( $error )) {
 	echo $error;
 } else {
