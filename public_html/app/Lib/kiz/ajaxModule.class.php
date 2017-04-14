@@ -1181,7 +1181,8 @@ class ajaxModule extends KizBaseModule{
             "customerPrice"=>$skuPrice->costPrice,
             "sellPrice2"=>$skuPrice->balancePrice,
             "print"=>$skuList->wmType,
-            "is_stock"=>1
+            "is_stock"=>1,
+            "chupinliu"=>$skuList->yieldRate
         );
         if($skuList->skuCode){
             $dc_menu_data['id'] = $skuList->skuCode;
