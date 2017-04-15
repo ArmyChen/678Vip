@@ -134,7 +134,7 @@ var skulist = {
         };
 
         $.doMyDelete = function(data){
-            Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！出现的后果自负！"},function () {
+            Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！<br/>出现的问题后果自负！"},function () {
                 $.ajax({
                     url: skulist.opts.urlRoot+ skulist.opts.deleteUrl,
                     type: "post",

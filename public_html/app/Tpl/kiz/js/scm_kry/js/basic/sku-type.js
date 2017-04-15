@@ -134,7 +134,7 @@ var skuType = {
     	   // $.message.showDialog(opts);
     	   // $("#typeCodeOrName").focus().blur();
 
-           Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！出现的错误后果自负！"},function () {
+           Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！<br/>出现的问题错误后果自负！"},function () {
                $.ajax({
                    url: _this.opts.urlRoot+ _this.opts.deleteUrl,
                    type: "post",
