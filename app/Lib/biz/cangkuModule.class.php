@@ -35,7 +35,7 @@ class cangkuModule extends BizBaseModule{
 		"4"=>"领料出库"		
 		);
         $kcnx=array(
-            "0"=>"暂无",
+            "0"=>"默认",
             "1"=>"现制商品",
             "2"=>"预制商品",
             "3"=>"外购商品",

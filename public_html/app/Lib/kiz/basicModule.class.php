@@ -11,7 +11,7 @@ class basicModule extends KizBaseModule
         global_run();
         parent::init();
         $kcnx=array(
-//            "0"=>"暂无",
+//            "0"=>"默认",
 //            "1"=>"现制商品",
 //            "2"=>"预制商品",
 //            "3"=>"外购商品",
@@ -19,7 +19,16 @@ class basicModule extends KizBaseModule
             "6"=>"半成品",
 
         );
-        $this->kcnx=$kcnx;
+        $index_kcnx=array(
+            "0"=>"暂无",
+            "1"=>"现制商品",
+            "2"=>"预制商品",
+            "3"=>"外购商品",
+            "4"=>"原物料",
+            "6"=>"半成品",
+        );
+
+        $this->index_kcnx=$index_kcnx;
 //        $this->check_auth();
     }
     #仓库管理
@@ -94,7 +103,7 @@ class basicModule extends KizBaseModule
         $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
-        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
+        $GLOBALS['tmpl']->assign('kcnx',$this->index_kcnx);
         $GLOBALS['tmpl']->assign("page_title", "商品-原料");
         $GLOBALS['tmpl']->display("pages/basic/warehouse.html");
     }
@@ -111,6 +120,7 @@ class basicModule extends KizBaseModule
         $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign("unitlist",json_encode(parent::get_unit_list($slid)));
         $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "新增原料");
         $GLOBALS['tmpl']->display("pages/basic/warehouseAdd.html");

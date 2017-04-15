@@ -72,9 +72,9 @@
             <div class="aside-column multi-select">
                 <h2>库存类型</h2>
                 <select id="goodsWm" name="wmType">
-                    <option value="0" selected="selected">请选择</option>
+                    <option value="-1" selected="selected">请选择</option>
                     {foreach from=$kcnx item=item key=key}
-                    {if $key gt 0}
+                    {if $key gt -1}
                     <option value="{$key}">{$item}</option>
                     {/if}
                     {/foreach}

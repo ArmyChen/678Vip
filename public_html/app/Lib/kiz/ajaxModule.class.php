@@ -760,6 +760,67 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    /**
+     * 仓库删除
+     */
+    public function ajax_setting_del()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $cangkuQqqqq = "select * from fanwe_cangku_menu WHERE cid=".$id." and slid = ".$slid;
+            $res = $GLOBALS['db']->getAll($cangkuQqqqq);
+            if(count($res) > 0){
+                $return['success'] = false;
+                $return['message'] = "操作失败，该仓库已经产生商品";
+            }else{
+                $deleteSQL = "delete from fanwe_cangku WHERE id=".$id." and slid = ".$slid;
+                $res = $GLOBALS['db']->query($deleteSQL);
+                if($res){
+                    $return['success'] = true;
+                    $return['message'] = "操作成功";
+                }else{
+                    $return['success'] = false;
+                    $return['message'] = "操作失败";
+                }
+            }
+            echo json_encode($return);exit;
+
+        }
+    }
+
+    /**
+     * 原料类别删除
+     */
+    public function ajax_category_del()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['ids'];
+        if($id > 0){
+            $cangkuQqqqq = "select * from fanwe_dc_menu WHERE cate_id=".$id." and location_id = ".$slid;
+            $res = $GLOBALS['db']->getAll($cangkuQqqqq);
+            if(count($res) > 0){
+                $return['success'] = false;
+                $return['message'] = "操作失败，该分类已经产生商品";
+            }else{
+                $deleteSQL = "delete from fanwe_dc_supplier_menu_cate WHERE id=".$id." and location_id = ".$slid;
+                $res = $GLOBALS['db']->query($deleteSQL);
+                if($res){
+                    $return['success'] = true;
+                    $return['message'] = "操作成功";
+                }else{
+                    $return['success'] = false;
+                    $return['message'] = "操作失败";
+                }
+            }
+            echo json_encode($return);exit;
+
+        }
+    }
 
     public function basic_warehouse_list_ajax(){
         init_app_page();
@@ -782,7 +843,7 @@ class ajaxModule extends KizBaseModule{
         if($_REQUEST['skuCodeOrName']){
             $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.id like'%".$_REQUEST['skuCodeOrName']."%')";
         }
-        if($_REQUEST['wmType']){
+        if($_REQUEST['wmType']>-1){
             $where .= " and g.print=".$_REQUEST['wmType'];
         }
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
@@ -830,6 +891,34 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+
+    public function ajax_warehouse_del()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['skuIds'];
+        if($id > 0){
+            $sqlsort = "delete from " . DB_PREFIX . "dc_menu where id=".$id." and location_id =".$slid ;
+            $res = $GLOBALS['db']->query($sqlsort);
+
+            if($res){
+                $return['success'] = true;
+                $return['message'] = "操作成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "操作失败";
+            }
+            echo json_encode($return);exit;
+        }else{
+            $return['success'] = false;
+            $return['message'] = "请选择进行操作";
+        }
+        echo json_encode($return);exit;
+    }
+
+
 
     function get_dc_supplier_menu($id = 30){
         $check=$GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id = ".$id);
