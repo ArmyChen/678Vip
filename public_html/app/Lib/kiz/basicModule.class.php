@@ -27,7 +27,7 @@ class basicModule extends KizBaseModule
             "4"=>"原物料",
             "6"=>"半成品",
         );
-
+        $this->kcnx=$kcnx;
         $this->index_kcnx=$index_kcnx;
 //        $this->check_auth();
     }
