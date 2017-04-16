@@ -1,0 +1,295 @@
+<?php
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/style.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/weebox.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/fanweUI.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/project.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/dc_menu.css";
+
+/*日期控件*/
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/jquery.datetimepicker.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/jquery.Jcrop.css";
+
+
+
+
+/*$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/plupload.full.min.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";*/
+
+
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery-1.8.2.min.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/plupload.full.min.js";
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";
+
+
+
+/*日期控件*/
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.datetimepicker.js";
+
+
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/pages/dc/jquery.Jcrop.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/pages/dc/dc_menu.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/pages/dc/dc_menu.js";
+
+
+
+?>
+
+{include file="inc/nr_header.html"}
+<script>
+
+var ajax_url = '{$ajax_url}';
+
+</script>
+<script type="text/javascript">
+
+function catechange()
+
+{
+
+document.search_form.submit();
+
+}
+
+</script>
+
+<style>
+
+.edit_item_txt{display:none;}
+.top_option{ display:block; clear:both; padding:10px 0;}
+.top_option a{ padding:0 15px; background:#1ab394; color:#fff; float:left; height:35px; line-height:35px; margin-left:5px;}
+.batch_del{ padding:0px 15px; height:35px; float:left; line-height:35px; margin:0; background:#1ab394; color:#fff; border:none;}
+.search_box{height:30px;line-height:30x; padding:0}
+.add_goods_type{ padding:0px 15px; height:32px;line-height:32px; margin:0; background:#1ab394; color:#fff; border:none;}
+.weedialog .dialog-header{ background:#1ab394;}
+</style>
+<div class="page wrap_full">
+  <div class="left_box"> {include file="inc/biz_nav_list.html"} </div>
+  <div class="right_box">
+    <div class="biz_header" style="background:none;">
+      <div class="head_box wrap_full">
+        <p style=" font-size:14px; color:#999; padding:20px 0 0 20px; line-height:38px;">注：当前页面数据为实时数据，仅供参考。实际数据以各业务统计数据为准。</p>
+        <ul class="head_nav hea_bak">
+          {insert name="load_biz_user_tip"}
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      <div class="head_box clearfix">
+        <h2 class="f_l">{$page_title}</h2>
+         <div class="f_r"><a class="back_menu_index" href="{url r="biz" p="dc#index"}">[ 返回列表 ]</a></div>
+      </div>
+      <div class="blank50"></div>
+      <div class="form_box  content_hastab">
+        <div class="comments_details">
+          <form name="search_form" action="{url r="biz" b="dc#dc_menu_index"}" method="post">
+            <select name="cate_id" class="ui-textbox search_box" onchange="catechange()" holder="商品分类">
+                        {$idselect}
+              <option value="-9">全部分类</option>
+					{if $sortlist}
+					{foreach from=$sortlist item=row}
+              <option value="{$row.id}" {if $cate_id eq $row.id } selected="selected" {/if}> {if $row.wlevel == '0'}
+              {elseif $row.wlevel == '1'}
+              |&nbsp;&nbsp;--
+              {elseif $row.wlevel == '2'}
+              |&nbsp;&nbsp;--&nbsp;&nbsp;--
+              {elseif $row.wlevel == '3'}
+              |&nbsp;&nbsp;--&nbsp;&nbsp;--&nbsp;&nbsp;--
+              {/if}{$row.name}</option>
+					{/foreach}
+					{/if}
+            </select>
+            名称/条码/拼音码：
+            <input name="name" type="text" class="ui-textbox search_box" value="{$bname}"/>
+            <input type="submit" value="查询" class="add_goods_type" rel="orange"  />
+            <input name="id" type="hidden" value="{$location_id}"/>
+            <div class=" f_r">
+          <button class="ui-button add_menu_btn" rel="orange" type="button" data-id="{$location_id}">添加 +</button>
+          <button class="ui-button btnImport" rel="orange" type="button" data-id="{$location_id}">导入</button>
+          <button class="ui-button btnExport" rel="orange" type="button" data-id="{$location_id}">导出</button>
+        </div>
+          </form>
+
+          <div class="blank50"></div>
+          <form name="menu_manage_form" action="{url r="biz" b="dc#batch_del_menu"}" method="post">
+            <div class="top_option">
+            	<input type="checkbox" id="checkAll"> 全选
+              <button class=" batch_del" rel="white" type="button">删除</button>
+              <input type="hidden" name="location_id" value="{$location_id}"/>
+              <a href="/biz.php?ctl=dc&act=dc_menu_unit_index&id={$location_id}"  class=" ">单位管理</a>
+              <!--<a href="/biz.php?ctl=dc&act=dc_menu_print_index&id={$location_id}" class=" ">厨房票打</a>-->
+              <a href="/biz.php?ctl=dc&act=dc_menu_taste&id={$location_id}" class=" ">商品属性</a>
+              <div class="clear"></div>
+            </div>
+            <table class="table_box ">
+
+              <thead>
+                <tr>
+                  <th>选择</th>
+                  <th>编号</th>
+				  <th>排序ID</th>
+                  <th>名称</th>
+
+                  <th>库存类型</th>
+
+                  <th>图片</th>
+                  <th>分类</th>
+
+				  <th>是否前台</th>
+				  <th>前台估清</th>
+				  <th>是否仓库</th>				  
+				  <th>仓库估清</th>
+				  <th>是否打折</th>
+				  <th>价格</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              {if $list}
+
+              {foreach from=$list item=row}
+              <tr data-id="{$row.id}">
+                <td class="rate"><label class="ui-checkbox" rel="common_cbo">
+                <input type="checkbox" name="del_ids[]" value="{$row.id}" /></label></td>
+                <td class="rate"> {$row.id} </td>
+				<td> {$row.orderid} </td>
+                <td><div class="menu">{$row.name}</div></td>
+
+                <td>{$row.kclx}</td>
+
+                <!--td><div class="cate_name_box">
+
+                            <a class="name_edit_btn" href="javascript:void(0);">
+
+								{if $row.yujingtishi eq 1}
+
+                                <font size="+4" color="#FF0000">
+
+                                {$row.stock}
+
+                                </font>
+
+                                {else}
+
+                                {$row.stock}
+
+                                 {/if}
+
+                        </a>{$row.unit}  </div>
+
+             <div class="edit_item_txt"><input class="ui-textbox" value="{$row.stock}" data-id="{$row.id}" style="width:220px;padding:5px;"/>&nbsp;<i class="iconfont edit_save">&#xe60d;</i>{$row.unit}  </div>
+
+
+
+							</td-->
+
+                <td><a href="{$row.image}" target="_blank"><img src="{function name="get_spec_image" v=$row.image h=40 w=40 g=1}"  width="40" height="40" lazy="true"/></a></td>
+                <td> {$row.cate_name} </td>
+				<td > {if $row.is_effect eq 1}是
+					{else}否{/if}</td>
+				<td > {if $row.is_effect_enable eq 0}是
+					{else}否{/if}</td>
+					<td > {if $row.is_stock eq 1}是
+					{else}否{/if}</td>
+					<td > {if $row.is_stock_enable eq 0}是
+					{else}否{/if}</td>
+				<td >{if $row.isdazhe eq 1}是
+					{else}否{/if}					</td>
+				<td > {$row.price} </td>
+                <td><a class="iconfont is_effect is_effect_btn" style="font-size:25px;" data-id="{$row.id}">{if $row.is_effect eq 1}&#xe612;{else}&#xe60b;{/if}</a></td>
+                <td class="operate"><a href="javascript:void(0);" class="edit_menu_btn" data-id="{$row.id}" >编辑</a> <a href="javascript:void(0);" onclick="del_menu(this);" data-id="{$row.id}" >删除</a></td>
+              </tr>
+              {/foreach}
+
+              {/if}
+                </tbody>
+
+            </table>
+            <div class="blank"></div>
+            <div class="pages"> {$pages} </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="inc/footer.html"}
+<script>
+			$(function() {
+				// 全选/全不选
+//				var selectAll = $('#selectAll');
+//				selectAll.click(function(){
+//					$(':checkbox').prop('checked', this.checked);
+//				});
+//				var checkboxes = $(':checkbox:not(#selectAll)');
+//				var total = checkboxes.length;
+//				checkboxes.click(function() {
+//					if (this.checked) {
+//						if ($(':checkbox:not(#selectAll):checked').length == total) {
+//							selectAll.prop('checked', true);
+//						}
+//					} else {
+//						selectAll.prop('checked', false);
+//					}
+//				});
+//			});
+			 $(function() {
+           $("#checkAll").click(function() {
+                $('input[name="del_ids[]"]').attr("checked",this.checked); 
+            });
+            var $subBox = $("input[name='del_ids[]']");
+            $subBox.click(function(){
+                $("#checkAll").attr("checked",$subBox.length == $("input[name='del_ids[]']:checked").length ? true : false);
+            });
+        });
+       
+		</script>

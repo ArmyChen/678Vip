@@ -42,6 +42,12 @@ if($op == 'index') {
 	$is_favorite = pdo_get('tiny_wmall_plus_store_favorite', array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid'], 'sid' => $sid));
 
 	$result = goods_avaliable_fetchall($slid,$sid, 0, true);
+	//var_dump($result);
+/*
+    taste字段
+    增加了taste，可以通过以上的来操作
+*/
+   //////////////////////////
 	$categorys = $result['category'];
 	$cate_goods = $result['cate_goods'];
 	$goods = $result['goods'];
@@ -59,7 +65,8 @@ if($op == 'index') {
 	include $this->template('table');
 }
 
-if($op == 'post') {	
+if($op == 'post') {
+
 	$cart = order_insert_member_cart($slid,$sid, true);
 	if(is_error($cart)) {
 		$cart = order_fetch_member_cart($sid);
