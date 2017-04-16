@@ -1,0 +1,102 @@
+
+{include file="inc/header.html"}
+
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>编辑原料类别</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnSave">保存</a>
+
+            <!--<a class="btn-link ml10" id="btnSave-bak">保存并复制</a>-->
+
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=basic&act=basic_category_index');">返回</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block panel-group" id="accordion">
+    <div class="panel" style="padding:0; margin-top: 10px;">
+        <form method="post" action="/kiz.php?ctl=basic&act=dc_menu_category_add_ajax" id="baseInfoForm" autocomplete="off">
+            <!-- hidden start -->
+            <input type="hidden" id="id" name="id" value="{$category.id}">
+            <input type="hidden" id="version" name="version" value="">
+            <!-- hidden end -->
+            <div class="panel-body">
+                <div style="margin:0 auto; width: 500px">
+
+
+                    <div>
+                        <dl class="panel-item">
+                            <dt><label for="typeName">类别名称<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w260 search-box">
+                                    <input type="text" class="form-control required" id="typeName"
+                                           name="typeName" value="{$category.name}"
+                                           data-format="name" select='auto'
+                                           placeholder="第一语言" maxlength="50"/>
+                                    <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+
+
+                    <div>
+                        <dl class="panel-item">
+                            <dt><label for="parentId">所属分类<strong class="white vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w260">
+                                    <select id="parentId" name="parentId" class="required">
+                                        <option value="0">请选择所属分类</option>
+                                        {foreach from=$listsort item=item}
+
+                                        <option value="{$item.id}" {if $item.id = $category.wcategory}selected{/if} >{$item.title_show}</option>
+
+                                        {/foreach}
+
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <!--<div>-->
+                        <!--<dl class="panel-item">-->
+                            <!--<dt><label for="comment">备注<strong class="white vam"> *</strong></label></dt>-->
+                            <!--<dd class="positionRelative">-->
+                                <!--<div class="pull-left w260">-->
+                                    <!--<textarea id="comment" name="comment" class="w260" style="height: 65px;" placeholder="备注（非必填）"-->
+                                              <!--data-character="true" maxlength="50"></textarea>-->
+                                <!--</div>-->
+                            <!--</dd>-->
+                        <!--</dl>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/sku-type.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
+<script>
+    $(function() {
+        var opts = {
+            urlRoot : ctxPath,
+            commandType : 1
+        };
+
+        skuType._init(opts);
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

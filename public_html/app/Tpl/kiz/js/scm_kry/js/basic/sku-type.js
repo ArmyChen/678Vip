@@ -12,7 +12,7 @@ var skuType = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=get_dc_menu_category_ajax',
-        editUrl : '/edit',
+        editUrl : '&act=basic_category_edit',
         viewUrl : '/view',
         lockUrl : '/lock',
         saveUrl : '&act=dc_menu_category_add_ajax',
@@ -82,7 +82,7 @@ var skuType = {
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showLock = function (rowData) {
@@ -187,7 +187,7 @@ var skuType = {
                         if (rowObject.isDisable == 1) {
                             return "<span style='color:red'>商品启用</span>";
                         } else {
-                            return "<span style='color:black'>仓库启用</span>";
+                            return "<span style='color:black'>启用</span>";
                         }
                     }
                 },
@@ -206,7 +206,7 @@ var skuType = {
                 editor: {
                     render: $.showEditor,
                     code: "scm:button:masterdata:skuType:edit",
-                    url: _this.opts.urlRoot + _this.opts.editUrl
+                    url: basicPath + _this.opts.editUrl
                 },
                 clock: {
                     url: _this.opts.urlRoot + _this.opts.lockUrl,

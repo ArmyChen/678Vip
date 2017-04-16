@@ -240,6 +240,7 @@ var skulist = {
                     name: 'price',
                     index: 'price',
                     align: "center",
+                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
                         if (rowObject.price == null){
@@ -281,6 +282,7 @@ var skulist = {
                     name: 'balancePrice',
                     index: 'balancePrice',
                     align: "center",
+                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
                         if (rowObject.wmType == 2 || rowObject.balancePrice == null){

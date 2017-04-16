@@ -49,6 +49,29 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "新增仓库");
         $GLOBALS['tmpl']->display("pages/basic/settingAdd.html");
     }
+    public function basic_setting_edit()
+    {
+        init_app_page();
+        $id = $_REQUEST['id'];
+        $cangku=$GLOBALS['db']->getRow("select * from fanwe_cangku where id=".$id);
+        $disable = "";
+        $enable = "";
+        if($cangku['isdisable']){
+            $disable = "checked";
+            $enable = "";
+        }else{
+            $disable = "";
+            $enable = "checked";
+        }
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangku", $cangku);
+        $GLOBALS['tmpl']->assign("disable", $disable);
+        $GLOBALS['tmpl']->assign("enable", $enable);
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "编辑仓库");
+        $GLOBALS['tmpl']->display("pages/basic/settingEdit.html");
+    }
 
     #期初设定
     public function basic_master_index()
@@ -74,11 +97,14 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/basic/category.html");
     }
 
+    /**
+     * 新增分类页面
+     */
     public function basic_category_add()
     {
         init_app_page();
         $account_info = $GLOBALS['account_info'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
         $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
 
         $wmenulist = $GLOBALS['db']->getAll($sqlsort);
@@ -118,6 +144,57 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/basic/categoryAdd.html");
     }
 
+    /**
+     * 编辑分类
+     */
+    public function basic_category_edit()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
+
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $wmenu0['parentTypeName'] = "";
+                $list[] = $wmenu0;
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $wmenu1['parentTypeName'] = $wmenu0['name'];
+                    $list[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $wmenu2['parentTypeName'] = $wmenu1['name'];
+                        $list[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $wmenu3['parentTypeName'] = $wmenu2['name'];
+                            $list[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+
+        $listsort = toFormatTree($list,"name");
+
+        $id = $_REQUEST['id'];
+        $category = $GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id=".$id);
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign("category", $category);
+
+        $GLOBALS['tmpl']->assign("page_title", "新增原料类别保存 保存并复制 返回");
+        $GLOBALS['tmpl']->display("pages/basic/categoryEdit.html");
+    }
     #商品-原料设定
     public function basic_warehouse_index()
     {
@@ -131,7 +208,7 @@ class basicModule extends KizBaseModule
         $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
-        $GLOBALS['tmpl']->assign('kcnx',$this->index_kcnx);
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "商品-原料");
         $GLOBALS['tmpl']->display("pages/basic/warehouse.html");
     }

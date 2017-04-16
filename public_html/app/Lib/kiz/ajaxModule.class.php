@@ -734,22 +734,37 @@ class ajaxModule extends KizBaseModule{
         return $gys_name;
     }
 
+    /**
+     * 操作仓库
+     */
     public function dc_cangku_add_ajax(){
         init_app_page();
-        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];;
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];
+        $id = intval($_REQUEST['id']);
         $cangkuArray['slid'] = $slid;
         $cangkuArray['tel'] = '';
         $cangkuArray['address'] = '';
         $cangkuArray['contact'] = '';
         $cangkuArray['name'] = $_REQUEST['warehouseName'];
         $cangkuArray['isdisable'] = $_REQUEST['isDisable'];
-        $cangkuexsit = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."cangku  where slid=".$slid." and name='".$_REQUEST['warehouseName']."'");
-        if($cangkuexsit){
-            $return['success'] = false;
-            $return['message'] = "仓库名已存在！";
-            echo json_encode($return);exit;
+         if($id > 0){
+             $cangkuexsit = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."cangku  where slid=".$slid." and id='".$id."'");
+            if(!$cangkuexsit){
+                $return['success'] = false;
+                $return['message'] = "仓库名不存在！";
+                echo json_encode($return);exit;
+            }
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"UPDATE","id=".$id);
+        }else{
+             $cangkuexsit = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."cangku  where slid=".$slid." and name='".$_REQUEST['warehouseName']."'");
+             if($cangkuexsit){
+                $return['success'] = false;
+                $return['message'] = "仓库名已存在！";
+                echo json_encode($return);exit;
+            }
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"INSERT");
         }
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku", $cangkuArray ,"INSERT");
+
         if($res){
             $return['success'] = true;
             $return['message'] = "操作成功";
@@ -759,6 +774,7 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
 
     /**
      * 仓库删除
@@ -1190,7 +1206,8 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];;
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];
+        $id = intval($_REQUEST['id']);
         $cateArray['is_effect'] = 0;//原料为0
         $cateArray['icon_img'] = '';
         $cateArray['iconcolor'] = '';
@@ -1201,19 +1218,37 @@ class ajaxModule extends KizBaseModule{
         $cateArray['location_id'] = $slid;
         $cateArray['wcategory'] = $_REQUEST['parentId'];//父分类
 
-        if($_REQUEST['wcategory']){
-            $parentCategory = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."dc_supplier_menu_cate  id=".$_REQUEST['parentId']);
-            if(!$parentCategory){
-                $return['success'] = false;
-                $return['message'] = "父分类不存在！";
-                echo json_encode($return);exit;
+        //编辑
+        if($id > 0){
+            if($_REQUEST['wcategory']){
+                $parentCategory = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."dc_supplier_menu_cate  id=".$_REQUEST['parentId']);
+                if(!$parentCategory){
+                    $return['success'] = false;
+                    $return['message'] = "父分类不存在！";
+                    echo json_encode($return);exit;
+                }
+                $cateArray['wlevel'] = $parentCategory['wlevel']+1;
+            }else{
+                $cateArray['wlevel'] = 0;
             }
-            $cateArray['wlevel'] = $parentCategory['wlevel']+1;
+
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $cateArray ,"UPDATE","id=".$id);
         }else{
-            $cateArray['wlevel'] = 0;
+            if($_REQUEST['wcategory']){
+                $parentCategory = $GLOBALS['db']->getRow("select name from ".DB_PREFIX."dc_supplier_menu_cate  id=".$_REQUEST['parentId']);
+                if(!$parentCategory){
+                    $return['success'] = false;
+                    $return['message'] = "父分类不存在！";
+                    echo json_encode($return);exit;
+                }
+                $cateArray['wlevel'] = $parentCategory['wlevel']+1;
+            }else{
+                $cateArray['wlevel'] = 0;
+            }
+
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $cateArray ,"INSERT");
         }
 
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate", $cateArray ,"INSERT");
         if($res){
             $return['success'] = true;
             $return['message'] = "操作成功";
