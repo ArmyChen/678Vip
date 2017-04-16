@@ -79,7 +79,7 @@
     </div>
 </div>
 <div class="center-block panel-group mt20">
-    <input id="cacheUnit" type="hidden" value='[{"id":64497,"name":"杯"},{"id":67729,"name":"份"},{"id":74711,"name":"瓶"},{"id":74712,"name":"串"},{"id":74713,"name":"盘"},{"id":74714,"name":"位"}]'>
+    <input id="cacheUnit" type="hidden" value='{$unitlist}'>
     <input id="cacheProperty" type="hidden" value='[{"dishProperty":[{"id":143976,"name":"大杯","typeId":19548,"version":0},{"id":143977,"name":"中杯","typeId":19548,"version":0}],"hide":false,"id":19548,"name":"默认"}]'>
     <!-- 右栏 start -->
     <div class="panel">
@@ -822,6 +822,7 @@
             if (skuPrice.purchasePrice == "" || skuPrice.purchasePrice == "—")skuPrice.purchasePrice = 0;
 
             bkeruyun.showLoading();
+
             $.ajax({
                 url: ctxPath + "&act=yuanliao_set_ajax",
                 type: "post",
@@ -835,7 +836,12 @@
                 success: function (result) {
                     var data = JSON.parse(result);
                     if (data.success) {
-                        Message.alert({title: "保存成功", describe: "保存成功"});
+                        var obj = {};
+                        obj.result = {};
+                        obj.result.message = "操作成功";
+                        obj.result.success = true;
+                        obj.forwardUrl = basicPath+"&act=basic_warehouse_index";
+                        $.msgAndForward(obj);
                     } else {
                         Message.alert({title: "提示", describe: data.message});
                     }
@@ -902,7 +908,6 @@
         $(".baseInfo_dish").on("keypress keyup change", function (e) {
             $(this).parent().find("span").html("");
         });
-
         //保存并复制加载新的类型
         function doResetType() {
             $.ajax({

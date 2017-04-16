@@ -17,7 +17,7 @@ var skulist = {
         lockUrl : '/disable?isEnable=false',
         saveUrl : '/save',
         unlockUrl : '/enable?isEnable=true',
-        deleteUrl:'/delete',
+        deleteUrl:'&act=ajax_warehouse_del',
         referencesUrl : '/references/get',
         sortName : 'parentSkuTypeCode',
         pager : '#gridPager',
@@ -112,55 +112,71 @@ var skulist = {
             return formData;
         };
 
+        $.showView = function (rowData) {
+            return renderEnum.hidden;
+        };
+
         $.showEdit = function (rowData) {
-            var flag = renderEnum.normal;
-            if(rowData.isDisable == 1) flag = renderEnum.disabled;
-            return flag;
+            return renderEnum.hidden;
         };
 
         //先假设可用判断置灰，再判断是否可用
         $.showlock = function (rowData) {
-            var flag = renderEnum.normal;
-            if(rowData.wmType!=4&&rowData.wmType!=5) flag = renderEnum.disabled;
-            if(rowData.isDisable == 1) flag = renderEnum.hidden;
-            if(!isBrand) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.hidden;
         };
 
         $.showUnlock = function (rowData) {
-            var flag = renderEnum.normal;
-            if(rowData.wmType!=4&&rowData.wmType!=5) flag = renderEnum.disabled;
-            if(rowData.isDisable == 0) flag = renderEnum.hidden;
-            if(!isBrand) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.hidden;
         };
 
         $.showDelete = function(rowData){
-            var flag = renderEnum.normal;
-            if(rowData.wmType!=4&&rowData.wmType!=5) flag = renderEnum.disabled;
-            if(!isBrand) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.normal;
+        };
+
+        $.doMyDelete = function(data){
+            Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！<br/>出现的问题后果自负！"},function () {
+                $.ajax({
+                    url: skulist.opts.urlRoot+ skulist.opts.deleteUrl,
+                    type: "post",
+                    async: false,
+                    data: {skuIds:data.postData.id},
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        if(data.success){
+                            $("#btn-query").trigger("click");
+                            $.layerMsg(data.message, true);
+                        }else{
+                            $.layerMsg(data.message, false);
+                        }
+                    },
+                    error: function () {
+                        $.layerMsg("网络错误", false);
+                    }
+                });
+            },null)
+
         };
 
         //删除前检测数据是否需要提示
         $.doDeleteOrLockTask = function(data){
-            $.ajax({
-                url: skulist.opts.urlRoot+(data.isDelete?skulist.opts.deleteUrl:skulist.opts.lockUrl),
-                type: "post",
-                async: false,
-                data: data.isDelete?{skuIds:data.postData.id}:{id:data.postData.id},
-                success: function (data) {
-                    if(data.success==true){
-                        $("#btn-query").trigger("click");
-                        $.layerMsg(data.message, true);
-                    }else{
-                        $.layerMsg(data.message, false);
-                    }
-                },
-                error: function () {
-                    $.layerMsg("网络错误", false);
-                }
-            });
+            // $.ajax({
+            //     url: skulist.opts.urlRoot+(data.isDelete?skulist.opts.deleteUrl:skulist.opts.lockUrl),
+            //     type: "post",
+            //     async: false,
+            //     data: data.isDelete?{skuIds:data.postData.id}:{id:data.postData.id},
+            //     success: function (data) {
+            //         if(data.success==true){
+            //             $("#btn-query").trigger("click");
+            //             $.layerMsg(data.message, true);
+            //         }else{
+            //             $.layerMsg(data.message, false);
+            //         }
+            //     },
+            //     error: function () {
+            //         $.layerMsg("网络错误", false);
+            //     }
+            // });
+           return;
         };
 
         //处理停用事件
@@ -168,34 +184,35 @@ var skulist = {
 
         //处理删除事件
         $.doDelete = function(dataArgs){
-            var isDelete = dataArgs.domId.indexOf("#delete")!=-1,
-                opts = {
-                    callBack: $.doDeleteOrLockTask,
-                    callBackArgs:dataArgs,
-                    hint:isDelete?'删除后不可恢复，确认删除？':'商品已被引用，确定停用？',
-                    dataHint:isDelete?'删除后会清除对应配方、模板、供货关系、库存预警等信息：':'以下为引用配方、模板、供货关系、库存预警等信息：'
-                }
-            $.ajax({
-                url: dataArgs.url,
-                type: "post",
-                async: false,
-                data: {skuIds:dataArgs.postData.id},
-                success: function (data) {
-                    if(data.count>0){
-                        opts.showBills = true;
-                        opts.dataList = data.skuReferenceVO;
-                    }else{
-                        if(!isDelete) opts.hint='确定停用？';
-                    }
-                    dataArgs.isDelete = isDelete;
-                    opts.callBackArgs=dataArgs;
-                    $.message.showDialog(opts);
-                    $("#skuCodeOrName").focus().blur();
-                },
-                error: function () {
-                    $.layerMsg("网络错误", false);
-                }
-            });
+            // var isDelete = dataArgs.domId.indexOf("#delete")!=-1,
+            //     opts = {
+            //         callBack: $.doDeleteOrLockTask,
+            //         callBackArgs:dataArgs,
+            //         hint:isDelete?'删除后不可恢复，确认删除？':'商品已被引用，确定停用？',
+            //         dataHint:isDelete?'删除后会清除对应配方、模板、供货关系、库存预警等信息：':'以下为引用配方、模板、供货关系、库存预警等信息：'
+            //     }
+            // $.ajax({
+            //     url: dataArgs.url,
+            //     type: "post",
+            //     async: false,
+            //     data: {skuIds:dataArgs.postData.id},
+            //     success: function (data) {
+            //         if(data.count>0){
+            //             opts.showBills = true;
+            //             opts.dataList = data.skuReferenceVO;
+            //         }else{
+            //             if(!isDelete) opts.hint='确定停用？';
+            //         }
+            //         dataArgs.isDelete = isDelete;
+            //         opts.callBackArgs=dataArgs;
+            //         $.message.showDialog(opts);
+            //         $("#skuCodeOrName").focus().blur();
+            //     },
+            //     error: function () {
+            //         $.layerMsg("网络错误", false);
+            //     }
+            // });
+            $.doMyDelete(dataArgs);
         }
 
         var $gridObj = $("#" + _this.opts.listGridId);
@@ -291,9 +308,10 @@ var skulist = {
             sortname: 'skuCode',
             sortorder: "asc",
             pager: _this.opts.pager,
-            showOperate: false,
+            showOperate: true,
             actionParam: {
                 view: {
+                    render : $.showView,
                     url: _this.opts.urlRoot + _this.opts.viewUrl
                 },
                 editor: {
@@ -317,7 +335,7 @@ var skulist = {
                     render : $.showDelete,
                     code: "scm:button:masterdata:sku:delete",
                     beforeCallback:'$.doDelete',
-                    url: _this.opts.urlRoot + _this.opts.referencesUrl
+                    url: _this.opts.urlRoot + _this.opts.deleteUrl
                 }
             },
 

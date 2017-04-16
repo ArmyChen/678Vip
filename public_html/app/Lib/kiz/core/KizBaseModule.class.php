@@ -345,6 +345,17 @@ class KizBaseModule{
         }
         return null;
     }
+
+    function get_unit_list($slid = 0){
+        $unitList = " select id,name,is_effect,sort from fanwe_dc_supplier_unit_cate  where 1 = 1";
+        if($slid > 0) {
+            $check = $GLOBALS['db']->getAll($unitList." and location_id=".$slid);
+            return $check;
+        }else{
+            $check = $GLOBALS['db']->getAll($unitList);
+            return $check;
+        }
+    }
 }
 
 ?>
