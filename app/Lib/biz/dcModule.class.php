@@ -4162,6 +4162,7 @@ exit;
 
 		foreach ($list as $k=>$v){
 			$list[$k]['cate_name'] = $f_menu_cate_list[$v['cate_id']]?$f_menu_cate_list[$v['cate_id']]:"暂无";
+            $list[$k]['kclx']=$this->kcnx[$v['print']];
 		}
 
 
