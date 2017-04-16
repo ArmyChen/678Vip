@@ -16,7 +16,7 @@ var skuType = {
         viewUrl : '/view',
         lockUrl : '/lock',
         saveUrl : '&act=dc_menu_category_add_ajax',
-        deleteUrl:'/delete',
+        deleteUrl:'&act=ajax_category_del',
         unlockUrl : '/unlock',
         indexUrl : "&act=basic_category_index",
         sortName : 'parentSkuTypeCode',
@@ -77,59 +77,45 @@ var skuType = {
             return formData;
         };
 
+        $.showView = function (rowData) {
+            return renderEnum.hidden;
+        };
+
         $.showEditor = function (rowData) {
-            if (!rowData.dishTypeId && rowData.isDisable == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showLock = function (rowData) {
-            if (!rowData.dishTypeId && rowData.isDisable == 0) {
-                return renderEnum.normal;
-            } else if (!!rowData.dishTypeId && rowData.isDisable == 0) {
-                return renderEnum.disabled;
-            } else {
-                return renderEnum.hidden;
-            }
+            return renderEnum.hidden;
         };
 
         $.showUnlock = function (rowData) {
-            if (!rowData.dishTypeId && rowData.isDisable == 1) {
-                return renderEnum.normal;
-            } else if (!!rowData.dishTypeId && rowData.isDisable == 1) {
-                return renderEnum.disabled;
-            } else {
-                return renderEnum.hidden;
-            }
+            return renderEnum.hidden;
         };
         $.showDelete = function(rowData){
-        	if (!rowData.dishTypeId) {
-                return renderEnum.normal;
-            } else {
-                return renderEnum.disabled;
-            } 
+            return renderEnum.normal;
         }
         
         //处理删除或停用任务
 	    $.doDeleteOrLockTask = function(data){
-	       $.ajax({
-               url: data.url,
-               type: "post",
-               async: false,
-               data: data.isDelete?{dishTypeIds:data.postData.id}:{id:data.postData.id},
-               success: function (data) {
-            	  if(data.success==true){
-            		  $("#btn-query").trigger("click");
-            		  $.layerMsg(data.message, true);
-            	  }else{
-            		  $.layerMsg(data.message, false);
-            	  }
-               },
-               error: function () {
-                   $.layerMsg("网络错误", false);
-               }
-           });
+           // $.ajax({
+           //     url: data.url,
+           //     type: "post",
+           //     async: false,
+           //     data: data.isDelete?{dishTypeIds:data.postData.id}:{id:data.postData.id},
+           //     success: function (data) {
+           //  	  if(data.success==true){
+           //  		  $("#btn-query").trigger("click");
+           //  		  $.layerMsg(data.message, true);
+           //  	  }else{
+           //  		  $.layerMsg(data.message, false);
+           //  	  }
+           //     },
+           //     error: function () {
+           //         $.layerMsg("网络错误", false);
+           //     }
+           // });
+            return;
 	    }
 	   
 	   //处理停用事件
@@ -137,16 +123,37 @@ var skuType = {
 	    
 	   //处理删除事件
        $.doDelete = function(dataArgs){
-    	   var typeCode = $(dataArgs.domId).parent().parent().find('td[aria-describedby="grid_typeCode"]').attr("title");
-    	   var isDelete = dataArgs.domId.indexOf("#delete")!=-1;
-    	   dataArgs.isDelete=isDelete;
-    	   var opts = {
-    		   callBack: $.doDeleteOrLockTask,
-    		   callBackArgs:dataArgs,
-			   hint:isDelete?((typeCode==""?'商品上级分类':'商品分类')+'删除后不可恢复,确认删除？'):'确定停用？'
-    	    };
-    	   $.message.showDialog(opts);
-    	   $("#typeCodeOrName").focus().blur();
+    	   // var typeCode = $(dataArgs.domId).parent().parent().find('td[aria-describedby="grid_typeCode"]').attr("title");
+    	   // var isDelete = dataArgs.domId.indexOf("#delete")!=-1;
+    	   // dataArgs.isDelete=isDelete;
+    	   // var opts = {
+    		//    callBack: $.doDeleteOrLockTask,
+    		//    callBackArgs:dataArgs,
+			//    hint:isDelete?((typeCode==""?'商品上级分类':'商品分类')+'删除后不可恢复,确认删除？'):'确定停用？'
+    	   //  };
+    	   // $.message.showDialog(opts);
+    	   // $("#typeCodeOrName").focus().blur();
+
+           Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！<br/>出现的问题错误后果自负！"},function () {
+               $.ajax({
+                   url: _this.opts.urlRoot+ _this.opts.deleteUrl,
+                   type: "post",
+                   async: false,
+                   data: {ids:dataArgs.postData.id},
+                   success: function (data) {
+                       data = $.parseJSON(data);
+                       if(data.success){
+                           $("#btn-query").trigger("click");
+                           $.layerMsg(data.message, true);
+                       }else{
+                           $.layerMsg(data.message, false);
+                       }
+                   },
+                   error: function () {
+                       $.layerMsg("网络错误", false);
+                   }
+               });
+           },null)
         }
        
         var $gridObj = $("#" + _this.opts.listGridId);
@@ -157,7 +164,7 @@ var skuType = {
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
             colNames: ['id', '上级分类编码', '上级分类名称', '分类编码', '分类名称', '最后编辑时间', '状态', '状态', 'mind类型ID'],
             colModel: [
-                {name: 'id', index: 'id', width: 50, hidden: true},
+                {name: 'id', index: 'id', width: 50, hidden: false},
                 {name: 'parentTypeCode', index: 'parentTypeCode', align: "center", width: 120,hidden:true},
                 {name: 'parentTypeName', index: 'parentTypeName', align: "center", width: 170,
                     formatter: function (cellvalue, options, rowObject) {
@@ -190,9 +197,10 @@ var skuType = {
             sortname: 'id',
             pager: "#gridPager",
             rowNum:80,
-            showOperate: false,
+            showOperate: true,
             actionParam: {
                 view: {
+                    render: $.showView,
                     url: _this.opts.urlRoot + _this.opts.viewUrl
                 },
                 editor: {

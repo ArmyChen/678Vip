@@ -4,17 +4,17 @@ var wareHouseList = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '/scm/warehouse',
+        urlRoot : ctxPath,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query/list',
+        queryUrl : '"&act=dc_cangku_ajax"',
         editUrl : '/edit',
         viewUrl : '/view',
         lockUrl : '/disableWarehouse',
         saveUrl : '/save',
         unlockUrl : '/enableWarehouse',
-        deleteUrl : '/deleteWareHouse',
+        deleteUrl : '&act=ajax_setting_del',
         sortName : 'parentSkuTypeCode',
         pager : '#gridPager',
         formId : 'baseInfoForm',
@@ -79,35 +79,23 @@ var wareHouseList = {
         	if(!checkbox0&&!checkbox1) delete formData.isDisable;
             return formData;
         };
-
+        $.showView = function (rowData) {
+            return renderEnum.hidden;
+        };
         $.showEdit = function (rowData) {
-        	var flag = renderEnum.normal;
-        	//if(rowData.isDefault) flag = renderEnum.disabled;
-        	if(rowData.isDisable) flag = renderEnum.disabled;
-            return flag;
+            return renderEnum.hidden;
         };
 
         //先假设可用判断置灰，再判断是否可用
         $.showlock = function (rowData) {
-        	var flag = renderEnum.normal;
-        	//if(rowData.isDefault) flag = renderEnum.disabled;
-        	if(rowData.isDisable) flag = renderEnum.hidden;
-            if (rowData.deductionName!=null&&rowData.deductionName!='') {
-                flag = renderEnum.disabled;
-            }
-            return flag;
+            return renderEnum.hidden;
         };
         
         $.showUnlock = function (rowData) {
-        	var flag = renderEnum.normal;
-        	if(!rowData.isDisable) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.hidden;
         };
 
         $.showDelete = function (rowData) {
-            if (rowData.isShowDelete == 0||(rowData.deductionName!=null&&rowData.deductionName!='')) {
-                return renderEnum.disabled;
-            }
             return renderEnum.normal;
         };
 
@@ -119,7 +107,7 @@ var wareHouseList = {
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
             colNames: ['id',  '仓库名称', '创建时间', '最后修改时间','扣减设定', '状态', '操作'],
             colModel: [
-                {name: 'id', index: 'id', width: 50, hidden: true},
+                {name: 'id', index: 'ids', width: 50, hidden: true},
                 {name: 'warehouseName', index: 'warehouseName', align: "left", width: 120},
                 {name: 'createTime', index: 'createTime', align: "center", width: 180, hidden: true},
                 {name: 'updateTime', index: 'updateTime', align: "center", width: 180, hidden: true},
@@ -142,9 +130,10 @@ var wareHouseList = {
             sortname: 'wareshouseCode',
             sortorder:'asc',
             pager: "#gridPager",
-            showOperate: false,
+            showOperate: true,
             actionParam: {
             	view: {
+                    render : $.showView,
                     url: _this.opts.urlRoot + _this.opts.viewUrl
                 },
                 editor: {

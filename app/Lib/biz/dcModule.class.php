@@ -75,12 +75,12 @@ $sql = " select * from " . DB_PREFIX . "supplier_location";
 
 		$list = $GLOBALS['db']->getAll($sql.$conditions . " order by id desc limit " . $limit);
 		//获取分类数量
-		$menu_cate_count = $GLOBALS['db']->getAll("select count(*) as count,location_id from ".DB_PREFIX."dc_supplier_menu_cate where location_id in(" . implode(",", $account_info['location_ids']) . ") GROUP BY location_id");
+		$menu_cate_count = $GLOBALS['db']->getAll("select count(*) as count,location_id from ".DB_PREFIX."dc_supplier_menu_cate where is_effect=1 and location_id in(" . implode(",", $account_info['location_ids']) . ") GROUP BY location_id");
 		//var_dump($menu_cate_count);
 		foreach ($menu_cate_count as $k=>$v){
 			$f_menu_cate_count[$v['location_id']] = $v;
 		}
-		$menu_count = $GLOBALS['db']->getAll("select count(*) as count,location_id from ".DB_PREFIX."dc_menu where location_id in(" . implode(",", $account_info['location_ids']) . ") GROUP BY location_id");
+		$menu_count = $GLOBALS['db']->getAll("select count(*) as count,location_id from ".DB_PREFIX."dc_menu where is_effect=1 and is_delete=1 and location_id in(" . implode(",", $account_info['location_ids']) . ") GROUP BY location_id");
 
 		foreach ($menu_count as $k=>$v){
 			$f_menu_count[$v['location_id']] = $v;
@@ -966,7 +966,7 @@ public function app_user_edit(){
 		//$conditions .= " where supplier_id = ".$supplier_id; // 查询条件
 		
 		//武林二次开发
-		$conditions .= " where wlevel<4 "; // 查询条件
+		$conditions .= " where is_effect=1 and  wlevel<4 "; // 查询条件
 		
 		// 只查询支持门店的
 		$conditions .= " and location_id=".$id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ";
@@ -4162,7 +4162,7 @@ exit;
 
 		foreach ($list as $k=>$v){
 			$list[$k]['cate_name'] = $f_menu_cate_list[$v['cate_id']]?$f_menu_cate_list[$v['cate_id']]:"暂无";
-            $list[$k]['kclx']=$this->kcnx[$v['print']];
+           $list[$k]['kclx']=$this->kcnx[$v['print']];
 		}
 
 
@@ -4365,13 +4365,13 @@ exit;
 		   syn_supplier_location_menu_match($id);
 		   $root['info'] = "添加成功";
 	   }
-	   
+
 	   if($data['is_effect']==1) {
 		$this->caipinpush($location_id);  
-	   }   	   
-	  
+	   }
+
 	   $root['status'] = 1;
-       
+
 	   $root['jump'] = url("biz","dc#dc_menu_index",array("id"=>$location_id));
 	   ajax_return($root);
 
@@ -8354,7 +8354,7 @@ public function sqgl_sprgl(){
 		}		
 			
 		$type = "cmd";
-		
+
 			 
         $description=array('code'=>'1001');
 	    $message = array (    
@@ -8365,9 +8365,9 @@ public function sqgl_sprgl(){
 		
 		$ht = new HyTool ();
         $ht->sendMessage ($channelIdlist,$type,$message);
-        $ht->sendMessage_NEW ($channelIdlist,$type,$message);
+       //// $ht->sendMessage_NEW ($channelIdlist,$type,$message);
 
-		
+
 	}
 		
 }
