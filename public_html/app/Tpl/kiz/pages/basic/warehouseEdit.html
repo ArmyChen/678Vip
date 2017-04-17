@@ -79,6 +79,7 @@
     </div>
 </div>
 <div class="center-block panel-group mt20">
+    <input id="id"  type="hidden" name="id" value="{$dc_menu.id}">
     <input id="cacheUnit" type="hidden" value='{$unitlist}'>
     <input id="cacheProperty" type="hidden" value='[{"dishProperty":[{"id":143976,"name":"大杯","typeId":19548,"version":0},{"id":143977,"name":"中杯","typeId":19548,"version":0}],"hide":false,"id":19548,"name":"默认"}]'>
     <!-- 右栏 start -->
@@ -96,25 +97,25 @@
                         <td>
                             <div class="search-box pull-left">
                                 <input id="skuName" data-format="skuName" name="skuName" type="text" maxlength="64"
-                                       value="" class="baseInfo_dish" placeholder="第一语言"><br>
+                                       value="{$dc_menu.standerStr}" class="baseInfo_dish" placeholder="第一语言"><br>
                                 <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
                         </td>
                         <th>商品分类<strong class="red vam"> *</strong></th>
                         <td id="skuType" style="width:220px;">
-                            <select id="skuTypeId" name="skuTypeId">
-                                <option value="0" selected="selected">请选择</option>
-                                {foreach from=$listsort item=item}
-                                    <option value="{$item.id}">{$item.title_show}</option>
-                                {/foreach}
-                            </select>
+                            <div class="search-box pull-left">
+                                <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="skuTypeId" name="skuTypeId"
+                                       maxlength="16" class="baseInfo_dish" type="text" value="{$dc_menu.name}" disabled>
+                                <button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>
+                                <br><span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
                         </td>
                         <th  style="display: none">商品编码<strong class="red vam"> &ensp;</strong></th>
                         <td  style="display: none">
                             <div class="search-box pull-left">
                                 <input placeholder="若不填写，则系统自动生成" id="skuCode" data-format="code" name="skuCode"
-                                       maxlength="16" class="baseInfo_dish" type="text" value=""><br>
+                                       maxlength="16" class="baseInfo_dish" type="text" value="{$dc_menu.id}" disabled><br>
                                 <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
@@ -129,28 +130,26 @@
                         <td>
                             <div class="search-box pull-left">
                                 <input id="skuAliasName" data-format="name" name="aliasName" type="text" maxlength="64"
-                                       value="" class="baseInfo_dish" placeholder="第二语言">
+                                       value="" class="baseInfo_dish" placeholder="第二语言" disabled>
                                 <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <br><span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
                         </td>
                         <th>库存类型<strong class="red vam"> *</strong></th>
                         <td>
-                            <select id="goodsWm" name="wmType">
-                                <!--<option value="0" selected="selected">请选择</option>-->
-                                {foreach from=$kcnx item=item key=key}
-                                {if $key gt 0}
-                                    <option value="{$key}">{$item}</option>
-                                {/if}
-                                {/foreach}
-                            </select>
+                            <div class="search-box pull-left">
+                                <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="goodsWm" name="wmType"
+                                       maxlength="16" class="baseInfo_dish" type="text" value="{$print}" disabled>
+                                <button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>
+                                <br><span style="color:#f87a7a;font-size: 14px;"></span>
+                            </div>
                         </td>
                         <th>条&nbsp;&nbsp;形&nbsp;&nbsp;码<span>&nbsp;</span></th>
                         <td>
                             <div class="search-box pull-left">
                                 <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="barCode" name="barcode"
-                                       maxlength="16" class="baseInfo_dish" type="text" value="">
-                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                       maxlength="16" class="baseInfo_dish" type="text" value="{$dc_menu.barcode}" disabled>
+                                <button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>
                                 <br><span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
                             <div class="wrong pull-left" style="margin-top: 5px"></div>
@@ -163,7 +162,7 @@
                             <div class="input-group pull-left" style="width: 299px;">
                                 <input type="text" data-format="float" data-limit="{5,3}" data-range="{0,10000}"
                                        class="form-control required" name="yieldRate" id="yieldRate" maxlength="14"
-                                       value="100" placeholder="请输入出成率">
+                                       value="{$dc_menu.chupinliu}" placeholder="请输入出成率" disabled>
                                 <span class="input-group-addon">%</span>
                             </div>
                             <div class="pull-left code-question">
@@ -205,7 +204,7 @@
 
                                         <li onclick="clickStopPropagation(event)">
                                             <div class="select-search-box" style="float: none;margin-left: 0;">
-                                                <input class="select-filter-ipt" onkeyup="filterSelect(this)"
+                                                <input class="select-filter-ipt" onkeyup="filterSelect(this)" disabled
                                                        onclick="clickStopPropagation(event)" style="width: 100%;"
                                                        class="form-control" type="text" autocomplete="off">
                                                 <span class="glyphicon glyphicon-search search-icon"></span>
@@ -259,24 +258,19 @@
                     <th width=""></th>
                 </tr>
                 </thead>
-                <tbody id="crm_unit">
-                <tr id="crm_unit_seed" style="display: none;">
+                <tbody>
+                <tr id="crm_unit_seed" style="display: table-row;">
                     <td style="height: 38px;" class="crm_num"></td>
                     <td class="scm_input">
-                        <div class="select-group" style="width: 165px;">
-                            <div class="select-control">
-                                <em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>
-                            </div>
-                            <ul class="unit_list" style="display: none;" name="unit_list">
-                            </ul>
-                        </div>
+                        <input class="unit_cache" data-type="unitName" data-left-max="8" data-right-max="5"
+                               style="height:34px;text-align: center;" type="text" value="{$dc_menu.unit}" disabled>
                     </td>
                     <td>
                         =
                     </td>
                     <td>
                         <input class="crm_unit_convert" data-type="number" data-left-max="8" data-right-max="5"
-                               style="height:34px;text-align: center;" type="text" value="">
+                               style="height:34px;text-align: center;" type="text" value="1" disabled>
                     </td>
                     <td>
                         <span name="unit" class="unit"></span>
@@ -297,10 +291,45 @@
                             <span></span>
                         </label>
                     </td>
-                    <td style="text-align: left;">
-                        <span class="icon-plus" style="float: left;">添加</span>
-                        <a href="#" class="close-1 ml10"
-                           style="display: none;margin-left: 41px;margin-top: 3px;">删除此项</a>
+                </tr>
+                <tr style="display: table-row;">
+                    <td style="height: 38px;" class="crm_num"></td>
+                    <td class="scm_input">
+                        <!--<div class="select-group" style="width: 165px;">-->
+                        <!--<div class="select-control">-->
+                        <!--<em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>-->
+                        <!--</div>-->
+                        <!--<ul class="unit_list" style="display: none;" name="unit_list">-->
+                        <!--</ul>-->
+                        <!--</div>-->
+                        <input class="unit_cache" data-type="unitName" data-left-max="8" data-right-max="5"
+                               style="height:34px;text-align: center;" type="text" value="{$dc_menu.funit}" disabled>
+                    </td>
+                    <td>
+                        =
+                    </td>
+                    <td>
+                        <input class="crm_unit_convert" data-type="number" data-left-max="8" data-right-max="5"
+                               style="height:34px;text-align: center;" type="text" value="{$dc_menu.times}" disabled>
+                    </td>
+                    <td>
+                        <span name="unit" class="unit"></span>
+                    </td>
+                    <td style="display: none">
+                        <!-- 如果有设置最小单位，则添加gerv属性 -->
+                        <label class="checkbox crm_unitSmall" style="cursor: pointer;">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td style="display: none">
+                        <label class="checkbox crm_unitStander" style="cursor: pointer;">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td style="display: none">
+                        <label class="checkbox crm_unitPurchase" style="cursor: pointer;">
+                            <span></span>
+                        </label>
                     </td>
                 </tr>
                 </tbody>
@@ -329,7 +358,7 @@
                         <div class="fl">
                             <div class="search-box pull-left">
                                 <input placeholder="0" data-limit="{8,5}" id="fixedPrice" type="text"
-                                       value="" disabled>
+                                       value="{$dc_menu.price}" disabled>
                                 <!-- <button type="button" class="close" data-val="0" name="close" aria-hidden="true">&times;</button> -->
                             </div>
                         </div>
@@ -343,7 +372,7 @@
                         <div class="fl">
                             <div class="search-box pull-left">
                                 <input placeholder="0" data-format="float" data-limit="{8,5}" id="purchasePrice"
-                                       name="purchasePrice" type="text" value="0">
+                                       name="purchasePrice" type="text" value="{$dc_menu.buyPrice}" disabled>
                                 <button type="button" class="close" data-val="0" name="close"
                                         aria-hidden="true">&times;</button>
                             </div>
@@ -358,8 +387,8 @@
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
-                                <input placeholder="0" data-limit="{8,5}" id="costPrice" type="text" value=""
-                                     disabled>
+                                <input placeholder="0" data-limit="{8,5}" id="costPrice" type="text" value="{$dc_menu.sellPrice2}"
+                                >
                                 <button style="display: none;" type="button" class="close" data-val="0" name="close"
                                         aria-hidden="true">&times;</button>
                             </div>
@@ -372,8 +401,8 @@
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
-                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="balancePrice"
-                                       type="text" value="0">
+                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="balancePrice" disabled
+                                       type="text" value="{$dc_menu.customerPrice}">
                                 <button type="button" class="close" data-val="0" name="close"
                                         aria-hidden="true">&times;</button>
                             </div>
@@ -831,7 +860,8 @@
                     skuPrice: JSON.stringify(skuPrice),
                     skuUnit: JSON.stringify(unitObj),
                     standard: JSON.stringify(standard),
-                    skuList: JSON.stringify(skuList)
+                    skuList: JSON.stringify(skuList),
+                    id:$("#id").val()
                 },
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -1108,7 +1138,7 @@
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135229"></script>
 <script src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-    //初始化chosen
+
     function loadChosen() {
         var config = {
             '.chosen-select': {},

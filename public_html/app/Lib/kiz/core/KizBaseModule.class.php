@@ -356,6 +356,14 @@ class KizBaseModule{
             return $check;
         }
     }
+
+    function getCollectionValue($arrays,$akey){
+        foreach ($arrays as $key=>$item) {
+            if($key == $akey){
+                return $item;
+            }
+        }
+    }
 }
 
 ?>

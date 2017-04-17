@@ -230,6 +230,30 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "新增原料");
         $GLOBALS['tmpl']->display("pages/basic/warehouseAdd.html");
     }
+    public function basic_warehouse_edit()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
+
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        //获取商品信息
+        $sql = "select *,g.name as standerStr,g.id as id from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id where g.id=".$id;
+        $dc_menu=$GLOBALS['db']->getRow($sql);
+
+        $listsort = toFormatTree($wmenulist,"name");
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign("dc_menu", $dc_menu);
+        $GLOBALS['tmpl']->assign("print",parent::getCollectionValue($this->kcnx,$dc_menu['print']));
+        $GLOBALS['tmpl']->assign("unitlist",json_encode(parent::get_unit_list($slid)));
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
+        $GLOBALS['tmpl']->assign("page_title", "编辑原料");
+        $GLOBALS['tmpl']->display("pages/basic/warehouseEdit.html");
+    }
 
     #商品配方设定
     public function basic_skuBom_index()

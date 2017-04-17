@@ -12,7 +12,7 @@ var skulist = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=basic_warehouse_list_ajax',
-        editUrl : '/edit',
+        editUrl : '&act=basic_warehouse_edit',
         viewUrl : '/view',
         lockUrl : '/disable?isEnable=false',
         saveUrl : '/save',
@@ -117,7 +117,7 @@ var skulist = {
         };
 
         $.showEdit = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         //先假设可用判断置灰，再判断是否可用
@@ -240,14 +240,9 @@ var skulist = {
                     name: 'price',
                     index: 'price',
                     align: "center",
-                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
-                        if (rowObject.price == null){
-                            return "<span>-</span>";
-                        }else {
-                            return rowObject.price;
-                        }
+                        return rowObject.price;
                     }
 
                 },
@@ -257,11 +252,7 @@ var skulist = {
                     align: "center",
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
-                        if ( rowObject.wmType == 1 || rowObject.wmType == 2 || rowObject.wmType == 5 ||  rowObject.purchasePrice == null){
-                            return "<span>-</span>";
-                        }else {
-                            return rowObject.purchasePrice;
-                        }
+                        return rowObject.purchasePrice;
                     }
                 },
                 {
@@ -270,26 +261,16 @@ var skulist = {
                     align: "center",
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
-                        if (rowObject.wmType == 3 || rowObject.wmType == 4  || rowObject.costPrice == null  ){
-                            return "<span>-</span>";
-                        }
-                        else {
-                            return rowObject.costPrice;
-                        }
+                        return rowObject.costPrice;
                     }
                 },
                 {
                     name: 'balancePrice',
                     index: 'balancePrice',
                     align: "center",
-                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
-                        if (rowObject.wmType == 2 || rowObject.balancePrice == null){
-                            return "<span>-</span>";
-                        }else {
-                            return rowObject.balancePrice;
-                        }
+                        return rowObject.balancePrice;
                     }
                 },
                 {
@@ -319,7 +300,7 @@ var skulist = {
                 editor: {
                     render : $.showEdit,
                     code: "scm:button:masterdata:sku:edit",
-                    url: _this.opts.urlRoot + _this.opts.editUrl
+                    url: basicPath + _this.opts.editUrl
                 },
                 clock: {
                     render : $.showlock,

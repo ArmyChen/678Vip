@@ -888,11 +888,11 @@ class ajaxModule extends KizBaseModule{
                 if(!empty($item['funit'])){
                     $str = "【".$item['funit']."(".$item['times'].")"."】";
                 }
-                $list['unitName'] = $item['unit'].$str;
+                $list['unitName'] = $item['unit'];
                 $list['price'] = $item['price'];
                 $list['purchasePrice'] = $item['buyPrice'];
-                $list['costPrice'] = $item['customerPrice'];
-                $list['balancePrice'] = $item['sellPrice'];
+                $list['costPrice'] = $item['sellPrice2'];
+                $list['balancePrice'] = $item['customerPrice'];
                 $list['status'] = 1;
                 $list['isDisable'] = 1;
                 array_push($arr_list,$list);
@@ -1267,10 +1267,12 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = intval($account_info['slid']);
+        $id = intval($_REQUEST['id']);
 
         $skuPrice = json_decode($_REQUEST['skuPrice']);
         $skuUnit = json_decode($_REQUEST['skuUnit']);
+
         $unit = "";
         $funit = "";
         $times = 0;
@@ -1289,6 +1291,22 @@ class ajaxModule extends KizBaseModule{
 
         //$standard = $_REQUEST['standard'];//规格
         $skuList = json_decode($_REQUEST['skuList']);
+        if($id > 0){//编辑
+            $dc_menu_data=array(
+                "id"=>$id,
+                "name"=>$skuList->skuName,
+                "sellPrice2"=>$skuPrice->costPrice,//成本价
+            );
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"UPDATE","id=".$id);
+            if($res){
+                $return['success'] = true;
+                $return['message'] = "操作成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "操作失败";
+            }
+            echo json_encode($return);exit;
+        }
 
         $dc_menu_data=array(
             "location_id"=>$slid,
@@ -1300,10 +1318,10 @@ class ajaxModule extends KizBaseModule{
             "funit"=>$funit,
             "times"=>$times,
             "type"=>'',
-            "buyPrice"=>$skuPrice->purchasePrice,
+            "buyPrice"=>$skuPrice->purchasePrice,//采购价
             "price"=>$skuPrice->price,
-            "customerPrice"=>$skuPrice->costPrice,//结算价
-            "sellPrice"=>$skuPrice->balancePrice,//成本价
+            "customerPrice"=>$skuPrice->balancePrice,//结算价
+            "sellPrice2"=>$skuPrice->costPrice,//成本价
             "print"=>$skuList->wmType,
             "is_stock"=>1,
             "chupinliu"=>$skuList->yieldRate
