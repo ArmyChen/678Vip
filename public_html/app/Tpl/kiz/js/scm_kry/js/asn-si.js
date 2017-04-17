@@ -311,8 +311,8 @@ var asnSi = {
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
-                {name: 'uom', index: 'uom', width: 50, sortable: !editable,align: "center", hidden: editable},
-                {name: 'uom', index: 'uom', width: 50, sortable: !editable, align: 'center', hidden: !editable,
+                {name: 'uom', index: 'uom', width: 100, sortable: !editable,align: "center", hidden: editable},
+                {name: 'uom', index: 'uom', width: 100, sortable: !editable, align: 'center', hidden: !editable,
                     formatter: $.unitSelectFormatter,
                     unformat : unformatSelect
                 },

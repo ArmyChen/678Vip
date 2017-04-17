@@ -248,7 +248,6 @@ class basicModule extends KizBaseModule
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
         $GLOBALS['tmpl']->assign("dc_menu", $dc_menu);
-        $GLOBALS['tmpl']->assign("print",parent::getCollectionValue($this->kcnx,$dc_menu['print']));
         $GLOBALS['tmpl']->assign("unitlist",json_encode(parent::get_unit_list($slid)));
         $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "编辑原料");

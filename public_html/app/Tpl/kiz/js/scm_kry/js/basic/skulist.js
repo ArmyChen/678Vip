@@ -240,6 +240,7 @@ var skulist = {
                     name: 'price',
                     index: 'price',
                     align: "center",
+                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
                         return rowObject.price;
@@ -268,6 +269,7 @@ var skulist = {
                     name: 'balancePrice',
                     index: 'balancePrice',
                     align: "center",
+                    hidden:true,
                     width: 120,
                     formatter:function (cellvalue,options,rowObject) {
                         return rowObject.balancePrice;

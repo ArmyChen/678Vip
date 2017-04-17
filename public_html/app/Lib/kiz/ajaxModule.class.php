@@ -97,10 +97,12 @@ class ajaxModule extends KizBaseModule{
         if($_REQUEST['danjuhao'] !=""){
             $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
-
+//        $sqlstr .=" and f.print <> 4";
+//        $sql2 = "select * from fanwe_cangku_log limit 1";
+//        var_dump($GLOBALS['db']->getRow($sql2));
         $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
         $sqlrecords="select count(a.id) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
-
+//        var_dump($sql);
         $return = array();
         $records = $GLOBALS['db']->getOne($sqlrecords);
         $list = $GLOBALS['db']->getAll($sql);
@@ -142,13 +144,21 @@ class ajaxModule extends KizBaseModule{
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
+        $wmTypes = $_REQUEST['wmTypes'];
+
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
         $where = "where  g.location_id=$slid";
         $where .=" and g.is_effect = 0";//是否现实在终端
         $where .= " and g.is_stock = 1 ";//是否是库存商品
-        $where .= " and g.print <> 1";//库存类型不等于现制商品
+        if(!empty($wmTypes)){
+            $where .= " and g.print in (".$wmTypes.")";//筛选库存类型
+        }else{
+            $where .= " and g.print <> 4";//库存类型不等于现制商品
+        }
+
+
         if($_REQUEST['skuTypeId']){
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
@@ -1295,7 +1305,12 @@ class ajaxModule extends KizBaseModule{
             $dc_menu_data=array(
                 "id"=>$id,
                 "name"=>$skuList->skuName,
+                "buyPrice"=>$skuPrice->purchasePrice,//采购价
+                "price"=>$skuPrice->price,//售价
+                "customerPrice"=>$skuPrice->balancePrice,//结算价
                 "sellPrice2"=>$skuPrice->costPrice,//成本价
+                "barcode"=>$skuList->barCode,
+                "print"=>$skuList->wmType,
             );
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"UPDATE","id=".$id);
             if($res){

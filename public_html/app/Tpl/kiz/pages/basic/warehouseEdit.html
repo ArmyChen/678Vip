@@ -137,19 +137,25 @@
                         </td>
                         <th>库存类型<strong class="red vam"> *</strong></th>
                         <td>
-                            <div class="search-box pull-left">
-                                <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="goodsWm" name="wmType"
-                                       maxlength="16" class="baseInfo_dish" type="text" value="{$print}" disabled>
-                                <button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>
-                                <br><span style="color:#f87a7a;font-size: 14px;"></span>
+                            <div class="search-box pull-left" style="width: 300px">
+                                <select id="goodsWm" name="wmType">
+                                    <!--<option value="0" selected="selected">请选择</option>-->
+                                    {foreach from=$kcnx item=item key=key}
+                                    {if $key gt 0}
+                                    <option value="{$key}" {if $key eq $dc_menu.print}selected{/if}>{$item}</option>
+                                    {/if}
+                                    {/foreach}
+                                </select>
+                                <!--<button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>-->
+                                <!--<br><span style="color:#f87a7a;font-size: 14px;"></span>-->
                             </div>
                         </td>
                         <th>条&nbsp;&nbsp;形&nbsp;&nbsp;码<span>&nbsp;</span></th>
                         <td>
                             <div class="search-box pull-left">
                                 <input data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" id="barCode" name="barcode"
-                                       maxlength="16" class="baseInfo_dish" type="text" value="{$dc_menu.barcode}" disabled>
-                                <button type="button" class="close" name="close" aria-hidden="true" disabled>&times;</button>
+                                       maxlength="16" class="baseInfo_dish" type="text" value="{$dc_menu.barcode}">
+                                <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <br><span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
                             <div class="wrong pull-left" style="margin-top: 5px"></div>
@@ -358,7 +364,7 @@
                         <div class="fl">
                             <div class="search-box pull-left">
                                 <input placeholder="0" data-limit="{8,5}" id="fixedPrice" type="text"
-                                       value="{$dc_menu.price}" disabled>
+                                       value="{$dc_menu.price}" >
                                 <!-- <button type="button" class="close" data-val="0" name="close" aria-hidden="true">&times;</button> -->
                             </div>
                         </div>
@@ -372,7 +378,7 @@
                         <div class="fl">
                             <div class="search-box pull-left">
                                 <input placeholder="0" data-format="float" data-limit="{8,5}" id="purchasePrice"
-                                       name="purchasePrice" type="text" value="{$dc_menu.buyPrice}" disabled>
+                                       name="purchasePrice" type="text" value="{$dc_menu.buyPrice}" >
                                 <button type="button" class="close" data-val="0" name="close"
                                         aria-hidden="true">&times;</button>
                             </div>
@@ -401,7 +407,7 @@
                         </div>
                         <div class="fl">
                             <div class="search-box pull-left">
-                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="balancePrice" disabled
+                                <input placeholder="0" data-format="float" data-limit="{8,5}" id="balancePrice"
                                        type="text" value="{$dc_menu.customerPrice}">
                                 <button type="button" class="close" data-val="0" name="close"
                                         aria-hidden="true">&times;</button>

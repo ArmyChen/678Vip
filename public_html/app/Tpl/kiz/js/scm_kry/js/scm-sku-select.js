@@ -90,9 +90,9 @@ var scmSkuSelect = {
         $('#skuSelectModal .control-label-con').css("margin-left","120px");
         $('#skuSelectModal .modal-footer').css("padding","10px 20px 10px");
 
-        if(_this.opts.skuScene != 11){
-            $('#skuSelectModal .form-item :first').hide();
-        }
+        // if(_this.opts.skuScene != 11){
+        //     $('#skuSelectModal .form-item :first').hide();
+        // }
     },
 
 
@@ -943,7 +943,7 @@ $(function () {
                                         <div class="control-label-con">\
                                             <div class="multi-select" >\
                                                  <div class="select-control"><em>请选择库存类型</em></div>\
-    												<div class="multi-select-con" style="display:none;">\
+    												<div class="multi-select-con">\
     													<ul class="multi-select-items" id="wmType">\
     														<li>\
     															<label class="checkbox" for="wmType-1">\
@@ -971,7 +971,7 @@ $(function () {
     														</li>\
                                                     	</ul>\
                                                  </div>\
-                                                 <input type="hidden" value="" />\
+                                                 <input type="hidden" name="wmTypes" value="" />\
                                             </div>\
                                         </div>\
                                     </div>\
