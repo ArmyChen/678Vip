@@ -4139,10 +4139,12 @@ exit;
 		$sql = " select * from " . DB_PREFIX . "dc_menu ";
      //   echo $sql.$conditions;
 		/* 分页 */
-		$page_size = 15;
+		$page_size = 5;
 		
 		if ($page == 0)
 			$page = 1;
+		$current_page=$page;
+        $GLOBALS['tmpl']->assign("page", $current_page);
 		$limit = (($page - 1) * $page_size) . "," . $page_size;
 
 		$total = $GLOBALS['db']->getOne($sql_count.$conditions);
@@ -4435,6 +4437,7 @@ $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_m
 
 		/*获取参数*/
 		$id = intval($_REQUEST['id']);
+        $page = intval($_REQUEST['page']);
 		/* 业务逻辑部分 */
 
 		$vo = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=".$id." ");
@@ -4509,6 +4512,7 @@ $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_m
 		}
 
         $GLOBALS['tmpl']->assign("vo",$vo);
+        $GLOBALS['tmpl']->assign("page",$page);
         $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
 		$GLOBALS['tmpl']->assign("vo",$vo);
 		$GLOBALS['tmpl']->assign("menu_cate",$menu_cate_list);
@@ -8365,7 +8369,7 @@ public function sqgl_sprgl(){
 		
 		$ht = new HyTool ();
         $ht->sendMessage ($channelIdlist,$type,$message);
-       //// $ht->sendMessage_NEW ($channelIdlist,$type,$message);
+        $ht->sendMessage_NEW ($channelIdlist,$type,$message);
 
 
 	}
