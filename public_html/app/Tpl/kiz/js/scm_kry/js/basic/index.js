@@ -9,7 +9,7 @@ var wareHouseList = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '"&act=dc_cangku_ajax"',
-        editUrl : '/edit',
+        editUrl : '&act=basic_setting_edit',
         viewUrl : '/view',
         lockUrl : '/disableWarehouse',
         saveUrl : '/save',
@@ -83,7 +83,7 @@ var wareHouseList = {
             return renderEnum.hidden;
         };
         $.showEdit = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         //先假设可用判断置灰，再判断是否可用
@@ -139,7 +139,7 @@ var wareHouseList = {
                 editor: {
                 	render : $.showEdit,
                     code: "scm:button:masterdata:warehouse:edit",
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: basicPath + _this.opts.editUrl,
                 },
                 clock: {
                 	render : $.showlock,

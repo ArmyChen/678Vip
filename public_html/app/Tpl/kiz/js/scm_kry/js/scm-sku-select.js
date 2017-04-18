@@ -90,9 +90,9 @@ var scmSkuSelect = {
         $('#skuSelectModal .control-label-con').css("margin-left","120px");
         $('#skuSelectModal .modal-footer').css("padding","10px 20px 10px");
 
-        if(_this.opts.skuScene != 11){
-            $('#skuSelectModal .form-item :first').hide();
-        }
+        // if(_this.opts.skuScene != 11){
+        //     $('#skuSelectModal .form-item :first').hide();
+        // }
     },
 
 
@@ -943,12 +943,12 @@ $(function () {
                                         <div class="control-label-con">\
                                             <div class="multi-select" >\
                                                  <div class="select-control"><em>请选择库存类型</em></div>\
-    												<div class="multi-select-con" style="display:none;">\
+    												<div class="multi-select-con">\
     													<ul class="multi-select-items" id="wmType">\
     														<li>\
     															<label class="checkbox" for="wmType-1">\
     																<span></span>\
-    																<input type="checkbox" name="wmType" id="wmType-1" value="1" data-text="预制商品" >预制商品\
+    																<input type="checkbox" name="wmType" id="wmType-1" value="2" data-text="预制商品" >预制商品\
     															</label>\
     														</li>\
     														<li>\
@@ -966,12 +966,12 @@ $(function () {
     														<li>\
     															<label class="checkbox" for="wmType-5">\
     																<span></span>\
-    																<input type="checkbox" name="wmType" id="wmType-5" value="5" data-text="半成品" >半成品\
+    																<input type="checkbox" name="wmType" id="wmType-5" value="6" data-text="半成品" >半成品\
     															</label>\
     														</li>\
                                                     	</ul>\
                                                  </div>\
-                                                 <input type="hidden" value="" />\
+                                                 <input type="hidden" name="wmTypes" value="" />\
                                             </div>\
                                         </div>\
                                     </div>\
@@ -986,7 +986,7 @@ $(function () {
                                         </div>\
                                     </div>\
                                     <div class="form-item">\
-                                        <label class="control-label">{{sku}}编码/名称</label>\
+                                        <label class="control-label">编码/名称/简码</label>\
                                         <div class="control-label-con search-box">\
                                             <input style="padding-right:25px;" data-format="skuName" type="text" name="skuCodeOrName" id="keyWord" class="form-control"\
                                                    placeholder="请输入{{sku}}编码/名称" maxlength="48" />\

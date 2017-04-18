@@ -20,7 +20,7 @@
 
                 <div class="search-box">
                     <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control"
-                           placeholder="请输入商品名称/编码" data-format="skuName" maxlength="14">
+                           placeholder="请输入商品名称/编码/简码" data-format="skuName" maxlength="14">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
             </div>
@@ -28,166 +28,66 @@
 
             <input type="text" class="hidden">
 
-            <!-- 商户仓库级联 start -->
-            <div class="aside-column">
-                <h2>商户</h2>
-                <select id="firstSelectCascading" name="storeId">
+            <!--&lt;!&ndash; 商户仓库级联 start &ndash;&gt;-->
+            <!--<div class="aside-column">-->
+                <!--<h2>商户</h2>-->
+                <!--<select id="firstSelectCascading" name="storeId">-->
 
-                    <option value="-1">(品牌)</option>
+                    <!--<option value="-1">(品牌)</option>-->
 
-                    <option value="810019565">客如云电  商部1号演示门店</option>
+                    <!--<option value="810019565">客如云电  商部1号演示门店</option>-->
 
-                </select>
-            </div>
-            <div class="aside-column">
-                <h2>仓库</h2>
-                <select id="secondSelectCascading" name="warehouseId">
-
-
-                    <option name="options-of--1" value="9591">总仓库</option>
-
-                    <option name="options-of--1" value="13260">饮品仓</option>
-
-                    <option name="options-of--1" value="13261">酒水仓</option>
-
-                    <option name="options-of--1" value="13262">原材料仓</option>
-
-                    <option name="options-of--1" value="14838">4号库</option>
-
-                    <option name="options-of--1" value="14839">5号库</option>
+                <!--</select>-->
+            <!--</div>-->
+            <!--<div class="aside-column">-->
+                <!--<h2>仓库</h2>-->
+                <!--<select id="secondSelectCascading" name="warehouseId">-->
 
 
+                    <!--<option name="options-of&#45;&#45;1" value="9591">总仓库</option>-->
 
-                    <option name="options-of-810019565" value="9604">总仓库</option>
+                    <!--<option name="options-of&#45;&#45;1" value="13260">饮品仓</option>-->
+
+                    <!--<option name="options-of&#45;&#45;1" value="13261">酒水仓</option>-->
+
+                    <!--<option name="options-of&#45;&#45;1" value="13262">原材料仓</option>-->
+
+                    <!--<option name="options-of&#45;&#45;1" value="14838">4号库</option>-->
+
+                    <!--<option name="options-of&#45;&#45;1" value="14839">5号库</option>-->
 
 
-                </select>
-            </div>
-            <!-- 商户仓库级联 end -->
+
+                    <!--<option name="options-of-810019565" value="9604">总仓库</option>-->
+
+
+                <!--</select>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; 商户仓库级联 end &ndash;&gt;-->
 
             <!-- 库存类型start -->
             <div class="aside-column multi-select">
                 <h2>库存类型</h2>
+                <select class="medium" name="print">
+                    <option value="-1" selected="selected">请选择</option>
+                    {foreach from=$kcnx item=item key=key}
+                    {if $key neq 1}
+                    <option value="{$key}" >{$item}</option>
+                    {/if}
+                    {/foreach}
 
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items">
-                        <li>
-                            <label class="checkbox" for="wm-type-all">
-                                <span></span>
-                                <input type="checkbox" id="wm-type-all">全部
-                            </label>
-                        </li>
-
-
-
-
-                        <li>
-                            <label class="checkbox" for="wm-type-2">
-                                <span></span>
-                                <input type="checkbox" name="wmTypes" id="wm-type-2"
-                                       value="1" data-text="预制商品">预制商品
-                            </label></li>
-
-
-
-                        <li>
-                            <label class="checkbox" for="wm-type-3">
-                                <span></span>
-                                <input type="checkbox" name="wmTypes" id="wm-type-3"
-                                       value="3" data-text="外购商品">外购商品
-                            </label></li>
-
-
-
-                        <li>
-                            <label class="checkbox" for="wm-type-4">
-                                <span></span>
-                                <input type="checkbox" name="wmTypes" id="wm-type-4"
-                                       value="4" data-text="原物料">原物料
-                            </label></li>
-
-
-
-                        <li>
-                            <label class="checkbox" for="wm-type-5">
-                                <span></span>
-                                <input type="checkbox" name="wmTypes" id="wm-type-5"
-                                       value="5" data-text="半成品">半成品
-                            </label></li>
-
-
-                    </ul>
-                </div>
-                <input type="hidden" value="" />
+                </select>
             </div>
             <!-- 库存类型end -->
             <!-- 商品中类start -->
             <div class="aside-column multi-select">
-                <h2>商品中类</h2>
-
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items">
-                        <li>
-                            <label class="checkbox" for="sku-type-all">
-                                <span></span>
-                                <input type="checkbox" id="sku-type-all">全部
-                            </label>
-                        </li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-1">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-1"
-                                       value="170317" data-text="奶慕奉茶">奶慕奉茶
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-2">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-2"
-                                       value="170318" data-text="醇香奶茶">醇香奶茶
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-3">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-3"
-                                       value="170319" data-text="新鲜果茶">新鲜果茶
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-4">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-4"
-                                       value="176635" data-text="海鲜">海鲜
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-5">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-5"
-                                       value="211181" data-text="火锅跟">火锅跟
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-6">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-6"
-                                       value="211182" data-text="uuu">uuu
-                            </label></li>
-
-                        <li>
-                            <label class="checkbox" for="sku-type-7">
-                                <span></span>
-                                <input type="checkbox" name="skuTypes" id="sku-type-7"
-                                       value="211449" data-text="sdsds">sdsds
-                            </label></li>
-
-                    </ul>
-                </div>
-                <input type="hidden" value="" />
+                <h2>商品分类</h2>
+                <select id="skuTypeIds" name="skuTypeIds">
+                    <option value="-1" selected="selected">请选择</option>
+                    {foreach from=$listsort item=item}
+                    <option value="{$item.id}">{$item.title_show}</option>
+                    {/foreach}
+                </select>
             </div>
             <!-- 商品中类end -->
 
@@ -465,18 +365,18 @@
 
     function load() {
         //验证
-        var storeId = $('select[name=storeId]').val();
-        var warehouseId = $('select[name=warehouseId]').val();
-        if (storeId == null || storeId == undefined || storeId.length < 1) {
-//            bkeruyun.promptMessage('请选择商户!');
-            $.layerMsg('请选择商户!', false);
-            return;
-        }
-        if (warehouseId == null || warehouseId == undefined || warehouseId.length < 1) {
-//            bkeruyun.promptMessage('请选择仓库!');
-            $.layerMsg('请选择仓库!', false);
-            return;
-        }
+//        var storeId = $('select[name=storeId]').val();
+//        var warehouseId = $('select[name=warehouseId]').val();
+//        if (storeId == null || storeId == undefined || storeId.length < 1) {
+////            bkeruyun.promptMessage('请选择商户!');
+//            $.layerMsg('请选择商户!', false);
+//            return;
+//        }
+//        if (warehouseId == null || warehouseId == undefined || warehouseId.length < 1) {
+////            bkeruyun.promptMessage('请选择仓库!');
+//            $.layerMsg('请选择仓库!', false);
+//            return;
+//        }
 
         cachedQueryConditions = serializeFormById('queryConditions');
         $(_gridTable).refresh(-1);

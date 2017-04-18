@@ -10,15 +10,63 @@ class reportModule extends KizBaseModule
         parent::__construct();
         global_run();
         parent::init();
+        $ywsort=array(
+            "-5"=>"生产退料",
+            "-4"=>"退还入库",
+            "-3"=>"预配退货",
+//            "-2"=>"其他入库",
+//            "-1"=>"盘盈",
+            "1"=>"盘盈",
+            "2"=>"无订单入库",
+            "3"=>"要货调入",
+            "4"=>"初始库存",
+            "6"=>"盘亏",
+            "7"=>"无订单出库",
+            "8"=>"要货调出",
+            "9"=>"退货",
+            "10"=>"生产领料",
+            "11"=>"借用出库",
+            "12"=>"其他出库",
+            "13"=>"配送领料",
+            "14"=>"品牌销售出库",
 
+        );
+        $this->ywsort=$ywsort;
+        $this->gonghuoren=array(
+            "1"=>"临时客户",
+            "2"=>"临时运输商",
+            "3"=>"临时供应商",
+            "4"=>"领料出库"
+        );
+
+        $kcnx=array(
+            "0"=>"暂无",
+            "1"=>"现制商品",
+            "2"=>"预制商品",
+            "3"=>"外购商品",
+            "4"=>"原物料",
+            "6"=>"半成品",
+
+        );
+        $this->kcnx=$kcnx;
 //        $this->check_auth();
     }
     #库存查询
     public function report_stock_index()
     {
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
 
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
+
+
         $GLOBALS['tmpl']->assign("page_title", "库存查询");
         $GLOBALS['tmpl']->display("pages/report/stockSearch.html");
     }
