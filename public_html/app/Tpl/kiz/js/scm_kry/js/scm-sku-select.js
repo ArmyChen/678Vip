@@ -948,7 +948,7 @@ $(function () {
     														<li>\
     															<label class="checkbox" for="wmType-1">\
     																<span></span>\
-    																<input type="checkbox" name="wmType" id="wmType-1" value="1" data-text="预制商品" >预制商品\
+    																<input type="checkbox" name="wmType" id="wmType-1" value="2" data-text="预制商品" >预制商品\
     															</label>\
     														</li>\
     														<li>\
@@ -966,7 +966,7 @@ $(function () {
     														<li>\
     															<label class="checkbox" for="wmType-5">\
     																<span></span>\
-    																<input type="checkbox" name="wmType" id="wmType-5" value="5" data-text="半成品" >半成品\
+    																<input type="checkbox" name="wmType" id="wmType-5" value="6" data-text="半成品" >半成品\
     															</label>\
     														</li>\
                                                     	</ul>\
@@ -986,7 +986,7 @@ $(function () {
                                         </div>\
                                     </div>\
                                     <div class="form-item">\
-                                        <label class="control-label">{{sku}}编码/名称</label>\
+                                        <label class="control-label">编码/名称/简码</label>\
                                         <div class="control-label-con search-box">\
                                             <input style="padding-right:25px;" data-format="skuName" type="text" name="skuCodeOrName" id="keyWord" class="form-control"\
                                                    placeholder="请输入{{sku}}编码/名称" maxlength="48" />\

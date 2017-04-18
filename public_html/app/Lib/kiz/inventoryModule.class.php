@@ -312,9 +312,13 @@ class inventoryModule extends KizBaseModule{
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+//var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_log limit 1'));
+//        获取部门信息
+        $bumen = parent::get_bumen_list($slid,0);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign('bumen',$bumen);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("page_title", "出库单");
         $GLOBALS['tmpl']->display("pages/inventory/goUpAdd.html");

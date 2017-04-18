@@ -346,6 +346,11 @@ class KizBaseModule{
         return null;
     }
 
+    /**
+     * 获取单位列表
+     * @param int $slid
+     * @return mixed
+     */
     function get_unit_list($slid = 0){
         $unitList = " select id,name,is_effect,sort from fanwe_dc_supplier_unit_cate  where 1 = 1";
         if($slid > 0) {
@@ -357,12 +362,48 @@ class KizBaseModule{
         }
     }
 
+    /**
+     * 获取键值
+     * @param $arrays
+     * @param $akey
+     * @return mixed
+     */
     function getCollectionValue($arrays,$akey){
         foreach ($arrays as $key=>$item) {
             if($key == $akey){
                 return $item;
             }
         }
+    }
+
+    /**
+     * 根据id下级分类
+     * @param $id
+     * @return mixed
+     */
+    function get_dc_supplier_cate($id){
+        if($id > 0) {
+            $res = $id;
+            $check = $GLOBALS['db']->getAll("select * from fanwe_dc_supplier_menu_cate where wcategory=".$id);
+            foreach ($check as $item) {
+                if($item){
+                    $res .= ','.$item['id'];
+                }
+            }
+            return $res;
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取部门列表
+     */
+    function get_bumen_list($slid,$isdd,$str = ''){
+        $list = $GLOBALS['db']->getAll("SELECT * FROM fanwe_cangku_bumen where slid=$slid and isdisable=$isdd $str order by id desc ");
+        return $list;
+
+
     }
 }
 

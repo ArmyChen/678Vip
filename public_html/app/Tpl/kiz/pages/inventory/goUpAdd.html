@@ -83,6 +83,24 @@
                             </dd>
                         </dl>
                     </div>
+
+                    <div class="pull-left" id="bumenDiv" style="display: none;">
+                        <dl class="panel-item">
+                            <dt><label for="senderId">领料部门<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <select id="bumen" name="bumen" class="{required:true}">
+
+                                        <option value="">请选择领料部门</option>
+                                        {foreach from=$bumen item=ywitem key=ywkey}
+                                        <option value="{$ywkey}">{$ywitem.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
 
                 <div class="clear">
@@ -222,6 +240,15 @@
         };
 
         asnSi._init(opts);
+    });
+    //单位下拉框变更事件
+    $(document).delegate('select[name="senderId"]','change',function(e){
+        var _this = $(this);
+        var selectId = _this.val(); //选择的单位id
+        if(selectId == 10){
+            $("#bumenDiv").show();
+        }
+
     });
 </script>
 

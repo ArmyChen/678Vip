@@ -110,7 +110,7 @@
         </form>
 
         <a class="link undo-all" id="undo-all2">全部撤销</a>
-        <a class="btn-blue btn-search" onclick="load()">查 询</a>
+        <a class="btn-blue btn-search" id="search">查 询</a>
     </div>
     <!-- 左栏 end -->
 
@@ -138,7 +138,7 @@
     $(function(){
 
         var opts = {
-            urlRoot: '/scm_kry/report/inventoryDistribution'
+            urlRoot: ctxPath
         };
 
         inventorydistribution._init(opts);
