@@ -241,16 +241,8 @@
       <div class="f_texts">
         <input type="text" class="ui-textbox "  name="fu_title" value="{$vo.fu_title}" id="fu_title"/>
       </div>
-    </div>
-    <div class="field_group" style="display: block">
-      <label class="f_label">前台收银终端：</label>
-      <div class="f_select">
-        <select class="medium" name="is_effect">
-		  <option value="1" {if $vo.is_effect eq 1}selected="selected"{/if}>是</option>
-          <option value="0" {if $vo.is_effect eq 0}selected="selected"{/if}>否</option>
-        </select>
-      </div>
-    </div>
+    </div>   
+	<input name="is_effect" type="hidden" value="{$vo.is_effect}" />
 	<div class="field_group">
       <label class="f_label">前台估清：</label>
       <div class="f_select">
