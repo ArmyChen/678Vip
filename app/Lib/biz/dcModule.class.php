@@ -4077,6 +4077,9 @@ exit;
 		$conditions .= " where 1=1 and is_delete=1"; // 查询条件
 		// 只查询支持门店的
 		$conditions .= " and location_id=".$id." ";
+
+		//只显示前台商品
+        $conditions .= " and print in (1,2,3) ";
           
 		if ($_REQUEST['name'] != ""){
 		$bname=strim($_REQUEST['name']);
@@ -4096,7 +4099,7 @@ exit;
 		
 		
 		//分类
-		$sortconditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+		$sortconditions .= " where is_effect=1 and wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
 		$sortconditions .= " and location_id=".$id;
 		$sqlsort = " select id,name,is_effect,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
 		$sqlsort.=$sortconditions. " order by sort desc";
@@ -4139,7 +4142,7 @@ exit;
 		$sql = " select * from " . DB_PREFIX . "dc_menu ";
      //   echo $sql.$conditions;
 		/* 分页 */
-		$page_size = 5;
+		$page_size = 25;
 		
 		if ($page == 0)
 			$page = 1;
