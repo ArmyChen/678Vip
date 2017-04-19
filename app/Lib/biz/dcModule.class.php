@@ -3546,7 +3546,7 @@ exit;
 		$menu_cate_list = array();
 		
 		$wsublist = array();
-		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where wlevel<3 and location_id=".$location_id." and supplier_id = ".$supplier_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
+		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where is_effect=1 and wlevel<3 and location_id=".$location_id." and supplier_id = ".$supplier_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
 		
 		foreach($wmenulist as $wmenu)
 		{
@@ -4200,7 +4200,7 @@ exit;
 		$menu_cate_list = array();
 		
 		$wsublist = array();
-		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where wlevel<4 and location_id=".$location_id." and supplier_id = ".$supplier_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
+		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where is_effect=1 and wlevel<4 and location_id=".$location_id." and supplier_id = ".$supplier_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
 		
 		foreach($wmenulist as $wmenu)
 		{
@@ -4459,7 +4459,7 @@ $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_m
 		$menu_cate_list = array();
 		
 		$wsublist = array();
-		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where wlevel<4 and location_id=".$location_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
+		$wmenulist = $GLOBALS['db']->getAll("select id,name,wcategory,wlevel from ".DB_PREFIX."dc_supplier_menu_cate where  is_effect=1 and  wlevel<4 and location_id=".$location_id." and location_id in(" . implode(",", $account_info['location_ids']) . ") ");
 		
 		foreach($wmenulist as $wmenu)
 		{
