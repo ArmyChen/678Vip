@@ -399,9 +399,9 @@ class KizBaseModule{
     /**
      * 获取部门列表
      */
-    function get_bumen_list($slid,$isdd,$str = ''){
-        $list = $GLOBALS['db']->getAll("SELECT * FROM fanwe_cangku_bumen where slid=$slid and isdisable=$isdd $str order by id desc ");
-        return $list;
+    function get_bumen_list($slid){
+        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
+        return $location_bumen;
 
 
     }
