@@ -182,13 +182,12 @@ document.search_form.submit();
                   <th>图片</th>
                   <th>分类</th>
 
-				  <th>是否前台</th>
+				 
 				  <th>前台估清</th>
-				  <th>是否仓库</th>				  
-				  <th>仓库估清</th>
+				  <th>库存</th>				  
+				  <th>单位</th>
 				  <th>是否打折</th>
-				  <th>价格</th>
-                  <th>状态</th>
+				  <th>价格</th>                 
                   <th>操作</th>
                 </tr>
               </thead>
@@ -234,19 +233,19 @@ document.search_form.submit();
 
                 <td><a href="{$row.image}" target="_blank"><img src="{function name="get_spec_image" v=$row.image h=40 w=40 g=1}"  width="40" height="40" lazy="true"/></a></td>
                 <td> {$row.cate_name} </td>
-				<td > {if $row.is_effect eq 1}是
-					{else}否{/if}</td>
+				
 				<td > {if $row.is_effect_enable eq 0}是
 					{else}否{/if}</td>
-					<td > {if $row.is_stock eq 1}是
+					<!--td > {if $row.is_stock eq 1}是
 					{else}否{/if}</td>
-					<td > {if $row.is_stock_enable eq 0}是
-					{else}否{/if}</td>
-				<td >{if $row.isdazhe eq 1}是
+					<td> {if $row.is_stock_enable eq 0}是
+					{else}否{/if}</td-->
+				<td>{$row.stock}</td>
+				<td>{$row.unit}</td>	
+				<td>{if $row.isdazhe eq 1}是
 					{else}否{/if}					</td>
-				<td > {$row.price} </td>
-                <td><a class="iconfont is_effect is_effect_btn" style="font-size:25px;" data-id="{$row.id}">{if $row.is_effect eq 1}&#xe612;{else}&#xe60b;{/if}</a></td>
-                <td class="operate"><a href="javascript:void(0);" class="edit_menu_btn" data-id="{$row.id}" >编辑</a> <a href="javascript:void(0);" onclick="del_menu(this);" data-id="{$row.id}" >删除</a></td>
+				<td > {$row.price} </td>              
+                <td class="operate"><a href="javascript:void(0);" class="edit_menu_btn" data-id="{$row.id}" data-page="{$page}" >编辑</a> <a href="javascript:void(0);" onclick="del_menu(this);" data-id="{$row.id}" >删除</a></td>
               </tr>
               {/foreach}
 

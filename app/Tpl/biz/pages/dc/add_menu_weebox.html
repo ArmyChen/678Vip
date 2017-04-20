@@ -226,29 +226,30 @@
 </style>
 
 <div class="dc_add_menu_cate_page">
-  <form action="{url r="biz" b="dc#do_save_menu"}" method="post" name="edit_menu_form"  bindsubmit="true">
+  <form action="{url r="biz" b="dc#do_save_menu"}" method="post" name="add_menu_form"  bindsubmit="true">
   <div class="common_tip" style="color:#f00">注意：正确填写菜单名称，避免重复添加</div>
   <div class="blank10"></div>
   <div class="con_box" style="padding-left:20px;">
     <div class="field_group " style=" width:100% !important;clear:both">
       <label class="f_label">菜单名称：</label>
       <div class="f_texts">
-        <input type="text" class=" "  name="menu_name" value="{$vo.name}" id="menu_name"/>
+        <input type="text" class=" "  name="menu_name" value="" id="menu_name"/>
       </div>
     </div>
     <div class="field_group " style=" width:100% !important;clear:both">
       <label class="f_label">副标题：</label>
       <div class="f_texts">
-        <input type="text" class="ui-textbox "  name="fu_title" value="{$vo.fu_title}" id="fu_title"/>
+        <input type="text" class="ui-textbox "  name="fu_title" value="" id="fu_title"/>
       </div>
-    </div>   
-	<input name="is_effect" type="hidden" value="{$vo.is_effect}" />
+    </div>
+   
+	<input name="is_effect" type="hidden" value="1" />
 	<div class="field_group">
       <label class="f_label">前台估清：</label>
       <div class="f_select">
         <select class="medium" name="is_effect_enable">
-         <option value="1" {if $vo.is_effect_enable eq 1}selected="selected"{/if}>否</option>
-          <option value="0" {if $vo.is_effect_enable eq 0}selected="selected"{/if}>估清</option>
+          <option value="1">否</option>
+          <option value="0">估清</option>
         </select>
       </div>
     </div>
@@ -256,8 +257,8 @@
       <label class="f_label">是否仓库商品：</label>
       <div class="f_select">
         <select class="medium" name="is_stock">
-          <option value="1" {if $vo.is_stock eq 1}selected="selected"{/if}>是</option>
-          <option value="0" {if $vo.is_stock eq 0}selected="selected"{/if}>否</option>
+          <option value="1">是</option>
+          <option value="0">否</option>
         </select>
       </div>
     </div>
@@ -265,8 +266,8 @@
       <label class="f_label">仓库商品估清：</label>
       <div class="f_select">
         <select class="medium" name="is_stock_enable">
-         <option value="1" {if $vo.is_stock_enable eq 1}selected="selected"{/if}>否</option>
-         <option value="0" {if $vo.is_stock_enable eq 0}selected="selected"{/if}>估清</option>
+          <option value="1">否</option>
+          <option value="0">估清</option>
         </select>
       </div>
     </div>
@@ -274,8 +275,8 @@
       <label class="f_label">允许打折：</label>
       <div class="f_select">
         <select class=" medium" name="isdazhe">
-          <option value="1" {if $vo.isdazhe eq 1}selected="selected"{/if}>是</option>
-          <option value="0" {if $vo.isdazhe eq 0}selected="selected"{/if}>否</option>
+          <option value="1">是</option>
+          <option value="0" selected="selected">否</option>
         </select>
       </div>
     </div>
@@ -283,27 +284,27 @@
       <label class="f_label">提成类型：</label>
       <div class="f_select">
         <select class="medium" name="ticheng_style">
-           <option value="1"  {if $vo.ticheng_style eq 1}selected="selected"{/if}>按比例提成</option>
-          <option value="0" {if $vo.ticheng_style eq 0}selected="selected"{/if}>固定金额</option>
+          <option value="1">按比例提成</option>
+          <option value="0">固定金额</option>
         </select>
       </div>
     </div>
     <div class="field_group ">
       <label class="f_label" style="padding-top:0">提成金额/比例：</label>
       <div class="f_text">
-        <input type="text" class=" "  name="tichengmoney" value="{$vo.tichengmoney}" id="tichengmoney"/>
+        <input type="text" class=" "  name="tichengmoney" value="" id="tichengmoney"/>
       </div>
     </div>
     <div class="field_group ">
       <label class="f_label">排序ID</label>
       <div class="f_text">
-        <input type="text" class=" "  name="orderid" value="{$vo.orderid}" id="orderid"　placeholder＝""/>
+        <input type="text" class=" "  name="orderid" value="" id="orderid"　placeholder＝""/>
       </div>
       （ID越小越靠前） </div>
     <div class="field_group ">
       <label class="f_label">条码:</label>
       <div class="f_text">
-        <input id="edit_barcode" class="" type="text" value="{$vo.barcode}" maxlength="32" name="barcode">
+        <input id="edit_barcode" class="" type="text" value="" maxlength="32" name="barcode">
       </div>
       <div id="btn_createBarcode" class="btnNumber" style="display: block;">&nbsp;&nbsp;<a href="#" class="creatcode"> 生成</a> </div>
 
@@ -339,7 +340,7 @@
 
 
 
-          <option value="{$row.id}"  {if $vo.cate_id eq $row.id}selected="selected"{/if} >{$row.name}</option>
+          <option value="{$row.id}" >{$row.name}</option>
 
 
 
@@ -364,21 +365,14 @@
         <button id="img_image" class="ui-button img_image_btn" style="float:left;clear: both;text-align: left !important;" rel="orange" type="button">图片上传</button>
       </div>
       <br/>
-	  <img src="" style="display: none" id="cropper"/>
-
-       <div class="img_image_upload_box pub_upload_img_box">
-          <span><a href="javascript:void(0);"></a>
-          <img src="{$vo.image}">
-
-          <input type="hidden" name="image" value="{$vo.image}">
-
-          </span> </div>
+      <img src="" style="display: none;float: left;" id="cropper"/>
+      <div class="img_image_upload_box pub_upload_img_box" style="text-align: center">  </div><br/>
 
       <input type="hidden" name="x" />
       <input type="hidden" name="y" />
       <input type="hidden" name="w" />
       <input type="hidden" name="h" />
-      <input type="hidden" name="isImagePost" value="0">
+      <input type="hidden" name="isImagePost" value="0"/>
     </div>
     <style>
       #preview-pane .preview-container {
@@ -425,13 +419,13 @@
     <div class="field_group">
       <label class="f_label" for="edit_sellPrice">售价:</label>
       <div class="f_text">
-        <input id="edit_sellPrice" class="edit_txt quantity" type="text" name="price" value="{$vo.price}" maxlength="8">
+        <input id="edit_sellPrice" class="edit_txt quantity" type="text" name="price" value="" maxlength="8">
       </div>
       <span  style="line-height:40px;">　元</span> </div>
     <div class="field_group" style="display: none">
-      <label class="f_label" for="edit_buyPrice">采购价:</label>
+      <label class="f_label" for="edit_buyPrice">进价:</label>
       <div class="f_text">
-        <input id="edit_buyPrice" class="edit_txt quantity" type="text" value="{$vo.buyPrice}" name="buyPrice" maxlength="8">
+        <input id="edit_buyPrice" class="edit_txt quantity" type="text" value="" name="buyPrice" maxlength="8">
       </div>
       <span  style="line-height:40px;">　元</span> </div>
 
@@ -470,26 +464,49 @@
           </div>-->
 
     <div class="field_group">
-      <label   class="f_label" for="edit_customerPrice">结算价:</label>
+      <label   class="f_label" for="edit_customerPrice">会员价:</label>
       <div class="f_text">
-        <input id="edit_customerPrice" class="edit_txt quantity" type="text" value="{$vo.customerPrice}" name="customerPrice" maxlength="8">
+        <input id="edit_customerPrice" class="edit_txt quantity" type="text" value="" name="customerPrice" maxlength="8">
       </div>
       <span  style="line-height:40px;">　元</span> </div>
     <div class="field_group" style="display: none">
-      <label  class="f_label"  for="edit_sellPrice2">成本价:</label>
+      <label  class="f_label"  for="edit_sellPrice2">批发价:</label>
       <div class="f_text">
-        <input id="edit_sellPrice2" class="edit_txt quantity" type="text" name="sellPrice2" value="{$vo.sellPrice2}" maxlength="8">
+        <input id="edit_sellPrice2" class="edit_txt quantity" type="text" name="sellPrice2" value="" maxlength="8">
       </div>
       <span  style="line-height:40px;">　元</span> </div>
     <div class="field_group"  >
       <label  class="f_label" >主单位</label>
       <div class="f_select">
         <select class="medium"  style="width:170px" name="unit">
-		<option value="{$vo.unit}" {if $vo.unit eq null }selected="selected" >不设置{else}selected="selected" >{$vo.unit}{/if}</option>
-       {foreach from=$menu_unit item=row}
-          <option value="{$row.name}" {if $vo.unit eq $row.name}selected="selected"{/if} >{$row.name}</option>
+
+
+
+
+
+
+          {foreach from=$menu_unit item=row}
+
+
+
+
+
+
+          <option value="{$row.name}" >{$row.name}</option>
+
+
+
+
+
+
           {/foreach}
-		   </select>
+
+
+
+
+
+
+        </select>
 
         <!--<span><a href="/biz.php?ctl=dc&act=dc_menu_unit_index&id={$location_id}">管理</a></span>-->
 
@@ -500,16 +517,40 @@
       <div class="f_select">
         <select class="medium" style="width:70px" name="funit" id="funit">
           <option value="" >不设置</option>
-		  <option value="" {if $vo.funit eq null }selected="selected"{/if} >不设置</option>
-		  {foreach from=$menu_unit item=row}
-		  <option value="{$row.name}" {if $vo.funit eq $row.name}selected="selected"{/if} >{$row.name}</option>
-          {/foreach} </select>
+
+
+
+
+
+
+          {foreach from=$menu_unit item=row}
+
+
+
+
+
+
+          <option value="{$row.name}" >{$row.name}</option>
+
+
+
+
+
+
+          {/foreach}
+
+
+
+
+
+
+        </select>
         副单位应该大于主单位 </div>
     </div>
     <div class="field_group" style="display: none">
       <label  class="f_label">兑换倍数:</label>
       <div class="f_text"  style="width:70px !important;">
-        <input id="times" class="edit_txt" type="text" name="times" value="{$vo.times}" onblur="javascript:get()">
+        <input id="times" class="edit_txt" type="text" name="times" value="" onblur="javascript:get()">
       </div>
       <span style="line-height:40px; padding-left:5px;">(多少个主单位相当于一个副单位）</span></div>
 
@@ -534,7 +575,7 @@
     <div class="field_group">
       <label  class="f_label" for="edit_pinyin">拼音码:</label>
       <div class="f_text">
-        <input id="edit_pinyin" class="edit_txt" type="text" name="pinyin" value="{$vo.pinyin}">
+        <input id="edit_pinyin" class="edit_txt" type="text" name="pinyin" value="">
       </div>
     </div>
 
@@ -579,49 +620,60 @@
     <div  class="field_group" style="display: none">
       <label  class="f_label"  for="edit_productionDate">生产日期:</label>
       <div class="f_text">
-        <input id="edit_productionDate" name="productionDate" class="edit_txt hasDatepicker time_input" type="text" value="{$vo.productionDate}" readonly="readonly">
+        <input id="edit_productionDate" name="productionDate" class="edit_txt hasDatepicker time_input" type="text" value="" readonly="readonly">
       </div>
     </div>
     <div class="field_group" style="display: none">
       <label  class="f_label"  for="edit_shelfLife">保质期:</label>
       <div class="f_text">
-        <input id="edit_shelfLife" class="edit_txt quantity" name="shelfLife" type="text" value="{$vo.shelfLife}" maxlength="4">
+        <input id="edit_shelfLife" class="edit_txt quantity" name="shelfLife" type="text" value="" maxlength="4">
       </div>
       <span  style="line-height:45px;">　天</span> </div>
     <div class="field_group" style="display: none">
       <label  class="f_label"  for="edit_maxStock">库存上限:</label>
       <div class="f_text">
-        <input id="edit_maxStock" class="edit_txt quantity" name="maxStock" type="text" value="{$vo.maxStock}" maxlength="8">
+        <input id="edit_maxStock" class="edit_txt quantity" name="maxStock" type="text" value="" maxlength="8">
       </div>
     </div>
     <div class="field_group" style="display: none">
       <label  class="f_label" for="edit_minStock">库存下限:</label>
       <div class="f_text">
-        <input id="edit_minStock" name="minStock" class="edit_txt quantity" type="text" value="{$vo.minStock}" maxlength="6">
+        <input id="edit_minStock" name="minStock" class="edit_txt quantity" type="text" value="" maxlength="6">
       </div>
     </div>
     <div class="field_group" style="display: none">
       <label  class="f_label" >标签打印</label>
       <div class="f_select" style="padding-top:10px;">
-         <input type="radio" {if $vo.biaoqian eq 1}checked="checked"{/if}  name="biaoqian" value="1" id="RadioGroup1_0" />
-
+        <input type="radio" name="biaoqian" value="1" id="RadioGroup1_0" />
         开
-
-        <input type="radio" {if $vo.biaoqian eq 0}checked="checked"{/if}  name="biaoqian" value="0" id="RadioGroup1_1" />
-
-        关  </div>
+        <input type="radio" name="biaoqian" value="0" id="RadioGroup1_1" />
+        关 </div>
     </div>
     <div id="btnShowPrinterList" class="field_group">
       <label  class="f_label" >库存类型</label>
       <div class="f_select">
         <select class="medium" name="print">
           <option>==请选择分类==</option>
-        {foreach from=$kcnx item=item key=key}
+
+
+
+
+
+          {foreach from=$kcnx item=item key=key}
           {if $key gt 0}
           <option value="{$key}" {if $key eq 3}selected{/if}>{$item}</option>
           {/if}
           {/foreach}
-      </select>
+
+
+
+
+
+
+
+
+
+        </select>
 
         <!-- <span><a href="/biz.php?ctl=dc&act=dc_menu_print_index&id={$location_id}">管理</a></span>-->
 
@@ -631,14 +683,14 @@
     <div class="field_group" style="clear:both; width:100%; height:100px !important;">
       <label  class="f_label" >备注:</label>
       <div class="f_text" style=" width:600px !important; height:90px !important; overflow:hidden;">
-        <textarea rows="2" maxlength="200"  name="info" style="border:none; background:none; width:98%; padding:5px 1%; height:80px;" id="edit_remarks">{$vo.info}</textarea>
+        <textarea rows="2" maxlength="200"  name="info" style="border:none; background:none; width:98%; padding:5px 1%; height:80px;" id="edit_remarks"></textarea>
       </div>
     </div>
     <div class="clear"></div>
     <div class="field_group" style=" width:100% !important; height:350px !important;clear:both">
       <label class="f_label">描述：</label>
       <div style="display:block; clear:both; padding-top:15px; overflow:hidden;">
-        <textarea rows="2" maxlength="200" class="edit_txt" name="m_desc" id="m_desc" width="100%">{$vo.m_desc}</textarea>
+        <textarea rows="2" maxlength="200" class="edit_txt" name="m_desc" id="m_desc" width="100%"></textarea>
       </div>
     </div>
     <div class="clear"></div>
@@ -647,8 +699,6 @@
   <div class="blank10"></div>
   <div style="text-align:center;padding-right: 20px;">
     <input type="hidden" name="location_id" value="{$location_id}"/>
-    <input type="hidden" name="id" value="{$id}"/>
-	<input type="hidden" name="page" id="current_page" value="{$page}"/>
     <button class="ui-button menu_cate_btn" rel="orange" type="submit">确认保存</button>
     <br />
     <br />

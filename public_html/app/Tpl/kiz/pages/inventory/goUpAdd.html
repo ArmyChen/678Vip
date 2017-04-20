@@ -93,7 +93,7 @@
 
                                         <option value="">请选择领料部门</option>
                                         {foreach from=$bumen item=ywitem key=ywkey}
-                                        <option value="{$ywkey}">{$ywitem.name}</option>
+                                        <option value="bumen_{$ywitem.id}">{$ywitem.name}</option>
                                         {/foreach}
                                     </select>
                                 </div>
