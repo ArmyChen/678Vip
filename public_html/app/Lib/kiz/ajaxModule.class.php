@@ -1511,19 +1511,20 @@ class ajaxModule extends KizBaseModule{
             $output['skuVOs'][$key]['skuCode'] = $item['mid'];
             $output['skuVOs'][$key]['skuId'] = $item['mid'];
             $output['skuVOs'][$key]['skuName'] = $item['name'];
+            $output['skuVOs'][$key]['uom'] = $item['unit'];
             $output['skuVOs'][$key]['skuParentTypeName'] = $item['cate_id'];
             $output['skuVOs'][$key]['skuTypeName'] = $item['cate_id'];
+
             //根据mid查询仓库信息
             $csql = "select * from fanwe_cangku_menu fc left JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid where fc.mid=".$item['mid'];
             $row2 = $GLOBALS['db']->getAll($csql);
 //var_dump($row2);
             foreach ($row2 as $key2=>$item2) {
-
-
                 $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$item2['price'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$item2['price'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId']=$account_info['slid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName']=$account_info['slname'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['qty']=$item2['stock'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['qtySum']=$item2['stock'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseId']=$item['cid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseName']=$item['cid'];

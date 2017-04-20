@@ -356,7 +356,6 @@ var inventorydistribution = {
             });
 
 
-
             //商品基本信息所在的colName/colModel
             Array.prototype.push.apply(finalColNames, fixedColNames);
             Array.prototype.push.apply(finalColModels, fixedColModel);
