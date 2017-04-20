@@ -290,11 +290,17 @@ class KizBaseModule{
 
     /**
      * 获取仓库列表
+     * @param int $id
+     * @return
      */
-    public function get_cangku_list(){
+    public function get_cangku_list($id=0){
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $cangku=$GLOBALS['db']->getRow("select id,name from fanwe_cangku where id=".$id);
+            return $cangku;
+        }
         /* 系统默认 */
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         return $cangkulist;

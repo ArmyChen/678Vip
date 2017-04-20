@@ -284,13 +284,13 @@ var inventorydistribution = {
                     }
 
                     if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
-                        footerData['qty_' + warehouse.warehouseId] = $.toFixed(footerData['qty_' + warehouse.warehouseId] + warehouse.qty);
+                        footerData['qty_' + warehouse.warehouseId] = $.toFixed(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
                     } else{
                         footerData['qty_' + warehouse.warehouseId] = warehouse.qty;
                     }
 
                     if(footerData['amount_' + warehouse.warehouseId] != undefined && footerData['amount_' + warehouse.warehouseId] != null){
-                        footerData['amount_' + warehouse.warehouseId] = $.toFixed(footerData['amount_' + warehouse.warehouseId] + warehouse.amount);
+                        footerData['amount_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['amount_' + warehouse.warehouseId]) + parseFloat(warehouse.amount));
                     } else{
                         footerData['amount_' + warehouse.warehouseId] = warehouse.amount;
                     }
