@@ -89,11 +89,11 @@
                             <dt><label for="senderId">领料部门<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
-                                    <select id="bumen" name="bumen" class="{required:true}">
+                                    <select id="bumen" name="bumen">
 
                                         <option value="">请选择领料部门</option>
                                         {foreach from=$bumen item=ywitem key=ywkey}
-                                        <option value="{$ywkey}">{$ywitem.name}</option>
+                                        <option value="bumen_{$ywitem.id}">{$ywitem.name}</option>
                                         {/foreach}
                                     </select>
                                 </div>

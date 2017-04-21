@@ -290,11 +290,17 @@ class KizBaseModule{
 
     /**
      * 获取仓库列表
+     * @param int $id
+     * @return
      */
-    public function get_cangku_list(){
+    public function get_cangku_list($id=0){
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $cangku=$GLOBALS['db']->getRow("select id,name from fanwe_cangku where id=".$id);
+            return $cangku;
+        }
         /* 系统默认 */
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         return $cangkulist;
@@ -399,9 +405,9 @@ class KizBaseModule{
     /**
      * 获取部门列表
      */
-    function get_bumen_list($slid,$isdd,$str = ''){
-        $list = $GLOBALS['db']->getAll("SELECT * FROM fanwe_cangku_bumen where slid=$slid and isdisable=$isdd $str order by id desc ");
-        return $list;
+    function get_bumen_list($slid){
+        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
+        return $location_bumen;
 
 
     }

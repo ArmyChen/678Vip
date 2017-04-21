@@ -9,11 +9,11 @@
                args="{formId:'baseInfoForm',gridId:'grid',url:'?ctl=ajax&act=saving_ajax&type=1',
                customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.saveCallback'}">保存</a>
             <!--<a code="scm:button:inventory:si:confirm" class="btn-link ml10"  id="btnConfirm" function="$.doConfirmOrder"-->
-               <!--args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/asn/si/confirm',-->
-               <!--customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>-->
+            <!--args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/asn/si/confirm',-->
+            <!--customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>-->
 
             <!--<a class="btn-link ml10 hidden" code="scm:button:inventory:si:add"-->
-               <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>-->
+            <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>-->
 
             <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=inventory&act=go_down_index');">返回</a>
         </div>
@@ -44,7 +44,7 @@
                                     <input type="text" class="form-control" id="asnNoView"
                                            name="asnNoView" value=""
                                            placeholder="请输入单据号" data-type="word" maxlength="14" required
-                                           />
+                                    />
 
                                 </div>
                                 <div class="wrong"></div>
@@ -148,35 +148,35 @@
         </div>
 
         <!--<div id="filterGridDiv" class="pull-left cut-off-rule">-->
-            <!--<form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">-->
-                <!--<div class="form-container ml10">-->
-                    <!--<div class="form-item filter">-->
-                        <!--<div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;display: none;">-->
-                            <!--<div class="select-group">-->
-                                <!--<div class="select-control"><em>请选择商品分类</em></div>-->
-                                <!--<ul>-->
-                                    <!--<li>请选择商品分类</li>-->
-                                <!--</ul>-->
-                                <!--<select class="form-control select-style" name="skuTypeName" id="skuTypeName">-->
-                                    <!--<option value="">请选择商品分类</option>-->
-                                <!--</select></div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-item filter">-->
-                        <!--<div class="control-label-con1 search-box" style="width: 185px;display: none;"><input type="text"-->
-                                                                                                <!--name="skuCodeOrName"-->
-                                                                                                <!--class="form-control"-->
-                                                                                                <!--placeholder="请输入商品编码/名称"-->
-                                                                                                <!--data-format="skuName"-->
-                                                                                                <!--maxlength="14">-->
-                            <!--<button type="button" class="close" aria-hidden="true">×</button>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"-->
-                                                                   <!--role="button"-->
-                                                                   <!--onclick="$.filterGrid.filterSku(this);">查 询</a></div>-->
-                <!--</div>-->
-            <!--</form>-->
+        <!--<form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">-->
+        <!--<div class="form-container ml10">-->
+        <!--<div class="form-item filter">-->
+        <!--<div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;display: none;">-->
+        <!--<div class="select-group">-->
+        <!--<div class="select-control"><em>请选择商品分类</em></div>-->
+        <!--<ul>-->
+        <!--<li>请选择商品分类</li>-->
+        <!--</ul>-->
+        <!--<select class="form-control select-style" name="skuTypeName" id="skuTypeName">-->
+        <!--<option value="">请选择商品分类</option>-->
+        <!--</select></div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-item filter">-->
+        <!--<div class="control-label-con1 search-box" style="width: 185px;display: none;"><input type="text"-->
+        <!--name="skuCodeOrName"-->
+        <!--class="form-control"-->
+        <!--placeholder="请输入商品编码/名称"-->
+        <!--data-format="skuName"-->
+        <!--maxlength="14">-->
+        <!--<button type="button" class="close" aria-hidden="true">×</button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"-->
+        <!--role="button"-->
+        <!--onclick="$.filterGrid.filterSku(this);">查 询</a></div>-->
+        <!--</div>-->
+        <!--</form>-->
         <!--</div>-->
 
         <div class="panel-body">

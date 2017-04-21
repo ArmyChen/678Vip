@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: 云淡风轻(97139915@qq.com)
 // +----------------------------------------------------------------------
-
+//dc_menu where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1))
 class ajaxModule extends KizBaseModule{
     function __construct()
     {
@@ -150,8 +150,13 @@ class ajaxModule extends KizBaseModule{
         $limit = (($page-1)*$page_size).",".$page_size;
 
         $where = "where  g.location_id=$slid";
-        $where .=" and g.is_effect = 0";//是否现实在终端
-        $where .= " and g.is_stock = 1 ";//是否是库存商品
+//        $where .=" and g.is_effect = 0";//是否显示在终端
+//        $where .= " and g.is_stock = 1 ";//是否是库存商品
+//        $where .=" and g.is_delete = 1";//是否删除
+
+        //库存商品
+        $where .= " and (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1))";
+
         if(!empty($wmTypes)){
             $where .= " and g.print in (".$wmTypes.")";//筛选库存类型
         }else{
@@ -169,7 +174,7 @@ class ajaxModule extends KizBaseModule{
         $records = $GLOBALS['db']->getOne($sqlcount);
         $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
-
+//var_dump($check);
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
 
         $return['page'] = $page;
@@ -259,7 +264,6 @@ class ajaxModule extends KizBaseModule{
         $dd_detail=serialize($datailinfo);
         $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
         $bumen = $_REQUEST['bumen'];
-
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
         $datain['ctime']= time()+ 60*60*8;
@@ -1385,10 +1389,10 @@ class ajaxModule extends KizBaseModule{
 
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-
-        $where = "where g.is_effect=0 and g.is_stock = 1 and aa.slid=$slid";
+//        $where = " WHERE 1=1";
+        $where = " where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1)) and aa.slid=$slid";
         if($skuNameOrCode){
-            $where .= " and (g.name like'%".$skuNameOrCode."%' or g.barcode like'%".$skuNameOrCode."%')"."%' or g.pinyin like'%".$skuNameOrCode."%')";
+            $where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
         }
         if($print>-1){
             $where .= " and g.print = $print";
@@ -1402,8 +1406,9 @@ class ajaxModule extends KizBaseModule{
 
 //var_dump($where);die;
 
-        $sqlrecords="select count(0) from fanwe_cangku_menu a".$where." limit ".$limit;;
-        $sql="select * from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid ".$where;
+//        $sqlrecords="select count(0) from fanwe_cangku_menu a".$where." limit ".$limit;;
+        $sqlrecords="select count(0) from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where;
+        $sql="select *,fc.name as cname from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where." limit ".$limit;
         $return = array();
         $records = $GLOBALS['db']->getOne($sqlrecords);
         $list = $GLOBALS['db']->getAll($sql);
@@ -1412,7 +1417,7 @@ class ajaxModule extends KizBaseModule{
         foreach ($list as $key=>$item) {
             $arr[$key]['mid'] =$item['mid'];
             $arr[$key]['commercialName'] =$account_info['slname'];
-            $arr[$key]['warehouseName'] = $item['name'];
+            $arr[$key]['warehouseName'] = $item['cname'];
             $arr[$key]['skuCode'] =$item['mbarcode'];
             $arr[$key]['skuName'] =$item['mname'];
             $arr[$key]['marketPrice'] =$item['buyPrice'];
@@ -1463,64 +1468,88 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
-        $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
         $skuNameOrCode = $_REQUEST['skuNameOrCode'];
         $skuTypeIds = $_REQUEST['skuTypeIds'];
         $wmIds = $_REQUEST['wmIds'];
-        $isDisable = $_REQUEST['isDisable'];
+        $print = $_REQUEST['print'];
 
         if (($_REQUEST['confirmDateStart'])|| ($_REQUEST['confirmDateEnd'])){
             $begin_time = strim($_REQUEST['confirmDateStart']);
             $end_time = strim($_REQUEST['confirmDateEnd']);
-        }else{	 //默认为当月的
-            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
-            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
         }
+//        else{	 //默认为当月的
+//            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+//            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+//        }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
+        $sqlstr = " where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1)) and fc.slid=$location_id";
 
-        $sqlstr="where 1=1";
-        $sqlstr.=' and ( a.slid='.$location_id.')';
+        if($skuNameOrCode){
+            $sqlstr = "where  and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+        }
+        if($print>-1){
+            $sqlstr .= " and g.print = $print";
+        }else{
+            $sqlstr .= " and g.print <> 1 ";
+        }
 
         if($begin_time_s){
-            $sqlstr .=" and a.ctime > ".$begin_time_s." ";
+            $sqlstr .=" and fc.ctime > ".$begin_time_s." ";
         }
         if($end_time_s){
-            $sqlstr .=" and a.ctime < ".$end_time_s." ";
+            $sqlstr .=" and fc.ctime < ".$end_time_s." ";
+        }
+        if($skuTypeIds){
+            $sqlstr.=' and ( fc.cate_id='.$skuTypeIds.')';
+        }
+        if($wmIds){
+            $sqlstr.=' and ( fc.cid='.$wmIds.')';
+        }
+        if($wmIds){
+            $sqlstr.=' and ( fc.cid='.$wmIds.')';
         }
 
 //        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
 //        $sqlrecords="select count(a.id) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
-        $return = array();
-        $return['skuVOs'] = array();
-        $output = $return['skuVOs'];
-        $sql = "select * from fanwe_cangku_menu where slid=".$location_id;
-        $row = $GLOBALS['db']->getRow($sql);
-        var_dump($row);
-        $skuOvs = array();
-        foreach ($skuOvs as $key=>$item) {
-            $output[$key]['isDelete'] = $item['isDelete'];
-            $output[$key]['isDisable'] = $item['isDisable'];
-            $output[$key]['qtySum'] = $item['qtySum'];
-            $output[$key]['skuCode'] = $item['skuCode'];
-            $output[$key]['skuId'] = $item['skuId'];
-            $output[$key]['skuName'] = $item['skuName'];
-            $output[$key]['skuParentTypeName'] = $item['skuParentTypeName'];
-            $output[$key]['skuTypeName'] = $item['skuTypeName'];
-            $output[$key]['titleVOs'] = array();
-            $titleVOs = array();
-            foreach ($titleVOs as $key2=>$item2) {
-                $output[$key]['titleVOs'][$key2]['amount']=$item2['amount'];
-                $output[$key]['titleVOs'][$key2]['amountSum']=$item2['amountSum'];
-                $output[$key]['titleVOs'][$key2]['commercialId']=$item2['commercialId'];
-                $output[$key]['titleVOs'][$key2]['commercialName']=$item2['commercialName'];
-                $output[$key]['titleVOs'][$key2]['qtySum']=$item2['qtySum'];
-                $output[$key]['titleVOs'][$key2]['warehouseId']=$item2['warehouseId'];
-                $output[$key]['titleVOs'][$key2]['warehouseName']=$item2['warehouseName'];
+//        $return = array();
+//        $return['skuVOs'] = array();
+//        $output = $return['skuVOs'];
+        $sql = "select * from fanwe_cangku_menu fc INNER JOIN fanwe_dc_menu g on g.id =fc.mid $sqlstr group by fc.mid";
+        $row = $GLOBALS['db']->getAll($sql);
+//var_dump($row);
+        $output['skuVOs'] = array();
+        foreach ($row as $key=>$item) {
+
+            $output['skuVOs'][$key]['isDelete'] = 0;
+            $output['skuVOs'][$key]['isDisable'] = 0;
+            $output['skuVOs'][$key]['qtySum'] =0;
+            $output['skuVOs'][$key]['skuCode'] = $item['mid'];
+            $output['skuVOs'][$key]['skuId'] = $item['mid'];
+            $output['skuVOs'][$key]['skuName'] = $item['name'];
+            $output['skuVOs'][$key]['uom'] = $item['unit'];
+            $output['skuVOs'][$key]['skuParentTypeName'] = $item['cate_id'];
+            $output['skuVOs'][$key]['skuTypeName'] = $item['cate_id'];
+
+            //根据mid查询仓库信息
+            $csql = "select * from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid where fc.mid=".$item['mid'];
+            $row2 = $GLOBALS['db']->getAll($csql);
+//var_dump($row2);
+            foreach ($row2 as $key2=>$item2) {
+                $output['skuVOs'][$key]['qtySum'] += $item2['stock'];
+                $cangku = parent::get_cangku_list($item2['cid']);
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$item2['price'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$item2['price'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId']=$account_info['slid'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName']=$account_info['slname'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['qty']=$item2['stock'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['qtySum']=$item2['stock'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseId']=$item2['cid'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseName']= $cangku['name'];
 
             }
         }
-
+//        var_dump($output);
 //        $records = $GLOBALS['db']->getOne($sqlrecords);
 //        $list = $GLOBALS['db']->getAll($sql);
 //
@@ -1531,7 +1560,7 @@ class ajaxModule extends KizBaseModule{
 //        $return['resMsg'] = null;
 //
 //        $return['dataList'] = $output;
-        echo json_encode($return);exit;
+        echo json_encode($output);exit;
     }
 
 }
