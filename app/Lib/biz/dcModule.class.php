@@ -3337,10 +3337,17 @@ $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 //echo '<hr />';
 
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+$i=0;
 foreach($sheetData as $key=>$val)
 {
  if($key>1){
-   $sql = " select m.*,c.name as catename,com.name as companyname from " . DB_PREFIX . "dc_menu m  left join ".DB_PREFIX."dc_supplier_menu_cate c on c.id=m.cate_id left join ".DB_PREFIX."dc_supplier_companyname com on com.id=m.company";
+    $location_id = intval($_REQUEST['location_id']);
+ 	$check=$GLOBALS['db']->getRow("select * from fanwe_dc_menu where supplier_id=$supplier_id and location_id=$location_id and name='".strim($val["A"])."'");
+
+ 	if($check){ //存在的话，直接跳入下一个
+    	continue;
+	}else{
+  // $sql = " select m.*,c.name as catename,com.name as companyname from " . DB_PREFIX . "dc_menu m  left join ".DB_PREFIX."dc_supplier_menu_cate c on c.id=m.cate_id left join ".DB_PREFIX."dc_supplier_companyname com on com.id=m.company";
 // var_dump($val)	;
  /*array(19) { ["A"]=> string(7) "萝卜3" ["B"]=> string(9) "牛肉面" ["C"]=> float(1455007007816) ["D"]=> float(1) ["E"]=> float(100) ["F"]=> float(100) ["G"]=> float(100) ["H"]=> float(100) ["I"]=> float(100) ["J"]=> float(1) ["K"]=> float(2002) ["L"]=> float(20033) ["M"]=> float(1) ["N"]=> string(6) "简餐" ["O"]=> string(19) "2016-02-10 19:00:00" ["P"]=> float(200) ["Q"]=> string(5) "luobo" ["R"]=> float(1) ["S"]=> float(202020202) }*/
 
@@ -3350,47 +3357,114 @@ foreach($sheetData as $key=>$val)
 		/*获取参数*/
 	 //   $id = intval($_REQUEST['id']);
 
-		$location_id = intval($_REQUEST['location_id']);
-		$data['name'] = strim($val["A"]);
-	   // $data['cate_id'] = intval($_REQUEST['cate_id']);
-		//$data['image'] =  replace_domain_to_public(strim($_REQUEST['image']));
-		$data['price'] = floatval($val["G"]);
-	   // $data['tags'] = implode(",", $_REQUEST['tags']);
-		$data['is_effect'] = intval($val["R"]);
 
-		  $data['barcode'] = strim($val["C"]);
-			$data['buyPrice'] = floatval($val["F"]);
-		  $data['stock'] = intval($val["E"]);
-			$data['customerPrice'] = floatval($val["I"]);
-			  $data['sellPrice2'] = floatval($val["H"]);
-				$data['unit'] = strim($val["T"]);
-				  $data['pinyin'] = strim($val["Q"]);
-
-
-					  $data['productionDate'] = strim($val["O"]);
-						$data['shelfLife'] = strim($val["P"]);
-						  $data['maxStock'] = intval($val["K"]);
-
-							$data['minStock'] = intval($val["L"]);
-							  $data['biaoqian'] = strim($val["M"]);
-								$data['print'] = strim($val["D"]);
-								  $data['info'] = strim($val["S"]);
-								  $data['isdazhe'] = strim($val["J"]);
-								  $data['funit'] = strim($val["U"]);
-								  $data['times'] = floatval($val["V"]);
-
+	   $data['name'] = strim($val["A"]);
 	   $location_info = $GLOBALS['db']->getRow("select xpoint,ypoint from ".DB_PREFIX."supplier_location where id=".$location_id);
-	   $cate_info = $GLOBALS['db']->getRow("select id from  ".DB_PREFIX."dc_supplier_menu_cate where name='".$val["B"]."' and supplier_id=".$supplier_id." and location_id=".$location_id);
+	   if($val["B"]=='默认'){//不存大大类
+		   $cate_info = $GLOBALS['db']->getRow("select id from  ".DB_PREFIX."dc_supplier_menu_cate where name='".$val["C"]."' and supplier_id=".$supplier_id." and location_id=".$location_id);
+		   if(!$cate_info){//不存在的分类，创建
+			   $data_category=array(
+			   	"name"=>$val["C"],
+			   	"supplier_id"=>$supplier_id,
+			   	"location_id"=>$location_id,
+			   	"wcategory"=>0,
+			   	"wlevel"=>0
+			   );
+			   if(intval($val["E"])==1 || intval($val["E"])==2 || intval($val["E"])==3){
+                   $data_category['is_effect']=1;
+			   }else{
+                   $data_category['is_effect']=0;
+			   }
+               $GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$data_category);
+               $cate_id = $GLOBALS['db']->insert_id();  //得到子类ID
+		   }else{
+               $cate_id = $cate_info['id'];
+		   }
+       }else{//存在大类
+           $cate_info = $GLOBALS['db']->getRow("select id from  ".DB_PREFIX."dc_supplier_menu_cate where name='".$val["B"]."' and supplier_id=".$supplier_id." and location_id=".$location_id);
+           if(!$cate_info){//不存在的分类，创建大类
+               $data_category=array(
+                   "name"=>$val["B"],
+                   "supplier_id"=>$supplier_id,
+                   "location_id"=>$location_id,
+                   "wcategory"=>0,
+                   "wlevel"=>0
+               );
+               if(intval($val["E"])==1 || intval($val["E"])==2 || intval($val["E"])==3){
+                   $data_category['is_effect']=1;
+               }else{
+                   $data_category['is_effect']=0;
+               }
+               $GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$data_category);
+               $big_cate_id = $GLOBALS['db']->insert_id();  //得到d大类ID
 
-		$company_info = $GLOBALS['db']->getRow("select id from  ".DB_PREFIX."dc_supplier_companyname where name='".$val["N"]."' ");
+
+			   //创建小类
+               $data_category['name']=$val["C"];
+               $data_category['wcategory']=$big_cate_id;
+               $data_category['wlevel']=1;
+               $GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$data_category);
+               $cate_id = $GLOBALS['db']->insert_id();  //得到小类ID
+
+           }else{ //存大类
+           	  //查找小类
+               $cate_info_small = $GLOBALS['db']->getRow("select id from  ".DB_PREFIX."dc_supplier_menu_cate where name='".$val["C"]."' and supplier_id=".$supplier_id." and location_id=".$location_id." and wcategory=".$cate_info['id']);
+               if($cate_info_small){ //存在小类
+                   $cate_id = $cate_info_small['id'];
+			   }else{ //不存在创建小类
+				   $small_category_data=array(
+                       "name"=>$val["C"],
+                       "supplier_id"=>$supplier_id,
+                       "location_id"=>$location_id,
+                       "wcategory"=>0,
+                       "wlevel"=>0
+				   );
+                   if(intval($val["E"])==1 || intval($val["E"])==2 || intval($val["E"])==3){
+                       $small_category_data['is_effect']=1;
+                   }else{
+                       $small_category_data['is_effect']=0;
+                   }
+                   $GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$small_category_data);
+                   $cate_id = $GLOBALS['db']->insert_id();  //得到子类ID
+			   }
+
+           }
+
+	   }
+
+
+
 
 	   $data['location_id'] = $location_id;
 	   $data['supplier_id'] = $supplier_id;
 	   $data['xpoint'] = $location_info['xpoint'];
 	   $data['ypoint'] = $location_info['ypoint'];
+	   $data['cate_id'] = intval($cate_id);
+       $data['barcode'] = strim($val["D"]);
+       $data['print'] = strim($val["E"]);
+       $data['stock'] = intval($val["F"]);
+       $data['buyPrice'] = floatval($val["G"]);
+       $data['price'] = floatval($val["H"]);
+       $data['sellPrice2'] = floatval($val["I"]);
+       $data['customerPrice'] = floatval($val["J"]);
+       $data['is_delete'] = floatval($val["K"]);
+       $data['maxStock'] = intval($val["L"]);
+       $data['minStock'] = intval($val["M"]);
+	   $data['pinyin'] = strim($val["N"]);
+       $data['is_effect'] = strim($val["O"]);
+       $data['is_effect_enable'] = strim($val["P"]);
+       $data['is_stock'] = strim($val["Q"]);
+       $data['is_stock_enable'] = strim($val["R"]);
+       $data['isdazhe'] = strim($val["S"]);
+       $data['info'] = strim($val["T"]);
+       $data['unit'] = strim($val["U"]);
+       $data['funit'] = strim($val["V"]);
+       $data['times'] = floatval($val["W"]);
+       $data['ticheng_style'] = strim($val["X"]);
+       $data['tichengmoney'] = strim($val["Y"]);
+       $data['chupinliu'] = strim($val["Z"]);
 
-	   $data['cate_id'] = intval($cate_info['id']);
-		$data['company'] = strim($company_info["id"]);
+
 	   /*获取标签中文,同步函数*/
 
 
@@ -3399,12 +3473,15 @@ foreach($sheetData as $key=>$val)
 		  // var_dump($cate_info);
 		//   syn_supplier_location_menu_match($id);
 		   //$root['info'] = "添加成功";
-
+	    if($id>0){
+	    	$i++;
+		}
+    }
 
  }
 }
 
-showBizSuccess("导入成功",0,url("biz","dc#dc_menu_index&id=$location_id"));
+showBizSuccess("成功导入".$i."个",0,url("biz","dc#dc_menu_index&id=$location_id"));
 
 	}
 
@@ -3424,7 +3501,7 @@ public function Export_weebox(){
 
 		$sql_count = " select count(id) from " . DB_PREFIX . "dc_menu";
 	   // $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_menu ";
-		$sql = " select m.*,c.name as catename,com.name as companyname from " . DB_PREFIX . "dc_menu m  left join ".DB_PREFIX."dc_supplier_menu_cate c on c.id=m.cate_id left join ".DB_PREFIX."dc_supplier_companyname com on com.id=m.company";
+		$sql = " select m.*,c.name as catename,c.wcategory,c.wlevel,com.name as companyname from " . DB_PREFIX . "dc_menu m  left join ".DB_PREFIX."dc_supplier_menu_cate c on c.id=m.cate_id left join ".DB_PREFIX."dc_supplier_companyname com on com.id=m.company";
 
   $list = $GLOBALS['db']->getAll($sql.$conditions);
 //var_dump($sql.$conditions);
@@ -3452,27 +3529,31 @@ $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
 // Add some data
 $objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A1', '名称（必填）')
-			->setCellValue('B1', '分类')
-			->setCellValue('C1', '条码')
-			->setCellValue('D1', '厨房票打')
-			->setCellValue('E1', '库存量（必填）')
-			->setCellValue('F1', '进货价（必填）')
-			->setCellValue('G1', '销售价（必填）')
-			->setCellValue('H1', '批发价')
-			->setCellValue('I1', '会员价')
-			->setCellValue('J1', '会员折扣')
-			->setCellValue('K1', '库存上限')
-			->setCellValue('L1', '库存下限')
-			->setCellValue('M1', '标签打印')
-			->setCellValue('N1', '供货商')
-			->setCellValue('O1', '生产日期')
-			->setCellValue('P1', '保质期')
-			->setCellValue('Q1', '拼音码')
-			->setCellValue('R1', '商品状态')
-			->setCellValue('S1', '商品备注')
-			->setCellValue('T1', '单位')
-			->setCellValue('U1', '副单位')
-			->setCellValue('V1', '兑换倍数');
+	        ->setCellValue('B1', '商品大类')
+			->setCellValue('C1', '分类')
+			->setCellValue('D1', '条码')
+			->setCellValue('E1', '库存类型（1现制商品,2预制商品，3外购商品，4原物料，6半成品）')
+			->setCellValue('F1', '库存量')
+			->setCellValue('G1', '采购价')
+			->setCellValue('H1', '销售价')
+			->setCellValue('I1', '成本价')
+			->setCellValue('J1', '结算价')
+			->setCellValue('K1', '是否删除（1正常 0删除）')
+			->setCellValue('L1', '库存上限')
+			->setCellValue('M1', '库存下限')
+			->setCellValue('N1', '拼音码')
+			->setCellValue('O1', '商品状态（1启用 0不启用）')
+			->setCellValue('P1', '前台商品估清（1正常 0估清）')
+			->setCellValue('Q1', '是否仓库商品（1是 0不是）')
+			->setCellValue('R1', '仓库商品是否估清(1是 0估清)')
+			->setCellValue('S1', '是否支付打折（1允许 0不允许）')
+			->setCellValue('T1', '商品备注')
+			->setCellValue('U1', '单位')
+			->setCellValue('V1', '副单位')
+			->setCellValue('W1', '兑换倍数')
+			->setCellValue('X1', '提成类型(1按比例 0实际金额')
+			->setCellValue('Y1', '提成金额（如果是按比例请输入0至1之间的数）')
+			->setCellValue('Z1', '出品率（如果是按比例请输入0至100之间的数）');
 /*
  ["id"]=> string(1) "2" ["name"]=> string(9) "牛肉面" ["cate_id"]=> string(1) "5" ["price"]=> string(6) "7.0000" ["image"]=> string(71) "./public/attachment/201602/03/10/fa30aaf9690fbe668f0816c177bda09875.jpg" ["tags"]=> string(0) "" ["tags_match"]=> string(0) "" ["tags_match_row"]=> string(0) "" ["is_effect"]=> string(1) "1" ["location_id"]=> string(3) "837" ["supplier_id"]=> string(3) "839" ["buy_count"]=> string(1) "0" ["xpoint"]=> string(18) "103.81730638713016" ["ypoint"]=> string(17) "36.05841065457739" ["menu_cate_type"]=> string(1) "0" ["open_time_cfg_str"]=> string(11) "08:00-23:59" ["barcode"]=> string(1) "0" ["buyPrice"]=> string(4) "0.00" ["stock"]=> string(1) "0" ["customerPrice"]=> string(4) "0.00" ["sellPrice2"]=> string(4) "0.00" ["unit"]=> string(1) "0" ["pinyin"]=> string(1) "0" ["company"]=> string(1) "0" ["productionDate"]=> string(19) "0000-00-00 00:00:00" ["shelfLife"]=> string(1) "0" ["maxStock"]=> string(1) "0" ["minStock"]=> string(1) "0" ["biaoqian"]=> string(1) "0" ["print"]=> string(1) "0" ["info"]=> string(0) "" } [1]=>
 
@@ -3483,29 +3564,41 @@ $objPHPExcel->setActiveSheetIndex(0)
 
 foreach($list as $key=> $val)
 {
+	if($val['wlevel']==1){
+		$bigCategory=$GLOBALS['db']->getOne("select name from fanwe_dc_supplier_menu_cate where id=".$val["wcategory"]);
+	}
+    if($val['wlevel']==0)
+	{
+        $bigCategory='默认';
+	}
+
 $objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A'.($key+2), $val["name"])
-			->setCellValue('B'.($key+2), $val["catename"])
-			->setCellValue('C'.($key+2),  $val["barcode"])
-			->setCellValue('D'.($key+2),  $val["print"])
-			->setCellValue('E'.($key+2), $val["stock"])
-			->setCellValue('F'.($key+2), $val["buyPrice"])
-			->setCellValue('G'.($key+2), $val["price"])
-			->setCellValue('H'.($key+2), $val["sellPrice2"])
-			->setCellValue('I'.($key+2),  $val["customerPrice"])
-			->setCellValue('J'.($key+2), ($val["customerPrice"]/$val["price"]))
-			->setCellValue('K'.($key+2),  $val["maxStock"])
-			->setCellValue('L'.($key+2),  $val["minStock"])
-			->setCellValue('M'.($key+2), $val["biaoqian"])
-			->setCellValue('N'.($key+2), $val["companyname"])
-			->setCellValue('O'.($key+2), $val["productionDate"])
-			->setCellValue('P'.($key+2),  $val["shelfLife"])
-			->setCellValue('Q'.($key+2), $val["pinyin"])
-			->setCellValue('R'.($key+2), $val["is_effect"])
-			->setCellValue('S'.($key+2), $val["info"])
-			->setCellValue('T'.($key+2), $val["unit"])
-			->setCellValue('U'.($key+2), $val["funit"])
-			->setCellValue('V'.($key+2), $val["times"]);
+            ->setCellValue('B'.($key+2), $bigCategory)
+			->setCellValue('C'.($key+2), $val["catename"])
+			->setCellValue('E'.($key+2),  $val["barcode"])
+			->setCellValue('E'.($key+2),  $val["print"])
+			->setCellValue('F'.($key+2), $val["stock"])
+			->setCellValue('G'.($key+2), $val["buyPrice"])
+			->setCellValue('H'.($key+2), $val["price"])
+			->setCellValue('I'.($key+2), $val["sellPrice2"])
+			->setCellValue('J'.($key+2),  $val["customerPrice"])
+			->setCellValue('K'.($key+2), ($val["is_delete"]))
+			->setCellValue('L'.($key+2),  $val["maxStock"])
+			->setCellValue('M'.($key+2),  $val["minStock"])
+			->setCellValue('N'.($key+2), $val["pinyin"])
+			->setCellValue('O'.($key+2), $val["is_effect"])
+			->setCellValue('P'.($key+2), $val["is_effect_enable"])
+			->setCellValue('Q'.($key+2),  $val["is_stock"])
+			->setCellValue('R'.($key+2), $val["is_stock_enable"])
+			->setCellValue('S'.($key+2), $val["isdazhe"])
+			->setCellValue('T'.($key+2), $val["info"])
+			->setCellValue('U'.($key+2), $val["unit"])
+			->setCellValue('V'.($key+2), $val["funit"])
+			->setCellValue('W'.($key+2), $val["times"])
+			->setCellValue('X'.($key+2), $val["ticheng_style"])
+			->setCellValue('Y'.($key+2), $val["tichengmoney"])
+			->setCellValue('Z'.($key+2), $val["chupinliu"]);
 }
 // Miscellaneous glyphs, UTF-8
 /*$objPHPExcel->setActiveSheetIndex(0)
@@ -3522,7 +3615,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 ob_end_clean();//清除缓冲区,避免乱码
 // Redirect output to a client’s web browser (Excel5)
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="01simple.xls"');
+header('Content-Disposition: attachment;filename="门店商品.xls"');
 header('Cache-Control: max-age=0');
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -4079,7 +4172,7 @@ exit;
 		$conditions .= " and location_id=".$id." ";
 
 		//只显示前台商品
-        $conditions .= " and print in (1,2,3) ";
+        $conditions .= " and print in (0,1,2,3) ";
           
 		if ($_REQUEST['name'] != ""){
 		$bname=strim($_REQUEST['name']);
