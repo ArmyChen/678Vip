@@ -10,7 +10,7 @@ function goods_avaliable_fetchall($slid,$sid, $cid = 0, $ignore_bargain = false)
 	if (empty($categorys)) {
 		return $result;
 	}
-	$condition = ' where is_delete=1 and location_id = :sid and is_effect = 1';
+	$condition = ' where is_delete=1 and location_id = :sid and is_effect = 1 and is_effect_enable=1 ';
 	$params = array(':sid' => $slid);
 	$goods = pdo_fetchall('select id,cate_id as cid,name as title, price,customerPrice as box_price, buy_count as total,image as thumb, sailed, info as label, m_desc as content, is_options, unit as unitname, comment_good from fanwe_dc_menu' . $condition, $params, 'id');
 	$goods_tastes=pdo_fetchall("select * from fanwe_dc_supplier_taste where is_effect=1 and location_id=:location_id",array(":location_id"=>$slid));
@@ -77,7 +77,7 @@ function goods_avaliable_fetchall($slid,$sid, $cid = 0, $ignore_bargain = false)
                 $good['taste'][]=json_decode($goods_taste['flavor'],true);
             }
         }
-		/////////////////////////////////////
+		
 	}
 	if (!is_array($bargains)) {
 		$bargains = array();
