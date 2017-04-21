@@ -898,6 +898,53 @@ function del_menu(obj){
 
 
 }
+function restore_menu(obj){
+
+	var id = $(obj).attr("data-id");
+
+	$.showConfirm("确认恢复吗？",function(){
+
+		var query = new Object();
+
+		query.act = "dc_menu_restore";
+
+
+
+		query.id = id;
+
+		$.ajax({
+
+			url:ajax_url,
+
+			data:query,
+
+			type:"post",
+
+			dataType:"json",
+
+			success:function(data){
+
+				if(data.status){
+
+					window.location = data.jump;
+
+				}else{
+
+					$.showErr(data.info);
+
+				}
+
+			}
+
+		});
+
+
+
+	});
+
+
+
+}
 
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
