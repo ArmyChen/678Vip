@@ -4161,16 +4161,21 @@ exit;
         $page = intval($_REQUEST['p']);
 		/*获取参数*/
 		$id = intval($_REQUEST['id']);
+        $is_delete = intval($_REQUEST['is_delete'])?intval($_REQUEST['is_delete']):1;
 		if ($id==0){
 		$id = $account_info['slid'];	
 		}
         $cate_id = intval($_REQUEST['cate_id'])?intval($_REQUEST['cate_id']):0;
         
 		/* 业务逻辑部分 */
-		$conditions .= " where 1=1 and is_delete=1"; // 查询条件
+		$conditions .= " where 1=1"; // 查询条件
 		// 只查询支持门店的
 		$conditions .= " and location_id=".$id." ";
-
+		if($is_delete==1){
+			$conditions .= " and is_delete=".$is_delete." ";
+		}else{
+            $conditions .= " and is_delete=0";
+		}
 		//只显示前台商品
         $conditions .= " and print in (0,1,2,3) ";
           
@@ -4266,6 +4271,7 @@ exit;
 
 		/* 数据 */
 		$GLOBALS['tmpl']->assign("location_id", $id);
+		$GLOBALS['tmpl']->assign("is_delete", $is_delete);
 		$GLOBALS['tmpl']->assign("list", $list);
 		$GLOBALS['tmpl']->assign("bname", $bname);
 		$GLOBALS['tmpl']->assign("ajax_url", url("biz","dc"));
@@ -4755,45 +4761,7 @@ $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_m
 			ajax_return($root);
 		}
 
-		//查询是否有关联菜单
 
-      //  $GLOBALS['db']->autoExecute("menu_update",array("isnew"=>"2"),"UPDATE"," isnew=1 and pid=".$id);
-		//$GLOBALS['db']->query("delete from menu_update where isnew=0 and pid=".$id);
-		
-		//百度推送
-	   //$pushjg=menu_push($location_id,$id);
-	   /*
-	    require_once APP_ROOT_PATH."baidupush/sdk.php";
-		$sdk = new PushSDK();	       
-		       		 
-         $description=array();
-         $description['code']='1001';
-        // $description['data']=$tuidata;
-
-		$message = array (    
- 		'title' => '提示',
-        'description' =>'有菜品删除' ,
-		'custom_content'=>$description
-		//'custom_content'=>'你有新的外卖订单'
-        );
-// 设置消息类型为 通知类型.
-        $opts = array (
-            'msg_type' => 1 
-        );        
-// 向目标设备发送一条消息
-       // var_dump($message);
-        //var_dump($opts);
-		
-        $list=$GLOBALS['db']->getAll("select appid from fanwe_app where slid='$location_id' order by loginTime desc ");	
-        foreach($list as $kc=>$vc){
-			$channelIdlist[]=$vc['appid'];
-		}
-		//var_dump($channelIdlist);
-		//执行发送程序 
-        $rs = $sdk -> pushBatchUniMsg($channelIdlist, $message, $opts);
-		//return $rs;
-		//$rst=json_encode($rs);
-		*/
 		
 		$this->caipinpush($location_id);
 		
@@ -4811,6 +4779,44 @@ $sql = " select id,name,is_effect,cate_id,price,image from " . DB_PREFIX . "dc_m
 		ajax_return($root);
 	}
 
+    public function dc_menu_restore(){
+        /* 基本参数初始化 */
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $location_id = $account_info['location_ids'][0];
+
+        /* 获取参数 */
+        $id = intval($_REQUEST['id']);
+
+        /* 业务逻辑部分 */
+        $root['status'] = 0;
+        $root['info'] = "";
+
+        $data = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."dc_menu where id=".$id." and location_id in(" . implode(",", $account_info['location_ids']) . ") and supplier_id =".$supplier_id);
+        //判断是否有权限和数据存在
+        if(empty($data)){
+            $root['status'] =0;
+            $root['info'] = "数据不存在/没有修改权限";
+            ajax_return($root);
+        }
+
+
+
+        $this->caipinpush($location_id);
+
+
+
+        //删除数据
+        //2017-4-12修改
+        $GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set is_delete=1 where id=".$id);
+        /* 数据 */
+        $root['status'] =1;
+        $root['jump'] = url("biz","dc#dc_menu_index",array('id'=>$data['location_id']));
+
+
+        /* ajax返回数据 */
+        ajax_return($root);
+    }
 
 	public function batch_del_menu(){
 		/* 基本参数初始化 */
