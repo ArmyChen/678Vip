@@ -168,8 +168,12 @@ class ajaxModule extends KizBaseModule{
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
         if($_REQUEST['skuCodeOrName']){
-            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.barcode like'%".$_REQUEST['skuCodeOrName']."%')"."%' or g.pinyin like'%".$_REQUEST['pinyin']."%')";
+            $where .= " and (g.name like '%".$_REQUEST['skuCodeOrName']."%'";
+            $where .= " or g.barcode like '%".$_REQUEST['skuCodeOrName']."%'";
+            $where .= " or g.id like '%".$_REQUEST['skuCodeOrName']."%' or g.pinyin like '%".$_REQUEST['skuCodeOrName']."%' )";
         }
+
+//        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
         $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
@@ -245,7 +249,8 @@ class ajaxModule extends KizBaseModule{
             echo json_encode($return);exit;
         }
         $datailinfo = array();
-        foreach($_REQUEST['detail'] as $k=>$v){
+        $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+        foreach($oDetail as $k=>$v){
             $datailinfo[$k]['mid'] = $v['skuId'];
             $datailinfo[$k]['unit'] = $v['uom'];
             $datailinfo[$k]['funit'] = $v['funit'];
@@ -270,7 +275,7 @@ class ajaxModule extends KizBaseModule{
         $datain['dd_detail']=$dd_detail;
         $datain['slid']=$slid;
         $datain['type'] = $_REQUEST['type'];
-        $datain['danjuhao'] = $_REQUEST['asnNoView'];
+        $datain['danjuhao'] = empty($_REQUEST['asnNoView'])?time():$_REQUEST['asnNoView'];
         $datain['ywsort'] = $_REQUEST['senderId'];
         $datain['cid'] = $_REQUEST['warehouseId'];
         $datain['lihuo_user'] = $account_info['account_name'];
@@ -1392,7 +1397,7 @@ class ajaxModule extends KizBaseModule{
 //        $where = " WHERE 1=1";
         $where = " where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1)) and aa.slid=$slid";
         if($skuNameOrCode){
-            $where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+            $where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
         }
         if($print>-1){
             $where .= " and g.print = $print";
