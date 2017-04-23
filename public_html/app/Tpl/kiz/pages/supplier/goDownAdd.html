@@ -59,21 +59,58 @@
                             <dt><label for="gys">供应商<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
-                                    <select id="gys" name="gys" class="{required:true}">
+                                    <select name="gys" id="gys" class="search_box select" style="height:33px; padding:4px 5px 5px; border:1px solid #e9e9e9">
+                                        {if $rukuval eq 2}
+                                        <optgroup label="店内部门">
 
+                                            {foreach from=$location_bumen item=item}
 
+                                            <option value="bumen_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
 
+                                            {/foreach}
+                                            {/if}
 
-                                        <!--<option value="">请选择入库原因</option>-->
-                                        {foreach from=$gys item=ywitem key=ywkey}
+                                            <optgroup label="临时专用">
+                                                <option value="linshi_1" data-id='临时客户' >临时客户</option>
+                                                <option value="linshi_2" data-id='临时运输商'>临时运输商</option>
+                                                <option value="linshi_3" data-id='临时供应商'>临时供应商</option>
 
+                                                {if $rukuval eq 2}
 
-                                        <option value="{ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
+                                                <option value="linshi_4" data-id='领料出库'>领料出库</option>
 
+                                                {/if}
 
-                                        {/foreach}
+                                                <optgroup label="门店之间">
 
+                                                    {foreach from=$slidlist item=item}
 
+                                                    <option value="slid_{$item.id}"
+                                                            {if $rukuval eq 1 and $item.id eq $seller_slid}selected="selected" {/if}
+                                                    {if $rukuval eq 2 and $item.id eq $buyer_slid}selected="selected" {/if}
+                                                    data-id='{$item.name}'  >
+
+                                                    {$item.name}
+
+                                                    </option>
+
+                                                    {/foreach}
+
+                                                    <optgroup label="城市供应商">
+
+                                                        {foreach from=$gyslist item=item}
+
+                                                        <option value="citygys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                                        {/foreach}
+
+                                                        <optgroup label="门店专属供应商">
+
+                                                            {foreach from=$location_gys item=item}
+
+                                                            <option value="localgys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                                            {/foreach}
 
                                     </select>
                                 </div>
@@ -96,7 +133,7 @@
                                         {foreach from=$gonghuoren item=ywitem key=ywkey}
 
 
-                                        <option value="{ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
+                                        <option value="{$ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
 
 
                                         {/foreach}

@@ -286,11 +286,6 @@ class ajaxModule extends KizBaseModule{
             $datain['ctime']= time()+ 60*60*8;
         }
 
-        if($gys){
-            $datain['gys'] =  $gys;
-        }
-
-
         $datain['dd_detail']=$dd_detail;
         $datain['slid']=$slid;
         $datain['type'] = $_REQUEST['type'];
@@ -386,6 +381,8 @@ class ajaxModule extends KizBaseModule{
                 if(!$cid){
                     $gonghuoren='linshi_3'; //临时供应商3
                 }
+
+                $gonghuoren = $gys;
 
                 $data_gys=array(
                     "slid"=>$slid,

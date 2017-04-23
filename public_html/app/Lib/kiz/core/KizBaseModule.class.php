@@ -252,6 +252,7 @@ class KizBaseModule{
         $slid=$GLOBALS['account_info']['slid'];
         $slname=$GLOBALS['account_info']['slname'];
         $opreview = $GLOBALS['config']['ERP_LOGO'];
+        $supplier_id = $GLOBALS['account_info']['supplier_id'];
         define("SLIDNAME",$slname);
         define("SLID",$slid);
 
@@ -267,6 +268,21 @@ class KizBaseModule{
 //        var_dump($_SESSION['fanweaccount_info']);die;
         $GLOBALS['tmpl']->assign("biz_gen_qrcode",gen_qrcode(SITE_DOMAIN.url("biz","downapp"),app_conf("QRCODE_SIZE")));
 
+
+        $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
+        $GLOBALS['tmpl']->assign("slidlist", $slidlist);
+
+        $gys_ids=$GLOBALS['db']->getOne("select a.gys_ids from fanwe_deal_city a left join fanwe_supplier_location b on a.id=b.city_id where b.id=".$slid);
+        $sql_gys="select id,name from fanwe_supplier_location where id in(".$gys_ids.")";
+
+        $gyslist=$GLOBALS['db']->getAll($sql_gys);
+        $GLOBALS['tmpl']->assign("gyslist", $gyslist);
+
+        $location_gys=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_gys where slid=".$slid);
+        $GLOBALS['tmpl']->assign("location_gys", $location_gys);
+
+        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
+        $GLOBALS['tmpl']->assign("location_bumen", $location_bumen);
     }
 
     /**
@@ -413,7 +429,7 @@ class KizBaseModule{
     }
 
     /**
-     * 获取部门列表
+     * 获取供应商列表
      */
     function get_gys_list($slid){
         $location=$GLOBALS['db']->getAll("select * from fanwe_cangku_gys where slid=".$slid);

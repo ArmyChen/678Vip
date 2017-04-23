@@ -228,12 +228,11 @@ class supplierModule extends KizBaseModule
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
-//        $sss=$GLOBALS['db']->getAll("select * from fanwe_cangku_menu limit 1");
-//        var_dump($sss);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("rukuval",1); //入库
         $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
         $GLOBALS['tmpl']->assign("page_title", "采购入库单");
