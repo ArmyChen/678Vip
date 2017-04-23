@@ -15,7 +15,7 @@
             <!--<a class="btn-link ml10 hidden" code="scm:button:inventory:si:add"-->
             <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>-->
 
-            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=inventory&act=go_down_index');">返回</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=supplier&act=go_down_index');">返回</a>
         </div>
     </div>
 </div>
@@ -56,22 +56,20 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="senderId">入库原因<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="gys">供应商<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
-                                    <select id="senderId" name="senderId" class="{required:true}">
+                                    <select id="gys" name="gys" class="{required:true}">
 
 
 
 
                                         <!--<option value="">请选择入库原因</option>-->
-                                        {foreach from=$ywsort item=ywitem key=ywkey}
+                                        {foreach from=$gys item=ywitem key=ywkey}
 
-                                        {if $ywkey lt '5'}
 
-                                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+                                        <option value="{ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
 
-                                        {/if}
 
                                         {/foreach}
 
@@ -83,9 +81,35 @@
                             </dd>
                         </dl>
                     </div>
-                </div>
 
-                <div class="clear">
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="gonghuoren">部门<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <select id="gonghuoren" name="senderId" class="{required:true}">
+
+
+
+
+                                        <!--<option value="">请选择入库原因</option>-->
+                                        {foreach from=$gonghuoren item=ywitem key=ywkey}
+
+
+                                        <option value="{ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
+
+
+                                        {/foreach}
+
+
+
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
                     <div class="pull-left">
                         <dl class="panel-item">
                             <dt><label for="warehouseId">入库仓库<strong class="red vam"> *</strong></label></dt>
@@ -115,18 +139,28 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="remarks">备注信息<strong class="white vam"> *</strong></label></dt>
+                            <dt><label for="orderDay">单据日期（补单）<strong class="white vam"> *</strong></label></dt>
                             <dd class="positionRelative">
-                                <div class="pull-left w240 search-box">
-                                <TEXTAREA id="remarks" name="remarks" class="w240" style="height: 65px;"
-                                          placeholder="备注说明（可不填）" data-character="true"
-                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
-                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                <!--提示红点样式，默认是修改样式 -->
+
+                                <div class="pull-left w240">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="background-color: white">
+                                            <input id="hasOrderDay" type="checkbox" >
+                                        </span>
+                                        <div class="search-box">
+                                            <input type="text" name="billDate" id="orderDay" class="{required:true} form-control datepicker-start disabled"
+                                                   data-date-startdate="2017-01-23" data-date-enddate="2017-04-23" value="" placeholder="请选择单据日期" readonly disabled>
+                                            <button type="button" class="close" name="close" aria-hidden="true" disabled>×</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="wrong"></div>
                                 </div>
-                                <div class="wrong"></div>
                             </dd>
                         </dl>
                     </div>
+
                 </div>
             </div>
         </form>

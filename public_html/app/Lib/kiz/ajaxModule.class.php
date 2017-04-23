@@ -271,7 +271,26 @@ class ajaxModule extends KizBaseModule{
         $bumen = $_REQUEST['bumen'];
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
-        $datain['ctime']= time()+ 60*60*8;
+
+        //采购入库单信息
+        $time = $_REQUEST['time'];
+        $gonghuoren = $_REQUEST['gonghuoren'];
+        $gys = $_REQUEST['gys'];
+        if($gonghuoren){
+            $bumen = $gonghuoren;
+        }
+
+        if($time){
+            $datain['ctime'] =  strtotime($time);
+        }else{
+            $datain['ctime']= time()+ 60*60*8;
+        }
+
+        if($gys){
+            $datain['gys'] =  $gys;
+        }
+
+
         $datain['dd_detail']=$dd_detail;
         $datain['slid']=$slid;
         $datain['type'] = $_REQUEST['type'];

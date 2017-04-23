@@ -406,8 +406,18 @@ class KizBaseModule{
      * 获取部门列表
      */
     function get_bumen_list($slid){
-        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
-        return $location_bumen;
+        $location=$GLOBALS['db']->getAll("select * from fanwe_cangku_bumen where slid=".$slid);
+        return $location;
+
+
+    }
+
+    /**
+     * 获取部门列表
+     */
+    function get_gys_list($slid){
+        $location=$GLOBALS['db']->getAll("select * from fanwe_cangku_gys where slid=".$slid);
+        return $location;
 
 
     }

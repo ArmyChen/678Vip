@@ -8,9 +8,38 @@ class supplierModule extends KizBaseModule
     function __construct()
     {
         parent::__construct();
-        global_run();
-        parent::init();
 
+        global_run();
+        $ywsort=array(
+            "-5"=>"生产退料",
+            "-4"=>"退还入库",
+            "-3"=>"预配退货",
+//            "-2"=>"其他入库",
+//            "-1"=>"盘盈",
+            "1"=>"盘盈",
+            "2"=>"无订单入库",
+            "3"=>"要货调入",
+            "4"=>"初始库存",
+            "6"=>"盘亏",
+            "7"=>"无订单出库",
+            "8"=>"要货调出",
+            "9"=>"退货",
+            "10"=>"生产领料",
+            "11"=>"借用出库",
+            "12"=>"其他出库",
+            "13"=>"配送领料",
+            "14"=>"品牌销售出库",
+
+        );
+        $this->ywsort=$ywsort;
+        $this->gonghuoren=array(
+            "1"=>"临时客户",
+            "2"=>"临时运输商",
+            "3"=>"临时供应商",
+            "4"=>"领料出库"
+        );
+
+        parent::init();
 //        $this->check_auth();
     }
     #供应商列表
@@ -49,9 +78,9 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/supplier/aggregateAdd.html");
     }
 
-    #商品采购入库单
+    #商品采购采购入库单
     /**
-     * 仓库入库查询
+     * 仓库采购入库查询
      */
     public function go_down_index()	{
         init_app_page();
@@ -88,12 +117,12 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("end_time", $end_time);
         $GLOBALS['tmpl']->assign("slid", $location_id);
         $GLOBALS['tmpl']->assign("danjuhao", $_REQUEST['danjuhao']);
-        $GLOBALS['tmpl']->assign("page_title", "入库单");
+        $GLOBALS['tmpl']->assign("page_title", "采购入库单");
         $GLOBALS['tmpl']->display("pages/supplier/goDown.html");
 
     }
     /**
-     * 仓库入库查询
+     * 仓库采购入库查询
      */
     public function go_down_index_view()	{
         init_app_page();
@@ -101,7 +130,7 @@ class supplierModule extends KizBaseModule
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
-        /*获取入库信息*/
+        /*获取采购入库信息*/
         $id = $_REQUEST['id'];
         if($id > 0){
             $sql = "select * from fanwe_cangku_log where id=".$id;
@@ -127,7 +156,7 @@ class supplierModule extends KizBaseModule
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
-            $GLOBALS['tmpl']->assign("page_title", "入库单");
+            $GLOBALS['tmpl']->assign("page_title", "采购入库单");
             $GLOBALS['tmpl']->display("pages/supplier/goDown.html");
         }
 
@@ -136,7 +165,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
-        $GLOBALS['tmpl']->assign("page_title", "查看入库单");
+        $GLOBALS['tmpl']->assign("page_title", "查看采购入库单");
         $GLOBALS['tmpl']->display("pages/supplier/goDownView.html");
 
     }
@@ -150,7 +179,7 @@ class supplierModule extends KizBaseModule
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
-        /*获取入库信息*/
+        /*获取采购入库信息*/
         $id = $_REQUEST['id'];
         if($id > 0){
             $sql = "select * from fanwe_cangku_log where id=".$id;
@@ -191,7 +220,7 @@ class supplierModule extends KizBaseModule
     }
 
     /**
-     * 仓库入库添加
+     * 仓库采购入库添加
      */
     public function go_down_add()	{
         init_app_page();
@@ -199,11 +228,15 @@ class supplierModule extends KizBaseModule
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+//        $sss=$GLOBALS['db']->getAll("select * from fanwe_cangku_menu limit 1");
+//        var_dump($sss);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
-        $GLOBALS['tmpl']->assign("page_title", "入库单");
+        $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
+        $GLOBALS['tmpl']->assign("page_title", "采购入库单");
         $GLOBALS['tmpl']->display("pages/supplier/goDownAdd.html");
 
     }
