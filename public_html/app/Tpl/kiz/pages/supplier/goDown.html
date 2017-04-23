@@ -1,0 +1,156 @@
+
+
+{include file="inc/header.html"}
+
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="orderType">{$page_title}</span></h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a href="/kiz.php?ctl=inventory&act=go_down_add" class="btn-link ml10" id="btn-create">创建</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryConditions" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="danjuhao" id="danjuhao" class="form-control" placeholder="请输入单据号"
+                           data-format="sn" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <!--<div class="search-box mt10">-->
+                    <!--<input type="text" name="sourceOrderNo" id="sourceOrderNo" class="form-control" placeholder="请输入来源单据号"-->
+                           <!--data-format="sn" maxlength="50">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 确认/保存日期 start -->
+            <div class="aside-column">
+                <h2>按时间范围查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="begin_time" id="begin_time" class="form-control datepicker-start" data-for-element="begin_time"
+                           placeholder="请选择开始日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+                <div class="search-box mt10">
+                    <input type="text" name="end_time" id="end_time" class="form-control datepicker-start" data-for-element="end_time"
+                           placeholder="请选择结束日期" readonly>
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 确认/保存日期 end -->
+
+            <!-- 入库原因 start -->
+            <div class="aside-column">
+                <h2>入库原因</h2>
+
+                <div>
+                    <select class="form-control" name="ywsortid" id="ywsortid">
+                        <option value="99" {if $ywsortid eq 99} selected="selected" {/if}>全部</option>
+                        {foreach from=$ywsort item=ywitem key=ywkey}
+
+                        {if $ywkey lt '5'}
+
+                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+
+                        {/if}
+
+                        {/foreach}
+
+                    </select>
+                </div>
+            </div>
+            <!-- 入库原因 end -->
+
+            <!-- 入库仓库 start -->
+            <div class="aside-column">
+                <h2>入库仓库</h2>
+
+                <div>
+                    <select class="form-control" name="warehouseId" id="warehouseId">
+                        <option value="">请选择入库仓库</option>
+                        {foreach from=$cangkulist item=item}
+
+                        <option value="{$item.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$item.name}</option>
+
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <!-- 入库仓库 end -->
+
+            <!-- 状态 start -->
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox" for="status-1" id="checkbox-1"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-1" value="1">已确认</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+            <!-- 状态 end -->
+            <!-- 更多查询 start -->
+            <!--<div class="aside-column panel-search" id="commercialCol" style="display:none;">-->
+
+                <!--<div class="search-box">-->
+                    <!--<input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="商品名称/编码"-->
+                           <!--data-format="skuName" maxlength="14">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="aside-column panel-search" id="updateCol" style="display:none;">
+                <div class="search-box">
+                    <input type="text" name="lihuo_user" id="lihuo_user" class="form-control" placeholder="制单人"
+                           data-format="name" maxlength="14">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 更多查询 end -->
+        </form>
+        <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
+        <a class="link undo-all" id="undo-all">全部撤销</a>
+        <a class="btn-blue btn-search" role="button"
+           function="$.doSearch" args="{dataGridId:grid}">查 询</a>
+    </div>
+    <!-- 左栏 end -->
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/asn-si.js?v=20170315_135229"></script>
+
+<script>
+    $(function() {
+        var opts = {
+            commandType : 0
+        };
+
+        asnSi._init(opts);
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

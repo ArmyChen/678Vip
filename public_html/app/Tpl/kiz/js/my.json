@@ -144,6 +144,28 @@
     "url": "&act=supplier_aggregate_index"
   },
   {
+    "code": "scm:purchase:asn:query#",
+    "id": 1272,
+    "levelId": "001001001",
+    "name": "采购入库单",
+    "parentId": 1257,
+    "platform": 7,
+    "sort": 30,
+    "type": 1,
+    "url": "&act=go_down_index"
+  },
+  {
+    "code": "scm:purchase:return:query#",
+    "id": 1273,
+    "levelId": "001001001",
+    "name": "采购退货单",
+    "parentId": 1257,
+    "platform": 7,
+    "sort": 40,
+    "type": 1,
+    "url": "&act=go_up_index"
+  },
+  {
     "code": "scm:scrap",
     "id": 1259,
     "levelId": "001001",
