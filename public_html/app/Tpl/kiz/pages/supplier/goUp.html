@@ -143,7 +143,7 @@
 <script>
 
     var urlRoot = ctxPath
-    var queryUrl = urlRoot + "&act=go_down_index_ajax&type=2&id={$slid}";
+    var queryUrl = urlRoot + "&act=go_down_index_ajax2&type=2&id={$slid}";
     var editUrl = urlRoot + "edit";
     var withDrawUrl = urlRoot + 'withdraw';
     var deleteUrl = urlRoot + "delete";
@@ -228,9 +228,11 @@
                 'id',
                 '单据号',
                 // '来源单据号',
-                '出库原因',
-                '出库仓库',
-                '出库金额',
+//                '出库原因',
+                '部门',
+                '供应商',
+                '退货仓库',
+                '退货金额',
                 '制单人',
                 '保存日期'
                 // '供货',
@@ -246,7 +248,9 @@
                 {name: 'id', index: 'id',  align: "center", width: 50},
                 {name: 'danjuhao', index: 'danjuhao', align: "center", width: 120},
                 // {name: '', index: '', align: "center", width: 120},
-                {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
+//                {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
+                {name: 'gonghuo', index: 'gonghuo', width: 120, align: "center"},
+                {name: 'gys', index: 'gys', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},

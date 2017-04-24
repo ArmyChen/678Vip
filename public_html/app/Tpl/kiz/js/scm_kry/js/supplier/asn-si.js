@@ -12,7 +12,7 @@ var asnSi = {
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '&act=go_down_index_ajax&type=1',
+        queryUrl : '&act=go_down_index_ajax2&type=1',
         editUrl : '&act=go_down_index_view',
         deleteUrl :'&act=go_down_delete_ajax',
         viewUrl : '&act=go_down_index_view',
