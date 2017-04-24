@@ -398,9 +398,24 @@ class ajaxModule extends KizBaseModule{
                 if(!$cid){
                     $gonghuoren='linshi_3'; //临时供应商3
                 }
-
-                $gonghuoren = $gys;
-
+//                if($gys){
+//                    $data_gys=array(
+//                        "slid"=>$slid,
+//                        "mid"=>$mid,
+//                        "cid"=>$cid,
+//                        "mbarcode"=>$v['skuCode'],
+//                        "mname"=>$v['skuName'],
+//                        "stock"=>$order_num,
+//                        "gonghuoren"=>$gys,
+//                        "unit"=>$v['uom'],
+//                        "funit"=>$v['funit'],
+//                        "times"=>$v['times'],
+//                        "type"=>$v['type'],
+//                        "price"=>floatval($v['price']),
+//                        "ctime"=>to_date(NOW_TIME)
+//                    );
+//                    $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
+//                }
                 $data_gys=array(
                     "slid"=>$slid,
                     "mid"=>$mid,

@@ -133,7 +133,7 @@
                                         {foreach from=$gonghuoren item=ywitem key=ywkey}
 
 
-                                        <option value="{$ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
+                                        <option value="bumen_{$ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
 
 
                                         {/foreach}
