@@ -2,14 +2,14 @@ var supplierCate = {
     $gridObj: '',
     //default opts
     opts: {
-        urlRoot: ctxPath + '/scm/supplierCate',
-        queryUrl: '/query',
-        addUrl: '/add',
-        editUrl: '/edit',
+        urlRoot: ctxPath,
+        queryUrl: '&act=supplier_cate_index_ajax',
+        addUrl: '&act=supplier_cate_add_ajax',
+        editUrl: '&act=supplier_cate_edit',
         viewUrl: '/view',
         enableUrl: '/enableSupplierCate',
         disableUrl: '/disableSupplierCate',
-        deleteUrl: '/delete',
+        deleteUrl: '&act=supplier_cate_del_ajax',
         //查询条件表单id
         queryFormId: 'queryConditions',
         //列表id
@@ -61,40 +61,23 @@ var supplierCate = {
         };
 
         $.showEditor = function (rowData) {
-        	var flag = renderEnum.normal;
-         	if(rowData.isDisable) flag = renderEnum.disabled;
-         	return flag;
-        };
-
-        $.showView = function (rowData) {
-           return renderEnum.normal;
-        };
-
-        $.showEnable = function (rowData) {
-            if (rowData.isDefault) {
-                return renderEnum.disabled;
-            }
-            if (rowData.isDisable) {
-                return renderEnum.hidden;
-            }
             return renderEnum.normal;
         };
 
-        $.showDisable = function (rowData) {
-            if (rowData.isDisable) {
-                return renderEnum.normal;
-            }
+        $.showView = function (rowData) {
             return renderEnum.hidden;
         };
 
-        $.showDelete = function (rowData) {
-            if (rowData.isDefault) {
-                return renderEnum.disabled;
-            }
-            if (rowData.isDelete == 0) {
-                return renderEnum.normal;
-            }
+        $.showEnable = function (rowData) {
             return renderEnum.hidden;
+        };
+
+        $.showDisable = function (rowData) {
+            return renderEnum.normal;
+        };
+
+        $.showDelete = function (rowData) {
+            return renderEnum.normal;
         };
 
         $gridObj.dataGrid({
@@ -133,7 +116,7 @@ var supplierCate = {
                     render: $.showView
                 },
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: supplierPath + _this.opts.editUrl,
                     code: "scm:button:purchase:supplierType:edit",
                     render: $.showEditor
                 },

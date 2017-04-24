@@ -1798,4 +1798,112 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($return);exit;
     }
+
+    //供应商类别列表
+    public function supplier_cate_index_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];;
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        $isDisable = intval($_REQUEST['isDisable']);
+        $supplierCateCode = trim($_REQUEST['supplierCateCode']);
+        $supplierCateName = trim($_REQUEST['supplierCateName']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $where = ' 1=1 and slid= '.$slid;
+        if($isDisable > -1){
+            $where .= ' and state='.$isDisable;
+        }
+        if($supplierCateCode){
+            $where .= " and supplierCode like '%".$supplierCateCode."%'";
+        }
+        if($supplierCateName){
+            $where .= " and supplierName like '%".$supplierCateName."%'";
+        }
+
+        $sql="select * from fanwe_gys_category where $where order by createTime desc limit ".$limit;
+//        $sql="select * from fanwe_gys_category";
+
+        $sqlc="select count(0) from fanwe_gys_category where slid=$slid ";
+
+        $total = $GLOBALS['db']->getOne($sqlc);
+        $list=$GLOBALS['db']->getAll($sql);
+//        var_dump($sql);die;
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            $arr[$key]['id'] =$item['id'];
+            $arr[$key]['slid'] =$item['slid'];
+            $arr[$key]['supplierCateCode'] =$item['supplierCode'];
+            $arr[$key]['supplierCateName'] =$item['supplierName'];
+            $arr[$key]['createTime'] =$item['createTime'];
+            $arr[$key]['updateTime'] =$item['updateTime'];
+            $arr[$key]['isDisable'] =$item['state'];
+        }
+
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $return['page'] = $_REQUEST['page'];
+        $return['records'] = $total;
+        $return['total'] = ceil($total/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $arr;
+        echo json_encode($return);exit;
+    }
+
+    //新增供应商类别
+    public function supplier_cate_add_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+
+        $id = intval($_REQUEST['id']);
+        if($id>0){
+            $_data['id'] = $id;
+            $_data['slid'] = $account_info['slid'];
+            $_data['supplierCode']= $_REQUEST['supplierCateCode']?$_REQUEST['supplierCateCode']:time();
+            $_data['supplierName'] = $_REQUEST['supplierCateName'];
+            $_data['remark'] = $_REQUEST['memo'];
+            $_data['updateTime'] = time();
+            $res = $GLOBALS['db']->autoExecute("fanwe_gys_category", $_data ,"UPDATE","id=".$id);
+        }else{
+            $_data['slid'] = $account_info['slid'];
+            $_data['supplierCode']= $_REQUEST['supplierCateCode']?$_REQUEST['supplierCateCode']:time();
+            $_data['supplierName'] = $_REQUEST['supplierCateName'];
+            $_data['remark'] = $_REQUEST['memo'];
+            $_data['createTime'] = time();
+            $_data['state'] = 0;
+            $res = $GLOBALS['db']->autoExecute("fanwe_gys_category", $_data ,"INSERT");
+        }
+
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+            $return['data']['url'] = url("kiz","supplier#supplier_cate_index");
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+    //新增供应商类别删除
+    public function supplier_cate_del_ajax(){
+        init_app_page();
+        $id = $_REQUEST['id'];
+        $res = $GLOBALS['db']->query('delete from fanwe_gys_category where id='.$id);
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+            $return['data']['url'] = url("kiz","supplier#supplier_cate_index");
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 }
