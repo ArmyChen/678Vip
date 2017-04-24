@@ -1806,14 +1806,14 @@ class ajaxModule extends KizBaseModule{
         $slid = $account_info['slid'];;
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
-        $isDisable = intval($_REQUEST['isDisable']);
+        $isDisable = trim($_REQUEST['isDisable']);
         $supplierCateCode = trim($_REQUEST['supplierCateCode']);
         $supplierCateName = trim($_REQUEST['supplierCateName']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 
         $where = ' 1=1 and slid= '.$slid;
-        if($isDisable > -1){
+        if($isDisable != ''){
             $where .= ' and state='.$isDisable;
         }
         if($supplierCateCode){
@@ -1837,8 +1837,8 @@ class ajaxModule extends KizBaseModule{
             $arr[$key]['slid'] =$item['slid'];
             $arr[$key]['supplierCateCode'] =$item['supplierCode'];
             $arr[$key]['supplierCateName'] =$item['supplierName'];
-            $arr[$key]['createTime'] =$item['createTime'];
-            $arr[$key]['updateTime'] =$item['updateTime'];
+            $arr[$key]['createTime'] = date('Y-m-d H:i:s',$item['createTime']);
+            $arr[$key]['updateTime'] = date('Y-m-d H:i:s',$item['updateTime']);
             $arr[$key]['isDisable'] =$item['state'];
         }
 
@@ -1895,6 +1895,30 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $id = $_REQUEST['id'];
         $res = $GLOBALS['db']->query('delete from fanwe_gys_category where id='.$id);
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+            $return['data']['url'] = url("kiz","supplier#supplier_cate_index");
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+    //供应商类别状态修改
+    public function supplier_cate_state_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        if($id>0){
+            $_data['id'] = $id;
+            $_data['slid'] = $account_info['slid'];
+            $_data['state']= $_REQUEST['isDisable'];
+            $_data['updateTime'] = time();
+            $res = $GLOBALS['db']->autoExecute("fanwe_gys_category", $_data ,"UPDATE","id=".$id);
+        }
 
         if($res){
             $return['success'] = true;

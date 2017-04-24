@@ -7,8 +7,8 @@ var supplierCate = {
         addUrl: '&act=supplier_cate_add_ajax',
         editUrl: '&act=supplier_cate_edit',
         viewUrl: '/view',
-        enableUrl: '/enableSupplierCate',
-        disableUrl: '/disableSupplierCate',
+        enableUrl: '&act=supplier_cate_state_ajax&isDisable=0',
+        disableUrl: '&act=supplier_cate_state_ajax&isDisable=1',
         deleteUrl: '&act=supplier_cate_del_ajax',
         //查询条件表单id
         queryFormId: 'queryConditions',
@@ -69,7 +69,7 @@ var supplierCate = {
         };
 
         $.showEnable = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showDisable = function (rowData) {
