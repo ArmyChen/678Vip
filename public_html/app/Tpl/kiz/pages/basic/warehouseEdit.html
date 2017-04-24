@@ -97,7 +97,7 @@
                         <td>
                             <div class="search-box pull-left">
                                 <input id="skuName" data-format="skuName" name="skuName" type="text" maxlength="64"
-                                       value="{$dc_menu.standerStr}" class="baseInfo_dish" placeholder="第一语言"><br>
+                                       value="{$dc_menu.standerStr}" class="baseInfo_dish" placeholder="请输入商品名称" onchange="generateCode(this)"><br>
                                 <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
@@ -130,7 +130,7 @@
                         <td>
                             <div class="search-box pull-left">
                                 <input id="skuAliasName" data-format="name" name="aliasName" type="text" maxlength="64"
-                                       value="" class="baseInfo_dish" placeholder="第二语言" disabled>
+                                       class="baseInfo_dish" placeholder="请输入商品简码" value="{$dc_menu.pinyin}">
                                 <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                                 <br><span style="color:#f87a7a;font-size: 14px;"></span>
                             </div>
@@ -1159,7 +1159,12 @@
 
     }
     loadChosen();
-
+    function generateCode(param){
+        var name = $(param).val();
+        $.get(ctxPath+"&act=get_hanzi",{name:name},function (e) {
+            $('input[name=aliasName]').val(e);
+        })
+    }
     //根据库存类型调整价格
     $("#goodsWm").on("change", function () {
         var type = $(this).val(),

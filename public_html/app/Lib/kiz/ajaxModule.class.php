@@ -1,4 +1,5 @@
 <?php
+require_once 'core/pinyin.php';
 // +----------------------------------------------------------------------
 // | Fanwe 方维o2o商业系统
 // +----------------------------------------------------------------------
@@ -52,6 +53,16 @@ class ajaxModule extends KizBaseModule{
 
         );
         $this->kcnx=$kcnx;
+    }
+
+    //common function
+    public function get_hanzi()
+    {
+        $pinyin = new pinyin();
+        if($_REQUEST['name']){
+            $result = $pinyin->pinyin1($_REQUEST['name']);
+            echo $result;
+        }
     }
 
     /**
@@ -1341,6 +1352,7 @@ class ajaxModule extends KizBaseModule{
                 "sellPrice2"=>$skuPrice->costPrice,//成本价
                 "barcode"=>$skuList->barCode,
                 "print"=>$skuList->wmType,
+                "pinyin"=>$skuList->skuAliasName,//拼音码
             );
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"UPDATE","id=".$id);
             if($res){
@@ -1358,6 +1370,7 @@ class ajaxModule extends KizBaseModule{
             "supplier_id"=>$supplier_id,
             "barcode"=>$skuList->barCode,
             "name"=>$skuList->skuName,
+            "pinyin"=>$skuList->skuAliasName,
             "cate_id"=>$skuList->skuTypeId,
             "unit"=>$unit,
             "funit"=>$funit,

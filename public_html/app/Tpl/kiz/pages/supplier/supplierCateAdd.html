@@ -1,0 +1,192 @@
+
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+
+        <h1>新增供应商类别</h1>
+
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btn-save">保存</a>
+
+            <a class="btn-link ml10" id="btnSave-bak">保存并复制</a>
+
+            <a class="btn-link ml10" href="#" id="btncancle">取消</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>供应商类别信息</em></h3>
+        </div>
+        <form method="post" id="supplierCateForm" autocomplete="off">
+            <input id="id" name="id" type="hidden" value="">
+            <input id="supplierCateCodeHid" type="hidden" value=""/>
+            <input id="supplierCateNameHid" type="hidden" value=""/>
+            <input id="version" name="version" type="hidden" value="0"/>
+
+            <div class="panel-body" style="margin-left: -25px;height: 275px;">
+                <dl class="panel-item">
+                    <dt>
+                        <label for="supplierCateCodeLabel" id="supplierCateCodeLabel">类别编码<strong class="red vam"> &ensp;</strong></label>
+                    </dt>
+
+                    <dd class="positionRelative">
+                        <div class="search-box w402 pull-left" style="margin-top: 6px;">
+                            <input type="text" class="form-control w402" id="supplierCateCode"
+                                   name="supplierCateCode" value=""
+                                   placeholder="若不填写，则系统自动生成" data-format="code" select="auto" maxlength="8">
+                            <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                        <div class="pull-left code-question" style="margin-left: 10px;margin-top: 6px;">
+                            <span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>SPC+流水号</span>"></span>
+                        </div>
+                    </dd>
+
+
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="supplierCateName" id="supplierCateNameLabel">类别名称<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402 pull-left" style="margin-top: 6px;">
+                            <input type="text" class="form-control w402 required" id="supplierCateName"
+                                   name="supplierCateName" value=""
+                                   placeholder="请输入类别名称" maxlength="48" select="auto"
+                                   data-format="name">
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="note">备注信息<strong class="white vam"> *</strong></label>
+                    </dt>
+                    <dd>
+                        <TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"
+                                  maxlength="96" data-character="true"></TEXTAREA>
+                    </dd>
+                </dl>
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170406_201331" ></script>
+<script type="text/javascript">
+    $("#btncancle").on("click", function () {
+//        Message.confirm({title: '取消提示', describe: '是否放弃当前操作'}, function () {
+//            //确定
+//            window.location = getContextPath() + "/scm/supplierCate/index";
+//        }, function () {
+//            //取消
+//            Message.display();
+//        });
+
+        layer.confirm("是否放弃当前操作？", {icon: 3, title:'提示', offset: '30%'}, function(index){
+            window.location = getContextPath() + "/scm/supplierCate/index";
+
+            layer.close(index);
+        });
+    });
+
+
+    $('#supplierCateName').focus();
+
+
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result;
+    }
+
+    $(function () {
+        //保存
+        $("#btn-save,#btnSave-bak").on("click", function () {
+            var isBtnBak = $(this).attr("id")=="btnSave-bak";
+
+            $("#supplierCateForm").submit();
+            //检查是否验证通过
+            var flag = $("#supplierCateForm").valid();
+            if (flag) {
+                var params = $("#supplierCateForm").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "scm/supplierCate/saveScmSupplierCate",
+                    data: params,
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        $("#btn-save").bind("click");
+                        if (data.message.indexOf("success") != -1) {
+                            var showMsg = $("#supplierCateCode").val().length==0;
+                            if(isBtnBak){
+                                if(showMsg){
+                                    $.layerMsg("操作成功，"+data.supplierCate.supplierCateName+"编码是:<span style='color:red;'>"+data.supplierCate.supplierCateCode+"</span>", true,{shade: 0.3});
+                                }else{
+                                    $.layerMsg("操作成功！", true,{shade: 0.3});
+                                }
+                            }else{
+                                //定向到详情页面
+                                if(showMsg){
+                                    $.layerMsg("操作成功，"+data.supplierCate.supplierCateName+"编码是:<span style='color:red;'>"+data.supplierCate.supplierCateCode+"</span>", true, {
+                                        end:function(){
+                                            window.location.href = getContextPath() + "/scm/supplierCate/index";
+                                        },shade: 0.3});
+                                }else{
+                                    $.layerMsg("操作成功！", true, {
+                                        end:function(){
+                                            window.location.href = getContextPath() + "/scm/supplierCate/index";
+                                        },shade: 0.3});
+                                }
+                            }
+                        } else {
+                            if (data.message.indexOf("编码") != -1) {
+                                var lab = '<label for="supplierCateCode" generated="true" class="error">'+data.message+'</label>';
+                                $("#supplierCateCode").parent().find(".wrong").html(lab);
+                            } else if (data.message.indexOf("名称") != -1) {
+                                var lab = '<label for="supplierCateName" generated="true" class="error">'+data.message+'</label>';
+                                $("#supplierCateName").parent().find(".wrong").html(lab);
+                            } else if (data.message.indexOf("过期") != -1) {
+                                $.layerMsg(data.message, false, {
+                                    end:function(){
+                                        //window.location.href = getContextPath() + "/scm/supplierCate/index";
+                                        window.location.reload(true);//fix bugId 12547
+                                    }});
+                            }
+
+                        }
+                    },
+                    error: function (XMLHttpRequest,
+                                     textStatus, errorThrown) {
+                        $("#btn-save").bind("click");
+                        $.layerMsg("保存失败，请刷新页面或重新登录！", false);
+                    }
+                });
+            }
+        });
+        $("#supplierCateForm").validate(
+            {
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parents(".positionRelative")
+                        .find(".wrong"));
+                },
+                //只验证不提交 需要提交时注销这段代码
+                debug: true
+            });
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

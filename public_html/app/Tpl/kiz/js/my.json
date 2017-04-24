@@ -123,15 +123,26 @@
   },
   {
     "code": "scm:purchase:supplier:query#",
-    "id": 1271,
+    "id": 1270,
     "levelId": "001001001",
-    "name": "供应商设定",
+    "name": "供应商类别设定",
     "parentId": 1257,
     "platform": 7,
     "sort": 20,
     "type": 1,
-    "url": "&act=supplier_index"
+    "url": "&act=supplier_cate_index"
   },
+  {
+  "code": "scm:purchase:supplier:query#",
+  "id": 1271,
+  "levelId": "001001001",
+  "name": "供应商设定",
+  "parentId": 1257,
+  "platform": 7,
+  "sort": 20,
+  "type": 1,
+  "url": "&act=supplier_index"
+},
   {
     "code": "scm:delivery:aggregate:query#",
     "id": 1610,
