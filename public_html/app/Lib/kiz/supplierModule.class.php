@@ -171,6 +171,14 @@ class supplierModule extends KizBaseModule
 
             }
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
+
+//            var_dump($GLOBALS['db']->getRow('select * from fanwe_cangku_log'));die;
+
+            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);//供货人
+            $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
+            $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
+            $result['cangku'] = parent::get_cangku_list($result['cid']);
+
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
             $GLOBALS['tmpl']->assign("page_title", "采购入库单");
@@ -219,6 +227,10 @@ class supplierModule extends KizBaseModule
                 $datailinfo[$k]['supplierQty'] = $v['num'] + $dc_menu2['stock'];
 
             }
+            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);//供货人
+            $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
+            $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
+
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
@@ -250,6 +262,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("rukuval",1); //入库
+        $GLOBALS['tmpl']->assign('bumen',parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
         $GLOBALS['tmpl']->assign("page_title", "采购入库单");
@@ -292,6 +305,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("type", $type);
+        $GLOBALS['tmpl']->assign("rukuval",2); //入库
         $GLOBALS['tmpl']->assign("begin_time", $begin_time);
         $GLOBALS['tmpl']->assign("end_time", $end_time);
         $GLOBALS['tmpl']->assign("slid", $location_id);
@@ -314,6 +328,8 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign('bumen',parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("page_title", "出库单");
         $GLOBALS['tmpl']->display("pages/supplier/goUpAdd.html");

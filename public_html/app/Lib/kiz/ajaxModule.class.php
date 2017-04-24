@@ -79,6 +79,7 @@ class ajaxModule extends KizBaseModule{
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $warehouseId = $_REQUEST['warehouseId']?intval($_REQUEST['warehouseId']):'99';
 
         if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
             $begin_time = strim($_REQUEST['begin_time']);
@@ -101,6 +102,9 @@ class ajaxModule extends KizBaseModule{
         }
         if ($type !=99 ){
             $sqlstr .=" and a.type = ".$type." ";
+        }
+        if ($warehouseId !=99 ){
+            $sqlstr .=" and a.cid = ".$warehouseId." ";
         }
         if ($ywsortid !=99 ){
             $sqlstr .=" and a.ywsort = ".$ywsortid." ";
@@ -137,7 +141,7 @@ class ajaxModule extends KizBaseModule{
             }
 
             $v['ywsort']=$this->ywsort[$v['ywsort']];
-            $v['gonghuo']=$this->get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
+            $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $list[$k]=$v;
         }
         $return['dataList'] = $list;
@@ -287,9 +291,7 @@ class ajaxModule extends KizBaseModule{
         $time = $_REQUEST['time'];
         $gonghuoren = $_REQUEST['gonghuoren'];
         $gys = $_REQUEST['gys'];
-        if($gonghuoren){
-            $bumen = $gonghuoren;
-        }
+
 
         if($time){
             $datain['ctime'] =  strtotime($time);
@@ -307,7 +309,9 @@ class ajaxModule extends KizBaseModule{
         if($bumen){
             $datain['gonghuoren'] = $bumen;
         }
-
+        if($gys){
+            $datain['gonghuoren'] = $gys;
+        }
 
         //更新仓库
         $detail=$_REQUEST['details'];
@@ -445,7 +449,14 @@ class ajaxModule extends KizBaseModule{
         }else{
             $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
         }
-
+        //采购入库单url封装
+        if($gys){
+            if ($_REQUEST['type']==1){ //入库
+                $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
+            }else{
+                $return['data']['url'] = url("kiz","supplier#go_up_index&id=$slid");
+            }
+        }
 
         $datain['zmoney'] = $amount;
         if($res){
@@ -736,54 +747,6 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
-    function get_gonghuoren_name($supplier_id,$slid,$gonghuoren){
-
-        $linshi=array(
-            "1"=>"临时客户",
-            "2"=>"临时运输商",
-            "3"=>"临时供应商"
-        );
-
-        $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
-        $slid_names = array();
-        $slid_names = array_reduce($slidlist, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
-
-        $gys_ids=$GLOBALS['db']->getOne("select a.gys_ids from fanwe_deal_city a left join fanwe_supplier_location b on a.id=b.city_id where b.id=".$slid);
-        $sql_gys="select id,name from fanwe_supplier_location where id in(".$gys_ids.")";
-        $gyslist=$GLOBALS['db']->getAll($sql_gys);
-
-
-        $city_names = array();
-        $city_names = array_reduce($gyslist, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
-
-        $location_gys=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_gys where slid=".$slid);
-        $local_names = array();
-        $local_names = array_reduce($location_gys, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
-
-        $location_bumen=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_bumen where slid=".$slid);
-        $local_bumen = array();
-        $local_bumen = array_reduce($location_bumen, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
-
-        $gonghuoren_arr=explode('_',$gonghuoren);
-        $gonghuoren_type=$gonghuoren_arr[0];
-        $gonghuoren_id=$gonghuoren_arr[1];
-        if ($gonghuoren_type=='linshi'){
-            $gys_name=$linshi[$gonghuoren_id];
-        }elseif($gonghuoren_type=='slid'){
-            $gys_name=$slid_names[$gonghuoren_id];
-        }elseif($gonghuoren_type=='citygys'){
-            $gys_name=$city_names[$gonghuoren_id];
-        }elseif($gonghuoren_type=='localgys'){
-            $gys_name=$local_names[$gonghuoren_id];
-        }elseif($gonghuoren_type=='bumen'){
-            $gys_name=$local_bumen[$gonghuoren_id];
-        }elseif($gonghuoren_type=='other'){
-            $gys_name=$GLOBALS['db']->getOne("select name from fanwe_supplier_location where id=".$gonghuoren_id);
-        }elseif($gonghuoren_type=='user'){
-            $gys_name='存货用户：'.$GLOBALS['db']->getOne("select user_name from fanwe_user where id=".$gonghuoren_id);
-        }
-        return $gys_name;
-    }
 
     /**
      * 操作仓库

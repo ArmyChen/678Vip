@@ -43,8 +43,8 @@
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="asnNoView"
                                            name="asnNoView" value=""
-                                           placeholder="请输入单据号" data-type="word" maxlength="14"
-                                           />
+                                           placeholder="请输入单据号" data-type="word" maxlength="14" required
+                                    />
 
                                 </div>
                                 <div class="wrong"></div>
@@ -56,22 +56,85 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="senderId">出库原因<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="gys">供应商<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
-                                    <select id="senderId" name="senderId" class="{required:true}">
+                                    <select name="gys" id="gys" class="search_box select" style="height:33px; padding:4px 5px 5px; border:1px solid #e9e9e9">
+                                        {if $rukuval eq 2}
+                                        <optgroup label="店内部门">
+
+                                            {foreach from=$location_bumen item=item}
+
+                                            <option value="bumen_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                            {/foreach}
+                                            {/if}
+
+                                            <optgroup label="临时专用">
+                                                <option value="linshi_1" data-id='临时客户' >临时客户</option>
+                                                <option value="linshi_2" data-id='临时运输商'>临时运输商</option>
+                                                <option value="linshi_3" data-id='临时供应商'>临时供应商</option>
+
+                                                {if $rukuval eq 2}
+
+                                                <option value="linshi_4" data-id='领料出库'>领料出库</option>
+
+                                                {/if}
+
+                                                <optgroup label="门店之间">
+
+                                                    {foreach from=$slidlist item=item}
+
+                                                    <option value="slid_{$item.id}"
+                                                            {if $rukuval eq 1 and $item.id eq $seller_slid}selected="selected" {/if}
+                                                    {if $rukuval eq 2 and $item.id eq $buyer_slid}selected="selected" {/if}
+                                                    data-id='{$item.name}'  >
+
+                                                    {$item.name}
+
+                                                    </option>
+
+                                                    {/foreach}
+
+                                                    <optgroup label="城市供应商">
+
+                                                        {foreach from=$gyslist item=item}
+
+                                                        <option value="citygys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                                        {/foreach}
+
+                                                        <optgroup label="门店专属供应商">
+
+                                                            {foreach from=$location_gys item=item}
+
+                                                            <option value="localgys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                                            {/foreach}
+
+                                    </select>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="gonghuoren">部门<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240">
+                                    <select id="gonghuoren" name="gonghuoren" class="{required:true}">
 
 
 
 
-                                        <!--<option value="">请选择出库原因</option>-->
-                                        {foreach from=$ywsort item=ywitem key=ywkey}
+                                        <!--<option value="">请选择入库原因</option>-->
+                                        {foreach from=$gonghuoren item=ywitem key=ywkey}
 
-                                        {if $ywkey gt '5'}
 
-                                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+                                        <option value="{$ywitem.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem.name}</option>
 
-                                        {/if}
 
                                         {/foreach}
 
@@ -84,29 +147,9 @@
                         </dl>
                     </div>
 
-                    <div class="pull-left" id="bumenDiv" style="display: none;">
-                        <dl class="panel-item">
-                            <dt><label for="senderId">领料部门<strong class="red vam"> *</strong></label></dt>
-                            <dd class="positionRelative">
-                                <div class="pull-left w240">
-                                    <select id="bumen" name="bumen">
-
-                                        <option value="">请选择领料部门</option>
-                                        {foreach from=$bumen item=ywitem key=ywkey}
-                                        <option value="bumen_{$ywitem.id}">{$ywitem.name}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="wrong"></div>
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-
-                <div class="clear">
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="warehouseId">出库仓库<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="warehouseId">退货仓库<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <select id="warehouseId" name="warehouseId" class="{required:true}">
@@ -114,7 +157,7 @@
 
 
 
-                                        <!--<option value="">请选择出库仓库</option>-->
+                                        <!--<option value="">请选择入库仓库</option>-->
 
                                         {foreach from=$cangkulist item=item}
 
@@ -133,18 +176,28 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="remarks">备注信息<strong class="white vam"> *</strong></label></dt>
+                            <dt><label for="orderDay">单据日期（补单）<strong class="white vam"> *</strong></label></dt>
                             <dd class="positionRelative">
-                                <div class="pull-left w240 search-box">
-                                <TEXTAREA id="remarks" name="remarks" class="w240" style="height: 65px;"
-                                          placeholder="备注说明（可不填）" data-character="true"
-                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
-                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                <!--提示红点样式，默认是修改样式 -->
+
+                                <div class="pull-left w240">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="background-color: white">
+                                            <input id="hasOrderDay" type="checkbox" >
+                                        </span>
+                                        <div class="search-box">
+                                            <input type="text" name="billDate" id="orderDay" class="{required:true} form-control datepicker-start disabled"
+                                                   data-date-startdate="2017-01-23" data-date-enddate="2017-04-23" value="" placeholder="请选择单据日期" readonly disabled>
+                                            <button type="button" class="close" name="close" aria-hidden="true" disabled>×</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="wrong"></div>
                                 </div>
-                                <div class="wrong"></div>
                             </dd>
                         </dl>
                     </div>
+
                 </div>
             </div>
         </form>
@@ -224,7 +277,7 @@
 
 
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-unit-select.js?v=20170315_135229"></script>
-<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/asn-si.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/supplier/asn-si.js?v=20170315_135229"></script>
 
 
 
