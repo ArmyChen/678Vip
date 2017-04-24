@@ -144,6 +144,7 @@ class ajaxModule extends KizBaseModule{
 
             $v['ywsort']=$this->ywsort[$v['ywsort']];
             $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
+            $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
         }
         $return['dataList'] = $list;
@@ -285,13 +286,12 @@ class ajaxModule extends KizBaseModule{
 
         $dd_detail=serialize($datailinfo);
         $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
-        $bumen = $_REQUEST['bumen'];
+        $bumen = empty($_REQUEST['bumen'])?$_REQUEST['gonghuoren']:$_REQUEST['bumen'];
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
 
         //采购入库单信息
         $time = $_REQUEST['time'];
-        $gonghuoren = $_REQUEST['gonghuoren'];
         $gys = $_REQUEST['gys'];
 
 
@@ -310,9 +310,6 @@ class ajaxModule extends KizBaseModule{
         $datain['lihuo_user'] = $account_info['account_name'];
         if($bumen){
             $datain['gonghuoren'] = $bumen;
-        }
-        if($gys){
-            $datain['gonghuoren'] = $gys;
         }
 
         //更新仓库
@@ -394,10 +391,10 @@ class ajaxModule extends KizBaseModule{
                 }
 
                 //写入库商品明细
-                $gonghuoren=$GLOBALS['db']->getOne("select gid from fanwe_cangku_bangding_gys where slid=$slid and mid=$mid"); //取得绑定的供应商
-                if(!$cid){
-                    $gonghuoren='linshi_3'; //临时供应商3
-                }
+//                $gonghuoren=$GLOBALS['db']->getOne("select gid from fanwe_cangku_bangding_gys where slid=$slid and mid=$mid"); //取得绑定的供应商
+//                if(!$cid){
+//                    $gonghuoren='linshi_3'; //临时供应商3
+//                }
 //                if($gys){
 //                    $data_gys=array(
 //                        "slid"=>$slid,
@@ -423,7 +420,8 @@ class ajaxModule extends KizBaseModule{
                     "mbarcode"=>$v['skuCode'],
                     "mname"=>$v['skuName'],
                     "stock"=>$order_num,
-                    "gonghuoren"=>$gonghuoren,
+                    "gonghuoren"=>$bumen,
+                    "gys"=>$gys,
                     "unit"=>$v['uom'],
                     "funit"=>$v['funit'],
                     "times"=>$v['times'],

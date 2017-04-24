@@ -174,7 +174,7 @@ class supplierModule extends KizBaseModule
 
 //            var_dump($GLOBALS['db']->getRow('select * from fanwe_cangku_log'));die;
 
-            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);//供货人
+            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gys']);//供货人
             $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
             $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
             $result['cangku'] = parent::get_cangku_list($result['cid']);
@@ -227,7 +227,7 @@ class supplierModule extends KizBaseModule
                 $datailinfo[$k]['supplierQty'] = $v['num'] + $dc_menu2['stock'];
 
             }
-            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);//供货人
+            $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gys']);//供货人
             $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
             $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
 
