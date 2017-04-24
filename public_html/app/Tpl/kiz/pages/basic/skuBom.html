@@ -19,7 +19,7 @@
                 <h2>模糊查询</h2>
 
                 <div class="search-box">
-                    <input type="text" data-format="skuName" name="codeOrName" id="codeOrName" class="form-control" placeholder="请输入商品编码/名称"
+                    <input type="text" data-format="skuName" name="codeOrName" id="codeOrName" class="form-control" placeholder="请输入商品编码/名称/简码"
                            maxlength="14">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
@@ -27,7 +27,7 @@
             <!-- 模糊查询 end -->
 
             <!-- 模糊查询配方中的商品 start -->
-            <div class="aside-column panel-search">
+            <div class="aside-column panel-search" style="display: none">
                 <h2>模糊查询配方中的商品</h2>
 
                 <div class="search-box">
@@ -62,35 +62,35 @@
                 <ul class="panel-list-type">
                     <li>
                         <label class="checkbox checkbox-check" for="wmType-0" id="type-0"><span></span>
-                            <input type="checkbox" name="wmTypeArray" id="wmType-0" checked value="1">预制商品</label>
+                            <input type="checkbox" name="wmTypeArray1" id="wmType-0" checked value="1">预制商品</label>
                     </li>
                     <li>
                         <label class="checkbox checkbox-check" for="wmType-1" id="type-1"><span></span>
-                            <input type="checkbox" name="wmTypeArray" id="wmType-1" checked value="2">现制商品</label>
+                            <input type="checkbox" name="wmTypeArray2" id="wmType-1" checked value="2">现制商品</label>
                     </li>
                     <li>
                         <label class="checkbox checkbox-check" for="wmType-2" id="type-2"><span></span>
-                            <input type="checkbox" name="wmTypeArray" id="wmType-2" checked value="5">半成品</label>
+                            <input type="checkbox" name="wmTypeArray3" id="wmType-2" checked value="6">半成品</label>
                     </li>
                 </ul>
             </div>
             <!-- 库存类型 end -->
 
             <!-- 状态 start -->
-            <div class="aside-column">
-                <h2>状态</h2>
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
 
-                <ul class="panel-list-type">
-                    <li>
-                        <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
-                            <input type="checkbox" name="status" id="status-0" checked value="-1">未编辑</label>
-                    </li>
-                    <li>
-                        <label class="checkbox checkbox-check" for="status-1" id="checkbox-1"><span></span>
-                            <input type="checkbox" name="status" id="status-1" checked value="0">已保存</label>
-                    </li>
-                </ul>
-            </div>
+                <!--<ul class="panel-list-type">-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-0" checked value="0">未编辑</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-1" id="checkbox-1"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-1" checked value="1">已保存</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 状态 end -->
         </form>
         <a class="link undo-all" id="undo-all">全部撤销</a>
@@ -114,7 +114,6 @@
 <script>
     $(function() {
         var opts = {
-            urlRoot : "/scm_kry/scm/skubom",
             commandType : 0
         };
 

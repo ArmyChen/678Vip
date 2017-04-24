@@ -10,13 +10,13 @@ var skuBom = {
         id: -1,
         skuBomName: '',
         baseNum: 1,
-        urlRoot : '/scm/template/delivery',
+        urlRoot : ctxPath,
         templateId : -1,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         cachedQueryConditions : '',
         listGridId : 'grid',
-        queryUrl : '/query',
+        queryUrl : '&act=ajax_skuBom_index',
         editUrl : '/edit',
         deleteUrl : '/delete',
         viewUrl : '/view',
@@ -114,7 +114,7 @@ var skuBom = {
         };
 
         $.showView = function (rowData) {
-        	var flag = renderEnum.normal;
+        	var flag = renderEnum.hidden;
         	//if(rowData.isDisable == 1) flag = renderEnum.normal; //如果是ture则正常显示
         	return flag;
         };

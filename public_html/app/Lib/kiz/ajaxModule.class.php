@@ -1,5 +1,7 @@
 <?php
 require_once 'core/pinyin.php';
+require_once 'core/page.php';
+
 // +----------------------------------------------------------------------
 // | Fanwe 方维o2o商业系统
 // +----------------------------------------------------------------------
@@ -1560,4 +1562,145 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($output);exit;
     }
 
+    //商品配方设定
+    public function ajax_skuBom_index()
+    {
+        init_app_page();
+        var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_log limit 1'));
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $account_info['slid'];;
+        $cate_id = $_REQUEST['cate_id']?intval($_REQUEST['cate_id']):'';
+        $mid = $_REQUEST['codeOrName']?$_REQUEST['codeOrName']:'';
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        //预制、现制、半成品   1 2 6
+        $print = ' (1=1';
+        if($_REQUEST['wmTypeArray1']){
+            $print .= ' or a.print = '.$_REQUEST['wmTypeArray1'];
+        }
+        if($_REQUEST['wmTypeArray2']){
+            $print .= ' or a.print = '.$_REQUEST['wmTypeArray2'];
+        }
+        if($_REQUEST['wmTypeArray3']){
+            $print .= ' or a.print = '.$_REQUEST['wmTypeArray3'];
+        }
+        $print .= ')';
+        $sqlstr="where 1=1 and $print and a.location_id=$slid ";
+//        var_dump($sqlstr);
+        if($cate_id){ //配送中心
+            $sqlstr.=' and a.cate_id='.$cate_id;
+        }
+
+        if($mid){
+            $sqlstr .=" and (a.pinyin like '%".$mid."%' or a.id  like '%".$mid."%' or a.barcode like '%".$mid."%' or a.name like '%".$mid."%' )";
+        }
+        if (($_REQUEST['confirmDateStart'])|| ($_REQUEST['confirmDateEnd'])){
+            $begin_time = strim($_REQUEST['confirmDateStart']);
+            $end_time = strim($_REQUEST['confirmDateEnd']);
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+        if($begin_time_s){
+            $sqlstr .=" and a.ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $sqlstr .=" and a.ctime < ".$end_time_s." ";
+        }
+
+        $GLOBALS['tmpl']->assign("cate_id", $cate_id);
+        $GLOBALS['tmpl']->assign("mid", $mid);
+
+        //分类
+        $conditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $conditions .= " and location_id=".$slid;
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+        $sqlsort.=$conditions . " order by sort desc";
+
+        $listsort = array();
+        $wsublist = array();
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $listsort[] = $wmenu0;
+
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $listsort[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $listsort[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $listsort[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+        $GLOBALS['tmpl']->assign("sortlist", $listsort);
+
+
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+
+        $sql="select a.id,a.name,a.cate_id,a.image,a.barcode,a.print,a.unit,b.name as cname from ".DB_PREFIX."dc_menu a left join ".DB_PREFIX."dc_supplier_menu_cate b on a.cate_id=b.id  ".$sqlstr." order by a.id desc limit ".$limit;
+
+        $sqlc="select count(a.id) from ".DB_PREFIX."dc_menu a left join ".DB_PREFIX."dc_supplier_menu_cate b on a.cate_id=b.id ".$sqlstr." order by a.id desc";
+
+        $total = $GLOBALS['db']->getOne($sqlc);
+        $page = new Page($total,$page_size);   //初始化分页对象
+        $p  =  $page->show();
+        $GLOBALS['tmpl']->assign('pages',$p);
+        $list=$GLOBALS['db']->getAll($sql);
+
+        $peifang_info=$GLOBALS['db']->getAll("select id,menu_id,datetime from fanwe_cangku_peifang where slid=".$slid);
+        $peifang=array();
+        foreach ($peifang_info as $ke=>$ve){
+            $peifang[$ve['menu_id']]=$ve;
+        }
+
+
+        foreach($list as $k=>$v){
+            $v['pfdate']=to_date($v[$peifang[$v['id']]['datetime']],"Y-m-d H:i:s");
+            if(!empty($peifang[$v['id']])){
+                $v['pf_status']=1;
+            }else{
+                $v['pf_status']=0;
+            }
+            $v['kclx']=$this->kcnx[$v['print']];
+            $list[$k]=$v;
+
+        }
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            $arr[$key]['id'] =$item['id'];
+            $arr[$key]['skuTypeName'] =$item['kclx'];
+            $arr[$key]['wmTypeName'] =$item['cname'];
+            $arr[$key]['skuCode'] =$item['id'];
+            $arr[$key]['skuName'] =$item['name'];
+            $arr[$key]['uom'] =$item['unit'];
+            $arr[$key]['updateTime'] =$item['pfdate'];
+            $arr[$key]['statusName'] =$item['pf_status']?'已保存':'未编辑';
+            $arr[$key]['status'] =$item['pf_status'];
+        }
+
+        $return['page'] = $_REQUEST['page'];
+        $return['records'] = $total;
+        $return['total'] = ceil($total/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $arr;
+
+        echo json_encode($return);exit;
+    }
 }
