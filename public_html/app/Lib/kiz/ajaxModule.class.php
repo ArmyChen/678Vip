@@ -9,7 +9,7 @@ require_once 'core/page.php';
 // +----------------------------------------------------------------------
 // | Author: 云淡风轻(97139915@qq.com)
 // +----------------------------------------------------------------------
-//dc_menu where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1))
+//dc_menu where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1))
 class ajaxModule extends KizBaseModule{
     function __construct()
     {
@@ -172,7 +172,7 @@ class ajaxModule extends KizBaseModule{
 //        $where .=" and g.is_delete = 1";//是否删除
 
         //库存商品
-        $where .= " and (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1))";
+        $where .= " and (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1))";
 
         if(!empty($wmTypes)){
             $where .= " and g.print in (".$wmTypes.")";//筛选库存类型
@@ -1404,7 +1404,7 @@ class ajaxModule extends KizBaseModule{
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
 //        $where = " WHERE 1=1";
-        $where = " where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1)) and aa.slid=$slid";
+        $where = " where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1)) and aa.slid=$slid";
         if($skuNameOrCode){
             $where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
         }
@@ -1419,8 +1419,6 @@ class ajaxModule extends KizBaseModule{
         }
 
 //var_dump($where);die;
-
-//        $sqlrecords="select count(0) from fanwe_cangku_menu a".$where." limit ".$limit;;
         $sqlrecords="select count(0) from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where;
         $sql="select *,fc.name as cname from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where." limit ".$limit;
         $return = array();
@@ -1497,7 +1495,7 @@ class ajaxModule extends KizBaseModule{
 //        }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-        $sqlstr = " where (( g.is_effect = 0 and g.is_stock = 1) or (g.is_delete = 1)) and fc.slid=$location_id";
+        $sqlstr = " where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1)) and fc.slid=$location_id";
 
         if($skuNameOrCode){
             $sqlstr = "where  and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
@@ -1581,7 +1579,7 @@ class ajaxModule extends KizBaseModule{
     public function ajax_skuBom_index()
     {
         init_app_page();
-        var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_log limit 1'));
+//        var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_log limit 1'));
 
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
