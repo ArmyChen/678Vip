@@ -888,7 +888,7 @@ class ajaxModule extends KizBaseModule{
             $where .= " and g.cate_id=".$_REQUEST['skuTypeId'];
         }
         if($_REQUEST['skuCodeOrName']){
-            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.id like'%".$_REQUEST['skuCodeOrName']."%')";
+            $where .= " and (g.name like'%".$_REQUEST['skuCodeOrName']."%' or g.id like'%".$_REQUEST['skuCodeOrName']."%' or g.pinyin like'%".$_REQUEST['skuCodeOrName']."%')";
         }
         if($_REQUEST['wmType']>-1){
             $where .= " and g.print=".$_REQUEST['wmType'];
