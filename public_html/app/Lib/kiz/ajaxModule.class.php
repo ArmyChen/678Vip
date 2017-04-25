@@ -340,6 +340,7 @@ class ajaxModule extends KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         //$slid = $account_info['slid'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $cid = $_REQUEST['warehouseId'];
 
         $dhid = $_REQUEST['asnNoView']?intval($_REQUEST['asnNoView']):'0';
 
@@ -434,10 +435,10 @@ class ajaxModule extends KizBaseModule{
                 }
             }
 
-            $cid=$GLOBALS['db']->getOne("select cid from fanwe_cangku_bangding_cangku where slid=$slid and mid=$mid"); //取得仓库ID
-            if(!$cid){
-                $cid=$GLOBALS['db']->getOne("select id from fanwe_cangku where slid=$slid and isdisable=1 order by id asc limit 1");//取得仓库ID
-            }
+//            $cid=$GLOBALS['db']->getOne("select cid from fanwe_cangku_bangding_cangku where slid=$slid and mid=$mid"); //取得仓库ID
+//            if(!$cid){
+//                $cid=$GLOBALS['db']->getOne("select id from fanwe_cangku where slid=$slid and isdisable=1 order by id asc limit 1");//取得仓库ID
+//            }
 
             $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
             $order_num=floatval($v['actualQty']);
@@ -1513,7 +1514,7 @@ class ajaxModule extends KizBaseModule{
             $arr[$key]['commercialName'] =$account_info['slname'];
             $arr[$key]['warehouseName'] = $item['cname'];
             $arr[$key]['skuCode'] =$item['mbarcode'];
-            $arr[$key]['skuName'] =$item['mname'];
+            $arr[$key]['skuName'] =$item['name'];
             $arr[$key]['marketPrice'] =$item['buyPrice'];
             $arr[$key]['cost'] =$item['price'];
             $arr[$key]['uom'] =$item['unit'];
@@ -1581,7 +1582,7 @@ class ajaxModule extends KizBaseModule{
         $sqlstr = " where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1)) and fc.slid=$location_id";
 
         if($skuNameOrCode){
-            $sqlstr = " and (g.name like '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+            $sqlstr .= " and (g.name like '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
         }
         if($print>-1){
             $sqlstr .= " and g.print = $print";
@@ -1609,11 +1610,13 @@ class ajaxModule extends KizBaseModule{
 //        $return = array();
 //        $return['skuVOs'] = array();
 //        $output = $return['skuVOs'];
-        $sql = "select * from fanwe_cangku_menu fc INNER JOIN fanwe_dc_menu g on g.id =fc.mid $sqlstr group by fc.mid";
+        $sql = "select * from fanwe_cangku_menu fc LEFT JOIN fanwe_dc_menu g on g.id =fc.mid $sqlstr group by fc.mid";
+//        $sql = "select * from fanwe_cangku_menu fc where cid=209";
         $row = $GLOBALS['db']->getAll($sql);
 //var_dump($row);
         $output['skuVOs'] = array();
         foreach ($row as $key=>$item) {
+            $sql = "select * from fanwe_cangku_log fc where fc.cid=".$item['cid'];
             $category  = parent::get_dc_current_supplier_cate($item['cate_id']);
             $wcategory  = parent::get_dc_current_supplier_cate($category['wcategory']);
 
@@ -1635,10 +1638,11 @@ class ajaxModule extends KizBaseModule{
             if($wmIds){
                 $msqlstr.=' and ( fc.cid='.$wmIds.')';
             }
-            $csql = "select * from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
+            $csql = "select *,fc.stock as fstock from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
+//            $csql = "select * from fanwe_cangku_menu fc where cid=209";
             $row2 = $GLOBALS['db']->getAll($csql);
 
-//var_dump($csql);
+//var_dump($row2);
             foreach ($row2 as $key2=>$item2) {
                 $output['skuVOs'][$key]['qtySum'] += $item2['stock'];
                 $cangku = parent::get_cangku_list($item2['cid']);
@@ -1646,7 +1650,7 @@ class ajaxModule extends KizBaseModule{
                 $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$item2['price'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId']=$account_info['slid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName']=$account_info['slname'];
-                $output['skuVOs'][$key]['titleVOs'][$key2]['qty']=$item2['stock'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['qty']=$item2['fstock'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['qtySum']=$item2['stock'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseId']=$item2['cid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseName']= $cangku['name'];
@@ -1942,7 +1946,7 @@ class ajaxModule extends KizBaseModule{
     }
 
     /**
-     * 库存查询
+     * 采购明细表
      */
     public function report_purchase_detail_ajax(){
         init_app_page();
@@ -1985,9 +1989,9 @@ class ajaxModule extends KizBaseModule{
             $where .= " and a.ctime < $endTime";
         }
 
-        if($supplier){
-            $where .= " and a.gys like '%".$supplier."%'";
-        }
+//        if($supplier){
+//            $where .= " and a.gys like '%".$supplier."%'";
+//        }
         if($type>-1&&$type < 3){
             $where .= " and a.type =".$type;
         }
@@ -2006,9 +2010,6 @@ class ajaxModule extends KizBaseModule{
             $dc_where .= " and g.cate_id in ( $parentids )";
         }
 
-
-
-
 //var_dump($where);die;
         $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$where." order by a.id desc limit ".$limit;
 //        var_dump($sql);die;
@@ -2023,39 +2024,73 @@ class ajaxModule extends KizBaseModule{
 
             foreach ($dd_detail as $key2=>$item2) {
                 $detail = [];
-                $tsql = 'select * from fanwe_dc_menu g '.$dc_where.' and g.id='.$item2['mid'];
+                $tsql = "select * from fanwe_dc_menu g $dc_where and g.id=".$item2['mid'];
                 $row = $GLOBALS['db']->getRow($tsql);
-//                var_dump($tsql);
+//var_dump($supplier);
                 if($row){
-                    $category =parent::get_dc_current_supplier_cate($row['cate_id']);
-                    if($item['type']==1){
-                        $type = '采购入库单';
-                    }elseif($item['type']==2){
-                        $type = '采购退货单';
+                    $gys = parent::get_gonghuoren_name($supplier_id,$slid,$item['gys']);
+                    if($supplier){
+                        if(strpos($gys, $supplier) !==false){
+                            $category =parent::get_dc_current_supplier_cate($row['cate_id']);
+                            if($item['type']==1){
+                                $type = '采购入库单';
+                            }elseif($item['type']==2){
+                                $type = '采购退货单';
+                            }else{
+                                $type = '其他';
+                            }
+                            $detail['id'] =$item['id'];
+                            $detail['orderNo'] =$item['danjuhao'];
+                            $detail['typeStr'] = $type;
+                            $detail['billDate'] = date('Y-m-d H:i:s',$item['ctime']);
+                            $detail['supplierCode'] =$item['gys'];
+                            $detail['supplierName'] = $gys;
+                            $detail['wmTypeStr'] = parent::getCollectionValue($this->kcnx,$item2['ywsort']);
+                            $detail['cname'] = $item['cname'];
+                            $detail['skuTypeName'] = $category['name'];
+                            $detail['skuCode'] = $row['id'];
+                            $detail['skuName'] = $row['name'];
+                            $detail['skuTypeIsDisable'] =0;
+                            $detail['skuIsDelete'] =0;
+                            $detail['uom'] =$item2['unit'];
+                            $detail['price'] =$item2['price'];
+                            $detail['taxRate'] =0;
+                            $detail['qty'] =$item2['num'];
+                            $detail['amount'] = floatval($item2['price'])*floatval($item2['num']);
+                            array_push($arr,$detail);
+                        }
                     }else{
-                        $type = '其他';
-                    }
-                    $detail['id'] =$item['id'];
-                    $detail['orderNo'] =$item['danjuhao'];
-                    $detail['typeStr'] = $type;
-                    $detail['billDate'] = date('Y-m-d H:i:s',$item['ctime']);
-                    $detail['supplierCode'] =$item['gys'];
-                    $detail['supplierName'] = parent::get_gonghuoren_name($supplier_id,$slid,$item['gys']);
-                    $detail['wmTypeStr'] = parent::getCollectionValue($this->kcnx,$item2['ywsort']);
-                    $detail['cname'] = $item['cname'];
-                    $detail['skuTypeName'] = $category['name'];
-                    $detail['skuCode'] = $row['id'];
-                    $detail['skuName'] = $row['name'];
-                    $detail['skuTypeIsDisable'] =0;
-                    $detail['skuIsDelete'] =0;
-                    $detail['uom'] =$item2['unit'];
-                    $detail['price'] =$item2['price'];
-                    $detail['taxRate'] =0;
-                    $detail['qty'] =$item2['num'];
-                    $detail['amount'] = floatval($item2['price'])*floatval($item2['num']);
+                        $category =parent::get_dc_current_supplier_cate($row['cate_id']);
+                        if($item['type']==1){
+                            $type = '采购入库单';
+                        }elseif($item['type']==2){
+                            $type = '采购退货单';
+                        }else{
+                            $type = '其他';
+                        }
+                        $detail['id'] =$item['id'];
+                        $detail['orderNo'] =$item['danjuhao'];
+                        $detail['typeStr'] = $type;
+                        $detail['billDate'] = date('Y-m-d H:i:s',$item['ctime']);
+                        $detail['supplierCode'] =$item['gys'];
+                        $detail['supplierName'] = $gys;
+                        $detail['wmTypeStr'] = parent::getCollectionValue($this->kcnx,$item2['ywsort']);
+                        $detail['cname'] = $item['cname'];
+                        $detail['skuTypeName'] = $category['name'];
+                        $detail['skuCode'] = $row['id'];
+                        $detail['skuName'] = $row['name'];
+                        $detail['skuTypeIsDisable'] =0;
+                        $detail['skuIsDelete'] =0;
+                        $detail['uom'] =$item2['unit'];
+                        $detail['price'] =$item2['price'];
+                        $detail['taxRate'] =0;
+                        $detail['qty'] =$item2['num'];
+                        $detail['amount'] = floatval($item2['price'])*floatval($item2['num']);
 
-                    array_push($arr,$detail);
+                        array_push($arr,$detail);
+                    }
                 }
+
 
             }
         }

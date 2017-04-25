@@ -174,6 +174,34 @@ var purchaseDetailReport = {
         var $gridDiv =  $("#gridDiv");
         $gridDiv.empty().html('<table id="grid"></table>');
         var $grid = $("#grid");
+        var footerData = {};
+        $.each(data, function(i, warehouse) {
+            if(footerData['qty'] != undefined && footerData['qty'] != null){
+                footerData['qty'] = $.toFixed(parseInt(footerData['qty']) + parseInt(warehouse.qty));
+            } else{
+                footerData['qty'] = warehouse.qty;
+            }
+
+            if(footerData['amount'] != undefined && footerData['amount'] != null){
+                footerData['amount'] = $.toFixed(parseFloat(footerData['amount']) + parseFloat(warehouse.amount));
+            } else{
+                footerData['amount'] = warehouse.amount;
+            }
+
+
+            // if(footerData['amount'] != undefined && footerData['amount'] != null){
+            //     footerData['amount'] = $.toFixed(parseFloat(footerData['amount']) + parseFloat(warehouse.amount));
+            // } else{
+            //     footerData['amount'] = warehouse.amount;
+            // }
+
+            if(footerData['price'] != undefined && footerData['price'] != null){
+                footerData['price'] = $.toFixed(parseFloat(footerData['price']) + parseFloat(warehouse.price));
+            } else{
+                footerData['price'] = warehouse.price;
+            }
+        });
+        _this.opts.footerData = footerData;
 
         $grid.dataGrid({
             data: data,
@@ -190,7 +218,7 @@ var purchaseDetailReport = {
                 {name: 'orderNo', index: 'orderNo', /*width: 130,*/align: 'center',sortable: false},
                 {name: 'typeStr', index: 'typeStr', /*width: 110,*/ align: 'center',sortable: false},
                 {name: 'billDate', index: 'billDate', align: 'center',sortable: false},
-                {name: 'supplierCode', index: 'supplierCode', /*width: 100,*/ align: 'center',sortable: false},
+                {name: 'supplierCode', index: 'supplierCode', /*width: 100,*/ align: 'center',sortable: false,hidden:true},
                 {name: 'supplierName', index: 'supplierName',sortable: false},
                 {name: 'wmTypeStr', index: 'wmTypeStr', /*width: 100,*/ align: 'center',sortable: false,hidden:true},
                 {name: 'cname', index: 'cname', /*width: 100,*/ align: 'center',sortable: false},
@@ -222,9 +250,12 @@ var purchaseDetailReport = {
             ],
             sortname: 'orderNo',
             sortorder:'asc',
+            footerrow: true,
             gridComplete: function() {
             	merge(["orderNo"]);
-            	
+                var $gridObj = $(this);
+
+                var rowData = $gridObj.getDataIDs();
             	//让单据类型使用单据号样式
             	$("#grid>tbody>tr:gt(0)").each(function(indx,eh){
             		var eh = $(eh).find("td"),td0 = $(eh[0]);
@@ -233,6 +264,9 @@ var purchaseDetailReport = {
             		$(eh[1]).attr("style",style).attr("rowspan",td0.attr("rowspan"));
                     $(eh[2]).attr("style",style).attr("rowspan",td0.attr("rowspan"));
             	});
+                if (rowData.length > 0) {
+                    $(this).footerData("set", purchaseDetailReport.opts.footerData);
+                }
             }
         });
     },
