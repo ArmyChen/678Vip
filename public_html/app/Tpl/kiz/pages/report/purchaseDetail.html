@@ -1,6 +1,67 @@
 
 {include file="inc/header.html"}
+<style type="text/css">
+    .tab-nav {
+        /*height: 60px;*/
+        /*line-height: 60px;*/
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+
+    .tab-nav .btn-active {
+        color: #fff;
+        background-color: #4084CA;
+    }
+
+    .chart-head{
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+
+    .chart-head b{
+        color: black;
+        font-weight: normal;
+        font-size: 16px;
+    }
+
+    .chart-body{
+        width: 100%;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .chart-body .chart-line{
+        width: 100%;
+    }
+    .chart-body .chart-line .line{
+        height: 300px;
+    }
+
+    .chart-head>b>span {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .commercials-span {
+        max-width: 400px;
+    }
+
+    .supplier-sku-span {
+        max-width: 400px;
+    }
+</style>
+<!-- css end -->
 <div class="article-header">
     <div class="center-block w1200">
         <h1>采购明细表</h1>
@@ -22,7 +83,7 @@
                 <div class="aside-column panel-search">
                     <h2>模糊查询</h2>
                     <div class="search-box">
-                        <input type="text" name="skuName" id="skuName" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="64">
+                        <input type="text" name="skuName" id="skuName" class="form-control" placeholder="请输入商品编码/名称/简码" data-format="skuName" maxlength="64">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
                     <div class="search-box mt10">
@@ -36,36 +97,36 @@
 
 
 
-                <div class="aside-column multi-select">
-                    <h2>品牌/商户</h2>
-                    <div class="select-control"><em></em></div>
-                    <div class="multi-select-con" style="display:none;">
-                        <ul class="multi-select-items">
-                            <li>
-                                <label class="checkbox" for="commercialId-all">
-                                    <span></span>
-                                    <input type="checkbox" id="commercialId-all">全部
-                                </label>
-                            </li>
+                <!--<div class="aside-column multi-select">-->
+                    <!--<h2>品牌/商户</h2>-->
+                    <!--<div class="select-control"><em></em></div>-->
+                    <!--<div class="multi-select-con" style="display:none;">-->
+                        <!--<ul class="multi-select-items">-->
+                            <!--<li>-->
+                                <!--<label class="checkbox" for="commercialId-all">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" id="commercialId-all">全部-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                            <li>
-                                <label class="checkbox" for="commercialId-1">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId-1"
-                                           value="-1" data-text="(品牌)">(品牌)
-                                </label></li>
+                            <!--<li>-->
+                                <!--<label class="checkbox" for="commercialId-1">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId-1"-->
+                                           <!--value="-1" data-text="(品牌)">(品牌)-->
+                                <!--</label></li>-->
 
-                            <li>
-                                <label class="checkbox" for="commercialId-2">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId-2"
-                                           value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店
-                                </label></li>
+                            <!--<li>-->
+                                <!--<label class="checkbox" for="commercialId-2">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId-2"-->
+                                           <!--value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店-->
+                                <!--</label></li>-->
 
-                        </ul>
-                    </div>
-                    <input id="commercial" name="commercial" type="hidden" value="" />
-                </div>
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<input id="commercial" name="commercial" type="hidden" value="" />-->
+                <!--</div>-->
 
 
                 <!-- 商户 end -->
@@ -73,12 +134,14 @@
                 <!-- 仓库 start -->
                 <div class="aside-column multi-select">
                     <h2>仓库</h2>
-                    <div class="select-control"><em id="wmId-all-em"></em></div>
-                    <div class="multi-select-con" style="display:none;">
-                        <ul class="multi-select-items" id="wmId-all-ul">
-                        </ul>
-                    </div>
-                    <input id="wareHouse" name="wareHouse" type="hidden" value="" />
+                    <select class="form-control" name="wmIds" id="wmIds">
+                        <option value="">请选择入库仓库</option>
+                        {foreach from=$cangkulist item=item}
+
+                        <option value="{$item.id}" >{$item.name}</option>
+
+                        {/foreach}
+                    </select>
                 </div>
                 <!-- 仓库 end -->
 
@@ -86,27 +149,27 @@
                 <div class="aside-column panel-search">
                     <h2>供应商</h2>
                     <div class="search-box">
-                        <input type="text" name="supplier" id="supplier" class="form-control" placeholder="请输入供应商编码/名称" data-format="skuName" maxlength="14">
+                        <input type="text" name="supplier" id="supplier" class="form-control" placeholder="请输入供应商编码" data-format="skuName" maxlength="14">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
                 </div>
                 <!-- 供应商 end -->
 
                 <!-- 商品状态 start -->
-                <div class="aside-column">
-                    <h2>商品状态</h2>
-                    <ul class="panel-list-type">
-                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
-                            <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
-                        </li>
-                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
-                            <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
-                        </li>
-                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDelete"><span></span>
-                            <input type="checkbox" name="isDelete" id="isDelete" checked value="1">删除</label>
-                        </li>
-                    </ul>
-                </div>
+                <!--<div class="aside-column">-->
+                    <!--<h2>商品状态</h2>-->
+                    <!--<ul class="panel-list-type">-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>-->
+                            <!--<input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>-->
+                        <!--</li>-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>-->
+                            <!--<input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>-->
+                        <!--</li>-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDelete"><span></span>-->
+                            <!--<input type="checkbox" name="isDelete" id="isDelete" checked value="1">删除</label>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
                 <!-- 商品状态 end -->
 
                 <!-- 单据日期 start -->
@@ -114,13 +177,13 @@
                     <h2>单据日期</h2>
 
                     <div class="search-box">
-                        <input type="text" name="billDateStart" id="billDateStart" class="form-control datepicker-start" data-date-endDate="2017-04-07"
-                               data-for-element="billDateEnd" placeholder="请选择开始日期" value="2017-04-01" readonly>
+                        <input type="text" name="billDateStart" id="billDateStart" class="form-control datepicker-start" data-date-endDate=""
+                               data-for-element="billDateEnd" placeholder="请选择开始日期" value="" readonly>
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
                     <div class="search-box mt10">
-                        <input type="text" name="billDateEnd" id="billDateEnd" class="form-control datepicker-end" data-date-endDate="2017-04-07"
-                               data-for-element="billDateStart" placeholder="请选择结束日期" value="2017-04-07" readonly>
+                        <input type="text" name="billDateEnd" id="billDateEnd" class="form-control datepicker-end" data-date-endDate=""
+                               data-for-element="billDateStart" placeholder="请选择结束日期" value="" readonly>
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
                 </div>
@@ -128,83 +191,27 @@
 
                 <!-- ===================更多条件===================== -->
                 <!-- 库存类型start -->
-                <div class="aside-column multi-select" id="wmTypeHid" style="display:none;">
-                    <h2>库存类型</h2>
-
-                    <div class="select-control"><em></em></div>
-                    <div class="multi-select-con" style="display:none;">
-                        <ul class="multi-select-items">
-                            <li>
-                                <label class="checkbox" for="wm-type-all">
-                                    <span></span>
-                                    <input type="checkbox" id="wm-type-all">全部
-                                </label>
-                            </li>
-
-
-                            <li>
-                                <label class="checkbox" for="wm-type-1">
-                                    <span></span>
-                                    <input type="checkbox" name="wmTypes" id="wm-type-1"
-                                           value="3" data-text="外购商品">外购商品
-                                </label></li>
-
-
-
-                            <li>
-                                <label class="checkbox" for="wm-type-2">
-                                    <span></span>
-                                    <input type="checkbox" name="wmTypes" id="wm-type-2"
-                                           value="4" data-text="原物料">原物料
-                                </label></li>
-
-
-                        </ul>
-                    </div>
-                    <input id="wmType" name="wmType" type="hidden" value="" />
-                </div>
+                <!--<div class="aside-column multi-select" id="wmTypeHid" style="display:none;">-->
+                    <!--<h2>库存类型</h2>-->
+                    <!--<select id="wmType" name="wmType">-->
+                        <!--<option value="-1" selected="selected">请选择</option>-->
+                        <!--{foreach from=$kcnx item=item key=key}-->
+                        <!--{if $key neq 1}-->
+                        <!--<option value="{$key}" >{$item}</option>-->
+                        <!--{/if}-->
+                        <!--{/foreach}-->
+                    <!--</select>-->
+                <!--</div>-->
                 <!-- 库存类型end -->
 
                 <!-- 商品类别 start -->
                 <div class="aside-column panel-search" id="skuTypeIdHid" style="display:none;">
-                    <h2>商品类别</h2>
-                    <select id="skuTypeId" name="skuTypeId" data-placeholder="所有商品类别" style="width:100%;display: block;" class="chosen-select select-style" tabindex="5">
-                        <option value="">所有商品类别</option>
-
-                        <optgroup label="火锅">
-
-                            <option value="211181">火锅跟</option>
-
-                            <option value="211182">uuu</option>
-
-                        </optgroup>
-
-                        <optgroup label="默认">
-
-                            <option value="170317">奶慕奉奶</option>
-
-                            <option value="170318">醇香奶茶</option>
-
-                            <option value="170319">新鲜果茶</option>
-
-                            <option value="176635">海鲜</option>
-
-                            <option value="326168">茶</option>
-
-                        </optgroup>
-
-                        <optgroup label="CC">
-
-                            <option value="326213">无</option>
-
-                        </optgroup>
-
-                        <optgroup label="啊啊啊">
-
-                            <option value="326162">丸子</option>
-
-                        </optgroup>
-
+                    <h2>商品分类</h2>
+                    <select id="skuTypeIds" name="skuTypeIds">
+                        <option value="-1" selected="selected">请选择</option>
+                        {foreach from=$listsort item=item}
+                        <option value="{$item.id}">{$item.title_show}</option>
+                        {/foreach}
                     </select>
                 </div>
                 <!-- 商品类别 end -->
@@ -267,10 +274,10 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/scm_kry/js/chosen.jquery.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/commercial-wm-associate.js?v=20170406_201331" ></script>
-<script type="text/javascript" src="/scm_kry/js/scm/scm-select-cascading.js?v=20170406_201331" ></script>
-<script type="text/javascript" src="/scm_kry/js/scm/report/purchase-detail-report.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/commercial-wm-associate.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/scm-select-cascading.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js//report/purchase-detail-report.js?v=20170406_201331" ></script>
 <script>
     var commercialId="-1",wareHouseJson = '[{"id":9591,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-25 13:15:02","version":2,"wareshouseCode":"WH001","warehouseName":"-1_总仓库(品牌)","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0},{"id":13260,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:31","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-21 16:28:18","version":1,"wareshouseCode":"WH002","warehouseName":"-1_饮品仓(品牌)","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13261,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:49:43","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:11:15","version":1,"wareshouseCode":"WH003","warehouseName":"-1_酒水仓(品牌)","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":13262,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-02-23 11:50:57","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 10:12:49","version":1,"wareshouseCode":"WH004","warehouseName":"-1_原材料仓(品牌)","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":0},{"id":14838,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:09","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:09","version":1,"wareshouseCode":"WH005","warehouseName":"-1_4号库(品牌)","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":14839,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":null,"createTime":"2017-03-24 17:19:37","updaterId":88888981819,"updaterName":null,"updateTime":"2017-03-24 17:19:37","version":1,"wareshouseCode":"WH006","warehouseName":"-1_5号库(品牌)","memo":"","isDisable":false,"isDefault":false,"deductionName":null,"isShowDelete":1},{"id":9604,"uuid":null,"brandId":12566,"brandName":null,"commercialId":810019565,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 15:11:38","updaterId":-1,"updaterName":null,"updateTime":"2016-12-29 19:15:24","version":1,"wareshouseCode":"WH001","warehouseName":"810019565_总仓库(客如云电商部1号演示门店)","memo":"","isDisable":false,"isDefault":true,"deductionName":null,"isShowDelete":0}]';
     $(function() {

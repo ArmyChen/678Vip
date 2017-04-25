@@ -1940,4 +1940,132 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+    /**
+     * 库存查询
+     */
+    public function report_purchase_detail_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:999999;
+        $page = intval($_REQUEST['page']);
+        $skuNameOrCode = $_REQUEST['skuName'];
+        $danjuhao = $_REQUEST['orderNo'];
+        $cid = $_REQUEST['wmIds'];
+        $supplier = $_REQUEST['supplier'];
+        $billDateStart = $_REQUEST['billDateStart'];
+        $billDateEnd = $_REQUEST['billDateEnd'];
+        $skuTypeIds = $_REQUEST['skuTypeIds'];
+        $type = $_REQUEST['type'];
+        $wmTypeStr = $_REQUEST['wmTypeStr'];
+        $wareHouseStr = $_REQUEST['wareHouseStr'];
+        $commercialStr = $_REQUEST['commercialStr'];
+        $statusStr = $_REQUEST['statusStr'];
+        $print = $_REQUEST['print'];
+
+
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $dc_where = " WHERE 1=1";
+        $where = " where a.slid=$slid and a.gys is not null";
+        if($danjuhao){
+            $where .= " and a.danjuhao like '%".$danjuhao."%'";
+        }
+        if($cid){
+            $where .= " and c.id =".$cid;
+        }
+        if($billDateStart){
+            $startTime = strtotime($billDateStart);
+            $where .= " and a.ctime > $startTime";
+        }
+        if($billDateEnd){
+            $endTime = strtotime($billDateEnd);
+            $where .= " and a.ctime < $endTime";
+        }
+
+        if($supplier){
+            $where .= " and a.gys like '%".$supplier."%'";
+        }
+        if($type>-1&&$type < 3){
+            $where .= " and a.type =".$type;
+        }
+
+        //dc_menu
+        if($skuNameOrCode){
+            $dc_where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+        }
+        if($print>-1){
+            $dc_where .= " and g.print = $print";
+        }else{
+            $dc_where .= " and g.print <> 1 ";
+        }
+        if($skuTypeIds>-1){
+            $parentids = parent::get_dc_supplier_cate($skuTypeIds);
+            $dc_where .= " and g.cate_id in ( $parentids )";
+        }
+
+
+
+
+//var_dump($where);die;
+        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$where." order by a.id desc limit ".$limit;
+//        var_dump($sql);die;
+        $sqlrecords="select count(0) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$where." order by a.id desc";
+        $return = array();
+        $records = $GLOBALS['db']->getOne($sqlrecords);
+        $list = $GLOBALS['db']->getAll($sql);
+//var_dump($list);die;
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            $dd_detail = unserialize($item["dd_detail"]);
+
+            foreach ($dd_detail as $key2=>$item2) {
+                $detail = [];
+                $tsql = 'select * from fanwe_dc_menu g '.$dc_where.' and g.id='.$item2['mid'];
+                $row = $GLOBALS['db']->getRow($tsql);
+//                var_dump($tsql);
+                if($row){
+                    $category =parent::get_dc_current_supplier_cate($row['cate_id']);
+                    if($item['type']==1){
+                        $type = '采购入库单';
+                    }elseif($item['type']==2){
+                        $type = '采购退货单';
+                    }else{
+                        $type = '其他';
+                    }
+                    $detail['id'] =$item['id'];
+                    $detail['orderNo'] =$item['danjuhao'];
+                    $detail['typeStr'] = $type;
+                    $detail['billDate'] = date('Y-m-d H:i:s',$item['ctime']);
+                    $detail['supplierCode'] =$item['gys'];
+                    $detail['supplierName'] = parent::get_gonghuoren_name($supplier_id,$slid,$item['gys']);
+                    $detail['wmTypeStr'] = parent::getCollectionValue($this->kcnx,$item2['ywsort']);
+                    $detail['cname'] = $item['cname'];
+                    $detail['skuTypeName'] = $category['name'];
+                    $detail['skuCode'] = $row['id'];
+                    $detail['skuName'] = $row['name'];
+                    $detail['skuTypeIsDisable'] =0;
+                    $detail['skuIsDelete'] =0;
+                    $detail['uom'] =$item2['unit'];
+                    $detail['price'] =$item2['price'];
+                    $detail['taxRate'] =0;
+                    $detail['qty'] =$item2['num'];
+                    $detail['amount'] = floatval($item2['price'])*floatval($item2['num']);
+
+                    array_push($arr,$detail);
+                }
+
+            }
+        }
+//        $return['page'] = $page;
+//        $return['records'] = $records;
+//        $return['total'] = ceil($records/$page_size);
+//        $return['status'] = true;
+//        $return['resMsg'] = null;
+//        $return['dataList'] = $arr;
+
+        echo json_encode($arr);exit;
+    }
 }
