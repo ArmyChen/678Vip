@@ -1,6 +1,66 @@
 
 {include file="inc/header.html"}
+<style type="text/css">
+    .tab-nav {
+        /*height: 60px;*/
+        /*line-height: 60px;*/
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+
+    .tab-nav .btn-active {
+        color: #fff;
+        background-color: #4084CA;
+    }
+
+    .chart-head{
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+
+    .chart-head b{
+        color: black;
+        font-weight: normal;
+        font-size: 16px;
+    }
+
+    .chart-body{
+        width: 100%;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .chart-body .chart-line{
+        width: 100%;
+    }
+    .chart-body .chart-line .line{
+        height: 300px;
+    }
+
+    .chart-head>b>span {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .commercials-span {
+        max-width: 400px;
+    }
+
+    .supplier-sku-span {
+        max-width: 400px;
+    }
+</style>
 <div class="article-header">
     <div class="center-block w1200">
         <h1>采购分析表</h1>
@@ -35,7 +95,7 @@
                     <h2>模糊查询</h2>
 
                     <div class="search-box">
-                        <input type="text" name="keyword" id="keyword" class="form-control" placeholder="请输入商品名称/编码"
+                        <input type="text" name="keyword" id="keyword" class="form-control" placeholder="请输入商品名称/编码/简码"
                                data-format="skuName" maxlength="14">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
@@ -44,44 +104,12 @@
 
                 <!-- 供应商 start -->
                 <div class="aside-column panel-search">
-                    <h2>商品类别</h2>
-                    <select id="skuTypeId" name="skuTypeId" data-placeholder="所有商品类别" style="width:100%;display: block;" class="chosen-select select-style" tabindex="5">
-                        <option value="">所有商品类别</option>
-
-                        <optgroup label="火锅">
-
-                            <option value="211181">火锅跟</option>
-
-                            <option value="211182">uuu</option>
-
-                        </optgroup>
-
-                        <optgroup label="默认">
-
-                            <option value="170317">奶慕奉奶</option>
-
-                            <option value="170318">醇香奶茶</option>
-
-                            <option value="170319">新鲜果茶</option>
-
-                            <option value="176635">海鲜</option>
-
-                            <option value="326168">茶</option>
-
-                        </optgroup>
-
-                        <optgroup label="CC">
-
-                            <option value="326213">无</option>
-
-                        </optgroup>
-
-                        <optgroup label="啊啊啊">
-
-                            <option value="326162">丸子</option>
-
-                        </optgroup>
-
+                    <h2>商品分类</h2>
+                    <select id="skuTypeIds" name="skuTypeIds">
+                        <option value="-1" selected="selected">请选择</option>
+                        {foreach from=$listsort item=item}
+                        <option value="{$item.id}">{$item.title_show}</option>
+                        {/foreach}
                     </select>
                 </div>
                 <!-- 供应商 end -->
@@ -89,38 +117,38 @@
                 <!-- 门店 start -->
 
 
-                <div class="aside-column multi-select" id="commercial">
-                    <h2>品牌/商户<strong class="red vam"> *</strong></h2>
-                    <div class="select-control"><em></em></div>
-                    <div class="multi-select-con" style="display:none;">
-                        <ul class="multi-select-items commercials">
-                            <li>
-                                <label class="checkbox" for="commercialId-all">
-                                    <span></span>
-                                    <input type="checkbox" class="checkbox-all" id="commercialId-all">全部
-                                </label>
-                            </li>
+                <!--<div class="aside-column multi-select" id="commercial">-->
+                    <!--<h2>品牌/商户<strong class="red vam"> *</strong></h2>-->
+                    <!--<div class="select-control"><em></em></div>-->
+                    <!--<div class="multi-select-con" style="display:none;">-->
+                        <!--<ul class="multi-select-items commercials">-->
+                            <!--<li>-->
+                                <!--<label class="checkbox" for="commercialId-all">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" class="checkbox-all" id="commercialId-all">全部-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                            <li>
-                                <label class="checkbox commercial" for="commercialId-1">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId-1"
-                                           value="-1" data-text="品牌">品牌
-                                </label>
-                            </li>
+                            <!--<li>-->
+                                <!--<label class="checkbox commercial" for="commercialId-1">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId-1"-->
+                                           <!--value="-1" data-text="品牌">品牌-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                            <li>
-                                <label class="checkbox commercial" for="commercialId-2">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId-2"
-                                           value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店
-                                </label>
-                            </li>
+                            <!--<li>-->
+                                <!--<label class="checkbox commercial" for="commercialId-2">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId-2"-->
+                                           <!--value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                        </ul>
-                    </div>
-                    <input type="hidden" class="checkbox-selected" value="" />
-                </div>
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<input type="hidden" class="checkbox-selected" value="" />-->
+                <!--</div>-->
 
 
 
@@ -129,14 +157,58 @@
                 <!-- 供应商 start -->
                 <div class="aside-column panel-search">
                     <h2>供应商</h2>
-                    <select id="supplierId" name="supplierId" style="width: 100%;">
-                        <option value="-1" selected>所有供应商</option>
+                    <select name="gys" id="gys" class="search_box select" style="height:33px; padding:4px 5px 5px; border:1px solid #e9e9e9">
+                        {if $rukuval eq 2}
+                        <optgroup label="店内部门">
 
-                        <option value="5641">默认供应商</option>
+                            {foreach from=$location_bumen item=item}
 
-                        <option value="8805">火锅供应商</option>
+                            <option value="bumen_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
 
-                        <option value="8806">刘经理</option>
+                            {/foreach}
+                            {/if}
+
+                            <optgroup label="临时专用">
+                                <option value="linshi_1" data-id='临时客户' >临时客户</option>
+                                <option value="linshi_2" data-id='临时运输商'>临时运输商</option>
+                                <option value="linshi_3" data-id='临时供应商'>临时供应商</option>
+
+                                {if $rukuval eq 2}
+
+                                <option value="linshi_4" data-id='领料出库'>领料出库</option>
+
+                                {/if}
+
+                                <optgroup label="门店之间">
+
+                                    {foreach from=$slidlist item=item}
+
+                                    <option value="slid_{$item.id}"
+                                            {if $rukuval eq 1 and $item.id eq $seller_slid}selected="selected" {/if}
+                                    {if $rukuval eq 2 and $item.id eq $buyer_slid}selected="selected" {/if}
+                                    data-id='{$item.name}'  >
+
+                                    {$item.name}
+
+                                    </option>
+
+                                    {/foreach}
+
+                                    <optgroup label="城市供应商">
+
+                                        {foreach from=$gyslist item=item}
+
+                                        <option value="citygys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                        {/foreach}
+
+                                        <optgroup label="门店专属供应商">
+
+                                            {foreach from=$location_gys item=item}
+
+                                            <option value="localgys_{$item.id}" data-id='{$item.name}'>{$item.name}</option>
+
+                                            {/foreach}
 
                     </select>
                 </div>
@@ -177,20 +249,20 @@
                 <!-- 查询日期 end -->
 
                 <!-- 商品状态 start -->
-                <div class="aside-column">
-                    <h2>商品状态</h2>
-                    <ul class="panel-list-type">
-                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
-                            <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
-                        </li>
-                        <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
-                            <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
-                        </li>
-                        <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
-                            <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
-                        </li>
-                    </ul>
-                </div>
+                <!--<div class="aside-column">-->
+                    <!--<h2>商品状态</h2>-->
+                    <!--<ul class="panel-list-type">-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>-->
+                            <!--<input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>-->
+                        <!--</li>-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>-->
+                            <!--<input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>-->
+                        <!--</li>-->
+                        <!--<li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>-->
+                            <!--<input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
                 <!-- 商品状态 end -->
             </form>
 
@@ -233,234 +305,45 @@
                 <!-- 商品名称 start -->
                 <div class="aside-column panel-search">
                     <h2>商品名称<strong class="red vam"> *</strong></h2>
-                    <select id="skuId" name="skuId" data-placeholder="请选择商品" style="width:100%;display: block;" class="chosen-select select-style" tabindex="5">
-                        <option value=""></option>
 
-                        <optgroup label="奶慕奉奶">
-
-                            <option value="1296413">荔枝红奶慕(大杯)</option>
-
-                            <option value="1296412">玫瑰乌龙奶慕(大杯)</option>
-
-                            <option value="1296411">樱桃乌龙奶慕(大杯)</option>
-
-                            <option value="1296410">金凤凰奶慕(大杯)</option>
-
-                            <option value="1296409">桂花乌龙奶慕(大杯)</option>
-
-                            <option value="1296408">茉绿清香奶慕(大杯)</option>
-
-                            <option value="1296407">格雷红茶奶慕(大杯)</option>
-
-                            <option value="1296406">青乌龙奶慕(大杯)</option>
-
-                            <option value="1296414">红宝石奶慕(大杯)</option>
-
-                            <option value="1296415">醇味红茶奶慕(大杯)</option>
-
-                            <option value="1296416">熊猫奶慕茶(大杯)</option>
-
-                            <option value="1741717">牛肉面</option>
-
-                            <option value="1317865">西凤酒(大杯)</option>
-
-                            <option value="1296425">金凤凰奶慕(中杯)</option>
-
-                            <option value="1296424">桂花乌龙奶慕(中杯)</option>
-
-                            <option value="1296423">茉绿清香奶慕(中杯)</option>
-
-                            <option value="1296422">格雷红茶奶慕(中杯)</option>
-
-                            <option value="1296421">蜜桃乌龙奶慕(中杯)</option>
-
-                            <option value="1296420">青乌龙奶慕(中杯)</option>
-
-                            <option value="1296419">其它(大杯)</option>
-
-                            <option value="1296418">四季春茶奶慕(大杯)</option>
-
-                            <option value="1296417">红玉茗茶奶慕(大杯)</option>
-
-                            <option value="1296365">其它(中杯)</option>
-
-                            <option value="1296364">四季春茶奶慕(中杯)</option>
-
-                            <option value="1296363">红玉茗茶奶慕(中杯)</option>
-
-                            <option value="1296362">熊猫奶慕茶(中杯)</option>
-
-                            <option value="1296361">醇味红茶奶慕(中杯)</option>
-
-                            <option value="1296360">红宝石奶慕(中杯)</option>
-
-                            <option value="1296359">荔枝红奶慕(中杯)</option>
-
-                            <option value="1296358">樱桃乌龙奶慕(中杯)</option>
-
-                            <option value="1296392">玫瑰乌龙奶慕(中杯)</option>
-
-                            <option value="1296381">蜜桃乌龙奶慕(大杯)</option>
-
-                        </optgroup>
-
-                        <optgroup label="新鲜果茶">
-
-                            <option value="1296405">其它(中杯)</option>
-
-                            <option value="1296404">桂花石榴茶(中杯)</option>
-
-                            <option value="1296403">芒果欧蕾(中杯)</option>
-
-                            <option value="1296402">寒天爱玉(中杯)</option>
-
-                            <option value="1296401">桂蜜柚子茶(中杯)</option>
-
-                            <option value="1296400">茉香青果茶(中杯)</option>
-
-                            <option value="1296399">茉香红柚茶(中杯)</option>
-
-                            <option value="1296398">一颗柠檬茶(中杯)</option>
-
-                            <option value="1296397">柠香金橘茶(中杯)</option>
-
-                            <option value="1296396">其它(大杯)</option>
-
-                            <option value="1296395">桂花石榴茶(大杯)</option>
-
-                            <option value="1296394">芒果欧蕾(大杯)</option>
-
-                            <option value="1296393">寒天爱玉(大杯)</option>
-
-                            <option value="1296391">茉香青果茶(大杯)</option>
-
-                            <option value="1296390">茉香红柚茶(大杯)</option>
-
-                            <option value="1296389">一颗柠檬茶(大杯)</option>
-
-                            <option value="1296388">柠香金橘茶(大杯)</option>
-
-                            <option value="1296357">桂蜜柚子茶(大杯)</option>
-
-                        </optgroup>
-
-                        <optgroup label="醇香奶茶">
-
-                            <option value="1833706">难难难(中杯)</option>
-
-                            <option value="1296426">相思水晶奶茶(中杯)</option>
-
-                            <option value="1296374">芝士抹茶(大杯)</option>
-
-                            <option value="1296373">海盐抹茶(大杯)</option>
-
-                            <option value="1296372">可可鲜奶(大杯)</option>
-
-                            <option value="1296371">碎碎姜奶茶(大杯)</option>
-
-                            <option value="1296370">相思水晶奶茶(大杯)</option>
-
-                            <option value="1296369">玄香抹茶红豆(大杯)</option>
-
-                            <option value="1296368">金钻奶茶(大杯)</option>
-
-                            <option value="1296367">日月潭珍珠奶茶(大杯)</option>
-
-                            <option value="1296366">奥利奥芝士奶茶(大杯)</option>
-
-                            <option value="1296375">宇冶抹茶鲜奶(大杯)</option>
-
-                            <option value="1296376">其它(大杯)</option>
-
-                            <option value="1296377">奥利奥芝士奶茶(中杯)</option>
-
-                            <option value="1296387">其它(中杯)</option>
-
-                            <option value="1296386">宇冶抹茶鲜奶(中杯)</option>
-
-                            <option value="1296385">芝士抹茶(中杯)</option>
-
-                            <option value="1296378">日月潭珍珠奶茶(中杯)</option>
-
-                            <option value="1296379">金钻奶茶(中杯)</option>
-
-                            <option value="1296380">玄香抹茶红豆(中杯)</option>
-
-                            <option value="1296382">碎碎姜奶茶(中杯)</option>
-
-                            <option value="1296383">可可鲜奶(中杯)</option>
-
-                            <option value="1296384">海盐抹茶(中杯)</option>
-
-                            <option value="2981453">撒尿牛丸(已删除)</option>
-
-                        </optgroup>
-
-                        <optgroup label="茶">
-
-                            <option value="2981596">红茶(大杯)</option>
-
-                        </optgroup>
-
-                        <optgroup label="丸子">
-
-                            <option value="2981622">撒尿牛丸</option>
-
-                        </optgroup>
-
-                        <optgroup label="海鲜">
-
-                            <option value="1633123">临时菜</option>
-
-                            <option value="1351646">波士顿龙虾仔</option>
-
-                        </optgroup>
-
-                        <optgroup label="无">
-
-                            <option value="2981853">宫爆鸡丁</option>
-
-                        </optgroup>
-
-                    </select>
                 </div>
                 <!-- 商品名称 end -->
 
                 <!-- 门店 start -->
 
 
-                <div class="aside-column multi-select">
-                    <h2>品牌/商户<strong class="red vam"> *</strong></h2>
-                    <div class="select-control"><em></em></div>
-                    <div class="multi-select-con" style="display:none;">
-                        <ul class="multi-select-items commercials_2">
-                            <li>
-                                <label class="checkbox" for="commercialId-all_2">
-                                    <span></span>
-                                    <input type="checkbox" class="checkbox-all" id="commercialId-all_2">全部
-                                </label>
-                            </li>
+                <!--<div class="aside-column multi-select">-->
+                    <!--<h2>品牌/商户<strong class="red vam"> *</strong></h2>-->
+                    <!--<div class="select-control"><em></em></div>-->
+                    <!--<div class="multi-select-con" style="display:none;">-->
+                        <!--<ul class="multi-select-items commercials_2">-->
+                            <!--<li>-->
+                                <!--<label class="checkbox" for="commercialId-all_2">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" class="checkbox-all" id="commercialId-all_2">全部-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                            <li>
-                                <label class="checkbox commercial" for="commercialId_2-1">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId_2-1"
-                                           value="-1" data-text="品牌">品牌
-                                </label>
-                            </li>
+                            <!--<li>-->
+                                <!--<label class="checkbox commercial" for="commercialId_2-1">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId_2-1"-->
+                                           <!--value="-1" data-text="品牌">品牌-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                            <li>
-                                <label class="checkbox commercial" for="commercialId_2-2">
-                                    <span></span>
-                                    <input type="checkbox" name="commercialIds" id="commercialId_2-2"
-                                           value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店
-                                </label>
-                            </li>
+                            <!--<li>-->
+                                <!--<label class="checkbox commercial" for="commercialId_2-2">-->
+                                    <!--<span></span>-->
+                                    <!--<input type="checkbox" name="commercialIds" id="commercialId_2-2"-->
+                                           <!--value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店-->
+                                <!--</label>-->
+                            <!--</li>-->
 
-                        </ul>
-                    </div>
-                    <input type="hidden" class="checkbox-selected" value="" />
-                </div>
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<input type="hidden" class="checkbox-selected" value="" />-->
+                <!--</div>-->
 
 
 
@@ -536,11 +419,11 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/scm_kry/js/echarts2.2.7/echarts-all.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/scm_kry/js/echarts2.2.7/theme/macarons.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/scm_kry/js/chosen.jquery.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/scm_kry/js/freeDownloadExcel.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/scm_kry/js/scm/report/purchase-analysis-report.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/echarts-all.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/macarons.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js?v=20170406_201331"></script>
+<!--<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/freeDownloadExcel.js?v=20170406_201331"></script>-->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/report/purchase-analysis-report.js?v=20170406_201331" ></script>
 <script>
     $(function() {
         //初始化chosen

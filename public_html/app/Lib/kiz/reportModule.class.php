@@ -108,8 +108,13 @@ class reportModule extends KizBaseModule
     public function report_allocation_difference_index()
     {
         init_app_page();
-
+        $slid=$GLOBALS['account_info']['slid'];
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign('bumen',parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("listsort", parent::goods_category_tree_ajax());
         $GLOBALS['tmpl']->assign("page_title", "调拨差异分析表");
         $GLOBALS['tmpl']->display("pages/report/allocationDifference.html");
     }
