@@ -5,7 +5,7 @@
 <div class="article-header">
     <div class="center-block w1200">
 
-        <h1>新增供应商类别</h1>
+        <h1>编辑供应商类别</h1>
 
 
         <div class="btn-wrap pull-right tar">
@@ -23,7 +23,7 @@
             <h3 class="panel-title"><em>供应商类别信息</em></h3>
         </div>
         <form method="post" id="supplierCateForm" autocomplete="off">
-            <input id="id" name="id" type="hidden" value="">
+            <input id="id" name="id" type="hidden" value="{$result.id}">
             <input id="supplierCateCodeHid" type="hidden" value=""/>
             <input id="supplierCateNameHid" type="hidden" value=""/>
             <input id="version" name="version" type="hidden" value="0"/>
@@ -37,7 +37,7 @@
                     <dd class="positionRelative">
                         <div class="search-box w402 pull-left" style="margin-top: 6px;">
                             <input type="text" class="form-control w402" id="supplierCateCode"
-                                   name="supplierCateCode" value=""
+                                   name="supplierCateCode" value="{$result.supplierCode}"
                                    placeholder="若不填写，则系统自动生成" data-format="code" select="auto" maxlength="18">
                             <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
@@ -56,7 +56,7 @@
                     <dd class="positionRelative">
                         <div class="search-box w402 pull-left" style="margin-top: 6px;">
                             <input type="text" class="form-control w402 required" id="supplierCateName"
-                                   name="supplierCateName" value=""
+                                   name="supplierCateName" value="{$result.supplierName}"
                                    placeholder="请输入类别名称" maxlength="48" select="auto"
                                    data-format="name">
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
@@ -70,7 +70,7 @@
                     </dt>
                     <dd>
                         <TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"
-                                  maxlength="96" data-character="true"></TEXTAREA>
+                                  maxlength="96" data-character="true">{$result.memo}</TEXTAREA>
                     </dd>
                 </dl>
             </div>
