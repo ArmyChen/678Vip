@@ -1,0 +1,82 @@
+<?php
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/style.css";
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/weebox.css";
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/fanweUI.css";
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/project.css";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/pages/project/project.js";
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/pages/project/project.js";
+?>
+
+	<link rel="stylesheet" type="text/css" href="public/raw.css"> {include file="inc/header.html"}
+	<script>
+		var ajax_url = '{$ajax_url}';
+	</script>
+	<style type="text/css">
+		.table_box tr {
+			font-size: 12px;
+		}
+	</style>
+
+	<div class="blank20"></div>
+	<div class="page wrap_full">
+		<div class="left_box">
+			{include file="inc/biz_nav_list.html"}
+		</div>
+		<div class="right_box">
+			<div class="content">
+				<div class="head_box clearfix">
+					<h2 class="f_l">{$page_title}</h2>
+				</div>
+				<div class="blank50"></div>
+				<div class="form_box  content_hastab">
+					<div class="standard_tab cf">
+						<ul>
+							<li class="{if $ACTION_NAME eq 'raw_ification'}curr{/if}">
+								<a href="{url r="biz" b="location#raw_ification"}">列表</a>
+							</li>
+							<li class="{if $ACTION_NAME eq 'raw_ification_add'}curr{/if}">
+								<a href="{url r="biz" b="location#raw_ification_add"}&id={$supplier_id}">新增材料</a>
+							</li>
+							 
+						</ul>
+					</div>
+					<div class="raw">
+						<table class="list table_box">
+							<tr>
+								<th>编号</th>
+								<th>分类名称</th>
+								<th>操作</th>
+							</tr>
+
+							{if $list}
+							{foreach from=$list item=val}
+							<tr>
+								<td>{$val.id}</td>
+								<td>{$val.ification_name}</td>
+								<td>
+									<a href="{url r="biz" b="location#raw_ification_up"}&id={$val.id}">编辑</a>/
+									<a href="javascript:if(confirm('确定删除吗?'))location.href='{url r="biz" b="location#raw_ification_del"}&id={$val.id}';">删除</a>
+								</td>
+							</tr>
+							{/foreach} 
+							{/if}
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="blank20"></div>
+	{include file="inc/footer.html"}

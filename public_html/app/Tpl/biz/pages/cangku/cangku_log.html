@@ -1,0 +1,391 @@
+<?php
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/style.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/weebox.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/fanweUI.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/project.css";
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/dc_menu.css";
+
+/*日期控件*/
+
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/utils/jquery.datetimepicker.css";
+
+
+
+
+
+/*$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/plupload.full.min.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";*/
+
+
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery-1.8.2.min.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/plupload.full.min.js";
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.bgiframe.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.weebox.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.pngfix.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.animateToClass.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.timer.js";
+
+
+
+/*日期控件*/
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/utils/jquery.datetimepicker.js";
+
+
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/fanwe_utils/fanweUI.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/script.js";
+
+
+
+
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/pages/dc/dc_menu.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/pages/dc/dc_menu.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/time_ipt.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/time_ipt.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/cangku/jquery-3.1.1.min.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/cangku/jquery-3.1.1.min.js";
+
+$this->_var['pagejs'][] = $this->_var['TMPL_REAL']."/js/cangku/jquery.table2excel.js";
+
+$this->_var['cpagejs'][] = $this->_var['TMPL_REAL']."/js/cangku/jquery.table2excel.js";
+?>
+
+{include file="inc/nr_header.html"} 
+<script>
+
+var ajax_url = '{$ajax_url}';
+
+</script> 
+<script type="text/javascript">
+
+function catechange()
+
+{
+
+document.search_form.submit();
+
+}
+
+</script> 
+<script language="javascript" type="text/javascript"> 
+
+$(document).ready(function(){ 
+
+ $(".detail_tog").hide();  //隐藏
+
+  $(".show_detail_detial").click(function(){
+
+   var detail_id=jQuery($(this)).data('value');  
+
+ // $("#de_"+detail_id).toggle();
+
+    $("[id=de_"+detail_id+"]").toggle();
+
+
+
+  });
+
+  
+
+    $(".send_shenhe").click(function(){
+
+   var detail_id=jQuery($(this)).data('value');  
+
+   var status=jQuery($(this)).data('status');  
+
+   var url='/biz.php?ctl=order&act=op_diaohuo&order_id='+detail_id+'&status='+status;
+
+   $.ajax({
+
+            type : 'POST', 
+
+			url : url,
+
+			dataType : 'json',
+
+             success : function(msg) {	
+
+			    if(msg.status=='success'){		
+
+				//alert('删除成功！');
+
+				
+
+				 if(status==9){
+
+				$("#"+detail_id+"_1").html(msg.optime);	 
+
+				 }else{
+
+				$("#"+detail_id+"_"+status).html(msg.optime);
+
+				 }
+
+									
+
+                }else{
+
+                alert(msg.msg);
+
+                }
+
+            }
+
+        }); 
+
+    
+
+
+
+  });
+
+
+
+
+
+}) 
+
+</script> 
+
+<script>
+$(function(){
+	$(".btn-success").click(function(){
+        $(".table2excel").table2excel({
+          exclude:".noExl",
+          name:"Excel Document Name",
+          filename:"明细表"
+        });
+     });
+});
+    </script>
+<style>
+
+.edit_item_txt{display:none;}
+
+input{ border:none; width:100px;}
+
+</style>
+<div class="page wrap_full">
+  <div class="left_box"> {include file="inc/biz_nav_list.html"} </div>
+  <div class="right_box">
+    <div class="biz_header" style="background:none;">
+      <div class="head_box wrap_full">
+      	<p style=" font-size:14px; color:#999; padding:20px 0 0 20px; line-height:38px;">注：当前页面数据为实时数据，仅供参考。实际数据以各业务统计数据为准。</p>
+        <ul class="head_nav hea_bak">
+          {insert name="load_biz_user_tip"}
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+    	<div class="head_box">
+		<h2>仓库管理</h2>
+      </div>
+      <div class="form_box  content_hastab">
+      {include file="pages/cangku/nav.html"}
+      <div class="blank10"></div>
+        <div class="comments_details">
+          <form name="search_form" action="{url r="biz" b="cangku#index"}" method="post">
+            业务类别：
+            <select name="type" class="ui-textbox search_box" holder="出入库">
+              <option value="99" {if $type eq 99} selected="selected" {/if}>全部</option>
+              <option value="1" {if $type eq 1} selected="selected" {/if}>入库</option>
+              <option value="2" {if $type eq 2} selected="selected" {/if}>出库</option>
+            </select>
+            业务类型：
+            <select name="ywsortid" class="ui-textbox search_box"  holder="业务类型">
+              <option value="99" {if $ywsortid eq 99} selected="selected" {/if}>全部</option>
+              
+              
+
+                  {foreach from=$ywsort item=ywitem key=ywkey}
+
+                    
+              
+              <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+              
+              
+
+                 {/foreach}               		
+
+
+            
+            </select>
+            按时间范围查询
+            <input class="ui-textbox search_box time_input" name="begin_time" holder="起始日期" value="{$begin_time}" readonly style="width:120px; "/>
+            -
+            <input class="ui-textbox search_box time_input" name="end_time" holder="截止日期" value="{$end_time}" readonly  style="width:120px;" />
+            单据号：
+            <input class="ui-textbox search_box" name="danjuhao" holder="单据号" value="{$danjuhao}" style="width:120px;" />
+            <input type="submit" value="查询" class="ui-button add_goods_type" rel="orange"  />
+            <input name="id" type="hidden" value="{$slid}"/>
+          </form>
+          <div style="float:right;background-color:#FFF;font-size:16px;margin:-35px 0 0 0;width:100px;">
+            <button class="btn btn-success" onclick='Excel()'>Excel Export</button>
+          </div>
+          <br />
+          <div class="blank50"></div>
+          <table class="table_box " classs="table2excel">
+            <colgroup>
+            <col width="50">
+            <col width="80">
+            <col width="125">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="120">
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="200">
+            </colgroup>
+            <thead>
+              <tr>
+                <th width="50">ID</th>
+                <th width="80">类型</th>
+                <th width="125">时间</th>
+                <th width="100">出入库明细</th>
+                <th width="100">仓库名称</th>
+                <th width="100">业务类型</th>
+                <th width="120">单据与备注</th>
+                <th width="100">供货与理货员</th>
+                <th width="100">金额与数量</th>
+                <th width="100">体积与重量</th>
+                <th width="200">物流与运费</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+            {if $list}
+            
+            {foreach from=$list item=row}
+            <tr data-id="{$row.id}">
+              <td class="rate">{$row.id}</td>
+              <td class="rate">{$row.type_show}</td>
+              <td>{$row.ctime}</td>
+              <td><input type="button" data-value="{$row.id}" class="show_detail_detial" value="显示明细"></td>
+              <td>{$row.cname}</td>
+              <td>{$row.ywsort}</td>
+              <td>单据号：{$row.danjuhao}<br />
+                备注：{$row.memo}</td>
+              <td>{$row.gonghuo_show}：{$row.gonghuo}<br />
+                理货员：{$row.lihuo_user}</td>
+              <td>总金额：{$row.zmoney}<br />
+                总数量：{$row.znum}</td>
+              <td>体积：{$row.ztiji}<br />
+                重量：{$row.zweight}</td>
+              <td>运费：{$row.wuliu_yunfei}<br />
+                物流公司：{$row.wuliu_company}</td>
+            </tr>
+            {if $row.detail}
+            <tr class="detail_tog"  id="de_{$row.id}">
+              <td class="rate">&nbsp;</td>
+              <td class="rate">&nbsp;</td>
+              <td>序号</td>
+              <td>名称</td>
+              <td colspan="2">条码</td>
+              <td>数量</td>
+              <td>单位</td>
+              <td>单价</td>
+              <td>金额</td>
+              <td>规格</td>
+            </tr>
+            {foreach from=$row.detail item=sunrow key=skey}
+            <tr class="detail_tog"  id="de_{$row.id}">
+              <td class="rate">&nbsp;</td>
+              <td class="rate">&nbsp;</td>
+              <td>{$skey}</td>
+              <td>{$sunrow.name}</td>
+              <td colspan="2">{$sunrow.barcode}</td>
+              <td>{$sunrow.num}</td>
+              <td> { if $sunrow.unit_type eq 1}
+                
+                {$sunrow.funit}
+                
+                {else}
+                
+                {$sunrow.unit}	  
+                
+                {/if} </td>
+              <td>{$sunrow.price}</td>
+              <td>{$sunrow.zmoney}</td>
+              <td>每{$sunrow.funit}{$sunrow.times}{$sunrow.unit}</td>
+            </tr>
+            {/foreach}
+            
+            
+            
+            {/if}
+            
+            
+            
+            
+            
+            {/foreach}
+            
+            {/if}
+              </tbody>
+            
+          </table>
+          <div class="blank"></div>
+          <div class="pages"> {$pages} </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="inc/footer.html"}
+<script>
+       function Excel()
+       {
+       	 var url="biz.php?ctl=cangku&act=Excel&id="+GetQueryString("id");
+       	 window.location.href=url; 
+       }
+//正则获取url的参数
+       function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+</script>
