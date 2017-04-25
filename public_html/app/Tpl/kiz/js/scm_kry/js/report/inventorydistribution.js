@@ -226,15 +226,16 @@ var inventorydistribution = {
         }
 
 
-        conditions = JSON.stringify(conditions);
+         // conditions = JSON.stringify(conditions);
+        conditions = serializeFormById("queryConditions");
 
         $("#load_grid").show();
         $.ajax({
             type: "post",
             async: true,
-            url : _this.opts.urlRoot + _this.opts.queryUrl,
+            url : _this.opts.urlRoot + _this.opts.queryUrl+'&'+conditions,
             contentType : 'application/json;charset=UTF-8',
-            data : conditions,
+            data : {},
             dataType : 'json',
             success: function (data) {
                 //var data = $.parseJSON(json);

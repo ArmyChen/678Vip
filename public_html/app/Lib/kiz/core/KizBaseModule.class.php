@@ -419,6 +419,22 @@ class KizBaseModule{
     }
 
     /**
+     * 根据id当前分类
+     * @param $id
+     * @return mixed
+     */
+    function get_dc_current_supplier_cate($id){
+        if($id > 0) {
+            $res = $id;
+            $check = $GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id=".$id);
+            return $check;
+        }
+
+        return null;
+    }
+
+
+    /**
      * 获取部门列表
      */
     function get_bumen_list($slid){

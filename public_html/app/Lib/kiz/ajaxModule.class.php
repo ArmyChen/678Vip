@@ -1554,11 +1554,12 @@ class ajaxModule extends KizBaseModule{
      * 2017-4-18
      */
     public function report_stock_dubbo_ajax(){
+        init_app_page();
 //        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
 //        $page = intval($_REQUEST['page']);
 //        if($page==0) $page = 1;
 //        $limit = (($page-1)*$page_size).",".$page_size;
-
+//        var_dump($_REQUEST);
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
@@ -1575,12 +1576,12 @@ class ajaxModule extends KizBaseModule{
 //            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
 //            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
 //        }
-        $begin_time_s = strtotime($begin_time);
-        $end_time_s = strtotime($end_time);
+//        $begin_time_s = strtotime($begin_time);
+//        $end_time_s = strtotime($end_time);
         $sqlstr = " where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1)) and fc.slid=$location_id";
 
         if($skuNameOrCode){
-            $sqlstr = "where  and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+            $sqlstr = " and (g.name like '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
         }
         if($print>-1){
             $sqlstr .= " and g.print = $print";
@@ -1588,11 +1589,11 @@ class ajaxModule extends KizBaseModule{
             $sqlstr .= " and g.print <> 1 ";
         }
 
-        if($begin_time_s){
-            $sqlstr .=" and fc.ctime > ".$begin_time_s." ";
+        if($begin_time){
+            $sqlstr .=" and fc.ctime > ".$begin_time." ";
         }
-        if($end_time_s){
-            $sqlstr .=" and fc.ctime < ".$end_time_s." ";
+        if($end_time){
+            $sqlstr .=" and fc.ctime < ".$end_time." ";
         }
         if($skuTypeIds){
             $sqlstr.=' and ( fc.cate_id='.$skuTypeIds.')';
@@ -1600,10 +1601,9 @@ class ajaxModule extends KizBaseModule{
         if($wmIds){
             $sqlstr.=' and ( fc.cid='.$wmIds.')';
         }
-        if($wmIds){
-            $sqlstr.=' and ( fc.cid='.$wmIds.')';
-        }
-
+//        $sql = 'select * from fanwe_cangku_menu';
+//        $row = $GLOBALS['db']->query($sql);
+//        var_dump($row);
 //        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
 //        $sqlrecords="select count(a.id) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
 //        $return = array();
@@ -1614,6 +1614,8 @@ class ajaxModule extends KizBaseModule{
 //var_dump($row);
         $output['skuVOs'] = array();
         foreach ($row as $key=>$item) {
+            $category  = parent::get_dc_current_supplier_cate($item['cate_id']);
+            $wcategory  = parent::get_dc_current_supplier_cate($category['wcategory']);
 
             $output['skuVOs'][$key]['isDelete'] = 0;
             $output['skuVOs'][$key]['isDisable'] = 0;
@@ -1622,13 +1624,21 @@ class ajaxModule extends KizBaseModule{
             $output['skuVOs'][$key]['skuId'] = $item['mid'];
             $output['skuVOs'][$key]['skuName'] = $item['name'];
             $output['skuVOs'][$key]['uom'] = $item['unit'];
-            $output['skuVOs'][$key]['skuParentTypeName'] = $item['cate_id'];
-            $output['skuVOs'][$key]['skuTypeName'] = $item['cate_id'];
+            $output['skuVOs'][$key]['skuParentTypeName'] = !$wcategory['name']?'<span style="color:red">顶级分类</span>':$wcategory['name'];
+            $output['skuVOs'][$key]['skuTypeName'] = $category['name'];
 
             //根据mid查询仓库信息
-            $csql = "select * from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid where fc.mid=".$item['mid'];
+            $msqlstr = ' where 1=1';
+            if($skuTypeIds){
+                $msqlstr.=' and ( fc.cate_id='.$skuTypeIds.')';
+            }
+            if($wmIds){
+                $msqlstr.=' and ( fc.cid='.$wmIds.')';
+            }
+            $csql = "select * from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
             $row2 = $GLOBALS['db']->getAll($csql);
-//var_dump($row2);
+
+//var_dump($csql);
             foreach ($row2 as $key2=>$item2) {
                 $output['skuVOs'][$key]['qtySum'] += $item2['stock'];
                 $cangku = parent::get_cangku_list($item2['cid']);
