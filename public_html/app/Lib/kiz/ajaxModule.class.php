@@ -2103,4 +2103,13 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($arr);exit;
     }
+
+    //库存分布表
+    public function report_purchase_analysis_ajax(){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+
+    }
 }
