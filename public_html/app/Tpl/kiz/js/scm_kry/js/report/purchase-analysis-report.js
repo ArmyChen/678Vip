@@ -6,10 +6,10 @@
 var purchaseAnalysisReport = {
     //默认参数
     opts : {
-        urlRoot : "/report/purchaseanalysis",
+        urlRoot : ctxPath,
         querySupplierSkuUrl : "/querySupplierSkuData",
         querySkuSupplierUrl: "/querySkuSupplierData",
-        exportUrl : "/export",
+        exportUrl : "&act=report_purchase_analysis_ajax",
         queryData : "",
         footerData : {},
         oldCommercialId : "",

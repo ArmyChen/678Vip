@@ -2106,10 +2106,89 @@ class ajaxModule extends KizBaseModule{
 
     //库存分布表
     public function report_purchase_analysis_ajax(){
+        init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:999999;
+        $page = intval($_REQUEST['page']);
+        $skuNameOrCode = $_REQUEST['skuName'];
+        $danjuhao = $_REQUEST['orderNo'];
+        $cid = $_REQUEST['wmIds'];
+        $supplier = $_REQUEST['supplier'];
+        $billDateStart = $_REQUEST['billDateStart'];
+        $billDateEnd = $_REQUEST['billDateEnd'];
+        $skuTypeIds = $_REQUEST['skuTypeIds'];
+        $type = $_REQUEST['type'];
+        $wmTypeStr = $_REQUEST['wmTypeStr'];
+        $wareHouseStr = $_REQUEST['wareHouseStr'];
+        $commercialStr = $_REQUEST['commercialStr'];
+        $statusStr = $_REQUEST['statusStr'];
+        $print = $_REQUEST['print'];
 
+
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $dc_where = " WHERE 1=1";
+        $where = " where a.slid=$slid and a.gys is not null";
+        if($danjuhao){
+            $where .= " and a.danjuhao like '%".$danjuhao."%'";
+        }
+        if($cid){
+            $where .= " and c.id =".$cid;
+        }
+        if($billDateStart){
+            $startTime = strtotime($billDateStart);
+            $where .= " and a.ctime > $startTime";
+        }
+        if($billDateEnd){
+            $endTime = strtotime($billDateEnd);
+            $where .= " and a.ctime < $endTime";
+        }
+
+//        if($supplier){
+//            $where .= " and a.gys like '%".$supplier."%'";
+//        }
+        if($type>-1&&$type < 3){
+            $where .= " and a.type =".$type;
+        }
+
+        //dc_menu
+        if($skuNameOrCode){
+            $dc_where .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+        }
+        if($print>-1){
+            $dc_where .= " and g.print = $print";
+        }else{
+            $dc_where .= " and g.print <> 1 ";
+        }
+        if($skuTypeIds>-1){
+            $parentids = parent::get_dc_supplier_cate($skuTypeIds);
+            $dc_where .= " and g.cate_id in ( $parentids )";
+        }
+
+//var_dump($where);die;
+        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$where." order by a.id desc limit ".$limit;
+//        var_dump($sql);die;
+        $sqlrecords="select count(0) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$where." order by a.id desc";
+        $return = array();
+        $records = $GLOBALS['db']->getOne($sqlrecords);
+        $list = $GLOBALS['db']->getAll($sql);
+//var_dump($list);die;
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            $dd_detail = unserialize($item["dd_detail"]);
+            array_push($arr,$dd_detail);
+        }
+
+//        $return['page'] = $page;
+//        $return['records'] = $records;
+//        $return['total'] = ceil($records/$page_size);
+//        $return['status'] = true;
+//        $return['resMsg'] = null;
+//        $return['dataList'] = $arr;
+
+        echo json_encode($arr);exit;
 
     }
 }
