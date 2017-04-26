@@ -1,0 +1,108 @@
+{include file="inc/header.html"}
+<style type="text/css">
+    .td-to-holder
+    {
+        width: 110px;
+        height: 28px;
+        position: relative;
+        display: inline-block;
+        margin-right: 12px;
+        vertical-align: middle;
+    }
+    .td-to-holder span{
+        display: inline-block;
+        width: 50%;
+        height: 28px;
+        line-height: 28px;
+        text-align: center;
+        background: #e4e4e4;
+        border: solid #e4e4e4 1px;
+        cursor: pointer;
+    }
+    .td-to-holder #radio-light
+    {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    .td-to-holder #radio-shade
+    {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    .td-to-holder .radio-on
+    {
+        background: #009dd9;
+        border: solid #00ccff 1px;
+        color: #fff;
+        -webkit-transition: all 0.4s ease;
+        -moz-transition: all 0.4s ease;
+        -o-transition: all 0.4s ease;
+        -ms-transition: all 0.4s ease;
+    }
+    .td-to-holder .radio-on-bor-left-no
+    {
+        border-left: none;
+    }
+    .td-to-holder .radio-on-bor-right-no
+    {
+        border-right: none;
+    }
+</style>
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>盘点参数设定</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnSave">保存</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel" style="min-height:400px;">
+        <form name="whyForm" id="whyForm" method="post" action="#">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>盘点管理设定 </em></h3>
+            </div>
+            <div class="panel-body">
+                <!-- 退回原因 start -->
+                <dl class="panel-item">
+                    <dt><label for="cc-mode">盘点方式</label></dt>
+                    <dd>
+                        <div id="cc-mode">
+                            <div class="pull-left">
+                                <div class="td-to-holder">
+                                    <!-- 注意下面span标签之间不能有换行和空格，否则页面展示出来的效果不对 -->
+                                    <span id="radio-light"
+                                          class="radio-on radio-on-bor-right-no"
+                                          data-id="" data-type="1" data-version="0"
+                                          data-value="1" data-title-id="light-title">明盘</span><span
+                                        id="radio-shade"
+                                        class=" radio-on-bor-left-no"
+                                        data-id="" data-type="1" data-version="0"
+                                        data-value="2" data-title-id="shade-title">暗盘</span>
+                                </div>
+                            </div>
+                            <div id="radio-title">
+                                <span id="light-title" class="gray pull-left mt5" style="display: none">盘点时显示实时库存</span>
+                                <span id="shade-title" class="gray pull-left mt5" style="display: none">又名盲盘，即盘点时不显示实时库存</span>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </form>
+    </div>
+</div>
+<script style="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/count/setting.js?v=20170406_201331"></script>
+<script style="text/javascript">
+    $(function() {
+        setting.init({
+
+        });
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

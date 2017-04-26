@@ -1,0 +1,345 @@
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1><span id="command-type-name">新增</span><span id="orderType">盘点单</span></h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnExport" function="$.doSave"
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackExport'}"
+               style="display: none;">导出</a>
+
+            <a class="btn-link ml10" id="btnPrint2" function="$.doSave"
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackPrint'}"
+               style="display: none;">打印</a>
+
+            <a class="btn-link ml10" id="btnSave" function="$.doSave"
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">保存</a>
+            <a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doConfirmOrder"
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/confirm',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.confirmCallback',confirmAfter:'$.confirmAfter'}">确认</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/cc/task/index');">返回</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block w1200 panel-group mt20" id="accordion">
+    <div class="panel">
+
+        <form method="post" action="/scm_kry/cc/task/save" id="saveOrUpdateForm">
+            <!-- 基本信息 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <em>基本信息</em>
+                    <span id="ccByShadeTitel" class="pull-right mr10" style="display: none">目前使用的盘点方式是：【暗盘】，确认后生成盘盈盘亏金额。</span>
+                </h3>
+            </div>
+
+            <div class="panel-body">
+
+                <!--提示红点样式，默认是修改样式 -->
+
+
+
+                <div class="pull-left">
+                    <dl class="panel-item">
+                        <dt><label for="warehouseId">盘点仓库<strong class="red vam"> *</strong></label></dt>
+                        <dd class="positionRelative">
+                            <div class="pull-left w240">
+                                <select id="warehouseId" name="warehouseId" class="{required:true}">
+                                    <option value="">请选择盘点仓库</option>
+
+                                    <option value="9591"
+
+                                    >21211111111111111(生产扣减)</option>
+
+                                    <option value="13262"
+
+                                    >原材料仓</option>
+
+                                    <option value="14838"
+
+                                    >4号库</option>
+
+                                    <option value="14839"
+
+                                    >5号库</option>
+
+                                    <option value="38900"
+
+                                    >测试1</option>
+
+                                    <option value="38901"
+
+                                    >测试2</option>
+
+                                    <option value="38903"
+
+                                    >测试4</option>
+
+                                    <option value="38904"
+
+                                    >测试5</option>
+
+                                </select>
+
+                                <input type="hidden" id="deductionName9591" value="生产"/>
+
+                                <input type="hidden" id="deductionName13262" value=""/>
+
+                                <input type="hidden" id="deductionName14838" value=""/>
+
+                                <input type="hidden" id="deductionName14839" value=""/>
+
+                                <input type="hidden" id="deductionName38900" value=""/>
+
+                                <input type="hidden" id="deductionName38901" value=""/>
+
+                                <input type="hidden" id="deductionName38903" value=""/>
+
+                                <input type="hidden" id="deductionName38904" value=""/>
+
+                                <input type="hidden" id="commercialId" value="-1"/>
+                            </div>
+                            <div class="wrong"></div>
+                        </dd>
+                    </dl>
+                </div>
+
+
+
+                <!-- 编辑页面，或选定仓库后，显示以下内容 start-->
+                <div class="pull-left" style="display:none;" >
+                    <dl class="panel-item">
+                        <dt><label for="warehouseName">盘点仓库<strong class="red vam"> *</strong></label></dt>
+                        <dd class="positionRelative">
+
+                            <input type="text" class="form-control w240 required dfdfdf" id="warehouseName"
+                                   name="warehouseName" value="" readonly>
+                        </dd>
+                    </dl>
+                </div>
+
+                <!-- 盘点模板 start-->
+                <div class="pull-left">
+                    <dl class="panel-item">
+                        <dt><label for="warehouseName">盘点模板<strong class="white vam"> *</strong></label></dt>
+                        <dd class="positionRelative w260">
+                            <select id="templateId" name="templateId">
+                                <option value="-1">不选模板，则全部盘点</option>
+
+                                <option value="7766"
+
+                                >是是是</option>
+
+                                <option value="24871"
+
+                                >878</option>
+
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- 盘点模板 end-->
+
+                <div class="pull-left clear" style="display:none;" >
+                    <dl class="panel-item">
+                        <dt><label for="ccTaskNo">单据号<strong class="red vam"> *</strong></label></dt>
+                        <dd class="positionRelative">
+                            <input type="text" class="form-control w240 required dfdfdf" id="ccTaskNo" name="ccTaskNo"
+                                   value="" readonly>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="pull-left" style="display:none;" >
+                    <dl class="panel-item">
+                        <dt><label for="remarks">备注信息<strong class="white vam"> *</strong></label></dt>
+                        <dd class="positionRelative">
+                            <div class="pull-left w260 search-box">
+                                <TEXTAREA id="remarks" name="remarks" class="w260" style="height: 65px;"
+                                          placeholder="备注说明（可不填）" data-character="true"
+                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
+                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                            </div>
+                            <div class="wrong"></div>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- 编辑页面，或选定仓库后，显示以下内容 end-->
+
+            </div>
+
+            <input id="id" name="id" type="hidden" value="">
+            <input id="ccModel" name="ccModel" type="hidden" value="">
+        </form>
+        <!-- 基本信息 end -->
+
+        <!-- 单据明细信息 start -->
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>单据明细</em></h3>
+        </div>
+
+        <div class="ml10 mt10 mr10" style="float: left">
+            <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
+            <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
+            <div class="input-group search-box w200 pull-left ml5">
+                <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+                <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
+            </div>
+        </div>
+
+        <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+
+        <div class="panel-body">
+            <div class="inventoryTotal mr15" style="margin-top:-50px;" >
+                <span>盘盈占比&nbsp;<span class="iconfont question color-g" data-content="盘盈占比=盘盈金额合计/实时库存金额"></span>：<span id="profitRate"></span></span>
+                <span>盘亏占比&nbsp;<span class="iconfont question color-g" data-offset="left" data-content="盘亏占比=盘亏金额合计/实时库存金额"></span>：<span id="lossRate"></span></span>
+            </div>
+            <div class="inventoryTotal mr15" style="float:right;">
+                <span >实时库存金额：<span id="inventoryAmountSum">￥0</span></span>
+                <span id="ccAmoutSpan">盘点金额：<span id="ccAmountSum">￥0</span></span>
+                <span >盘盈金额合计：<span id="profitAmountSum">￥0</span></span>
+                <span >盘亏金额合计：<span id="lossAmountSum">￥0</span></span>
+            </div>
+
+            <div id="gridDiv" class="clear detail-grid">
+                <!-- grid begin -->
+                <table id="grid"></table>
+                <!-- grid end -->
+            </div>
+        </div>
+        <!-- 单据明细信息 end -->
+    </div>
+</div>
+
+
+<div id="scmSkuSelectDiv" gridId="grid" skuScene="61" warehouseId="warehouseId" ccTask="1" qtyColName="ccQty"></div>
+
+<!-- 商品过滤 begin -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
+<!-- 商品过滤 end -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/count/cctask.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170406_201331"></script>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        var opts = {
+            commandType: 1,
+            urlRoot: '/scm_kry/cc/task',
+            editable: true,
+            details: [],
+            urlWebSocket : 'ws://' + window.location.host + '/scm_kry/inventoryWebsocket/',
+            ccModel: 1
+        };
+
+        cctask._init(opts);
+    });
+
+    //盘点模板控制
+    function hideTemplate(status){
+        var template = $("#templateId").parent().find(".select-control");
+        if(status){
+            template.addClass("disabled");
+        }else{
+            template.removeClass("disabled");
+        }
+    }
+
+    //=========================task template begin=============================
+    //盘点模板下拉选中事件
+    var isCancel = false,lastChoice = -1;
+    $("#templateId").on("change",function(){
+
+        //重置触发控制
+        if(isCancel){
+            isCancel = false;
+            return false;
+        }
+        var templateId = $(this).val(),
+            warehouseId = $("#warehouseId").val(),
+            ccModel = $("#ccModel").val(),
+            msg=templateId=="-1"?'不选模板，则盘点仓库内的所有商品，确定执行？':'选择此模板将清除原有商品，确定选择该模板？';
+
+        layer.confirm(msg, {icon:3, offset: '30%'} , function(index){
+            $.ajax({
+                url: cctask.opts.urlRoot + '/sku/info',
+                type: "post",
+                data: {warehouseId: warehouseId,templateId:templateId,ccModel: ccModel},
+                dataType: 'json',
+                async: false,
+                success: function(result){
+                    var grid = $("#grid");
+                    if(result.success == false){
+//             	            grid.jqGrid("clearGridData");
+//             	            $("#inventoryAmountSum,#ccAmountSum,#profitAmountSum,#lossAmountSum").html("");
+                        $.layerMsg(result.message, false, {
+                            shade: 0.3,
+                            end: function() {
+                                isCancel = true;
+                                restTemplate(lastChoice);//重置为上一个
+                            }
+                        });
+                        return false;
+                    }
+
+                    lastChoice = templateId;
+
+                    reloadGrid(result);
+
+                    $('#inventoryAmountSum').text("￥" + result.inventoryAmount);
+                    $('#ccAmountSum').text("￥" + result.ccAmount);
+                    $('#profitAmountSum').text("￥" + result.profitAmount);
+                    $('#lossAmountSum').text("￥" + result.lossAmount);
+                    cctask.updateRealTimeQty();//实实库存
+                },
+                error:function(xhr, status, error){/* do nothing */}
+            });
+            layer.close(index);
+        }, function(index){
+            isCancel = true;
+            restTemplate(lastChoice);//重置为上一个
+            layer.close(index);
+            return false;
+        });
+    });
+
+    //重置为上一个模板选择
+    function restTemplate(lastChoice){
+        var target = $("#templateId"),tpArray = target.find("option"),tpLi = target.parent().find("ul li");
+        for(var i = 0;i<tpArray.length;i++){
+            if($(tpArray[i]).val()==lastChoice){
+                $(tpLi[i]).click();
+                return false;
+            }
+        }
+    }
+    //=========================task template end=============================
+    /**
+     加载完成后置灰模板
+     1.如果新增，则执行
+     2.如果编辑，有Id时执行
+     3.如果编辑，没有Id则不执行
+     **/
+    $(function(){
+        var type = 1;
+        var templateId = -1;
+        if(type!=2||templateId!="-1"){
+            hideTemplate(true);
+        }
+
+        $('a[onclick="addSku()"]').attr("afterAdd","$.afterAdd()");
+    });
+    //=======================================================================
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

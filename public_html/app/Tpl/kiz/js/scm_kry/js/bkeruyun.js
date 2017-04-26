@@ -331,6 +331,8 @@ var bkeruyun = {
                     return "/kiz.php?ctl=outbound&"+ u;
                 }else if(p == 7){
                     return "/kiz.php?ctl=supplier&"+ u;
+                }else if(p == 8){
+                    return "/kiz.php?ctl=count&"+ u;
                 }else{
                     //return "/ww"
                     throw new Error("菜单未知参数p="+p);
