@@ -16,6 +16,7 @@ var asnSi = {
         editUrl : '&act=go_down_index_view',
         deleteUrl :'&act=go_down_delete_ajax',
         viewUrl : '&act=go_down_index_view',
+        printUrl : '&act=go_down_print_view',
         confirmUrl : '/doconfirm',
         withdrawUrl : '/withdraw',
         copyUrl: '/copy',
@@ -151,7 +152,7 @@ var asnSi = {
         };
 
         $.showPrint = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showCopy = function (rowData) {
@@ -240,7 +241,7 @@ var asnSi = {
                     render: $.showDelete
                 },
                 print: {
-                    url: supplierPath,
+                    url: supplierPath + _this.opts.printUrl,
                     render: $.showPrint
                 },
                 copy: {

@@ -147,6 +147,14 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/supplier/goDown.html");
 
     }
+
+    public function go_down_print_view(){
+        init_app_page();
+
+        $GLOBALS['tmpl']->assign("page_title", "打印采购入库单");
+        $GLOBALS['tmpl']->display("pages/supplier/goDownPrint.html");
+    }
+
     /**
      * 仓库采购入库查询
      */

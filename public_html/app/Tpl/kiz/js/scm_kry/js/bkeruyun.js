@@ -3134,7 +3134,7 @@ $.fn.selectFilter = function () {
         _this.formatObjToUrl(opt);
     };
     _this.formatObjToUrl = function(opt){
-        var printJsp = opt.urlRoot + '/printPage';
+        var printJsp = opt.urlRoot;
         var url = '';
         var query = opt.query;
         var queryUrl = '';
@@ -3156,8 +3156,8 @@ $.fn.selectFilter = function () {
             + date.getSeconds() + '秒';
 
         var title = encodeURIComponent(encodeURIComponent(orderType + time));
-        url = opt.urlRoot + '/print/' + opt.printType + '/' + title + '.pdf' + queryUrl;
-        printJsp += "?title=" + encodeURIComponent(encodeURIComponent(orderType)) + "&printUrl=" + url;
+        // url = opt.urlRoot + '/print/' + opt.printType + '/' + title + '.pdf' + queryUrl;
+        printJsp += "&title=" + encodeURIComponent(encodeURIComponent(orderType))+"&id="+query[key];
         //printJsp = encodeURI(printJsp); //转码
         window.open(printJsp);
     };
