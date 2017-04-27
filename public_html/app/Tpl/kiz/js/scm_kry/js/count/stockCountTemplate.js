@@ -5,16 +5,16 @@
 var skuTemplate = {
     //默认参数
     opts : {
-        urlRoot : '/scm/template/stockcount',
+        urlRoot : ctxPath,
         brandId : 1031,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query',
-        editUrl : '/update',
-        viewUrl : '/view',
-        lockUrl : '/lock',
-        unlockUrl : '/unlock',
+        queryUrl : '&act=count_stock_ajax',
+        editUrl : '&act=count_stock_edit',
+        viewUrl : '&act=count_stock_view',
+        lockUrl : '&act=count_stock_lock_ajax',
+        unlockUrl : '&act=count_stock_unlock_ajax',
         sortName : 'code',
         pager : '#gridPager',
         _now : new Date(),
@@ -189,13 +189,13 @@ var skuTemplate = {
 
         $.show = function (rowData) {
         	var flag = renderEnum.hidden;
-        	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
+        	if(rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
         	return flag;
         };
 
         $.showLock = function (rowData) {
         	var flag = renderEnum.hidden;
-        	if(rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
+        	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
         	return flag;
         };
 
@@ -224,7 +224,7 @@ var skuTemplate = {
                 editor: {
                     render: $.showEdit,
                     code: "scm:button:stockcount:template:edit",
-                    url: _this.opts.urlRoot + _this.opts.editUrl
+                    url: countPath + _this.opts.editUrl
                 },
                 clock: {
                     url: _this.opts.urlRoot + _this.opts.lockUrl,
@@ -240,7 +240,7 @@ var skuTemplate = {
         });
 
         function disableFormatter(cellValue, options, rowObject) {
-            return rowObject.isDisable ? '<span style="color: red">停用</span>' : '启用';
+            return !rowObject.isDisable ? '<span style="color: red">停用</span>' : '启用';
         }
     },
 

@@ -46,7 +46,10 @@ class countModule extends KizBaseModule
     public function count_setting_index()
     {
         init_app_page();
-
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
+        $GLOBALS['tmpl']->assign("slidlist", $slidlist);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("page_title", "盘点管理设定");
         $GLOBALS['tmpl']->display("pages/count/countSetting.html");

@@ -1,6 +1,56 @@
 
 {include file="inc/header.html"}
-
+<style>
+    .tab-nav {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .tab-nav .btn {
+        width: 150px;
+        color: #333;
+        margin-top: 3px;
+    }
+    .tab-nav .btn-active {
+        color: #fff;
+        background-color: #4084CA;
+    }
+    .chart-head{
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+    .chart-head b{
+        color: black;
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .chart-body{
+        width: 100%;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    .chart-body .chart-line{
+        width: 100%;
+    }
+    .chart-body .chart-line .line{
+        height: 300px;
+    }
+    .chart-head>b>span {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .commercials-span {
+        max-width: 400px;
+    }
+    .supplier-sku-span {
+        max-width: 400px;
+    }
+</style>
 <!-- 标题 -->
 <div class="article-header">
     <div class="center-block w1200">
@@ -124,13 +174,13 @@
                     <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
                     <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
                     <div class="input-group search-box w200 pull-left ml5">
-                        <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                        <div class="input-group-addon"><img width="20" height="20" src="/app/Tpl/kiz/js/scm_kry/img/scanning.png" alt=""></div>
                         <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
                         <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
                     </div>
                 </div>
 
-                <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+                <!--<div id="filterGridDiv" class="pull-left cut-off-rule"></div>-->
                 <span class="mr10 mt10" style="padding-top:10px;float: right;">
 		      		 注：若要设定某些商品不授权给某些门店，就在【非授权商户】列勾选！
 		       </span>

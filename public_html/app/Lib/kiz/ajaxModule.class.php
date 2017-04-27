@@ -2191,4 +2191,65 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($arr);exit;
 
     }
+
+    //盘点模板列表
+    public function count_stock_ajax(){
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $moban_keywords = $_REQUEST['name'];
+        $menu_keywords = $_REQUEST['skuName'];
+        $accept_location = $_REQUEST['shopIds'];
+        $isDisable = trim($_REQUEST['isDisable']);
+        !isset($isdd) && $isdd = 1;
+
+        $str="where supplier_id=$supplier_id ";
+
+        if($moban_keywords){
+            $str .= " and (name like '%$moban_keywords%' or code like '%$moban_keywords%')";
+        }
+        if($menu_keywords){
+            $str .= " and (accept_goods like '%$menu_keywords%')";
+        }
+        if($accept_location){
+            $str .= " and (accept_location like '%$accept_location%')";
+        }
+
+        if($isDisable == '0'||$isDisable == '1'){
+            $str .= " and (isdisable = ".$isDisable.")";
+        }
+
+
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_mb  $str order by id desc limit ".$limit);
+        $recordslist = $GLOBALS['db']->getAll("SELECT count(*) as count FROM " . DB_PREFIX . "cangku_pandian_mb  $str order by id desc ");
+        $records = count($recordslist);
+
+        $data = [];
+        foreach ($list as $key=>$item) {
+            $data[$key]['id'] = $item['id'];
+            $data[$key]['code'] = $item['code'];
+            $data[$key]['name'] = $item['name'];
+            $data[$key]['updaterName'] = $item['edit_user'];
+            $data[$key]['updateTime'] = $item['datetime'];
+            $data[$key]['isDisable'] = $item['isdisable'];
+            $data[$key]['status'] = $item['isdisable'];
+        }
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $data;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
 }

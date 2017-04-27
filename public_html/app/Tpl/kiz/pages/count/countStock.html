@@ -6,7 +6,7 @@
         <h1>盘点模板</h1>
 
         <div class="btn-wrap pull-right tar">
-            <a code="scm:button:stockcount:template:add" function="$.doForward" args="{url:'/scm_kry/scm/template/stockcount/add'}" class="btn-link ml10" id="btn-create">创建</a>
+            <a code="scm:button:stockcount:template:add" function="$.doForward" args="{url:'/kiz.php?ctl=count&act=count_stock_add'}" class="btn-link ml10" id="btn-create">创建</a>
         </div>
     </div>
 </div>
@@ -38,35 +38,40 @@
             <!-- 门店 start -->
             <div class="aside-column multi-select">
                 <h2>模板授权商户</h2>
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items commercials_2">
-                        <li>
-                            <label class="checkbox" for="commercialId-all_2">
-                                <span></span>
-                                <input type="checkbox" class="checkbox-all" id="commercialId-all_2">全部
-                            </label>
-                        </li>
+                <select name="shopIds" id="shopIds">
+                    <option value="0">请选择商户</option>
+                    {foreach from=$slidlist item=item}
+                        <option value="{$item.id}">{$item.name}</option>
+                    {/foreach}
+                </select>
+                <!--<div class="multi-select-con" style="display:none;">-->
+                    <!--<ul class="multi-select-items commercials_2">-->
+                        <!--<li>-->
+                            <!--<label class="checkbox" for="commercialId-all_2">-->
+                                <!--<span></span>-->
+                                <!--<input type="checkbox" class="checkbox-all" id="commercialId-all_2">全部-->
+                            <!--</label>-->
+                        <!--</li>-->
 
-                        <li>
-                            <label class="checkbox commercial" for="commercialId_2-1">
-                                <span></span>
-                                <input type="checkbox" name="commercialIds" id="commercialId_2-1"
-                                       value="-1" data-text="(品牌)">(品牌)
-                            </label>
-                        </li>
+                        <!--<li>-->
+                            <!--<label class="checkbox commercial" for="commercialId_2-1">-->
+                                <!--<span></span>-->
+                                <!--<input type="checkbox" name="commercialIds" id="commercialId_2-1"-->
+                                       <!--value="-1" data-text="(品牌)">(品牌)-->
+                            <!--</label>-->
+                        <!--</li>-->
 
-                        <li>
-                            <label class="checkbox commercial" for="commercialId_2-2">
-                                <span></span>
-                                <input type="checkbox" name="commercialIds" id="commercialId_2-2"
-                                       value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店
-                            </label>
-                        </li>
+                        <!--<li>-->
+                            <!--<label class="checkbox commercial" for="commercialId_2-2">-->
+                                <!--<span></span>-->
+                                <!--<input type="checkbox" name="commercialIds" id="commercialId_2-2"-->
+                                       <!--value="810019565" data-text="客如云电商部1号演示门店">客如云电商部1号演示门店-->
+                            <!--</label>-->
+                        <!--</li>-->
 
-                    </ul>
-                </div>
-                <input id="shopIds" name="shopIds" type="hidden" class="checkbox-selected" value="" />
+                    <!--</ul>-->
+                <!--</div>-->
+                <!--<input id="shopIds" name="shopIds" type="hidden" class="checkbox-selected" value="" />-->
             </div>
             <!-- 门店 end -->
             <!-- 模糊查询 end -->
@@ -76,10 +81,10 @@
                 <h2>状态</h2>
                 <ul class="panel-list-type">
                     <li><label class="checkbox checkbox-check" for="status-0"><span></span>
-                        <input type="checkbox" name="status" id="status-0" checked value="0">启用</label>
+                        <input type="checkbox" name="status" id="status-0" checked value="1">启用</label>
                     </li>
                     <li><label class="checkbox" for="status-1"><span></span>
-                        <input type="checkbox" name="status" id="status-1" value="1">停用</label></li>
+                        <input type="checkbox" name="status" id="status-1" value="0">停用</label></li>
                 </ul>
             </div>
             <!-- 状态 end -->
@@ -106,7 +111,6 @@
 <script>
     $(function() {
         var opts = {
-            urlRoot : "/scm_kry/scm/template/stockcount",
             commandType : 0
         };
         skuTemplate._init(opts);
