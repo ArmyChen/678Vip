@@ -3157,7 +3157,7 @@ $.fn.selectFilter = function () {
 
         var title = encodeURIComponent(encodeURIComponent(orderType + time));
         // url = opt.urlRoot + '/print/' + opt.printType + '/' + title + '.pdf' + queryUrl;
-        printJsp += "&title=" + encodeURIComponent(encodeURIComponent(orderType))+"&id="+query[key];
+        printJsp += "&title=" + encodeURIComponent(encodeURIComponent(orderType))+"&id="+query[key]+"&printType="+ opt.printType;
         //printJsp = encodeURI(printJsp); //转码
         window.open(printJsp);
     };

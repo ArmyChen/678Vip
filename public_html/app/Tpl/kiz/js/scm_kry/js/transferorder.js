@@ -7,6 +7,7 @@ var transferOrder = {
         editUrl: '/edit',
         deleteUrl: '/delete',
         viewUrl: '&act=go_transfer_index_view',
+        printUrl: '&act=go_transfer_print_view',
         confirmUrl: '/doconfirm',
         withdrawUrl: '/withdraw',
         //查询条件表单id
@@ -108,7 +109,7 @@ var transferOrder = {
         };
 
         $.showPrint = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showCopy = function (rowData) {
@@ -167,7 +168,7 @@ var transferOrder = {
                     render: $.showDelete
                 },
                 print: {
-                    url: _this.opts.urlRoot,
+                    url: inventoryPath +  _this.opts.printUrl,
                     render: $.showPrint
                 }
             }

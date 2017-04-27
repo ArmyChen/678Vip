@@ -150,6 +150,7 @@
     var viewUrl =supplierPath + "&act=go_up_index_view";
     var confirmUrl = urlRoot + "doconfirm";
     var copyUrl = urlRoot + "copy";
+    var printUrl = supplierPath + '&act=go_up_print_view';
 
     $(function () {
         //需要保存查询条件的页面
@@ -189,7 +190,7 @@
         };
 
         $.showPrint = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showCopy = function (rowData) {
@@ -298,7 +299,7 @@
                     render: $.showDelete
                 },
                 print: {
-                    url: urlRoot,
+                    url: printUrl,
                     render: $.showPrint
                 },
                 copy:{

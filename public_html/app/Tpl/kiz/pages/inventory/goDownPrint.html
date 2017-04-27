@@ -67,7 +67,7 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">采购入库单号:</span><span>{$result.danjuhao}</span>
+                    <span class="title">入库单号:</span><span>{$result.danjuhao}</span>
                 </li>
                 <li>
                     <span class="title">入库日期:</span><span>{$result.ctime2}</span>
@@ -81,11 +81,9 @@
                 <li>
                     <span class="title">入库商户:</span><span>{$result.supplier}</span>
                 </li>
+
                 <li>
-                    <span class="title">入库仓库:</span><span>{$result.cname}</span>
-                </li>
-                <li>
-                    <span class="title">单据日期:</span><span>{$result.ctime2}</span>
+                    <span class="title">入库原因:</span><span>{$result.yuanyin}</span>
                 </li>
             </ul>
         </th>
@@ -94,13 +92,13 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">供应商:</span><span>{$result.gys}</span>
+                    <span class="title">入库仓库:</span><span>{$result.cname}</span>
                 </li>
                 <li>
-                    <span class="title">采购金额合计:</span><span>{$result.amount}</span>
+                    <span class="title">入库金额合计:</span><span>{$result.amount}</span>
                 </li>
                 <li>
-                    <span class="title">采购数量合计:</span><span>{$result.sum}</span>
+                    <span class="title">入库数量合计:</span><span>{$result.sum}</span>
                 </li>
             </ul>
         </th>
@@ -112,7 +110,7 @@
         <td>价格(含税)</td>
         <td>税率</td>
         <td>单位</td>
-        <td>采购入库数</td>
+        <td>入库数</td>
         <td>合计金额(含税)</td>
     </tr>
     {foreach from=$dd_detail item=item}
@@ -148,9 +146,7 @@
                 <li>
                     <span class="title">审核:</span><span></span>
                 </li>
-                <li>
-                    <span class="title">供应商:</span><span>{$result.gys}</span>
-                </li>
+
             </ul>
         </td>
     </tr>

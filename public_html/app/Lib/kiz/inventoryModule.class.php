@@ -382,6 +382,160 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->display("pages/inventory/goTransferAdd.html");
 
     }
+
+    #入库单打印
+    public function go_down_print_view(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slname =$account_info['slname'];
+        $account_name =$account_info['account_name'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $printType = $_REQUEST['printType'];
+        $sql = "select * from fanwe_cangku_log where id=".$id;
+        $result = $GLOBALS['db']->getRow($sql);
+        $sum = 0;
+        $amount = 0;
+        $datailinfo = array();
+        foreach(unserialize($result['dd_detail']) as $k=>$v){
+            $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+            $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+            $datailinfo[$k]['id'] = $v['mid'];//24733
+            $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+            $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+            $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+            $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+            $datailinfo[$k]['uom'] = $dc_menu['unit'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['actualQty'] = $v['num'];
+            $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+            $datailinfo[$k]['standardsupplierQty'] = $dc_menu2['stock'];
+            $datailinfo[$k]['supplierQty'] = $v['num'] + $dc_menu2['stock'];
+            $sum += intval($v['num']);
+            $amount += floatval($v['price']* $v['num']);
+
+        }
+//        var_dump($result['cid']);die;
+
+        $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gys']);//供货人
+        $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
+        $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
+        $result['cname'] = !parent::get_cangku_list($result['cid'])?"":parent::get_cangku_list($result['cid'])['name'];
+        $result['supplier'] = $slname;
+        $result['lihuoren'] = $account_name;
+        $result['sum'] = $sum;
+        $result['amount'] = $amount;
+        $result['yuanyin'] = parent::getCollectionValue($this->ywsort,$result['ywsort']);
+
+        $GLOBALS['tmpl']->assign("dd_detail", $datailinfo);
+        $GLOBALS['tmpl']->assign("result", $result);
+
+        $GLOBALS['tmpl']->assign("page_title", "打印入库单");
+        $GLOBALS['tmpl']->assign("header", $slname."入库单");
+        $GLOBALS['tmpl']->assign("printType", $printType);
+        $GLOBALS['tmpl']->display("pages/inventory/goDownPrint.html");
+    }
+
+    #出库单打印
+    public function go_up_print_view(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slname =$account_info['slname'];
+        $account_name =$account_info['account_name'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $printType = $_REQUEST['printType'];
+        $sql = "select * from fanwe_cangku_log where id=".$id;
+        $result = $GLOBALS['db']->getRow($sql);
+        $sum = 0;
+        $amount = 0;
+        $datailinfo = array();
+        foreach(unserialize($result['dd_detail']) as $k=>$v){
+            $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+            $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+            $datailinfo[$k]['id'] = $v['mid'];//24733
+            $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+            $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+            $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+            $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+            $datailinfo[$k]['uom'] = $dc_menu['unit'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['actualQty'] = $v['num'];
+            $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+            $datailinfo[$k]['standardsupplierQty'] = $dc_menu2['stock'];
+            $datailinfo[$k]['supplierQty'] = $v['num'] + $dc_menu2['stock'];
+            $sum += intval($v['num']);
+            $amount += floatval($v['price']* $v['num']);
+
+        }
+        $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gys']);//供货人
+        $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
+        $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
+        $result['cname'] = !parent::get_cangku_list($result['cid'])?"":parent::get_cangku_list($result['cid'])['name'];
+        $result['supplier'] = $slname;
+        $result['lihuoren'] = $account_name;
+        $result['sum'] = $sum;
+        $result['amount'] = $amount;
+
+        $GLOBALS['tmpl']->assign("dd_detail", $datailinfo);
+        $GLOBALS['tmpl']->assign("result", $result);
+
+        $GLOBALS['tmpl']->assign("page_title", "打印出库单");
+        $GLOBALS['tmpl']->assign("header", $slname."出库单");
+        $GLOBALS['tmpl']->assign("printType", $printType);
+        $GLOBALS['tmpl']->display("pages/inventory/goDownPrint.html");
+    }
+
+    #移库打印
+    public function go_transfer_print_view(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slname =$account_info['slname'];
+        $account_name =$account_info['account_name'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $printType = $_REQUEST['printType'];
+        $sql = "select * from fanwe_cangku_diaobo where id=".$id;
+        $result = $GLOBALS['db']->getRow($sql);
+        $sum = 0;
+        $amount = 0;
+        $datailinfo = array();
+        foreach(unserialize($result['dd_detail']) as $k=>$v){
+            $dc_menu = $this->getCangkuMenuInfoByMid($v['mid']);
+            $dc_menu2 = $this->getDcMenuInfoByMid($v['mid']);
+            $datailinfo[$k]['id'] = $v['mid'];//24733
+            $datailinfo[$k]['skuId'] = $dc_menu['cate_id'];
+            $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($dc_menu2['cate_id']))?"":$this->get_dc_supplier_menu($dc_menu2['cate_id'])['name'];
+            $datailinfo[$k]['skuCode'] = $dc_menu['barcode'];
+            $datailinfo[$k]['skuName'] = $dc_menu['mname'];
+            $datailinfo[$k]['uom'] = $dc_menu['unit'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['actualQty'] = $v['num'];
+            $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+            $datailinfo[$k]['standardsupplierQty'] = $dc_menu2['stock'];
+            $datailinfo[$k]['supplierQty'] = $v['num'] + $dc_menu2['stock'];
+            $sum += intval($v['num']);
+            $amount += floatval($v['price']* $v['num']);
+
+        }
+        $result['gys'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gys']);//供货人
+        $result['gonghuoren'] = parent::get_gonghuoren_name($account_info['supplier_id'],$slid,$result['gonghuoren']);
+        $result['ctime2'] = date("Y-m-d H:i:s",$result['ctime']);
+        $result['cname'] = !parent::get_cangku_list($result['cid'])?"":parent::get_cangku_list($result['cid'])['name'];
+        $result['cname2'] = !parent::get_cangku_list($result['cidtwo'])?"":parent::get_cangku_list($result['cidtwo'])['name'];
+        $result['supplier'] = $slname;
+        $result['lihuoren'] = $account_name;
+        $result['sum'] = $sum;
+        $result['amount'] = $amount;
+
+        $GLOBALS['tmpl']->assign("dd_detail", $datailinfo);
+        $GLOBALS['tmpl']->assign("result", $result);
+
+        $GLOBALS['tmpl']->assign("page_title", "打印出库单");
+        $GLOBALS['tmpl']->assign("header", $slname."出库单");
+        $GLOBALS['tmpl']->assign("printType", $printType);
+        $GLOBALS['tmpl']->display("pages/inventory/goTransferPrint.html");
+    }
 }
 
 ?>

@@ -1,7 +1,7 @@
 {include file="inc/printHeader.html"}
 <script>
     $(function(){
-        $("#body").jqprint({
+        $("#table").jqprint({
             debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
             importCSS: true, //true表示引进原来的页面的css，默认是true。（如果是true，先会找$("link[media=print]")，若没有会去找$("link")中的css文件）
             printContainer: true, //表示如果原来选择的对象必须被纳入打印（注意：设置为false可能会打破你的CSS规则）。
@@ -67,10 +67,10 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">采购入库单号:</span><span>{$result.danjuhao}</span>
+                    <span class="title">退货退货单号:</span><span>{$result.danjuhao}</span>
                 </li>
                 <li>
-                    <span class="title">入库日期:</span><span>{$result.ctime2}</span>
+                    <span class="title">退货日期:</span><span>{$result.ctime2}</span>
                 </li>
             </ul>
         </th>
@@ -79,10 +79,10 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">入库商户:</span><span>{$result.supplier}</span>
+                    <span class="title">退货商户:</span><span>{$result.supplier}</span>
                 </li>
                 <li>
-                    <span class="title">入库仓库:</span><span>{$result.cname}</span>
+                    <span class="title">退货仓库:</span><span>{$result.cname}</span>
                 </li>
                 <li>
                     <span class="title">单据日期:</span><span>{$result.ctime2}</span>
@@ -97,10 +97,10 @@
                     <span class="title">供应商:</span><span>{$result.gys}</span>
                 </li>
                 <li>
-                    <span class="title">采购金额合计:</span><span>{$result.amount}</span>
+                    <span class="title">退货金额合计:</span><span>{$result.amount}</span>
                 </li>
                 <li>
-                    <span class="title">采购数量合计:</span><span>{$result.sum}</span>
+                    <span class="title">退货数量合计:</span><span>{$result.sum}</span>
                 </li>
             </ul>
         </th>
@@ -112,7 +112,7 @@
         <td>价格(含税)</td>
         <td>税率</td>
         <td>单位</td>
-        <td>采购入库数</td>
+        <td>退货数</td>
         <td>合计金额(含税)</td>
     </tr>
     {foreach from=$dd_detail item=item}

@@ -67,10 +67,10 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">采购入库单号:</span><span>{$result.danjuhao}</span>
+                    <span class="title">移库单号:</span><span>{$result.danjuhao}</span>
                 </li>
                 <li>
-                    <span class="title">入库日期:</span><span>{$result.ctime2}</span>
+                    <span class="title">移库日期:</span><span>{$result.ctime2}</span>
                 </li>
             </ul>
         </th>
@@ -79,13 +79,15 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">入库商户:</span><span>{$result.supplier}</span>
+                    <span class="title">移库商户:</span><span>{$result.supplier}</span>
                 </li>
+
                 <li>
-                    <span class="title">入库仓库:</span><span>{$result.cname}</span>
+                    <span class="title">移出仓库:</span><span>{$result.cname}</span>
                 </li>
+
                 <li>
-                    <span class="title">单据日期:</span><span>{$result.ctime2}</span>
+                    <span class="title">移入仓库:</span><span>{$result.cname2}</span>
                 </li>
             </ul>
         </th>
@@ -94,13 +96,10 @@
         <th colspan="8">
             <ul>
                 <li>
-                    <span class="title">供应商:</span><span>{$result.gys}</span>
+                    <span class="title">移库金额合计:</span><span>{$result.amount}</span>
                 </li>
                 <li>
-                    <span class="title">采购金额合计:</span><span>{$result.amount}</span>
-                </li>
-                <li>
-                    <span class="title">采购数量合计:</span><span>{$result.sum}</span>
+                    <span class="title">移库数量合计:</span><span>{$result.sum}</span>
                 </li>
             </ul>
         </th>
@@ -112,21 +111,21 @@
         <td>价格(含税)</td>
         <td>税率</td>
         <td>单位</td>
-        <td>采购入库数</td>
+        <td>移库数</td>
         <td>合计金额(含税)</td>
     </tr>
     {foreach from=$dd_detail item=item}
 
-        <tr>
-            <td>{$item.skuTypeName}</td>
-            <td>{$item.id}</td>
-            <td>{$item.skuName}</td>
-            <td>{$item.price}</td>
-            <td>0%</td>
-            <td>{$item.uom}</td>
-            <td>{$item.actualQty}</td>
-            <td>{$item.amount}</td>
-        </tr>
+    <tr>
+        <td>{$item.skuTypeName}</td>
+        <td>{$item.id}</td>
+        <td>{$item.skuName}</td>
+        <td>{$item.price}</td>
+        <td>0%</td>
+        <td>{$item.uom}</td>
+        <td>{$item.actualQty}</td>
+        <td>{$item.amount}</td>
+    </tr>
 
     {/foreach}
     <tr>
@@ -137,7 +136,7 @@
                 </li>
 
             </ul>
-            </td>
+        </td>
     </tr>
     <tr>
         <td colspan="8">
@@ -148,9 +147,7 @@
                 <li>
                     <span class="title">审核:</span><span></span>
                 </li>
-                <li>
-                    <span class="title">供应商:</span><span>{$result.gys}</span>
-                </li>
+
             </ul>
         </td>
     </tr>
