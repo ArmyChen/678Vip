@@ -502,6 +502,13 @@ class KizBaseModule{
         }
         return $gys_name;
     }
+
+    //$html-被查找的字符串 $tag-被查找的标签 $attr-被查找的属性名 $value-被查找的属性值
+    function get_tag_data($html,$tag,$attr,$value){
+        $regex = "/.*value=\"(.*)?\".*/is";
+        preg_match_all($regex,$html,$matches,PREG_PATTERN_ORDER);
+        return $matches[1];
+    }
 }
 
 ?>

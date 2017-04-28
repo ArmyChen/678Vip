@@ -58,12 +58,12 @@
 
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10" id="btnSave" function="$.formSubmitWithAjax"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/scm/template/stockcount/save',
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_stock_saving_ajax',
                customValidator:'$.detailsValidator',gridDataId:'templateDetails',submitCallback:'$.submitCallback'}">保存</a>
 
-            <a class="btn-link ml10" id="btnSave-bak" function="$.formSubmitWithAjax"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/scm/template/stockcount/save',
-	               customValidator:'$.detailsValidator',gridDataId:'templateDetails',submitCallback:'$.submitCallbackBak'}">保存并复制</a>
+            <!--<a class="btn-link ml10" id="btnSave-bak" function="$.formSubmitWithAjax"-->
+               <!--args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/scm/template/stockcount/save',-->
+	               <!--customValidator:'$.detailsValidator',gridDataId:'templateDetails',submitCallback:'$.submitCallbackBak'}">保存并复制</a>-->
 
             <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/scm/template/stockcount/index');">取消</a>
         </div>

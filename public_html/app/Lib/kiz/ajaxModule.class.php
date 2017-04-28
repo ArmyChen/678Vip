@@ -2252,4 +2252,139 @@ class ajaxModule extends KizBaseModule{
         /* 数据 */
         echo json_encode($return);exit;
     }
+
+    //获取商户选择
+    public function getTempletCommercialJqGridData(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $commercialIdOrName = $_REQUEST['commercialIdOrName'];
+
+        $where = " where supplier_id=".$supplier_id;
+        if($commercialIdOrName){
+            $where .= " and ( name like '%$commercialIdOrName%' or id like '%$commercialIdOrName%')";
+        }
+
+
+        $slidlist=$GLOBALS['db']->getAll("select supplier_id,id,name,address from fanwe_supplier_location $where");
+
+//        var_dump($slidlist);
+        $data = [];
+        foreach ($slidlist as $key=>$item) {
+            $data[$key]['brandId'] = $item['supplier_id'];
+            $data[$key]['commercialId'] = $item['id'];
+            $data[$key]['commercialName'] = $item['name'];
+            $data[$key]['commercialAddress'] = $item['address'];
+        }
+
+        $return['page'] = 1;
+        $return['records'] = count($slidlist);
+        $return['total'] = ceil( count($slidlist)/1);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $data;
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+    //新增盘点模板
+    public function count_stock_saving_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //模板模板ID
+        $mbid=$_REQUEST['mbid']?intval($_REQUEST['mbid']):0;
+        //数组
+        $data_moban=array(
+            "edit_user"=>$account_info['account_name'],
+            "supplier_id"=>$supplier_id,
+            "slid"=>$slid,
+            "code"=>empty($_REQUEST['code'])?time():$_REQUEST['code'],
+            "name"=>$_REQUEST['name'],
+            "accept_location"=>serialize($_REQUEST['accept_location']),
+            "memo"=>$_REQUEST['memo'],
+            "datetime"=>to_date(NOW_TIME,'Y-m-d H:i:s'),
+            "isdisable"=>1
+        );
+
+        //存在ID，则更新，否则插入，取到ID
+        if($mbid){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_mb",$data_moban,"UPDATE","id='$mbid'");
+        }else{
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_mb",$data_moban);
+            $mbid= $GLOBALS['db']->insert_id();
+        }
+
+        //插入配方，取到配方ID
+
+        $mid=$_REQUEST['templateDetails'];
+        // var_dump($mid);
+        //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
+        $data_stat=array();
+        foreach ($mid as $key=>$item) {
+            $data_stat[$key]['id']=$item['id'];
+            $data_stat[$key]['cate_id']=$item['skuTypeId'];
+            $data_stat[$key]['cname']=$item['skuTypeName'];
+            $data_stat[$key]['name']=$item['skuName'];
+            $data_stat[$key]['unit']=$item['uom'];
+            $data_stat[$key]['price']=$item['price'];
+            $exceptShopStr = $item['exceptShopStr'];
+            $regStr = parent::get_tag_data($exceptShopStr);
+            $regStr = str_replace("\"","",$regStr);
+            if($regStr){
+                $feiS = explode(",",$regStr[0]);
+                $fei_slid=$feiS;
+            }else{
+                $fei_slid='';
+            }
+            $data_stat[$key]['fei_slid']=json_encode($fei_slid);
+        }
+
+        //更新配方里的data_json字段
+        $data_json=array('accept_goods'=>serialize($data_stat));
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_mb",$data_json,"UPDATE","id='$mbid'");
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
+    }
+
+    //新增盘点模板(检查)
+    public function count_stock_checkName(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $name = $_REQUEST['name'];
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($name){
+            $sql = "select * from fanwe_cangku_pandian_mb where name='".$name."'";
+            $res = $GLOBALS['db']->getRow($sql);
+            if($res){//成功
+                $return['success'] = true;
+                $return['message'] = '';
+            }else{
+
+                $return['success'] = false;
+                $return['message'] = '';
+            }
+        }
+
+        echo json_encode($return);exit;
+    }
 }

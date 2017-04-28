@@ -103,7 +103,7 @@ var skuTemplate = {
             var flag = true;
             $.ajax({
                 type: 'post',
-                url: _this.opts.urlRoot + '/checkName',
+                url: ctxPath + '&act=count_stock_checkName',
                 data: {
                     id: parseInt($("#id").val()) || -1,
                     name: value
@@ -256,11 +256,11 @@ var skuTemplate = {
             showEmptyGrid: true,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格','非授权商户', '当前换算率', '标准单位换算率', '定价', '单位ID'],
+            colNames: ['商品编码', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格','非授权商户', '当前换算率', '标准单位换算率', '定价', '单位ID'],
             colModel: [
-                {name: 'id', index: 'id', hidden: true},
+                {name: 'id', index: 'id', hidden: false},
                 {name: 'skuTypeName', index: 'skuTypeName', sortable: false,width: 70, formatter: $.skuIsDisableFormat,unformat: unformatSpan},
-                {name: 'skuCode', index: 'skuCode', sortable: false,width: 80, formatter: $.skuIsDisableFormat},
+                {name: 'skuTypeId', index: 'skuTypeId', sortable: false,width: 70,hidden:true},
                 {
                     name: 'skuName',
                     index: 'skuName',
@@ -451,9 +451,9 @@ $.submitCallback = function (args) {
     if (rs.success) {
     	var showMsg = $("#code").val().length==0;
     	if(showMsg){
-    		$.layerMsg("操作成功，"+$("#name").val()+"编码是：<span style='color:red;'>"+rs.data+"</span>", true, {end:function(){window.location.href = skuTemplate.opts.urlRoot + '/index';},shade: 0.3});
+    		$.layerMsg("操作成功！", true, {end:function(){window.location.href = countPath + '&act=count_stock_index';},shade: 0.3});
     	}else{
-    		$.layerMsg("操作成功！", true, {end:function(){window.location.href = skuTemplate.opts.urlRoot + '/index';},shade: 0.3});
+    		$.layerMsg("操作成功！", true, {end:function(){window.location.href = countPath + '&act=count_stock_index';},shade: 0.3});
     	}
     } else {
         if (rs.data != '' && rs.data != null) {
@@ -470,8 +470,8 @@ $.submitCallbackBak = function (args) {
     if (rs.success) {
     	var showMsg = $("#code").val().length==0;
     	if(showMsg){
-    		$.layerMsg("操作成功，"+$("#name").val()+"编码是：<span style='color:red;'>"+rs.data+"</span>",true,{shade: 0.3});
-    	}else{
+            $.layerMsg("操作成功！",true,{shade: 0.3});
+        }else{
     		$.layerMsg("操作成功！",true,{shade: 0.3});
     	}
     } else {

@@ -203,7 +203,7 @@ var templetCommercialSelect = {
         var $gridObj = $(_this.opts.gridTableId);
         $gridObj.dataGrid({
             formId: "commercialselectConditions",
-            url: ctxPath + '/common/getTempletCommercialJqGridData',
+            url: ctxPath + '&act=getTempletCommercialJqGridData',
             datatype: 'local',
             showEmptyGrid: true,
             rownumbers: true,
@@ -237,7 +237,7 @@ var templetCommercialSelect = {
                     key: true,
                 	formatter: function(data,opt,cell){
                 		var showCommercialId = cell.commercialId!=-1?cell.commercialId:cell.brandId;
-                		if(cell.isDisabled!=0){
+                		if(cell.isDisabled==0){
                 			return "<span style='color:#9D9D9D;'>"+showCommercialId+"</span>";
                 		}
                 		return showCommercialId;
@@ -249,7 +249,7 @@ var templetCommercialSelect = {
                 	width: 300,
                 	formatter: function(data,opt,cell){
 	                	if(cell.commercialId==-1) return data + '(<span style="color:red;">品牌</span>)';
-	                	return cell.isDisabled==0?data:("<span style='color:#9D9D9D;'>"+data+'(<span style="color:red;">已停用</span>)</span>');
+	                	return cell.isDisabled!=0?data:("<span style='color:#9D9D9D;'>"+data+'(<span style="color:red;">已停用</span>)</span>');
                 	}
                 },
                 {
@@ -257,7 +257,7 @@ var templetCommercialSelect = {
                 	index: 'commercialAddress', 
                 	width: 415,
                 	formatter: function(data,opt,cell){
-	                	return cell.isDisabled==0?data:("<span style='color:#9D9D9D;'>"+data+"</span>");
+	                	return cell.isDisabled!=0?data:("<span style='color:#9D9D9D;'>"+data+"</span>");
                 	}
                 }
             ],
@@ -431,28 +431,28 @@ $(function () {
                     <form id="commercialselectConditions" action="#" method="post" style="margin: 0">\
                         <input name="showBrand" type="hidden" value="{{showBrand}}"/>\
                         <div class="panel-body">\
-                            <div class="pull-left">\
+                            <div class="pull-left" style="display:none" >\
                                         <div class="panel-item w180" >\
                                             <select class="form-control" name="provinceCode" id="provinceCode">\
                                                 <option value="">省份</option>\
                                             </select>\
                                         </div>\
                             </div>\
-                            <div class="pull-left">\
+                            <div class="pull-left" style="display:none" >\
                                         <div class="panel-item w180" >\
                                             <select class="form-control" name="cityCode" id="cityCode">\
                                                 <option value="">城市</option>\
                                             </select>\
                                         </div>\
                             </div>\
-                            <div class="pull-left">\
+                            <div class="pull-left" style="display:none" >\
                                         <div class="panel-item w180" >\
                                             <select class="form-control" name="districtCode" id="districtCode">\
                                                 <option value="">区/县</option>\
                                             </select>\
                                         </div>\
                             </div>\
-                            <div style="margin-top:5px;" class="pull-left">\
+                            <div style="margin-top:5px;margin-left:20px" class="pull-left">\
                                     <div class="search-box">\
                                         <input data-format="name" type="text" name="commercialIdOrName" id="commercialIdOrName" class="form-control w260"\
                                                placeholder="请输入商户编码/名称" maxlength="48"/>\
