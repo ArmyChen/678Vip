@@ -53,37 +53,11 @@
                                 <select id="warehouseId" name="warehouseId" class="{required:true}">
                                     <option value="">请选择盘点仓库</option>
 
-                                    <option value="9591"
+                                    {foreach from=$cangkulist item=item}
 
-                                    >21211111111111111(生产扣减)</option>
+                                    <option value="{$item.id}" >{$item.name}</option>
 
-                                    <option value="13262"
-
-                                    >原材料仓</option>
-
-                                    <option value="14838"
-
-                                    >4号库</option>
-
-                                    <option value="14839"
-
-                                    >5号库</option>
-
-                                    <option value="38900"
-
-                                    >测试1</option>
-
-                                    <option value="38901"
-
-                                    >测试2</option>
-
-                                    <option value="38903"
-
-                                    >测试4</option>
-
-                                    <option value="38904"
-
-                                    >测试5</option>
+                                    {/foreach}
 
                                 </select>
 
@@ -132,13 +106,9 @@
                             <select id="templateId" name="templateId">
                                 <option value="-1">不选模板，则全部盘点</option>
 
-                                <option value="7766"
-
-                                >是是是</option>
-
-                                <option value="24871"
-
-                                >878</option>
+                                {foreach from=$templatelist item=item}
+                                    <option value="{$item.id}" >{$item.name}</option>
+                                {/foreach}
 
                             </select>
                         </dd>
@@ -194,7 +164,7 @@
             </div>
         </div>
 
-        <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+        <!--<div id="filterGridDiv" class="pull-left cut-off-rule"></div>-->
 
         <div class="panel-body">
             <div class="inventoryTotal mr15" style="margin-top:-50px;" >
@@ -233,7 +203,7 @@
 
         var opts = {
             commandType: 1,
-            urlRoot: '/scm_kry/cc/task',
+            urlRoot: ctxPath,
             editable: true,
             details: [],
             urlWebSocket : 'ws://' + window.location.host + '/scm_kry/inventoryWebsocket/',
@@ -270,7 +240,7 @@
 
         layer.confirm(msg, {icon:3, offset: '30%'} , function(index){
             $.ajax({
-                url: cctask.opts.urlRoot + '/sku/info',
+                url: ctxPath + '&act=count_task_info',
                 type: "post",
                 data: {warehouseId: warehouseId,templateId:templateId,ccModel: ccModel},
                 dataType: 'json',

@@ -2467,4 +2467,81 @@ class ajaxModule extends KizBaseModule{
         /* 数据 */
         echo json_encode($return);exit;
     }
+
+    //盘点单检查是否锁定
+    public function count_task_isLocked()
+    {
+        init_app_page();
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '';
+
+        echo json_encode($return);exit;
+    }
+
+    //根据模板id获得盘点单信息
+    public function count_task_info()
+    {
+        init_app_page();
+
+        $where = " where 1=1 ";
+        $templateId = $_REQUEST['templateId'];
+        if($templateId){
+            $where .=" and id=$templateId";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '';
+
+        echo json_encode($return);exit;
+    }
+
+    //保存盘点单
+    public function count_task_saving_ajax()
+    {
+        init_app_page();
+
+        $where = " where 1=1 ";
+        $templateId = $_REQUEST['templateId'];
+        if($templateId){
+            $where .=" and id=$templateId";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '';
+
+        echo json_encode($return);exit;
+    }
+
+    //编辑保存盘点单
+    public function count_task_edit_saving_ajax()
+    {
+        init_app_page();
+
+        $where = " where 1=1 ";
+        $templateId = $_REQUEST['templateId'];
+        if($templateId){
+            $where .=" and id=$templateId";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '';
+
+        echo json_encode($return);exit;
+    }
 }

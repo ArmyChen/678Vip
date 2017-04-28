@@ -569,7 +569,7 @@ $.confirmAfter = function (args) {
 selectWarehouse = function(warehouseId,deductionName){
 
     $.ajax({
-        url: cctask.opts.urlRoot + '/isLocked',
+        url: ctxPath + '&act=count_task_isLocked',
         type: "post",
         data: {warehouseId: warehouseId},
         dataType: 'text',
@@ -588,7 +588,7 @@ selectWarehouse = function(warehouseId,deductionName){
                 }
                 layer.confirm(msg, {icon:3, offset: '30%'} , function(index){
                     var status = createCcTask(warehouseId); //创建盘点单
-                    //hideTemplate(false);
+                    // hideTemplate(false);
                     hideTemplate(!status);  // fix bug 15306 【盘点单】所选盘点仓库无库存，选择模版提示信息优化
                     layer.close(index);
                 }, function(){
@@ -625,11 +625,10 @@ undoSelectWarehouse = function(){
  * @param warehouseId
  */
 createCcTask = function(warehouseId){
-
     var status = false;
 
     $.ajax({
-        url: cctask.opts.urlRoot + '/save',
+        url: cctask.opts.urlRoot + '&act=count_task_saving_ajax',
         type: "post",
         data: {warehouseId: warehouseId},
         dataType: 'json',

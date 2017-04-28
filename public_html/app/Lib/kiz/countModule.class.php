@@ -94,6 +94,8 @@ class countModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("templatelist", parent::get_count_template_list());
         $GLOBALS['tmpl']->assign("page_title", "新增盘点单");
         $GLOBALS['tmpl']->display("pages/count/countTaskAdd.html");
     }
