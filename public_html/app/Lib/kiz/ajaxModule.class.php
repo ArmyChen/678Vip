@@ -2387,4 +2387,84 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($return);exit;
     }
+
+    //盘点单据列表
+    public function count_task_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        //$slid = $account_info['slid'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //仓库列表
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        //改成一维数据
+        $cangku_name=array_column($cangkulist,'name','id');
+        //模板列表
+        $mobanlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_pandian_mb where slid=".$slid);
+        //改成一维数据
+        $moban_name=array_column($mobanlist,'name','id');
+
+        $danjuhao = $_REQUEST['ccTaskNo'];
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $cangku_id = $_REQUEST['warehouseId'];
+        $moban_id = $_REQUEST['taskTemplateIds'];
+        $isdisable = $_REQUEST['status'];
+        if (($_REQUEST['createDateStart'])|| ($_REQUEST['createDateEnd'])){
+            $begin_time = strim($_REQUEST['createDateStart']);
+            $end_time = strim($_REQUEST['createDateEnd']);
+        }
+
+        $str="where supplier_id=".$supplier_id;
+        if($isdisable > -1){
+            $str .=  " and isdisable=".$isdisable;
+        }
+        if($danjuhao){
+            $str .= " and (danjuhao='$danjuhao')";
+        }
+        if($cangku_id > -1){
+            $str .= " and (cangku_id =$cangku_id)";
+        }
+        if($moban_id){
+            $str .= " and (moban_id in (0,$moban_id))";
+        }
+        if($begin_time){
+            $str .=" and datetime > ".$begin_time." ";
+        }
+        if($end_time){
+            $str .=" and datetime < ".$end_time." ";
+        }
+
+
+
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc limit ".$limit);
+        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc ");
+        $records = count($list2);
+        $data = [];
+        foreach ($list as $k=>$v){
+            $data[$k]['ccTaskNo']=$v['danjuhao'];
+            $data[$k]['warehouseName']=$cangku_name[$v['cangku_id']];
+            $data[$k]['templateName']=$moban_name[$v['moban_id']];
+            $data[$k]['profitAmount']=$v['panying'];
+            $data[$k]['lossAmount']=$v['pankui'];
+            $data[$k]['updaterName']=$v['edit_user'];
+            $data[$k]['updateTime']=$v['datetime'];
+            $data[$k]['statusName']=$v['isdisable']?'已保存':'已确认';
+            $data[$k]['status']=$v['isdisable'];
+            $data[$k]['showNote']='';
+        }
+
+        $return['page'] = 1;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $data;
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
 }

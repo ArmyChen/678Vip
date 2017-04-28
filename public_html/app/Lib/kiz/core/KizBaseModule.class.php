@@ -509,6 +509,24 @@ class KizBaseModule{
         preg_match_all($regex,$html,$matches,PREG_PATTERN_ORDER);
         return $matches[1];
     }
+
+    /**
+     * 获取仓库列表
+     * @param int $id
+     * @return
+     */
+    public function get_count_template_list($id=0){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select id,name from fanwe_cangku_pandian_mb where id=".$id);
+            return $pandian;
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_pandian_mb where slid=".$slid);
+        return $pandianlist;
+    }
 }
 
 ?>

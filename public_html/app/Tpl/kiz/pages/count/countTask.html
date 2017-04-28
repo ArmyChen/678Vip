@@ -29,84 +29,12 @@
                 <h2>盘点仓库</h2>
                 <div>
                     <select class="form-control" name="warehouseId" id="warehouseId">
-                        <option value="">请选择盘点仓库</option>
+                        <option value="-1" >请选择仓库</option>
+                        {foreach from=$cangkulist item=item}
 
+                        <option value="{$item.id}" >{$item.name}</option>
 
-
-
-                        <option value="9591">21211111111111111</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
-
-
-
-                        <option value="14838">4号库</option>
-
-
-
-
-
-
-                        <option value="14839">5号库</option>
-
-
-
-
-
-
-                        <option value="38900">测试1</option>
-
-
-
-
-
-
-                        <option value="38901">测试2</option>
-
-
-
-
-
-
-                        <option value="38902">测试3</option>
-
-
-
-
-
-
-                        <option value="38903">测试4</option>
-
-
-
-
-
-
-                        <option value="38904">测试5</option>
-
-
+                        {/foreach}
 
                     </select>
                 </div>
@@ -126,42 +54,14 @@
                             </label>
                         </li>
 
+                        {foreach from=$templatelist item=item}
                         <li>
-                            <label class="checkbox" for="template-00">
+                            <label class="checkbox" for="template-{$item.id}">
                                 <span></span>
-                                <input type="checkbox" name="template" id="template-00"
-                                       value="-1" data-text="未选择模板(-)">未选择模板(-)
+                                <input type="checkbox" name="template" id="template-{$item.id}" value="{$item.id}" data-text="{$item.name}">{$item.name}
                             </label>
                         </li>
-
-
-
-                        <li>
-                            <label class="checkbox" for="template-1">
-                                <span></span>
-
-
-                                <input type="checkbox" name="template" id="template-1" value="7766" data-text="是是是">是是是
-
-
-
-                            </label>
-                        </li>
-
-
-
-                        <li>
-                            <label class="checkbox" for="template-2">
-                                <span></span>
-
-
-                                <input type="checkbox" name="template" id="template-2" value="24871" data-text="878">878
-
-
-
-                            </label>
-                        </li>
-
+                        {/foreach}
 
                     </ul>
                 </div>
@@ -189,10 +89,10 @@
                 <h2>状态</h2>
                 <ul class="panel-list-type">
                     <li><label class="checkbox checkbox-check" for="status-0"><span></span>
-                        <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
+                        <input type="checkbox" name="status" id="status-0" checked value="1">已保存</label>
                     </li>
                     <li><label class="checkbox" for="status-1"><span></span>
-                        <input type="checkbox" name="status" id="status-1" value="1">已确认</label></li>
+                        <input type="checkbox" name="status" id="status-1" value="2">已确认</label></li>
                 </ul>
             </div>
             <!-- 状态 end -->
@@ -222,7 +122,6 @@
 
         var opts = {
             commandType: 0,
-            urlRoot: '/scm_kry/cc/task'
         };
 
         cctask._init(opts);

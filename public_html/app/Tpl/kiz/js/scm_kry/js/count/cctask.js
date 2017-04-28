@@ -4,11 +4,11 @@ var flag = true;
 var cctask = {
 
     opts : {
-        urlRoot : '',
+        urlRoot : ctxPath,
         commandType : '',
         queryConditionsId : 'queryConditions',
         listGridId : '#grid',
-        queryUrl : '/query',
+        queryUrl : '&act=count_task_ajax',
         editUrl : '/edit',
         viewUrl : '/view',
         confirmUrl : '/doconfirm',
@@ -85,42 +85,32 @@ var cctask = {
         };
 
         $.showEditor = function (rowData) {
-             if (rowData.status == 0) {
-                 return renderEnum.normal;
-             }
-             return renderEnum.hidden;
+            return renderEnum.hidden;
+
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
+
         };
 
         $.showConfirm = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
+
         };
 
         $.showDelete = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
+
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 0 || rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
+
         };
 
         $.showExport = function () {
-            return renderEnum.normal;
+            return renderEnum.hidden;
         };
 
         $listGrid.dataGrid({
