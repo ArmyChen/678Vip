@@ -658,7 +658,7 @@ createCcTask = function(warehouseId){
             $("#btnExport").show();//显示导出按钮
 
             //更改url新增地址为编辑地址，改变页面title等
-            replaceUrl('/cc/task/edit', 'id=' + result.id);
+            replaceUrl(ctxPath+'&act=count_task_edit', 'id=' + result.id);
             $("#command-type-name").text("编辑");
             document.title = '编辑盘点单';
 

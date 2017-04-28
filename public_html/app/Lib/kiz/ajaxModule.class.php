@@ -2521,6 +2521,10 @@ class ajaxModule extends KizBaseModule{
     {
         init_app_page();
         $warehouseId = $_REQUEST['warehouseId'];
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $warehouseId = $_REQUEST['warehouseId'];
 
         //判断仓库下是否有商品
         $csql = "select * from fanwe_cangku_menu where cid=$warehouseId";
@@ -2533,19 +2537,64 @@ class ajaxModule extends KizBaseModule{
             $return['message'] = "该仓库下无商品库存，不能进行盘点操作！";
         }
 
+        //新增盘点单据
+        //如果ID不存在，则自动增加商品进入产品库，返回ID
+        $count_data=array(
+            "danjuhao"=>time(),
+            "cangku_id"=>$warehouseId,
+            "datetime"=> date('Y-m-d H:i:s'),
+            "isdisable"=>1,
+        );
+
+        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
+        $mid = $GLOBALS['db']->insert_id();
+
         //查询仓库下的商品，封装商品
-
-
-        $where = " where 1=1 ";
-        $templateId = $_REQUEST['templateId'];
-        if($templateId){
-            $where .=" and id=$templateId";
+        $dd_detail = [];
+        foreach ($clist as $key=>$item) {
+            $dd_detail[$key]['skuId'] = $item['id'];
+            $dd_detail[$key]['skuTypeName'] = $item['id'];
+            $dd_detail[$key]['skuCode'] = $item['id'];
+            $dd_detail[$key]['skuName'] = $item['id'];
+            $dd_detail[$key]['uom'] = $item['id'];
+            $dd_detail[$key]['price'] = $item['id'];
+            $dd_detail[$key]['inventoryQty'] = $item['id'];
+            $dd_detail[$key]['realTimeInventory'] = $item['id'];
+            $dd_detail[$key]['ccQty'] = $item['id'];
+            $dd_detail[$key]['qtyDiff'] = $item['id'];
+            $dd_detail[$key]['amountDiff'] = $item['id'];
+            $dd_detail[$key]['remarks'] = $item['id'];
+            $dd_detail[$key]['ccAmount'] = $item['id'];
+            $dd_detail[$key]['relTimeAmount'] = $item['id'];
+            $dd_detail[$key]['alreadyData'] = $item['id'];
         }
-        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
+        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  where id=".$mid);
+        $data = [];
+        //仓库列表
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        //改成一维数据
+        $cangku_name=array_column($cangkulist,'name','id');
+        //模板列表
+        $mobanlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_pandian_mb where slid=".$slid);
+        //改成一维数据
+        $moban_name=array_column($mobanlist,'name','id');
+        foreach ($list2 as $k=>$v){
+            $data['ccTaskNo']=$v['danjuhao'];
+            $data['warehouseName']=$cangku_name[$v['cangku_id']];
+            $data['templateName']=$moban_name[$v['moban_id']];
+            $data['profitAmount']=$v['panying'];
+            $data['lossAmount']=$v['pankui'];
+            $data['updaterName']=$v['edit_user'];
+            $data['updateTime']=$v['datetime'];
+            $data['statusName']=$v['isdisable']?'已保存':'已确认';
+            $data['status']=$v['isdisable'];
+            $data['showNote']='';
+        }
+
+        $data['details'] = $dd_detail;
 
 
-
-        echo json_encode($return);exit;
+        echo json_encode($data);exit;
     }
 
     //编辑保存盘点单
