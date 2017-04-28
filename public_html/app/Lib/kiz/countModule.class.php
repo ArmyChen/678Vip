@@ -92,9 +92,22 @@ class countModule extends KizBaseModule
     public function count_task_add()
     {
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $sql = "select fc.id,fc.name from fanwe_cangku fc where fc.slid=$slid";
+
+
+        $list = $GLOBALS['db']->getAll($sql);
+        foreach ($list as $key=>$item) {
+            $pandian = "select * from fanwe_cangku_pandian_danju where cangku_id=".$item['id']."  and slid=$slid";
+            $pandianlist = $GLOBALS['db']->getAll($pandian);
+            if(count($pandianlist) > 0){
+                unset($list[$key]);
+            }
+        }
 
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("cangkulist", $list);
         $GLOBALS['tmpl']->assign("templatelist", parent::get_count_template_list());
         $GLOBALS['tmpl']->assign("page_title", "新增盘点单");
         $GLOBALS['tmpl']->display("pages/count/countTaskAdd.html");

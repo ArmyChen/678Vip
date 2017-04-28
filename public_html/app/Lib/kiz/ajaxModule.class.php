@@ -1012,8 +1012,6 @@ class ajaxModule extends KizBaseModule{
                 array_push($arr_list,$list);
             }
 
-
-
             $return['dataList'] = $arr_list;
         }else{
             $return['status'] = false;
@@ -2396,7 +2394,7 @@ class ajaxModule extends KizBaseModule{
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         //$slid = $account_info['slid'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
         //仓库列表
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
@@ -2472,13 +2470,28 @@ class ajaxModule extends KizBaseModule{
     public function count_task_isLocked()
     {
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $warehouseId = $_REQUEST['warehouseId'];
+        $where = " where supplier_id=".$supplier_id." and isdisable=1";
 
-        $return['flag'] = null;
-        $return['exception'] = null;
-        $return['refresh'] = false;
-        $return['success'] = true;
-        $return['message'] = '';
+        if($warehouseId > -1){
+            $where .=" and cangku_id=$warehouseId";
+        }
 
+        $supplierSql = "select * from fanwe_cangku_pandian_danju where cangku_id=$warehouseId";
+        $list=$GLOBALS['db']->getAll($supplierSql);
+
+        $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g left join fanwe_cangku_menu fcm on fcm.mid=g.id LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id where fcm.cid=$warehouseId ";
+        $check=$GLOBALS['db']->getAll($sql);
+
+        $return = false;
+        if(count($check)<0){
+            $return = true;
+        }else{
+            $return = false;
+        }
         echo json_encode($return);exit;
     }
 
@@ -2507,6 +2520,21 @@ class ajaxModule extends KizBaseModule{
     public function count_task_saving_ajax()
     {
         init_app_page();
+        $warehouseId = $_REQUEST['warehouseId'];
+
+        //判断仓库下是否有商品
+        $csql = "select * from fanwe_cangku_menu where cid=$warehouseId";
+        $clist = $GLOBALS['db']->getAll($csql);
+        if(count($clist) == 0){
+            $return['flag'] = null;
+            $return['exception'] = null;
+            $return['refresh'] = false;
+            $return['success'] = false;
+            $return['message'] = "该仓库下无商品库存，不能进行盘点操作！";
+        }
+
+        //查询仓库下的商品，封装商品
+
 
         $where = " where 1=1 ";
         $templateId = $_REQUEST['templateId'];
@@ -2515,11 +2543,7 @@ class ajaxModule extends KizBaseModule{
         }
         $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
 
-        $return['flag'] = null;
-        $return['exception'] = null;
-        $return['refresh'] = false;
-        $return['success'] = true;
-        $return['message'] = '';
+
 
         echo json_encode($return);exit;
     }
