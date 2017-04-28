@@ -2436,14 +2436,12 @@ class ajaxModule extends KizBaseModule{
         if($end_time){
             $str .=" and datetime < ".$end_time." ";
         }
-
-
-
         $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc limit ".$limit);
         $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc ");
         $records = count($list2);
         $data = [];
         foreach ($list as $k=>$v){
+            $data[$k]['id']=$v['id'];
             $data[$k]['ccTaskNo']=$v['danjuhao'];
             $data[$k]['warehouseName']=$cangku_name[$v['cangku_id']];
             $data[$k]['templateName']=$moban_name[$v['moban_id']];
@@ -2451,7 +2449,13 @@ class ajaxModule extends KizBaseModule{
             $data[$k]['lossAmount']=$v['pankui'];
             $data[$k]['updaterName']=$v['edit_user'];
             $data[$k]['updateTime']=$v['datetime'];
-            $data[$k]['statusName']=$v['isdisable']?'已保存':'已确认';
+            if($v['isdisable'] == 1){
+                $data[$k]['statusName']='已保存';
+            }else if($v['isdisable'] == 2){
+                $data[$k]['statusName']='已确认';
+            }else{
+                $data[$k]['statusName'] = '';
+            }
             $data[$k]['status']=$v['isdisable'];
             $data[$k]['showNote']='';
         }
@@ -2536,7 +2540,8 @@ class ajaxModule extends KizBaseModule{
             $return['success'] = false;
             $return['message'] = "该仓库下无商品库存，不能进行盘点操作！";
         }
-
+        $csql2 = "select * from fanwe_cangku_pandian_stat";
+        $clist2 = $GLOBALS['db']->getAll($csql2);
         //新增盘点单据
         //如果ID不存在，则自动增加商品进入产品库，返回ID
         $count_data=array(
@@ -2545,10 +2550,6 @@ class ajaxModule extends KizBaseModule{
             "datetime"=> date('Y-m-d H:i:s'),
             "isdisable"=>1,
         );
-
-        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
-        $mid = $GLOBALS['db']->insert_id();
-
         //查询仓库下的商品，封装商品
         $dd_detail = [];
         foreach ($clist as $key=>$item) {
@@ -2568,6 +2569,10 @@ class ajaxModule extends KizBaseModule{
             $dd_detail[$key]['relTimeAmount'] = $item['id'];
             $dd_detail[$key]['alreadyData'] = $item['id'];
         }
+        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
+        $mid = $GLOBALS['db']->insert_id();
+
+
         $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  where id=".$mid);
         $data = [];
         //仓库列表
@@ -2586,7 +2591,14 @@ class ajaxModule extends KizBaseModule{
             $data['lossAmount']=$v['pankui'];
             $data['updaterName']=$v['edit_user'];
             $data['updateTime']=$v['datetime'];
-            $data['statusName']=$v['isdisable']?'已保存':'已确认';
+            if($v['isdisable'] == 1){
+                $data['statusName']='已保存';
+            }else if($v['isdisable'] == 2){
+                $data['statusName']='已确认';
+            }else{
+                $data['statusName'] = '';
+            }
+
             $data['status']=$v['isdisable'];
             $data['showNote']='';
         }
@@ -2615,6 +2627,33 @@ class ajaxModule extends KizBaseModule{
         $return['success'] = true;
         $return['message'] = '';
 
+        echo json_encode($return);exit;
+    }
+
+    //确认单据
+    public function count_task_doconfirm()
+    {
+        init_app_page();
+
+        $where = " where 1=1 ";
+        $id = $_REQUEST['id'];
+        if($id){
+            $where .=" and id=$id";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_danju $where");
+        if($row){
+            $data['isdisable'] = 2;
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
+
+
+        }
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
         echo json_encode($return);exit;
     }
 }

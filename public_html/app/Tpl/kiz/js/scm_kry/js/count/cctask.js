@@ -11,7 +11,7 @@ var cctask = {
         queryUrl : '&act=count_task_ajax',
         editUrl : '/edit',
         viewUrl : '/view',
-        confirmUrl : '/doconfirm',
+        confirmUrl : '&act=count_task_doconfirm',
         deleteUrl : '/delete',
         sortName : 'ccTaskNo',
         pager : '#gridPager',
@@ -95,8 +95,9 @@ var cctask = {
         };
 
         $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
-
+            if(rowData.status == 1){
+                return renderEnum.normal;
+            }
         };
 
         $.showDelete = function (rowData) {
@@ -117,8 +118,9 @@ var cctask = {
             formId: _this.opts.queryConditionsId,
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['单据号', '盘点仓库','模板名称', '盘盈金额', '盘亏金额','编辑人','最后修改时间', '状态', '状态','提示'],
+            colNames: ['id','单据号', '盘点仓库','模板名称', '盘盈金额', '盘亏金额','编辑人','最后修改时间', '状态', '状态','提示'],
             colModel: [
+                {name: 'id', index: 'id', width: 120, align: "center",hidden:true},
                 {name: 'ccTaskNo', index: 'ccTaskNo', width: 120, align: "center"},
                 {name: 'warehouseName', index: 'warehouseName', width: 80},
                 {name: 'templateName', index: 'templateName', width: 80,align: "center"},
