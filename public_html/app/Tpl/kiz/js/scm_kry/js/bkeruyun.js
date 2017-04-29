@@ -3223,10 +3223,10 @@ function replaceUrl(newUrl, paraStr) {
         paraStr = !!paraStr ? paraStr + '&' + tokenPara : tokenPara;
     }
 
-    var url = !!newUrl ? ctxPath + newUrl : oldUrl;
+    var url = !!newUrl ? newUrl : oldUrl;
 
     if (!!paraStr) {
-        url += '?' + paraStr;
+        url += '&' + paraStr;
     }
 
     history.replaceState({}, "更新浏览器地址", url);

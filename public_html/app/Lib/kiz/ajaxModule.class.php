@@ -2540,8 +2540,40 @@ class ajaxModule extends KizBaseModule{
             $return['success'] = false;
             $return['message'] = "该仓库下无商品库存，不能进行盘点操作！";
         }
-        $csql2 = "select * from fanwe_cangku_pandian_stat";
-        $clist2 = $GLOBALS['db']->getAll($csql2);
+//        $csql2 = "select * from fanwe_cangku_pandian_stat";
+//        $clist2 = $GLOBALS['db']->getAll($csql2);
+
+
+        //查询仓库下的商品，封装商品
+        $inventoryAmount = 0;
+        $ccAmount = 0;
+        $profitAmount = 0;
+        $lossAmount = 0;
+
+        $dd_detail = [];
+        foreach ($clist as $key=>$item) {
+            $dd_detail[$key]['skuId'] = $item['id'];
+            $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
+            $dd_detail[$key]['skuTypeName'] = parent::get_dc_current_supplier_cate(cate_id)?parent::get_dc_current_supplier_cate(cate_id)['name']:'';
+            $dd_detail[$key]['skuCode'] = $item['id'];
+            $dd_detail[$key]['skuName'] = $item['mname'];
+            $dd_detail[$key]['uom'] = $item['unit'];
+            $dd_detail[$key]['price'] = $item['mprice'];
+            $dd_detail[$key]['inventoryQty'] = $item['stock'];
+            $dd_detail[$key]['realTimeInventory'] = $item['stock'];
+            $dd_detail[$key]['ccQty'] = $item['stock'];
+            $dd_detail[$key]['qtyDiff'] = 0;
+            $dd_detail[$key]['amountDiff'] = 0;
+            $dd_detail[$key]['remarks'] = '';
+            $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
+            $dd_detail[$key]['relTimeAmount'] = $item['stock']*$item['mprice'];
+            $dd_detail[$key]['alreadyData'] = 1;
+            $dd_detail[$key]['remarks'] ='';
+            $dd_detail[$key]['djid'] = $item['id'];
+            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
+            $ccAmount +=  $dd_detail[$key]['ccAmount'];
+        }
+
         //新增盘点单据
         //如果ID不存在，则自动增加商品进入产品库，返回ID
         $count_data=array(
@@ -2550,30 +2582,51 @@ class ajaxModule extends KizBaseModule{
             "datetime"=> date('Y-m-d H:i:s'),
             "isdisable"=>1,
         );
-        //查询仓库下的商品，封装商品
-        $dd_detail = [];
-        foreach ($clist as $key=>$item) {
-            $dd_detail[$key]['skuId'] = $item['id'];
-            $dd_detail[$key]['skuTypeName'] = $item['id'];
-            $dd_detail[$key]['skuCode'] = $item['id'];
-            $dd_detail[$key]['skuName'] = $item['id'];
-            $dd_detail[$key]['uom'] = $item['id'];
-            $dd_detail[$key]['price'] = $item['id'];
-            $dd_detail[$key]['inventoryQty'] = $item['id'];
-            $dd_detail[$key]['realTimeInventory'] = $item['id'];
-            $dd_detail[$key]['ccQty'] = $item['id'];
-            $dd_detail[$key]['qtyDiff'] = $item['id'];
-            $dd_detail[$key]['amountDiff'] = $item['id'];
-            $dd_detail[$key]['remarks'] = $item['id'];
-            $dd_detail[$key]['ccAmount'] = $item['id'];
-            $dd_detail[$key]['relTimeAmount'] = $item['id'];
-            $dd_detail[$key]['alreadyData'] = $item['id'];
-        }
+
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
-        $mid = $GLOBALS['db']->insert_id();
+        $djid = $GLOBALS['db']->insert_id();
 
 
-        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  where id=".$mid);
+        //封装单据详情
+        //查询仓库下的商品，封装商品
+        $data_stat=array();
+        $tongji_data=array();
+        foreach ($clist as $key=>$item) {
+            $data_stat[$key]['djid']=$djid;
+            $data_stat[$key]['slid']=$slid;
+            $data_stat[$key]['mid']=$item['id'];
+            $data_stat[$key]['cate_id']=$item['cate_id'];
+            $data_stat[$key]['cid']=$item['cid'];
+            $data_stat[$key]['mbarcode']=$item['mbarcode'];
+            $data_stat[$key]['mname']=$item['mname'];
+            $data_stat[$key]['stock']=$item['stock'];
+            $data_stat[$key]['mstock']=$item['mstock'];
+            $data_stat[$key]['mprice']=$item['mprice'];
+            $data_stat[$key]['unit']=$item['unit'];
+            $data_stat[$key]['funit']=$item['funit'];
+            $data_stat[$key]['times']=$item['times'];
+            $data_stat[$key]['pandianshu']=$item['stock'];
+            $data_stat[$key]['chayishu']=0;
+            $data_stat[$key]['chanyijine']=0;
+            $data_stat[$key]['memo']='';
+            $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
+
+            //这块由于JS能力较差，不方便计算。这个可以在页面上通过通过JS计算好后直接上传也可以
+            if(intval($_REQUEST['chayishu'][$item])>0){  //盘盈
+                $tongji_data['panying']+=0;
+            }
+            if(intval($_REQUEST['chayishu'][$item])<0){  //盘亏
+                $tongji_data['pankui']+=0;
+            }
+
+        }
+
+        //插入Stat数据
+        foreach ($data_stat as $value){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$value);
+        }
+
+        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  where id=".$djid);
         $data = [];
         //仓库列表
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
@@ -2584,11 +2637,14 @@ class ajaxModule extends KizBaseModule{
         //改成一维数据
         $moban_name=array_column($mobanlist,'name','id');
         foreach ($list2 as $k=>$v){
+            $data['id']=$v['id'];
             $data['ccTaskNo']=$v['danjuhao'];
             $data['warehouseName']=$cangku_name[$v['cangku_id']];
             $data['templateName']=$moban_name[$v['moban_id']];
             $data['profitAmount']=$v['panying'];
             $data['lossAmount']=$v['pankui'];
+            $data['inventoryAmount']=$inventoryAmount;
+            $data['ccAmount']=$ccAmount;
             $data['updaterName']=$v['edit_user'];
             $data['updateTime']=$v['datetime'];
             if($v['isdisable'] == 1){
@@ -2606,7 +2662,7 @@ class ajaxModule extends KizBaseModule{
         $data['details'] = $dd_detail;
 
 
-        echo json_encode($data);exit;
+            echo json_encode($data);exit;
     }
 
     //编辑保存盘点单
@@ -2634,7 +2690,9 @@ class ajaxModule extends KizBaseModule{
     public function count_task_doconfirm()
     {
         init_app_page();
-
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
         $where = " where 1=1 ";
         $id = $_REQUEST['id'];
         if($id){
@@ -2645,7 +2703,32 @@ class ajaxModule extends KizBaseModule{
             $data['isdisable'] = 2;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
 
+            //读取盘点单据详情页面数据
+            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
+            foreach($danju_stat as $k=>$v){
+                //取得确认时间的实时库存, 更新到stat表，以备反确认的时候用
+                $sqlstr="slid='$slid' and mid=".$v['mid']." and cid=".$v['cid'];
+                $corrent_stock=$GLOBALS['db']->getOne("select mstock from fanwe_cangku_menu where ".$sqlstr);
+                $corrent_stock_data=array(
+                    "mstock"=>$corrent_stock
+                );
+                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$corrent_stock_data,"UPDATE","id=".$v['id']);
+                $change_stock=$v['stock']-$corrent_stock; //创建到确认之前库存的变化
 
+                //更新cangku_menu 仓库ID、菜单ID、门店ID相同的菜品数量
+                //由于这块在提交保存的时候已经确定了肯定是仓库存在的商品，所以这块不在验证cangku_menu中是否存在
+                $data_menu=array(
+                    'mstock'=>round($v['pandianshu']-$change_stock,2),//减去从仓库到确认这段时间内库存的变化
+                    'ctime'=>to_date(NOW_TIME,'Y-m-d H:i:s')
+                );
+
+
+                //更新cangku_menu
+                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_menu,"UPDATE",$sqlstr);
+                //更新ｄｃ＿ｍｅｎｕ
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
+
+            }
         }
         if($res){
             $return['success'] = true;
