@@ -2323,6 +2323,7 @@ class ajaxModule extends KizBaseModule{
         $data_stat=array();
         foreach ($mid as $key=>$item) {
             $data_stat[$key]['id']=$item['id'];
+            $data_stat[$key]['mid']=$item['mid'];
             $data_stat[$key]['cate_id']=$item['skuTypeId'];
             $data_stat[$key]['cname']=$item['skuTypeName'];
             $data_stat[$key]['name']=$item['skuName'];
@@ -2511,12 +2512,48 @@ class ajaxModule extends KizBaseModule{
         }
         $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
 
+
+        $inventoryAmount = 0;
+        $ccAmount = 0;
+        $profitAmount = 0;
+        $lossAmount = 0;
+        $dd_detail = [];
+        foreach (unserialize($row['accept_goods']) as $key=>$item) {
+            $value = $GLOBALS['db']->getRow("select * from fanwe_dc_menu where id=".$item['id']);
+
+            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
+            if (!empty($typeName)){
+                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
+            }else{
+                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
+            }
+            $dd_detail[$key]['skuId'] = $value['id'];
+            $dd_detail[$key]['skuTypeId'] = $value['cate_id'];
+            $dd_detail[$key]['skuCode'] = $value['id'];
+            $dd_detail[$key]['skuName'] = $value['mname'];
+            $dd_detail[$key]['uom'] = $value['unit'];
+            $dd_detail[$key]['price'] = $value['price'];
+            $dd_detail[$key]['inventoryQty'] = $value['stock'];
+            $dd_detail[$key]['realTimeInventory'] = $value['stock'];
+            $dd_detail[$key]['ccQty'] = $value['stock'];
+            $dd_detail[$key]['qtyDiff'] = 0;
+            $dd_detail[$key]['amountDiff'] = 0;
+            $dd_detail[$key]['remarks'] = '';
+            $dd_detail[$key]['ccAmount'] = $value['stock']*$value['mprice'];
+            $dd_detail[$key]['relTimeAmount'] = $value['stock']*$value['mprice'];
+            $dd_detail[$key]['alreadyData'] = 1;
+            $dd_detail[$key]['remarks'] ='';
+            $dd_detail[$key]['djid'] = $_REQUEST['id'];
+            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
+            $ccAmount +=  $dd_detail[$key]['ccAmount'];
+        }
+
         $return['flag'] = null;
         $return['exception'] = null;
         $return['refresh'] = false;
         $return['success'] = true;
         $return['message'] = '';
-
+        $return['result'] = $dd_detail;
         echo json_encode($return);exit;
     }
 
@@ -2531,7 +2568,7 @@ class ajaxModule extends KizBaseModule{
         $warehouseId = $_REQUEST['warehouseId'];
 
         //判断仓库下是否有商品
-        $csql = "select * from fanwe_cangku_menu where cid=$warehouseId";
+        $csql = "select * from fanwe_cangku_menu fcm inner join fanwe_dc_menu fdm on fdm.id=fcm.mid  where cid=$warehouseId";
         $clist = $GLOBALS['db']->getAll($csql);
         if(count($clist) == 0){
             $return['flag'] = null;
@@ -2549,16 +2586,20 @@ class ajaxModule extends KizBaseModule{
         $ccAmount = 0;
         $profitAmount = 0;
         $lossAmount = 0;
-
         $dd_detail = [];
         foreach ($clist as $key=>$item) {
+            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
+            if (!empty($typeName)){
+                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
+            }else{
+                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
+            }
             $dd_detail[$key]['skuId'] = $item['id'];
             $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
-            $dd_detail[$key]['skuTypeName'] = parent::get_dc_current_supplier_cate(cate_id)?parent::get_dc_current_supplier_cate(cate_id)['name']:'';
             $dd_detail[$key]['skuCode'] = $item['id'];
             $dd_detail[$key]['skuName'] = $item['mname'];
             $dd_detail[$key]['uom'] = $item['unit'];
-            $dd_detail[$key]['price'] = $item['mprice'];
+            $dd_detail[$key]['price'] = $item['price'];
             $dd_detail[$key]['inventoryQty'] = $item['stock'];
             $dd_detail[$key]['realTimeInventory'] = $item['stock'];
             $dd_detail[$key]['ccQty'] = $item['stock'];
@@ -2601,7 +2642,7 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['mname']=$item['mname'];
             $data_stat[$key]['stock']=$item['stock'];
             $data_stat[$key]['mstock']=$item['mstock'];
-            $data_stat[$key]['mprice']=$item['mprice'];
+            $data_stat[$key]['mprice']=$item['price'];
             $data_stat[$key]['unit']=$item['unit'];
             $data_stat[$key]['funit']=$item['funit'];
             $data_stat[$key]['times']=$item['times'];
@@ -2670,20 +2711,57 @@ class ajaxModule extends KizBaseModule{
     {
         init_app_page();
 
-        $where = " where 1=1 ";
-        $templateId = $_REQUEST['templateId'];
-        if($templateId){
-            $where .=" and id=$templateId";
-        }
-        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_mb $where");
+//        $account_info = $GLOBALS['account_info'];
+//        $slid = $account_info['slid'];
+//        $id = $_REQUEST['id'];
+//        $sql = "select fc.id,fc.name from fanwe_cangku fc where fc.slid=$slid";
+//        $gsql = "select * from fanwe_cangku_pandian_danju where id=$id";
+//        $glist = $GLOBALS['db']->getRow($gsql);
+//        $glist['warehousename']=parent::get_cangku_list($glist['cangku_id'])['name'];
+//        $ddsql = "select * from fanwe_cangku_pandian_stat where djid=".$glist['id'];
+//        $clist = $GLOBALS['db']->getAll($ddsql);
+//        $list = $GLOBALS['db']->getAll($sql);
+//        foreach ($list as $key=>$item) {
+//            $pandian = "select * from fanwe_cangku_pandian_danju where isdisable=1 and cangku_id=".$item['id']."  and slid=$slid";
+//            $pandianlist = $GLOBALS['db']->getAll($pandian);
+//            if(count($pandianlist) > 0){
+//                unset($list[$key]);
+//            }
+//        }
+//        $inventoryAmount = 0;
+//        $ccAmount = 0;
+//        $dd_detail = [];
+//        foreach ($clist as $key=>$item) {
+//            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
+//            if (!empty($typeName)){
+//                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
+//            }else{
+//                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
+//            }
+//            $dd_detail[$key]['skuId'] = $item['id'];
+//            $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
+//            $dd_detail[$key]['skuCode'] = $item['id'];
+//            $dd_detail[$key]['skuName'] = $item['mname'];
+//            $dd_detail[$key]['uom'] = $item['unit'];
+//            $dd_detail[$key]['price'] = $item['mprice'];
+//            $dd_detail[$key]['inventoryQty'] = $item['stock'];
+//            $dd_detail[$key]['realTimeInventory'] = $item['stock'];
+//            $dd_detail[$key]['ccQty'] = $item['stock'];
+//            $dd_detail[$key]['qtyDiff'] = 0;
+//            $dd_detail[$key]['amountDiff'] = 0;
+//            $dd_detail[$key]['remarks'] = '';
+//            $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
+//            $dd_detail[$key]['relTimeAmount'] = $item['stock']*$item['mprice'];
+//            $dd_detail[$key]['alreadyData'] = 1;
+//            $dd_detail[$key]['remarks'] ='';
+//            $dd_detail[$key]['djid'] = $item['id'];
+//            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
+//            $ccAmount +=  $dd_detail[$key]['ccAmount'];
+//        }
+//
+//
 
-        $return['flag'] = null;
-        $return['exception'] = null;
-        $return['refresh'] = false;
-        $return['success'] = true;
-        $return['message'] = '';
-
-        echo json_encode($return);exit;
+//        echo json_encode($return);exit;
     }
 
     //确认单据

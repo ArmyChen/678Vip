@@ -50,7 +50,7 @@ var cctask = {
             case 2 ://编辑
                  _this.initDetailGrid();
                 _this.initPrintButton();
-                _this.updateRealTimeQty();
+                // _this.updateRealTimeQty();
                  break;
             case 3 ://查看
                 _this.initDetailGrid();
@@ -223,7 +223,7 @@ var cctask = {
             colModel = [
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, key: true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 120, sortable: sortable},
-                {name: 'skuCode', index: 'skuCode', width: 120, sortable: sortable},
+                {name: 'skuId', index: 'skuId', width: 120, sortable: sortable},
                 {name: 'skuName', index: 'skuName', width: 160,sortable: sortable},
                 {name: 'uom', index: 'uom', width: 50, sortable: sortable, align: 'center'},
                 {
@@ -269,6 +269,7 @@ var cctask = {
                     name: 'ccQty',
                     index: 'ccQty',
                     align: 'right',
+                    hidden:true,
                     width: 170,
                     formatter: _this.opts.editable ? formatInputCcQty : null,
                     unformat: _this.opts.editable ? unformatInput : null,
@@ -341,6 +342,7 @@ var cctask = {
                     name: 'ccQty',
                     index: 'ccQty',
                     align: 'right',
+                    hidden:true,
                     width: 170,
                     formatter: _this.opts.editable ? formatInputCcQty : null,
                     unformat: _this.opts.editable ? unformatInput : null,
@@ -660,11 +662,12 @@ createCcTask = function(warehouseId){
             $("#btnExport").show();//显示导出按钮
 
             //更改url新增地址为编辑地址，改变页面title等
-            replaceUrl(countPath + '&act=count_task_edit', 'id=' + result.id);
+            // replaceUrl(countPath + '&act=count_task_edit', 'id=' + result.id);
+            location.href=countPath + '&act=count_task_edit&id='+result.id;
             $("#command-type-name").text("编辑");
             document.title = '编辑盘点单';
 
-            cctask.updateRealTimeQty();
+            // cctask.updateRealTimeQty();
         },
         error:function(xhr, status, error){
 
@@ -740,7 +743,7 @@ $.confirmCallback = function (args) {
         }
         $.doForward({"url":url, "postData":{"id":id}});
     } else {
-        cctask.updateRealTimeQty();
+        // cctask.updateRealTimeQty();
         if (rs.data != '' && rs.data != null) {
             //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
             $.layerOpen("操作失败:" + rs.message, rs.data);

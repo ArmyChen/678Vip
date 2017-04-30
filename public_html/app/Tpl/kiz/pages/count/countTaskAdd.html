@@ -6,15 +6,15 @@
         <h1><span id="command-type-name">新增</span><span id="orderType">盘点单</span></h1>
 
         <div class="btn-wrap pull-right tar">
-            <a class="btn-link ml10" id="btnExport" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackExport'}"
-               style="display: none;">导出</a>
+            <!--<a class="btn-link ml10" id="btnExport" function="$.doSave"-->
+               <!--args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',-->
+                   <!--customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackExport'}"-->
+               <!--style="display: none;">导出</a>-->
 
-            <a class="btn-link ml10" id="btnPrint2" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackPrint'}"
-               style="display: none;">打印</a>
+            <!--<a class="btn-link ml10" id="btnPrint2" function="$.doSave"-->
+               <!--args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',-->
+                   <!--customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackPrint'}"-->
+               <!--style="display: none;">打印</a>-->
 
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
                args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
@@ -195,7 +195,7 @@
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
 <!-- 商品过滤 end -->
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/count/cctask.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170406_201331"></script>
 
 <script type="text/javascript">
 
@@ -268,7 +268,7 @@
                     $('#ccAmountSum').text("￥" + result.ccAmount);
                     $('#profitAmountSum').text("￥" + result.profitAmount);
                     $('#lossAmountSum').text("￥" + result.lossAmount);
-                    cctask.updateRealTimeQty();//实实库存
+//                    cctask.updateRealTimeQty();//实实库存
                 },
                 error:function(xhr, status, error){/* do nothing */}
             });

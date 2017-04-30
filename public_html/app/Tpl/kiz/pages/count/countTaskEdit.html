@@ -56,7 +56,7 @@
                             <input type="hidden" id="warehouseId" name="warehouseId" value="38904">
 
                             <input type="text" class="form-control w240 required dfdfdf" id="warehouseName"
-                                   name="warehouseName" value="测试5" readonly>
+                                   name="warehouseName" value="{$glist.warehousename}" readonly>
                         </dd>
                     </dl>
                 </div>
@@ -69,21 +69,10 @@
                             <select id="templateId" name="templateId">
                                 <option value="-1">不选模板，则全部盘点</option>
 
-                                <option value="7766"
+                                {foreach from=$templatelist item=item}
+                                <option value="{$item.id}" >{$item.name}</option>
+                                {/foreach}
 
-                                >是是是</option>
-
-                                <option value="24871"
-
-                                >878</option>
-
-                                <option value="25361"
-
-                                >CS</option>
-
-                                <option value="25367"
-
-                                >LUCY</option>
 
                             </select>
                         </dd>
@@ -96,7 +85,7 @@
                         <dt><label for="ccTaskNo">单据号<strong class="red vam"> *</strong></label></dt>
                         <dd class="positionRelative">
                             <input type="text" class="form-control w240 required dfdfdf" id="ccTaskNo" name="ccTaskNo"
-                                   value="PD201704290001" readonly>
+                                   value="{$glist.danjuhao}" readonly>
                         </dd>
                     </dl>
                 </div>
@@ -109,7 +98,7 @@
                                 <TEXTAREA id="remarks" name="remarks" class="w260" style="height: 65px;"
                                           placeholder="备注说明（可不填）" data-character="true"
                                           onpropertychange="if(value.length > 48) value=value.substr(0,48)"
-                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                          oninput="if(value.length > 48) value=value.substr(0,48)">{$glist.memo}</TEXTAREA>
                             </div>
                             <div class="wrong"></div>
                         </dd>
@@ -119,7 +108,7 @@
 
             </div>
 
-            <input id="id" name="id" type="hidden" value="35812">
+            <input id="id" name="id" type="hidden" value="{$glist.id}">
             <input id="ccModel" name="ccModel" type="hidden" value="1">
         </form>
         <!-- 基本信息 end -->
@@ -133,13 +122,13 @@
             <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
             <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
             <div class="input-group search-box w200 pull-left ml5">
-                <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                <div class="input-group-addon"><img width="20" height="20" src="/app/Tpl/kiz/js/scm_kry/img/scanning.png" alt=""></div>
                 <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
                 <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
             </div>
         </div>
 
-        <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+        <!--<div id="filterGridDiv" class="pull-left cut-off-rule"></div>-->
 
         <div class="panel-body">
             <div class="inventoryTotal mr15" style="margin-top:-50px;" >
@@ -147,7 +136,7 @@
                 <span>盘亏占比&nbsp;<span class="iconfont question color-g" data-offset="left" data-content="盘亏占比=盘亏金额合计/实时库存金额"></span>：<span id="lossRate">0.00%</span></span>
             </div>
             <div class="inventoryTotal mr15" style="float:right;">
-                <span >实时库存金额：<span id="inventoryAmountSum">￥12</span></span>
+                <span >实时库存金额：<span id="inventoryAmountSum">￥12999</span></span>
                 <span id="ccAmoutSpan">盘点金额：<span id="ccAmountSum">￥12</span></span>
                 <span >盘盈金额合计：<span id="profitAmountSum">￥0</span></span>
                 <span >盘亏金额合计：<span id="lossAmountSum">￥0</span></span>
@@ -170,7 +159,7 @@
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
 <!-- 商品过滤 end -->
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/count/cctask.js?v=20170406_201331"></script>
-<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170406_201331"></script>
 
 <script type="text/javascript">
 
@@ -180,7 +169,7 @@
             commandType: 2,
             urlRoot: '/scm_kry/cc/task',
             editable: true,
-            details: [{"id":15002539,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":88888981819,"creatorName":"admin","createTime":"2017-04-29 11:01:20","updaterId":88888981819,"updaterName":"admin","updateTime":"2017-04-29 11:01:20","version":0,"ccTaskId":35812,"ccTaskNo":"PD201704290001","lineNo":1,"skuId":3095689,"skuCode":"SKU0002","skuName":"22111","skuTypeName":"uuu","price":12.00000,"uom":"盘","inventoryQty":1.00000,"inventoryAmount":12.00000,"ccQty":1.00000,"ccAmount":12.00000,"qtyDiff":0.00000,"amountDiff":0.00000,"status":0,"skuDisable":0,"remarks":"","realTimeInventory":1.00000,"relTimeAmount":null,"skuTypeId":211182}],
+            details: {$dd_detail},
             urlWebSocket : 'ws://' + window.location.host + '/scm_kry/inventoryWebsocket/',
             ccModel: 1
         };
@@ -215,7 +204,7 @@
 
         layer.confirm(msg, {icon:3, offset: '30%'} , function(index){
             $.ajax({
-                url: cctask.opts.urlRoot + '/sku/info',
+                url: ctxPath + "&act=count_task_info",
                 type: "post",
                 data: {warehouseId: warehouseId,templateId:templateId,ccModel: ccModel},
                 dataType: 'json',
@@ -239,11 +228,11 @@
 
                     reloadGrid(result);
 
-                    $('#inventoryAmountSum').text("￥" + result.inventoryAmount);
+                    $('#inventoryAmountSum').text("￥9999" + result.inventoryAmount);
                     $('#ccAmountSum').text("￥" + result.ccAmount);
                     $('#profitAmountSum').text("￥" + result.profitAmount);
                     $('#lossAmountSum').text("￥" + result.lossAmount);
-                    cctask.updateRealTimeQty();//实实库存
+//                    cctask.updateRealTimeQty();//实实库存
                 },
                 error:function(xhr, status, error){/* do nothing */}
             });
