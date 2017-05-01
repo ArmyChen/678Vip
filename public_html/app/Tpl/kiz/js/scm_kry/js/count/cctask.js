@@ -9,10 +9,10 @@ var cctask = {
         queryConditionsId : 'queryConditions',
         listGridId : '#grid',
         queryUrl : '&act=count_task_ajax',
-        editUrl : '/edit',
-        viewUrl : '/view',
+        editUrl : '&act=count_task_edit',
+        viewUrl : '&act=count_task_view',
         confirmUrl : '&act=count_task_doconfirm',
-        deleteUrl : '/delete',
+        deleteUrl : '&act=count_task_delete',
         sortName : 'ccTaskNo',
         pager : '#gridPager',
         detailGridId : '#grid',
@@ -85,8 +85,9 @@ var cctask = {
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
-
+            if(rowData.status == 1){
+                return renderEnum.normal;
+            }
         };
 
         $.showView = function (rowData) {
@@ -149,7 +150,7 @@ var cctask = {
             showOperate:true,
             actionParam: {
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: countPath + _this.opts.editUrl,
                     code: "scm:button:cc:cc:edit",
                     render: $.showEditor
                 },
@@ -215,13 +216,14 @@ var cctask = {
         var colNames, colModel, gridCal;
         if (_this.opts.ccModel == 1) {//明盘
 
-            colNames = ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格',
+            colNames = ['skuId','分类id','所属分类', '商品编码', '商品名称(规格)', '单位', '价格',
                 '盘点初始库存'+cctask.opts.tooltipText1,
                 '实时库存'+cctask.opts.tooltipText2,
                 '盘点数', '盘点差异<br/><span style="font-size:12px; ">(盘点数-实时库存)</span>', '盘点差异金额', '备注', '盘点金额', '实时库存金额', '是否原数据'];
 
             colModel = [
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, key: true},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 120, sortable: sortable},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 120, sortable: sortable},
                 {name: 'skuId', index: 'skuId', width: 120, sortable: sortable},
                 {name: 'skuName', index: 'skuName', width: 160,sortable: sortable},
@@ -315,10 +317,11 @@ var cctask = {
 
         } else {//暗盘
 
-            colNames = ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '盘点初始库存', '盘点数', '备注', '盘点金额', '是否原数据'];
+            colNames = ['skuId','分类id' ,'所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '盘点初始库存', '盘点数', '备注', '盘点金额', '是否原数据'];
 
             colModel = [
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, key: true},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, hidden: true, key: true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 120, sortable: sortable},
                 {name: 'skuCode', index: 'skuCode', width: 120, sortable: sortable},
                 {name: 'skuName', index: 'skuName', width: 160,sortable: sortable},
@@ -735,13 +738,13 @@ enableCcTaskNo = function(ccTaskNo){
 $.confirmCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-        var id = rs.data.id;
-        var url = cctask.opts.urlRoot + '/view';
-        var token_new = args.token;
-        if(token_new) {
-            $('#t').val(token_new);
-        }
-        $.doForward({"url":url, "postData":{"id":id}});
+        // var id = rs.data.id;
+        var url = countPath + '&act=count_task_index';
+        // var token_new = args.token;
+        // if(token_new) {
+        //     $('#t').val(token_new);
+        // }
+        $.doForward({"url":url});
     } else {
         // cctask.updateRealTimeQty();
         if (rs.data != '' && rs.data != null) {
@@ -759,6 +762,7 @@ $.confirmCallback = function (args) {
  * 每隔一段时间发一次请求，使得session不过期
  */
 activate = function() {
+    return;
     /**
      * 根据市场反馈临时将业务改成自动保存
      */

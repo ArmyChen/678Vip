@@ -6,23 +6,23 @@
         <h1><span id="command-type-name">编辑</span><span id="orderType">盘点单</span></h1>
 
         <div class="btn-wrap pull-right tar">
-            <a class="btn-link ml10" id="btnExport" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackExport'}"
-            >导出</a>
+            <!--<a class="btn-link ml10" id="btnExport" function="$.doSave"-->
+               <!--args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',-->
+                   <!--customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackExport'}"-->
+            <!--&gt;导出</a>-->
 
-            <a class="btn-link ml10" id="btnPrint2" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackPrint'}"
-            >打印</a>
+            <!--<a class="btn-link ml10" id="btnPrint2" function="$.doSave"-->
+               <!--args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',-->
+                   <!--customValidator:'$.saveOrUpdateValidator',submitCallback:'saveCallbackPrint'}"-->
+            <!--&gt;打印</a>-->
 
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_task_edit_saving_ajax',
                    customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">保存</a>
-            <a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doConfirmOrder"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/confirm',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.confirmCallback',confirmAfter:'$.confirmAfter'}">确认</a>
-            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/cc/task/index');">返回</a>
+            <a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doSave"
+               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_task_edit_saving_ajax&type=2',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">确认</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=count&act=count_task_index');">返回</a>
         </div>
     </div>
 </div>
@@ -70,7 +70,7 @@
                                 <option value="-1">不选模板，则全部盘点</option>
 
                                 {foreach from=$templatelist item=item}
-                                <option value="{$item.id}" >{$item.name}</option>
+                                <option value="{$item.id}" {if $item.id eq $glist.moban_id}selected{/if}>{$item.name}</option>
                                 {/foreach}
 
 
@@ -228,7 +228,7 @@
 
                     reloadGrid(result);
 
-                    $('#inventoryAmountSum').text("￥9999" + result.inventoryAmount);
+                    $('#inventoryAmountSum').text("￥" + result.inventoryAmount);
                     $('#ccAmountSum').text("￥" + result.ccAmount);
                     $('#profitAmountSum').text("￥" + result.profitAmount);
                     $('#lossAmountSum').text("￥" + result.lossAmount);

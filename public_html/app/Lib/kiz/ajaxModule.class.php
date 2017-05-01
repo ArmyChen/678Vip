@@ -2418,7 +2418,7 @@ class ajaxModule extends KizBaseModule{
             $end_time = strim($_REQUEST['createDateEnd']);
         }
 
-        $str="where supplier_id=".$supplier_id;
+        $str="where slid=".$slid;
         if($isdisable > -1){
             $str .=  " and isdisable=".$isdisable;
         }
@@ -2437,10 +2437,12 @@ class ajaxModule extends KizBaseModule{
         if($end_time){
             $str .=" and datetime < ".$end_time." ";
         }
+//        var_dump($str);
         $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc limit ".$limit);
         $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_pandian_danju  $str order by id desc ");
         $records = count($list2);
         $data = [];
+//        var_dump($list);
         foreach ($list as $k=>$v){
             $data[$k]['id']=$v['id'];
             $data[$k]['ccTaskNo']=$v['danjuhao'];
@@ -2520,7 +2522,7 @@ class ajaxModule extends KizBaseModule{
         $dd_detail = [];
         foreach (unserialize($row['accept_goods']) as $key=>$item) {
             $value = $GLOBALS['db']->getRow("select * from fanwe_dc_menu where id=".$item['id']);
-
+//var_dump($value);
             $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
             if (!empty($typeName)){
                 $dd_detail[$key]['skuTypeName'] = $typeName['name'];
@@ -2530,7 +2532,7 @@ class ajaxModule extends KizBaseModule{
             $dd_detail[$key]['skuId'] = $value['id'];
             $dd_detail[$key]['skuTypeId'] = $value['cate_id'];
             $dd_detail[$key]['skuCode'] = $value['id'];
-            $dd_detail[$key]['skuName'] = $value['mname'];
+            $dd_detail[$key]['skuName'] = $value['name'];
             $dd_detail[$key]['uom'] = $value['unit'];
             $dd_detail[$key]['price'] = $value['price'];
             $dd_detail[$key]['inventoryQty'] = $value['stock'];
@@ -2539,8 +2541,8 @@ class ajaxModule extends KizBaseModule{
             $dd_detail[$key]['qtyDiff'] = 0;
             $dd_detail[$key]['amountDiff'] = 0;
             $dd_detail[$key]['remarks'] = '';
-            $dd_detail[$key]['ccAmount'] = $value['stock']*$value['mprice'];
-            $dd_detail[$key]['relTimeAmount'] = $value['stock']*$value['mprice'];
+            $dd_detail[$key]['ccAmount'] = $value['stock']*$value['price'];
+            $dd_detail[$key]['relTimeAmount'] = $value['stock']*$value['price'];
             $dd_detail[$key]['alreadyData'] = 1;
             $dd_detail[$key]['remarks'] ='';
             $dd_detail[$key]['djid'] = $_REQUEST['id'];
@@ -2548,12 +2550,18 @@ class ajaxModule extends KizBaseModule{
             $ccAmount +=  $dd_detail[$key]['ccAmount'];
         }
 
-        $return['flag'] = null;
-        $return['exception'] = null;
-        $return['refresh'] = false;
-        $return['success'] = true;
-        $return['message'] = '';
-        $return['result'] = $dd_detail;
+//        $return['flag'] = null;
+//        $return['exception'] = null;
+//        $return['refresh'] = false;
+//        $return['success'] = true;
+//        $return['message'] = '';
+//        $return['result'] = $dd_detail;
+        $return['inventoryAmount'] = $inventoryAmount;
+        $return['ccAmount'] = $ccAmount;
+        $return['profitAmount'] = 0;
+        $return['lossAmount'] = 0;
+
+        $return['details'] = $dd_detail;
         echo json_encode($return);exit;
     }
 
@@ -2622,6 +2630,8 @@ class ajaxModule extends KizBaseModule{
             "cangku_id"=>$warehouseId,
             "datetime"=> date('Y-m-d H:i:s'),
             "isdisable"=>1,
+            "supplier_id"=>$supplier_id,
+            "slid"=>$slid
         );
 
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
@@ -2702,66 +2712,107 @@ class ajaxModule extends KizBaseModule{
 
         $data['details'] = $dd_detail;
 
-
-            echo json_encode($data);exit;
+        echo json_encode($data);exit;
     }
 
-    //编辑保存盘点单
+    //更新盘点单
     public function count_task_edit_saving_ajax()
     {
         init_app_page();
+        $warehouseId = $_REQUEST['warehouseId'];
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $warehouseId = $_REQUEST['warehouseId'];
+        $djid = $_REQUEST['id'];
+        $type = $_REQUEST['type'];
+        $templateId = $_REQUEST['templateId'];
+        $memo = $_REQUEST['remarks'];
+//        var_dump($_REQUEST);die;
 
-//        $account_info = $GLOBALS['account_info'];
-//        $slid = $account_info['slid'];
-//        $id = $_REQUEST['id'];
-//        $sql = "select fc.id,fc.name from fanwe_cangku fc where fc.slid=$slid";
-//        $gsql = "select * from fanwe_cangku_pandian_danju where id=$id";
-//        $glist = $GLOBALS['db']->getRow($gsql);
-//        $glist['warehousename']=parent::get_cangku_list($glist['cangku_id'])['name'];
-//        $ddsql = "select * from fanwe_cangku_pandian_stat where djid=".$glist['id'];
-//        $clist = $GLOBALS['db']->getAll($ddsql);
-//        $list = $GLOBALS['db']->getAll($sql);
-//        foreach ($list as $key=>$item) {
-//            $pandian = "select * from fanwe_cangku_pandian_danju where isdisable=1 and cangku_id=".$item['id']."  and slid=$slid";
-//            $pandianlist = $GLOBALS['db']->getAll($pandian);
-//            if(count($pandianlist) > 0){
-//                unset($list[$key]);
-//            }
-//        }
-//        $inventoryAmount = 0;
-//        $ccAmount = 0;
-//        $dd_detail = [];
-//        foreach ($clist as $key=>$item) {
-//            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
-//            if (!empty($typeName)){
-//                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
-//            }else{
-//                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
-//            }
-//            $dd_detail[$key]['skuId'] = $item['id'];
-//            $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
-//            $dd_detail[$key]['skuCode'] = $item['id'];
-//            $dd_detail[$key]['skuName'] = $item['mname'];
-//            $dd_detail[$key]['uom'] = $item['unit'];
-//            $dd_detail[$key]['price'] = $item['mprice'];
-//            $dd_detail[$key]['inventoryQty'] = $item['stock'];
-//            $dd_detail[$key]['realTimeInventory'] = $item['stock'];
-//            $dd_detail[$key]['ccQty'] = $item['stock'];
-//            $dd_detail[$key]['qtyDiff'] = 0;
-//            $dd_detail[$key]['amountDiff'] = 0;
-//            $dd_detail[$key]['remarks'] = '';
-//            $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
-//            $dd_detail[$key]['relTimeAmount'] = $item['stock']*$item['mprice'];
-//            $dd_detail[$key]['alreadyData'] = 1;
-//            $dd_detail[$key]['remarks'] ='';
-//            $dd_detail[$key]['djid'] = $item['id'];
-//            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
-//            $ccAmount +=  $dd_detail[$key]['ccAmount'];
-//        }
-//
-//
+        //判断仓库下是否有商品
+        $clist =$_REQUEST['details'];
+        if(count($clist) == 0) {
+            $return['flag'] = null;
+            $return['exception'] = null;
+            $return['refresh'] = false;
+            $return['success'] = false;
+            $return['message'] = "该模板下无商品库存，不能进行盘点操作！";
+        }
 
-//        echo json_encode($return);exit;
+        if($type == 2){
+            $count_data=array(
+                "datetime"=> date('Y-m-d H:i:s'),
+                "isdisable"=>2,
+                "edit_user"=>$account_info['account_name'],
+                "moban_id"=>$templateId,
+                "memo"=>$memo
+            );
+        }else{
+            $count_data=array(
+                "datetime"=> date('Y-m-d H:i:s'),
+                "isdisable"=>1,
+                "edit_user"=>$account_info['account_name'],
+                "moban_id"=>$templateId,
+                "memo"=>$memo
+            );
+        }
+        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"update","id=".$djid);
+
+        $dropSql = "delete from fanwe_cangku_pandian_stat where djid=".$djid;
+        $r = $GLOBALS['db']->query($dropSql);//删除原来盘点单的详情
+//        var_dump($r);
+        //封装单据详情
+        //查询仓库下的商品，封装商品
+        $data_stat=array();
+        $tongji_data=array();
+        foreach ($clist as $key=>$item) {
+
+            //查询商品信息
+            $ccsql = "select * from fanwe_dc_menu where id=".$item['skuId'];
+            $item = $GLOBALS['db']->getRow($ccsql);
+
+            $data_stat[$key]['djid']=$djid;
+            $data_stat[$key]['slid']=$slid;
+            $data_stat[$key]['mid']=$item['id'];
+            $data_stat[$key]['cate_id']=$item['cate_id'];
+            $data_stat[$key]['cid']=$item['cid'];
+            $data_stat[$key]['mbarcode']=$item['barcode'];
+            $data_stat[$key]['mname']=$item['name'];
+            $data_stat[$key]['stock']=$item['stock'];
+            $data_stat[$key]['mstock']=$item['stock'];
+            $data_stat[$key]['mprice']=$item['price'];
+            $data_stat[$key]['unit']=$item['unit'];
+            $data_stat[$key]['funit']=$item['funit'];
+            $data_stat[$key]['times']=$item['times'];
+            $data_stat[$key]['pandianshu']=$item['stock'];
+            $data_stat[$key]['chayishu']=0;
+            $data_stat[$key]['chanyijine']=0;
+            $data_stat[$key]['memo']='';
+            $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
+
+            //这块由于JS能力较差，不方便计算。这个可以在页面上通过通过JS计算好后直接上传也可以
+            if(intval($_REQUEST['chayishu'][$item])>0){  //盘盈
+                $tongji_data['panying']+=0;
+            }
+            if(intval($_REQUEST['chayishu'][$item])<0){  //盘亏
+                $tongji_data['pankui']+=0;
+            }
+
+        }
+
+        //插入Stat数据
+        foreach ($data_stat as $value){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$value);
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = "保存成功";
+
+        echo json_encode($return);exit;
     }
 
     //确认单据
