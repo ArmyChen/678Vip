@@ -433,6 +433,21 @@ class KizBaseModule{
         return null;
     }
 
+    /**
+     * 根据id当前分类
+     * @param $id
+     * @return mixed
+     */
+    function get_dc_current_gys_cate($id){
+        if($id > 0) {
+            $res = $id;
+            $check = $GLOBALS['db']->getRow("select * from fanwe_gys_category where id=".$id);
+            return $check;
+        }
+
+        return null;
+    }
+
 
     /**
      * 获取部门列表

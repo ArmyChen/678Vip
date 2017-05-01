@@ -27,20 +27,9 @@
                 <div class="search-box mt10">
                     <select id="supplierCateId" name="supplierCateId">
                         <option value="">请选择供应商类别</option>
-
-
-
-                        <option value="4551">默认供应商类别</option>
-
-
-
-
-                        <option value="6706">牛肉</option>
-
-
-
-
-                        <option value="6707">调料</option>
+                        {foreach from=$list item=item}
+                        <option value="{$item.id}">{$item.supplierName}</option>
+                        {/foreach}
 
 
                     </select>
@@ -53,11 +42,11 @@
                 <ul class="panel-list-type">
                     <li>
                         <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
-                            <input type="checkbox" name="isDisable" id="status-0" checked value="0">启用</label>
+                            <input type="checkbox" name="isDisable" id="status-0" checked value="1">启用</label>
                     </li>
                     <li>
                         <label class="checkbox" for="status-1" id="checkbox-1"><span></span>
-                            <input type="checkbox" name="isDisable" id="status-1" value="1">停用</label>
+                            <input type="checkbox" name="isDisable" id="status-1" value="0">停用</label>
                     </li>
                 </ul>
             </div>
@@ -84,7 +73,6 @@
 <script type="text/javascript">
     $(function() {
         var opts = {
-            urlRoot : "/scm_kry/scm/supplier",
             commandType :0
         };
         supplierList._init(opts);

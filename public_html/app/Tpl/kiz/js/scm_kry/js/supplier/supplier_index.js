@@ -4,17 +4,17 @@ var supplierList = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '/scm/supplierCate',
+        urlRoot : ctxPath,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query/list',
-        editUrl : '/edit',
-        viewUrl : '/view',
-        lockUrl : '/disableSupplier',
-        saveUrl : '/save',
-        unlockUrl : '/enableSupplier',
-        deleteUrl : '/delete',
+        queryUrl : '&act=supplier_ajax',
+        editUrl : '&act=supplier_edit',
+        viewUrl : '&act=supplier_view',
+        lockUrl : '&act=supplier_lock',
+        saveUrl : '&act=supplier_add',
+        unlockUrl : '&act=supplier_lock',
+        deleteUrl : '&act=supplier_del',
         sortName : 'parentSkuTypeCode',
         pager : '#gridPager',
         formId : 'baseInfoForm',
@@ -79,43 +79,36 @@ var supplierList = {
         	if(!checkbox0&&!checkbox1) delete formData.isDisable;
             return formData;
         };
+        $.showView = function (rowData) {
+            return renderEnum.hidden;
+
+        };
 
         $.showEdit = function (rowData) {
-        	var flag = renderEnum.normal;
-        	if(rowData.isDisable) flag = renderEnum.disabled;
-            return flag;
+            return renderEnum.hidden;
+
         };
 
         //先假设可用判断置灰，再判断是否可用
         $.showlock = function (rowData) {
-            if (rowData.isDefault) {
-                return renderEnum.disabled;
-            }
-        	var flag = renderEnum.normal;
-        	if(rowData.isDisable) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.hidden;
+
         };
         
         $.showUnlock = function (rowData) {
-        	var flag = renderEnum.normal;
-        	if(!rowData.isDisable) flag = renderEnum.hidden;
-            return flag;
+            return renderEnum.hidden;
+
         };
 
         $.showDelete = function (rowData) {
-            if (rowData.isDefault) {
-                return renderEnum.disabled;
-            }
-            if (rowData.isDelete == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
+
         };
 
         var $gridObj = $("#" + _this.opts.listGridId);
         $gridObj.dataGrid({
             rownumbers: true,
-            //formId: "queryConditions",
+            formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
             colNames: ['id', '供应商类别', '供应商编码','供应商名称','税率', '编辑人','最后编辑时间', '状态', '操作'],
@@ -141,7 +134,7 @@ var supplierList = {
                     align: "center",
                     width: 100,
                     formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDisable==1) {
+                        if (rowObject.isDisable==0) {
                             return "<span style='color:red'>停用 </span>";
                         } else {
                             return "启用";
@@ -155,7 +148,8 @@ var supplierList = {
             showOperate: true,
             actionParam: {
             	view: {
-                    url: _this.opts.urlRoot + _this.opts.viewUrl
+                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    render : $.showView,
                 },
                 editor: {
                 	render : $.showEdit,

@@ -1,4 +1,3 @@
-//Create by LiXing On 2016/8/12
 var aggregateList = {
     $listGrid : '',
     $detailGrid : '',

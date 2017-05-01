@@ -227,13 +227,14 @@ $("#btnNext,#btnSave-bak").on("click", function () {
 	
     $("#supplierForm").submit();
     //检查是否验证通过
-    var flag = $("#supplierForm").valid();
-  
+    // var flag = $("#supplierForm").valid();
+    var flag = true;
+
     if (flag&&loadData) {
         var params = $("#supplierForm").serialize();
         $.ajax({
             type: "POST",
-            url: "scm/supplier/saveScmSupplier",
+            url: ctxPath+"&act=supplier_add_ajax",
             data: params,
             dataType: "json",
             contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -241,47 +242,52 @@ $("#btnNext,#btnSave-bak").on("click", function () {
             cache: false,
             success: function (data) {
                 $("#btn-save").bind("click");
-                if (data.message.indexOf("success") != -1) {
-                	var showMsg = $("#supplierCode").val().length==0;
-                	if(isBtnBak){
-                		$("#btnMore").text("隐藏更多......");
-                		$("#setMore").show();
-                		if(showMsg){
-                			$.layerMsg("操作成功，"+data.scmSupplier.supplierName+"编码是：<span style='color:red;'>"+data.scmSupplier.supplierCode+"</span>", true,{shade: 0.3});
-                		}else{
-                			$.layerMsg("操作成功！", true,{shade: 0.3});
-                		}
-                		doResetType();
-                	}else{
-                		if(showMsg){
-                			$.layerMsg("操作成功，"+data.scmSupplier.supplierName+"编码是：<span style='color:red;'>"+data.scmSupplier.supplierCode+"</span>", true, {
-                				end:function(){
-                					window.location.href = $("#root_url").val() + "/scm/supplier/index";
-                				},shade: 0.3});
-                		}else{
-                			$.layerMsg("操作成功！", true, {
-                				end:function(){
-                					window.location.href = $("#root_url").val() + "/scm/supplier/index";
-                				},shade: 0.3});
-                		}
-                	}
+                if (data.success) {
+                    $.layerMsg("操作成功！", true, {
+                        end:function(){
+                            window.location.href = supplierPath + "&act=supplier_index";
+                        },shade: 0.3});
+                	// var showMsg = $("#supplierCode").val().length==0;
+                	// if(isBtnBak){
+                	// 	$("#btnMore").text("隐藏更多......");
+                	// 	$("#setMore").show();
+                	// 	if(showMsg){
+                	// 		$.layerMsg("操作成功，"+data.scmSupplier.supplierName+"编码是：<span style='color:red;'>"+data.scmSupplier.supplierCode+"</span>", true,{shade: 0.3});
+                	// 	}else{
+                	// 		$.layerMsg("操作成功！", true,{shade: 0.3});
+                	// 	}
+                	// 	doResetType();
+                	// }else{
+                	// 	if(showMsg){
+                	// 		$.layerMsg("操作成功，"+data.scmSupplier.supplierName+"编码是：<span style='color:red;'>"+data.scmSupplier.supplierCode+"</span>", true, {
+                	// 			end:function(){
+                	// 				window.location.href = $("#root_url").val() + "/scm/supplier/index";
+                	// 			},shade: 0.3});
+                	// 	}else{
+                	// 		$.layerMsg("操作成功！", true, {
+                	// 			end:function(){
+                	// 				window.location.href = $("#root_url").val() + "/scm/supplier/index";
+                	// 			},shade: 0.3});
+                	// 	}
+                	// }
                 } else {
-                	 if (data.message.indexOf("编码") != -1) {
-                     	var lab = '<label for="supplierCode" generated="true" class="error">'+data.message+'</label>';
-                     	$("#supplierCode1").parent().find(".wrong").html(lab);
-                     } else if (data.message.indexOf("名称") != -1) {
-                     	var lab = '<label for="supplierName" generated="true" class="error">'+data.message+'</label>';
-                     	$("#supplierName1").parent().find(".wrong").html(lab);
-                     } else if (data.message.indexOf("类别") != -1) {
-                         var lab = '<label for="supplierCateId" generated="true" class="error">'+data.message+'</label>';
-                         $("#supplierCateId1").parents('.panel-item').find('.wrong').html(lab);
-                     } else if (data.message.indexOf("过期") != -1) {
-                     	$.layerMsg(data.message, false, {
-                             end:function(){
-                                 //window.location.href = getContextPath() + "/scm/supplier/index";
-                                 window.location.reload(true);//fix bugId 12547
-                         }});
-                     }
+                    $.layerMsg("操作失败！", true,{shade: 0.3});
+                     // if (data.message.indexOf("编码") != -1) {
+                     // 	var lab = '<label for="supplierCode" generated="true" class="error">'+data.message+'</label>';
+                     // 	$("#supplierCode1").parent().find(".wrong").html(lab);
+                     // } else if (data.message.indexOf("名称") != -1) {
+                     // 	var lab = '<label for="supplierName" generated="true" class="error">'+data.message+'</label>';
+                     // 	$("#supplierName1").parent().find(".wrong").html(lab);
+                     // } else if (data.message.indexOf("类别") != -1) {
+                     //     var lab = '<label for="supplierCateId" generated="true" class="error">'+data.message+'</label>';
+                     //     $("#supplierCateId1").parents('.panel-item').find('.wrong').html(lab);
+                     // } else if (data.message.indexOf("过期") != -1) {
+                     // 	$.layerMsg(data.message, false, {
+                     //         end:function(){
+                     //             //window.location.href = getContextPath() + "/scm/supplier/index";
+                     //             window.location.reload(true);//fix bugId 12547
+                     //     }});
+                     // }
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {

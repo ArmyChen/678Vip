@@ -2868,4 +2868,113 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+    //供应商管理
+    public function supplier_ajax(){
+        init_app_page();
+
+        //更新供应商字段
+//        $GLOBALS['db']->query('alter table fanwe_cangku_gys add gys_code varchar(255)');
+//        var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_gys'));
+//        die;
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isDisable'];
+        $kw = $_REQUEST['supplierName'];
+        $supplierCateId = $_REQUEST['supplierCateId'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+
+        $str = "";
+        if($kw){
+            $str = " and (name like '%$kw%' or gys_code like '%$kw%')";
+        }
+
+        if($supplierCateId){
+            $str .= " and gys_cate_id=$supplierCateId";
+        }
+
+        !isset($isdd) && $isdd = 1;
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $sql = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid and isdisable=$isdd $str order by id desc limit ".$limit;
+        $sql2 = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid and isdisable=$isdd $str order by id desc ";
+        $list = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+//        $listcp= $GLOBALS['db']->getAll("SELECT name,gys_id FROM " . DB_PREFIX . "dc_menu where location_id=$slid");
+
+//        print_r($listcp);
+
+        /* 数据 */
+        $GLOBALS['tmpl']->assign("slid", $slid);
+        $GLOBALS['tmpl']->assign("isdd", $isdd);
+        $GLOBALS['tmpl']->assign("kw", $kw);
+        $GLOBALS['tmpl']->assign("list", $list);
+
+        $data=[];
+        foreach ($list as $key=>$item) {
+            $supplierCateName= parent::get_dc_current_gys_cate($item['gys_cate_id']);
+            if(empty($supplierCateName)){
+                $supplierCateName = '';
+            }else{
+                $supplierCateName = $supplierCateName['supplierName'];
+            }
+            $data[$key]['id']=$item['id'];
+            $data[$key]['supplierCode']=$item['id'];
+            $data[$key]['supplierName']=$item['name'];
+            $data[$key]['taxRate']=$item['tax'];
+            $data[$key]['supplierCateName']= $supplierCateName;
+            $data[$key]['supplierCode']=$item['gys_code'];
+            $data[$key]['isDisable']=$item['isdisable'];
+            $data[$key]['updaterName']=$item['edit_user'];
+            $data[$key]['updateTime']=date('Y-m-d',$item['edittime']);
+        }
+
+        $return['page'] = 1;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $data;
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+    //新增供应商
+    public function supplier_add_ajax(){
+        init_app_page();
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $data_menu = array(
+            'gys_code'=>empty($_REQUEST['supplierCode'])?time():$_REQUEST['supplierCode'],
+            'name'=>$_REQUEST['supplierName'],
+            'gys_cate_id'=>$_REQUEST['supplierCateId'],
+            'tax'=>$_REQUEST['taxRate'],
+            'edittime'=>time(),
+            'edit_user'=>$account_info['account_name'],
+            'isdisable'=>1,
+            'slid'=>$slid
+        );
+
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_gys", $data_menu ,"INSERT");
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "保存成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "保存失败";
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
 }
