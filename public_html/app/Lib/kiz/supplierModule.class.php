@@ -81,7 +81,7 @@ class supplierModule extends KizBaseModule
         $id = $_REQUEST['id'];
         $sql2 ="select * from fanwe_cangku_gys where id=".$id;
         $result = $GLOBALS['db']->getRow($sql2);
-var_dump($result);
+//var_dump($result);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("list", $list);
         $GLOBALS['tmpl']->assign("result", $result);
