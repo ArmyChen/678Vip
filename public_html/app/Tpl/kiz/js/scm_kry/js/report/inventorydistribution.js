@@ -285,7 +285,7 @@ var inventorydistribution = {
                     }
 
                     if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
-                        footerData['qty_' + warehouse.warehouseId] = $.toFixed(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
+                        footerData['qty_' + warehouse.warehouseId] = parseInt(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
                     } else{
                         footerData['qty_' + warehouse.warehouseId] = warehouse.qty;
                     }

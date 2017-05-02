@@ -71,7 +71,7 @@
                 <select class="medium" name="print">
                     <option value="-1" selected="selected">请选择</option>
                     {foreach from=$kcnx item=item key=key}
-                    {if $key neq 1}
+                    {if $key gt 1}
                     <option value="{$key}" >{$item}</option>
                     {/if}
                     {/foreach}
@@ -125,7 +125,7 @@
             url: ctxPath+"&act=stock_search_ajax",
             colNames: ['商品编码',
                 '商户',
-                '仓库',
+//                '仓库',
                 '商品条码',
                 '商品名称（规格）',
                 '单位',
@@ -136,7 +136,7 @@
             colModel: [
                 {name: 'mid', index: 'mid', hidden: false},
                 {name: 'commercialName', index: 'commercialName', width: 160, align: 'left'},
-                {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
+//                {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 160, align: 'left'},
                 {name: 'skuName', index: 'skuName', width: 160, align: 'left'},
                 {name: 'uom', index: 'uom', width: 100, align: 'center'},
@@ -147,7 +147,7 @@
                     align: "right",
                     formatter: customCurrencyFormatter
                 },
-                {name: 'qty', index: 'qty', width: 150, align: "right", formatter: customMinusToRedFormatter},
+                {name: 'qty', index: 'qty', width: 150, align: "right"},
                 {
                     name: 'cost',
                     index: 'cost',
