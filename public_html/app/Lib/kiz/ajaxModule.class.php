@@ -1481,6 +1481,8 @@ class ajaxModule extends KizBaseModule{
         $skuNameOrCode = $_REQUEST['skuNameOrCode'];
         $print = $_REQUEST['print'];
         $skuTypeIds = $_REQUEST['skuTypeIds'];
+        $warehouseId = $_REQUEST['warehouseId'];
+
 
         if($page==0) $page = 1;
             $limit = (($page-1)*$page_size).",".$page_size;
@@ -1499,21 +1501,28 @@ class ajaxModule extends KizBaseModule{
             $where .= " and g.cate_id in ( $parentids )";
         }
 
+        if(!empty($warehouseId)){
+            $where .= " and aa.cid=".$warehouseId;
+        }
+
 //var_dump($where);die;
         $sqlrecords="select count(0) from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where;
         $sql="select *,sum(g.price) as spirce,sum(g.buyPrice) as sbuy,sum(aa.stock) as sstock,fc.name as cname from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where." group by g.id limit ".$limit;
+
+
+
         $return = array();
         $records = $GLOBALS['db']->getOne($sqlrecords);
         $list = $GLOBALS['db']->getAll($sql);
 //        var_dump($list);
         $arr = [];
         foreach ($list as $key=>$item) {
-            if($item['print'] == 3){
+            if($item['print'] != 3){
                 $price =$item['sbuy'];
             }else{
                 $price =$item['price'];
             }
-
+//var_dump($price);
             $arr[$key]['mid'] =$item['mid'];
             $arr[$key]['commercialName'] =$account_info['slname'];
 //            $arr[$key]['warehouseName'] = $item['cname'];
@@ -1522,10 +1531,11 @@ class ajaxModule extends KizBaseModule{
             $arr[$key]['marketPrice'] = $price;
             $arr[$key]['cost'] =$price*$item['sstock'];
             $arr[$key]['uom'] =$item['unit'];
-            $arr[$key]['qty'] =$item['sstock'];
+            $arr[$key]['qty'] = intval($item['sstock']);
             $arr[$key]['print'] =$item['print'];
             $arr[$key]['cate_id'] =$item['cate_id'];
         }
+
         $return['page'] = $page;
         $return['records'] = $records;
         $return['total'] = ceil($records/$page_size);
@@ -1645,20 +1655,28 @@ class ajaxModule extends KizBaseModule{
             $csql = "select *,fc.stock as fstock from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
 //            $csql = "select * from fanwe_cangku_menu fc where cid=209";
             $row2 = $GLOBALS['db']->getAll($csql);
-
+            $mtock = 0;
+//var_dump($row2);
             foreach ($row2 as $key2=>$item2) {
-                $output['skuVOs'][$key]['qtySum'] += $item2['stock'];
+//                var_dump($item2);
+                if($item['print'] != 3){
+                    $price =$item['buyPrice'];
+                }else{
+                    $price =$item['price'];
+                }
+                $mtock += $item2['fstock'];
                 $cangku = parent::get_cangku_list($item2['cid']);
-                $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$item2['price']*$item2['stock'];
-                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$item2['price']*$item2['stock'];
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$price*$mtock;
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$price*$mtock;
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId']=$account_info['slid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName']=$account_info['slname'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['qty']= intval($item2['fstock']);
-                $output['skuVOs'][$key]['titleVOs'][$key2]['qtySum']=intval($item2['stock']);
+                $output['skuVOs'][$key]['titleVOs'][$key2]['qtySum']=intval($item2['fstock']);
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseId']=$item2['cid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['warehouseName']= $cangku['name'];
 
             }
+            $output['skuVOs'][$key]['qtySum'] += $mtock;
         }
 //        var_dump($output);
 //        $records = $GLOBALS['db']->getOne($sqlrecords);

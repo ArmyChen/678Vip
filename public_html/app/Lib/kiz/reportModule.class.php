@@ -59,7 +59,7 @@ class reportModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("listsort", parent::goods_category_tree_ajax());
         $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
 
-
+        $GLOBALS['tmpl']->assign('cangkulist',parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("page_title", "库存查询");
         $GLOBALS['tmpl']->display("pages/report/stockSearch.html");
     }

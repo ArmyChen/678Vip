@@ -25,11 +25,11 @@ var inventorydistribution = {
             shrinkToFit: false,
             rowNum: 50,
             scroll: 1, // virtual scroll
-            colNames:['商品大类', '商品中类', '库存类型', '商品编码', '商品名称（规格）', '单位', '库存合计'],
+            colNames:['商品大类', '商品中类', '商品编码', '商品名称（规格）', '单位', '库存合计'],
             colModel:[
                 {name: 'skuParentTypeName', index: 'skuParentTypeName', width: 80, align: 'center'},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
-                {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
+                // {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 100, align: 'left'},
                 {name: 'skuName', index: 'skuName', width: 180, align: 'left',
                     formatter: function (cellvalue, options, rowObject) {

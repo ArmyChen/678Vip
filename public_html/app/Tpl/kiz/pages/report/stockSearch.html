@@ -39,31 +39,22 @@
 
                 <!--</select>-->
             <!--</div>-->
-            <!--<div class="aside-column">-->
-                <!--<h2>仓库</h2>-->
-                <!--<select id="secondSelectCascading" name="warehouseId">-->
+            <div class="aside-column">
+                <h2>仓库</h2>
+                <select id="warehouseId" name="warehouseId">
+
+                    <option value="">请选择仓库</option>
+
+                    {foreach from=$cangkulist item=item}
+
+                    <option value="{$item.id}" >{$item.name}</option>
+
+                    {/foreach}
 
 
-                    <!--<option name="options-of&#45;&#45;1" value="9591">总仓库</option>-->
-
-                    <!--<option name="options-of&#45;&#45;1" value="13260">饮品仓</option>-->
-
-                    <!--<option name="options-of&#45;&#45;1" value="13261">酒水仓</option>-->
-
-                    <!--<option name="options-of&#45;&#45;1" value="13262">原材料仓</option>-->
-
-                    <!--<option name="options-of&#45;&#45;1" value="14838">4号库</option>-->
-
-                    <!--<option name="options-of&#45;&#45;1" value="14839">5号库</option>-->
-
-
-
-                    <!--<option name="options-of-810019565" value="9604">总仓库</option>-->
-
-
-                <!--</select>-->
-            <!--</div>-->
-            <!--&lt;!&ndash; 商户仓库级联 end &ndash;&gt;-->
+                </select>
+            </div>
+            <!-- 商户仓库级联 end -->
 
             <!-- 库存类型start -->
             <div class="aside-column multi-select">
@@ -135,9 +126,9 @@
             ],
             colModel: [
                 {name: 'mid', index: 'mid', hidden: false},
-                {name: 'commercialName', index: 'commercialName', width: 160, align: 'left'},
+                {name: 'commercialName', index: 'commercialName', width: 160, align: 'left',hidden:true},
 //                {name: 'warehouseName', index: 'warehouseName', width: 160, align: 'left'},
-                {name: 'skuCode', index: 'skuCode', width: 160, align: 'left'},
+                {name: 'skuCode', index: 'skuCode', width: 160, align: 'left',hidden:true},
                 {name: 'skuName', index: 'skuName', width: 160, align: 'left'},
                 {name: 'uom', index: 'uom', width: 100, align: 'center'},
                 {
