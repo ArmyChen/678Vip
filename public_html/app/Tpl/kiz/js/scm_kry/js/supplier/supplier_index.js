@@ -73,7 +73,7 @@ var supplierList = {
         	delete formData.supplierName;delete formData.supplierCateId;
         	if(supplierName!="") formData["supplierName"] = supplierName;
         	if(supplierCateId!="") formData["supplierCateId"] = supplierCateId;
-        	if(checkbox1) isDisable = 1;
+        	if(checkbox0) isDisable = 1;
         	formData["isDisable"] = isDisable;
         	if(checkbox0&&checkbox1) delete formData.isDisable;
         	if(!checkbox0&&!checkbox1) delete formData.isDisable;
@@ -85,7 +85,7 @@ var supplierList = {
         };
 
         $.showEdit = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
 
         };
 
@@ -154,7 +154,7 @@ var supplierList = {
                 editor: {
                 	render : $.showEdit,
                     code: "scm:button:purchase:supplier:edit",
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: supplierPath + _this.opts.editUrl,
                 },
                 clock: {
                 	render : $.showlock,

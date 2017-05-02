@@ -2895,12 +2895,13 @@ class ajaxModule extends KizBaseModule{
         if($supplierCateId){
             $str .= " and gys_cate_id=$supplierCateId";
         }
-
-        !isset($isdd) && $isdd = 1;
+        if($isdd > -1){
+            $str .= " and isdisable=$isdd";
+        }
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
-        $sql = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid and isdisable=$isdd $str order by id desc limit ".$limit;
-        $sql2 = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid and isdisable=$isdd $str order by id desc ";
+        $sql = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid $str order by id desc limit ".$limit;
+        $sql2 = "SELECT * FROM " . DB_PREFIX . "cangku_gys where slid=$slid  $str order by id desc ";
         $list = $GLOBALS['db']->getAll($sql);
         $records = count($GLOBALS['db']->getAll($sql2));
 
@@ -2951,11 +2952,15 @@ class ajaxModule extends KizBaseModule{
             'tax'=>$_REQUEST['taxRate'],
             'edittime'=>time(),
             'edit_user'=>$account_info['account_name'],
-            'isdisable'=>1,
-            'slid'=>$slid
+            'isdisable'=>$_REQUEST['isdisable'],
+            'slid'=>$slid,
+            'id'=>$_REQUEST['id']
         );
-
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_gys", $data_menu ,"INSERT");
+        if($_REQUEST['id'] > 0){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_gys", $data_menu ,"UPDATE","id=".$id);
+        }else{
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_gys", $data_menu ,"INSERT");
+        }
         if($res){
             $return['success'] = true;
             $return['message'] = "保存成功";

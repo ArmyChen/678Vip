@@ -69,6 +69,25 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "新增供应商");
         $GLOBALS['tmpl']->display("pages/supplier/indexAdd.html");
     }
+    public function supplier_edit()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $sql = "select * from fanwe_gys_category where slid=".$slid;
+        $list = $GLOBALS['db']->getAll($sql);
+
+        $id = $_REQUEST['id'];
+        $sql2 ="select * from fanwe_cangku_gys where id=".$id;
+        $result = $GLOBALS['db']->getRow($sql2);
+var_dump($result);
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("list", $list);
+        $GLOBALS['tmpl']->assign("result", $result);
+        $GLOBALS['tmpl']->assign("page_title", "新增供应商");
+        $GLOBALS['tmpl']->display("pages/supplier/indexEdit.html");
+    }
     #供应商类别列表
     public function supplier_cate_index()
     {

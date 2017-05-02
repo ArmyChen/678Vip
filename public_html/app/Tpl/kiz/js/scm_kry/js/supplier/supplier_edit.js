@@ -311,7 +311,7 @@ $("#supplierForm").validate({
 //取消操作
 $("#btncancle").on("click", function () {
     layer.confirm("是否放弃当前操作？", {icon: 3, title:'提示', offset: '30%'}, function(index){
-        window.location = $("#root_url").val() + "/scm/supplier/index";
+        window.location = supplierPath + "&act=supplier_index";
         layer.close(index);
     });
 });
