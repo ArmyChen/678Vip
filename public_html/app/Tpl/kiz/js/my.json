@@ -111,6 +111,17 @@
     "url": "act=basic_inventoryWarning_index"
   },
   {
+    "code": "scm:purchase:bumen:query#",
+    "id": 1631,
+    "levelId": "001001003",
+    "name": "部门设定",
+    "parentId": 1256,
+    "platform": 4,
+    "sort": 90,
+    "type": 1,
+    "url": "act=bumen_index"
+  },
+  {
     "code": "scm:purchase",
     "id": 1257,
     "levelId": "001001",

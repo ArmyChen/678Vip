@@ -305,6 +305,32 @@ class basicModule extends KizBaseModule
 //        var_dump($GLOBALS['db']->query($sql));
         var_dump($GLOBALS['db']->getAll($sql));
     }
+
+    #部门列表
+    public function bumen_index()
+    {
+        init_app_page();
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "部门列表");
+        $GLOBALS['tmpl']->display("pages/basic/bumen.html");
+    }
+    public function bumen_add()
+    {
+        init_app_page();
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增部门");
+        $GLOBALS['tmpl']->display("pages/basic/bumenAdd.html");
+    }
+    public function bumen_edit()
+    {
+        init_app_page();
+        $id = $_REQUEST['id'];
+        $g = $GLOBALS['db']->getRow("select * from fanwe_cangku_bumen where id=$id");
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("g", $g);
+        $GLOBALS['tmpl']->assign("page_title", "编辑部门");
+        $GLOBALS['tmpl']->display("pages/basic/bumenEdit.html");
+    }
 }
 
 ?>

@@ -1,0 +1,525 @@
+
+{include file="inc/header.html"}
+<style type="text/css">
+    .reservation-tab li.current{color: #fff; background-color: #3786d7;}
+    .panel-list-type em{color: rgb(165, 156, 156);}
+    .panel-list-type span{margin-top: -3px;}
+    .grey span{background-color: #DFDFDF;}
+    .pannel-font{
+        padding-left: 20px;
+        line-height: 42px;
+        font-size: 20px;
+        border-bottom: 1px solid #dfdfdf;
+    }
+</style>
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+
+        <h1>新增部门</h1>
+
+
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnNext">保存</a>
+
+            <!--<a class="btn-link ml10" id="btnSave-bak">保存并复制</a>-->
+
+            <a class="btn-link ml10" href="" id="btncancle">取消</a>
+        </div>
+    </div>
+</div>
+
+<!-- 详细页面 -->
+<div class="center-block panel-group mt20 panel">
+    <input id="root_url" type="hidden" value="/scm_kry">
+    <form method="post" action="" id="bumenForm" style="padding-bottom:30px;">
+    <!-- 基本信息start -->
+    <div>
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>基本信息</em></h3>
+        </div>
+        <div class="panel-body" style="margin-left: 0px;">
+            <!--<div class="pull-left" style="width:540px;">-->
+                <!--<dl class="panel-item">-->
+                    <!--<dt><label for="bumenCodeLabel" id="bumenCodeLabel">部门名称<strong class="red vam"> &ensp;</strong></label></dt>-->
+
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="search-box w260 pull-left" style="margin-top: 6px;">-->
+                            <!--<input type="text" class="form-control w260" id="bumenCode1"-->
+                                   <!--name="bumenCode1"-->
+                                   <!--value="" data-format="code" select="auto"-->
+                                   <!--placeholder="若不填写，则系统自动生成" maxlength="8">-->
+                            <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
+                            <!--<div class="wrong"></div>-->
+                        <!--</div>-->
+                        <!--<div class="pull-left code-question" style="margin-top: 6px;">-->
+                            <!--<span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>SP+流水号</span>"></span>-->
+                        <!--</div>-->
+                    <!--</dd>-->
+
+
+                <!--</dl>-->
+                <!--<dl class="panel-item">-->
+                    <!--<dt><label for="category">部门类别<strong class="red vam"> *</strong></label></dt>-->
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="w260 pull-left">-->
+                            <!--<select name="bumenCateId1" id="bumenCateId1" data-placeholder="请选择部门类别" >-->
+                                <!--{foreach from=$list item=item}-->
+                                    <!--<option value="{$item.id}">{$item.bumenName}</option>-->
+                                <!--{/foreach}-->
+
+
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--<div class="wrong"></div>-->
+                    <!--</dd>-->
+                <!--</dl>-->
+            <!--</div>-->
+            <div class="pull-left">
+                <dl class="panel-item">
+                    <dt><label for="name">部门名称<strong class="red vam"> *</strong></label></dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w260 required" id="name" name="name"
+                               value="" placeholder="请输入部门名称" data-format="name" maxlength="48">
+                        <div class="wrong"></div>
+                    </dd>
+                </dl>
+                <!--<dl class="panel-item">-->
+                    <!--<dt><label for="address">部门地址<strong class="red vam"> *</strong></label></dt>-->
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="input-group w260 pull-left">-->
+                            <!--<input type="text" class="form-control w260 required" id="address" name="address"-->
+                                   <!--value="" placeholder="请输入部门地址" data-format="name" maxlength="48">-->
+                        <!--</div>-->
+                        <!--<div class="wrong"></div>-->
+                    <!--</dd>-->
+                <!--</dl>-->
+            </div>
+
+            <!--<div class="pull-left">-->
+                <!--<dl class="panel-item">-->
+                    <!--<dt><label for="contact">负责人<strong class="red vam"> *</strong></label></dt>-->
+                    <!--<dd class="positionRelative">-->
+                        <!--<input type="text" class="form-control w260 required" id="contact" name="contact"-->
+                               <!--value="" placeholder="请输入负责人" data-format="name" maxlength="48">-->
+                        <!--<div class="wrong"></div>-->
+                    <!--</dd>-->
+                <!--</dl>-->
+                <!--<dl class="panel-item">-->
+                    <!--<dt><label for="tel">联系电话<strong class="red vam"> *</strong></label></dt>-->
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="input-group w260 pull-left">-->
+                            <!--<input type="text" class="form-control w260 required" id="tel" name="tel"-->
+                                   <!--value="" placeholder="请输入联系电话" data-format="name" maxlength="48">-->
+                        <!--</div>-->
+                        <!--<div class="wrong"></div>-->
+                    <!--</dd>-->
+                <!--</dl>-->
+            <!--</div>-->
+            <div class="pull-left">
+                <dl class="panel-item">
+                    <dt><label for="isdisable">状态<strong class="red vam"> *</strong></label></dt>
+                    <dd class="positionRelative">
+                        <select name="isdisable" id="isdisable">
+                            <option value="1" selected>启用</option>
+                            <option value="0">停用</option>
+
+                        </select>
+                        <div class="wrong"></div>
+                    </dd>
+                </dl>
+
+            </div>
+        </div>
+    </div>
+    <!-- 基本信息End -->
+
+    <!--<div class="panel-heading">-->
+        <!--<h3 class="panel-title"><em>详细信息</em></h3>-->
+    <!--</div>-->
+
+    <!-- tab页签 -->
+    <!--<ul class="reservation-tab" id="reservation-tab" style="background-color: #fff;margin-top: 10px;margin-left: 20px;width: 50%;">-->
+        <!--<li class="current" tabId="bumen_div1"><em>详细信息</em></li>-->
+        <!--<li tabId="bumen_div3"><em>商户授权</em></li>-->
+        <!--<li tabId="bumen_div2"><em>商品授权</em></li>-->
+    <!--</ul>-->
+    <!-- 详细信息白色底纹 -->
+    <!--<div>-->
+        <!--&lt;!&ndash; div1:详细信息&ndash;&gt;-->
+        <!--<div id="bumen_div1" style="display:block;">-->
+
+                <input id="id" name="id" type="hidden" value="">
+                <input id="version" name="version" type="hidden" value="0">
+                <input id="bumenCode" name="bumenCode" type="hidden" value="">
+                <input id="bumenName" name="bumenName" type="hidden" value="">
+                <input id="bumenCateId" name="bumenCateId" type="hidden" value="">
+                <input id="taxRate" name="taxRate" type="hidden" value="">
+                <input id="bond_sku" name="bondSku" type="hidden" value="">
+                <input id="bond_price" name="bondPrice" type="hidden" value="">
+                <input id=allSkuData name="allSkuData" type="hidden" value=''>
+                <input id=allShopData name="allShopData" type="hidden" value=''>
+                <input id="allUnLicensed" name="allUnLicensed" type="hidden" value=''>
+
+                <!--<div>-->
+                    <!--&lt;!&ndash; 部门信息start &ndash;&gt;-->
+                    <!--<div class="panel-heading">-->
+                        <!--<h3 class="pannel-font"><em>部门信息</em></h3>-->
+                    <!--</div>-->
+                    <!--<div class="panel-body" style="margin-left: 0px;">-->
+                        <!--<div class="pull-left" style="width:540px;">-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="fullName">部门全称<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control w260" id="fullName" name="fullName" value="" placeholder="请输入部门公司全称" maxlength="48">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="url">部门网址<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<div class="w260 pull-left">-->
+                                        <!--<input type="text" class="form-control w260" id="website" name="website" value="" maxlength="32" placeholder="请输入部门网址">-->
+                                    <!--</div>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="zipCode">部门邮编<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<div class="w260 pull-left">-->
+                                        <!--<input type="text" class="form-control w260" id="zipCode" name="zipCode" value="" placeholder="请输入部门邮编" maxlength="8" data-format="number">-->
+                                    <!--</div>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="contractCode">部门合同编号<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<div class="w260 pull-left">-->
+                                        <!--<input type="text" class="form-control w260" id="contractNo" name="contractNo" value="" placeholder="请输入部门合同编号" maxlength="24">-->
+                                    <!--</div>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                        <!--</div>-->
+                        <!--<div class="pull-left">-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="contact">部门联系人<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control w260" id="contact" name="contact" value="" placeholder="请输入部门联系人" maxlength="16">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="contactTell">联系人电话<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control" name="contactTel" id="contactTel" data-format="number" maxlength="16" value="" placeholder="请输入联系人电话/传真">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="contactEmail">联系人邮箱<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control email" name="contactMail" id="contactMail" value="" maxlength="32" placeholder="请输入联系人邮箱">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="contactQQ">联系人QQ/微信<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control" name="contactQq" id="contactQq"-->
+                                           <!--value="" maxlength="16" placeholder="请输入联系人联系人QQ/微信">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                        <!--</div>-->
+                        <!--<dl class="panel-item">-->
+                            <!--<dt><label for="address">部门地址<strong class="white vam"> *</strong></label></dt>-->
+                            <!--<dd>-->
+                                <!--<div class="w260">-->
+                                    <!--<input id="address" name="address" class="w800 form-control" placeholder="请输入部门详细地址" value="" maxlength="48"/>-->
+                                <!--</div>-->
+                            <!--</dd>-->
+                        <!--</dl>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; 部门信息 end&ndash;&gt;-->
+
+                    <!--&lt;!&ndash; 部门税务信息 start&ndash;&gt;-->
+                    <!--<div class="panel-heading">-->
+                        <!--<h3 class="pannel-font"><em>部门税务信息</em></h3>-->
+                    <!--</div>-->
+                    <!--<div class="panel-body" style="margin-left: 0px;">-->
+                        <!--<div class="pull-left" style="width:540px;">-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="invoiceName">开票全称<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control w260" id="invoiceName" name="invoiceName"-->
+                                           <!--value="" placeholder="请输入部门公司全称" maxlength="48">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="taxesFees">部门税号<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control w260" id="cuitNumber" name="cuitNumber"-->
+                                           <!--value="" maxlength="24" placeholder="请输入部门纳税人识别号（税号）"/>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="regTell">注册电话<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<div class="w260 pull-left">-->
+                                        <!--<input type="text" class="form-control w260" id="registeredTel" name="registeredTel"-->
+                                               <!--value="" maxlength="16" placeholder="请输入部门注册电话">-->
+                                    <!--</div>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+
+                        <!--</div>-->
+                        <!--<div class="pull-left">-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="bankName">开户银行<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<input type="text" class="form-control" name="openingBank" id="openingBank"-->
+                                           <!--maxlength="16" value="" placeholder="请输入部门开户银行名称">-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                            <!--<dl class="panel-item">-->
+                                <!--<dt><label for="bankCard">开户行账号<strong class="white vam"> *</strong></label></dt>-->
+                                <!--<dd class="positionRelative">-->
+                                    <!--<div class="w260 pull-left">-->
+                                        <!--<input type="text" class="form-control w260" id="bankAccountNumber" name="bankAccountNumber"-->
+                                               <!--value="" maxlength="24" placeholder="请输入部门开户行账号(基本户)">-->
+                                    <!--</div>-->
+                                    <!--<div class="wrong"></div>-->
+                                <!--</dd>-->
+                            <!--</dl>-->
+                        <!--</div>-->
+                        <!--<dl class="panel-item">-->
+                            <!--<dt><label for="address">注册地址<strong class="white vam"> *</strong></label></dt>-->
+                            <!--<dd>-->
+                                <!--<div class="w260">-->
+                                    <!--<input id="registeredAddress" name="registeredAddress" class="w800 form-control"-->
+                                           <!--placeholder="请输入详细地址" maxlength="48" value=""/>-->
+                                <!--</div>-->
+                            <!--</dd>-->
+                        <!--</dl>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; 部门税务信息 end&ndash;&gt;-->
+
+                <!--&lt;!&ndash; 部门备注信息start &ndash;&gt;-->
+                <!--<div>-->
+                    <!--<div class="panel-heading">-->
+                        <!--<h3 class="pannel-font"><em>部门备注信息</em></h3>-->
+                    <!--</div>-->
+                    <!--<dl class="panel-item">-->
+                        <!--<dt><label for="note">备注信息<strong class="white vam"> *</strong></label></dt>-->
+                        <!--<dd>-->
+                            <!--<input id="memo" name="memo" class="w800 form-control" placeholder="备注说明（可不填）" maxlength="96" value=""/>-->
+                        <!--</dd>-->
+                    <!--</dl>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; 部门备注信息end &ndash;&gt;-->
+            </form>
+        <!--</div>-->
+
+        <!--&lt;!&ndash; div3:商户授权 &ndash;&gt;-->
+        <!--<div id="bumen_div3" style="display:none;">-->
+            <!--&lt;!&ndash; 商户页签 &ndash;&gt;-->
+            <!--<div id="tab1" class="panel-body">-->
+                <!--<div class="mr10 mt10 ml10" style="float: left;">-->
+                    <!--<a class="btn btn-primary btn-large" id="btnSelectCommercial" callAfterSuccessFunc="$.resetExceptSelect();">添加商户</a>-->
+                    <!--<a class="btn btn-primary btn-large" id="btnDeleteCommercial" callAfterSuccessFunc="$.resetExceptSelect();">移除商户</a>-->
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                    <!--<div class="inventoryTotal"><sapn>&nbsp;</sapn></div>-->
+
+                    <!--<div class="mt20 clear detail-grid">-->
+                        <!--&lt;!&ndash; grid begin &ndash;&gt;-->
+                        <!--<table id="shop_grid"></table>-->
+                        <!--&lt;!&ndash; grid end &ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--&lt;!&ndash; div2:商品授权 &ndash;&gt;-->
+        <!--<div id="bumen_div2" style="display: none;">-->
+            <!--<div style="font-size: 15px;padding: 10px 10px 2px 20px;display: none;">-->
+                <!--<ul class="panel-list-type" id="my_bond">-->
+                    <!--<li style="width:320px;">-->
+                        <!--<label class="checkbox " for="status-0" id="checkbox-0">-->
+                            <!--<span style="cursor: pointer;"></span>-->
+                            <!--商品约束<em>(部门受限于授权的商品)</em>-->
+                        <!--</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox " for="status-1" id="checkbox-1">-->
+                            <!--<span style="cursor: pointer;"></span>-->
+                            <!--价格约束<em>(商品价格不可以修改)</em>-->
+                        <!--</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+
+            <!--&lt;!&ndash; 商品页签 &ndash;&gt;-->
+            <!--<div class="panel-body">-->
+                <!--&lt;!&ndash; toolbar begin &ndash;&gt;-->
+                <!--<div class="ml10 mt10 mr20" style="float: left">-->
+                    <!--<a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>-->
+                    <!--<a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>-->
+                    <!--<div class="input-group search-box w200 pull-left ml5">-->
+                        <!--<div class="input-group-addon"><img width="20" height="20" src="/app/Tpl/kiz/js/scm_kry/img/scanning.png" alt=""></div>-->
+                        <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
+                        <!--<input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div id="filterGridDiv"  class="pull-left cut-off-rule"></div>-->
+                <!--<span class="mr10 mt10" style="padding-top:10px;float: right;display: none;">-->
+			      		 <!--注：若要设定某些商品不授权给某些门店，就在【非授权商户】列勾选！-->
+			       <!--</span>-->
+
+                <!--&lt;!&ndash; toolbar end &ndash;&gt;-->
+                <!--<div class="panel-body">-->
+                    <!--<div class="inventoryTotal"><sapn>&nbsp;</sapn></div>-->
+
+                    <!--<div class="mt20 clear detail-grid">-->
+                        <!--&lt;!&ndash; grid begin &ndash;&gt;-->
+                        <!--<table id="grid"></table>-->
+                        <!--&lt;!&ndash; grid end &ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!-- 白色底纹end,该div与form嵌套使用 -->
+    <div>
+        <input id="shopDataSource" type="hidden" value='[]'>
+        <input id="skuDataSource" type="hidden" value='[]'>
+        <input id="mustDeleteList" type="hidden" value=''>
+    </div>
+</div>
+
+
+<div id="scmSkuSelectDiv" gridId="grid" skuIdColName="id" skuScene="13" qtyColName="null"></div>
+
+<div id="commercialSelectDiv" gridId="shop_grid" showBrand="false"></div>
+
+<script src="/app/Tpl/kiz/js/scm_kry/js/scm.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170406_201331" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-muliti-select.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/templet-commercial-select.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-unit-select.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/jquery.tablednd.js" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/bumen_edit.js?v=20170406_201331"></script>
+<script type="text/javascript">
+    //载入表格
+    $(function() {
+        var	initSkuData = eval('('+$("#skuDataSource").val()+')'),
+            initShopData = eval('('+$("#shopDataSource").val()+')');
+
+        bumen_edit._init({commandType : 1,gridShopData:initShopData,gridSkuData:initSkuData});
+
+        /* 部门编码，名字移除 */
+        $("#bumenCode1,#bumenName1,#bumenCateId1,#taxRate1").on("keyup change",function(){
+            var id = $(this).attr("id");
+            if(id=="bumenCateId1"){
+                $(this).parent().parent().parent().find(".wrong").html("");
+            }else if(id=="taxRate1"){
+                $(this).parent().parent().find(".wrong").html("");
+            }else{
+                $(this).parent().find(".wrong").html("");
+            }
+        });
+
+        /*商品约束和价格约束提示*/
+        $("#my_bond").on("click","span",function(){
+            var old = $(this).parent(),taget = $(this).parent().attr("id");
+            if("checkbox-0"==taget){
+                if(old.hasClass("checkbox-check")){
+                    showLayer({msg:"不勾选商品约束，采购时就可以添加所有商品，不受绑定商品的限制，是否要继续？",taget:old,type:"remove"});
+                }else{
+                    showLayer({msg:"勾选商品约束，采购时就只能采购授权的商品，是否要继续？",taget:old,type:"add"});
+                }
+            }else{
+                if(old.hasClass("checkbox-check")){
+                    showLayer({msg:"不勾选价格约束，采购时授权商品的价格可以修改，是否要继续？",taget:old,type:"remove"});
+                }else{
+                    showLayer({msg:"勾选价格约束，采购时授权商品的价格不能修改，是否要继续？",taget:old,type:"add"});
+                }
+            }
+        });
+
+        //检测是否有商品
+        //$('a[onclick="addSku()"]').on('click',function(){$.checkHasSku()});
+
+        //检查是否还有商品
+        $.checkHasSku = function(){
+            /* var len = $("#sku_grid").getRowData().length,taget=$("#my_bond");
+             if(len>0){
+             taget.find("label").removeClass("grey");
+             }else{
+             taget.find("label").addClass("grey").removeClass("checkbox-check");
+             } */
+        }
+
+        //展示弹出层提示
+        function showLayer(opt){
+            layer.confirm(opt.msg, {icon: 3, title:'提示', offset: '30%'}, function(index){
+                if(opt.type!="add")
+                    opt.taget.removeClass("checkbox-check");
+                else
+                    opt.taget.addClass("checkbox-check");
+                layer.close(index);
+            });
+        }
+        mustDeleteCom();
+        function mustDeleteCom(){
+            var ids = $("#mustDeleteList").val();
+            if(ids!=""){
+                var idsArr = eval("("+ids+")"),$shop_Grid = $("#shop_grid");
+                for(var i = 0; i < idsArr.length; i++){
+                    $shop_Grid.jqGrid('delRowData', idsArr[0]);
+                }
+                $.layerMsg("存在已关闭供应链的门店，将自动解除该门店的授权关系！", false);
+            }
+        }
+    });
+
+    (function($){
+
+        $('#bumenName1').focus();
+
+    })(jQuery);
+</script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //初始化chosen
+    function loadChosen(){
+        var config = {
+            '.chosen-select'           : {},
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+            '.chosen-select-width'     : {width:"100%"}
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+
+    }
+    loadChosen();
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

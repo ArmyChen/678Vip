@@ -2908,12 +2908,6 @@ class ajaxModule extends KizBaseModule{
 
 //        print_r($listcp);
 
-        /* 数据 */
-        $GLOBALS['tmpl']->assign("slid", $slid);
-        $GLOBALS['tmpl']->assign("isdd", $isdd);
-        $GLOBALS['tmpl']->assign("kw", $kw);
-        $GLOBALS['tmpl']->assign("list", $list);
-
         $data=[];
         foreach ($list as $key=>$item) {
             $supplierCateName= parent::get_dc_current_gys_cate($item['gys_cate_id']);
@@ -2977,4 +2971,131 @@ class ajaxModule extends KizBaseModule{
         /* 数据 */
         echo json_encode($return);exit;
     }
+
+    //部门管理
+    public function bumen_ajax(){
+        init_app_page();
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isDisable'];
+        $kw = $_REQUEST['bumenName'];
+//        $supplierCateId = $_REQUEST['supplierCateId'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+
+        $str = "";
+        if($kw){
+            $str = " and (name like '%$kw%')";
+        }
+
+//        if($supplierCateId){
+//            $str .= " and gys_cate_id=$supplierCateId";
+//        }
+
+           if($isdd > -1){
+                $str .= " and isdisable=$isdd";
+           }
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_bumen where slid=$slid $str order by id desc limit ".$limit);
+        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_bumen where slid=$slid $str order by id desc");
+        $records = count($list2);
+
+//        $listcp= $GLOBALS['db']->getAll("SELECT name,gys_id FROM " . DB_PREFIX . "dc_menu where location_id=$slid");
+
+//        print_r($listcp);
+
+//        $data=[];
+//        foreach ($list as $key=>$item) {
+////            $supplierCateName= parent::get_dc_current_gys_cate($item['gys_cate_id']);
+////            if(empty($supplierCateName)){
+////                $supplierCateName = '';
+////            }else{
+////                $supplierCateName = $supplierCateName['supplierName'];
+////            }
+//            $data[$key]['id']=$item['id'];
+//            $data[$key]['supplierCode']=$item['id'];
+//            $data[$key]['supplierName']=$item['name'];
+//            $data[$key]['taxRate']=$item['tax'];
+////            $data[$key]['supplierCateName']= $supplierCateName;
+//            $data[$key]['supplierCode']=$item['gys_code'];
+//            $data[$key]['isDisable']=$item['isdisable'];
+//            $data[$key]['updaterName']=$item['edit_user'];
+//            $data[$key]['updateTime']=date('Y-m-d',$item['edittime']);
+//        }
+
+        $return['page'] = 1;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+
+    //新增供应商
+    public function bumen_add_ajax(){
+        init_app_page();
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $data_menu = array(
+            'name'=>$_REQUEST['name'],
+            'isdisable'=>$_REQUEST['isdisable'],
+            'slid'=>$slid,
+            'id'=>$id
+        );
+//        var_dump($data_menu);die;
+        if($id > 0){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_bumen", $data_menu ,"UPDATE","id=".$id);
+        }else{
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_bumen", $data_menu ,"INSERT");
+        }
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "保存成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "保存失败";
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+    public function bumen_del_ajax(){
+        init_app_page();
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+
+        $res=$GLOBALS['db']->query("delete from fanwe_cangku_bumen where id=$id");
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "保存成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "保存失败";
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
 }
