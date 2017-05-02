@@ -271,7 +271,7 @@ var cctask = {
                     name: 'ccQty',
                     index: 'ccQty',
                     align: 'right',
-                    hidden:true,
+                    // hidden:true,
                     width: 170,
                     formatter: _this.opts.editable ? formatInputCcQty : null,
                     unformat: _this.opts.editable ? unformatInput : null,

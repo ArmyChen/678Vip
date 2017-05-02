@@ -1666,8 +1666,10 @@ class ajaxModule extends KizBaseModule{
                 }
                 $mtock += $item2['fstock'];
                 $cangku = parent::get_cangku_list($item2['cid']);
-                $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$price*$mtock;
-                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$price*$mtock;
+                $output['skuVOs'][$key]['titleVOs'][$key2]['price']=$price;
+                $output['skuVOs'][$key]['titleVOs'][$key2]['priceSum']=$price;
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amount']=$price*intval($item2['fstock']);
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum']=$price*intval($item2['fstock']);
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId']=$account_info['slid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName']=$account_info['slname'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['qty']= intval($item2['fstock']);
@@ -2789,6 +2791,7 @@ class ajaxModule extends KizBaseModule{
         //查询仓库下的商品，封装商品
         $data_stat=array();
         $tongji_data=array();
+        $details = $_REQUEST['details'];
         foreach ($clist as $key=>$item) {
 
             //查询商品信息
@@ -2808,18 +2811,18 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['unit']=$item['unit'];
             $data_stat[$key]['funit']=$item['funit'];
             $data_stat[$key]['times']=$item['times'];
-            $data_stat[$key]['pandianshu']=$item['stock'];
-            $data_stat[$key]['chayishu']=0;
-            $data_stat[$key]['chanyijine']=0;
-            $data_stat[$key]['memo']='';
+            $data_stat[$key]['pandianshu']=$details[$key]['ccQty'];
+            $data_stat[$key]['chayishu']=$details[$key]['qtyDiff'];
+            $data_stat[$key]['chanyijine']=$details[$key]['amountDiff'];
+            $data_stat[$key]['memo']=$details[$key]['remarks'];
             $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
 
             //这块由于JS能力较差，不方便计算。这个可以在页面上通过通过JS计算好后直接上传也可以
             if(intval($_REQUEST['chayishu'][$item])>0){  //盘盈
-                $tongji_data['panying']+=0;
+                $tongji_data['panying']+= ceil($details[$key]['ccQty']);
             }
             if(intval($_REQUEST['chayishu'][$item])<0){  //盘亏
-                $tongji_data['pankui']+=0;
+                $tongji_data['pankui']+= ceil($details[$key]['ccQty']);
             }
 
         }

@@ -282,6 +282,7 @@ var inventorydistribution = {
                     if(warehouse.qty != undefined && warehouse.qty != null) {
                         sku['qty_' + warehouse.warehouseId] = warehouse.qty;
                         sku['amount_' + warehouse.warehouseId] = warehouse.amount;
+                        sku['price_' + warehouse.warehouseId] = warehouse.price;
                     }
 
                     if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
@@ -295,17 +296,32 @@ var inventorydistribution = {
                     } else{
                         footerData['amount_' + warehouse.warehouseId] = warehouse.amount;
                     }
+                    if(footerData['price_' + warehouse.warehouseId] != undefined && footerData['price_' + warehouse.warehouseId] != null){
+                        footerData['price_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['price_' + warehouse.warehouseId]) + parseFloat(warehouse.price));
+                    } else{
+                        footerData['price_' + warehouse.warehouseId] = warehouse.price;
+                    }
 
                     if(pushedWarehouses.indexOf(warehouse.warehouseId) < 0){
 
                         pushedWarehouses.push(warehouse.warehouseId);
 
                         dynamicColNames.push('库存');
+                        dynamicColNames.push('单价');
                         dynamicColNames.push('库存金额');
 
                         dynamicColModel.push({
                             name: 'qty_' + warehouse.warehouseId,
                             index: 'qty_' + warehouse.warehouseId,
+                            width: 60,
+                            align: "right",
+                            sorttype: "number",
+                            formatter: _this.qtyFormatter
+                        });
+
+                        dynamicColModel.push({
+                            name: 'price_' + warehouse.warehouseId,
+                            index: 'price_' + warehouse.warehouseId,
                             width: 60,
                             align: "right",
                             sorttype: "number",
@@ -326,7 +342,7 @@ var inventorydistribution = {
 
                             groupHeaders2.push({
                                 startColumnName: 'qty_' + warehouse.warehouseId,
-                                numberOfColumns: 2,
+                                numberOfColumns: 3,
                                 titleText: warehouse.warehouseName
                             });
 
