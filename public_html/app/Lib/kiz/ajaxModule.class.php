@@ -282,7 +282,7 @@ class ajaxModule extends KizBaseModule{
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g INNER JOIN fanwe_cangku_menu fcm on fcm.mid=g.id LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,fcm.mstock as inventoryQty from fanwe_dc_menu g INNER JOIN fanwe_cangku_menu fcm on fcm.mid=g.id LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
 
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
@@ -681,8 +681,10 @@ class ajaxModule extends KizBaseModule{
             //减库
             $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
             $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
+//            var_dump("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//            die;
             $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
-
+//var_dump($res1);die;
             $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
             if($check){
                 $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
@@ -1511,7 +1513,7 @@ class ajaxModule extends KizBaseModule{
 
 //var_dump($where);die;
         $sqlrecords="select count(0) from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where;
-        $sql="select *,sum(g.price) as spirce,sum(g.buyPrice) as sbuy,sum(aa.stock) as sstock,fc.name as cname from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where." group by g.id limit ".$limit;
+        $sql="select *,sum(g.price) as spirce,sum(g.buyPrice) as sbuy,sum(aa.mstock) as sstock,fc.name as cname from fanwe_cangku_menu aa INNER JOIN fanwe_cangku fc on fc.id=aa.cid INNER join fanwe_dc_menu g on g.id=aa.mid".$where." group by g.id limit ".$limit;
 
 
 
@@ -1656,7 +1658,7 @@ class ajaxModule extends KizBaseModule{
             if($wmIds){
                 $msqlstr.=' and ( fc.cid='.$wmIds.')';
             }
-            $csql = "select *,fc.stock as fstock from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
+            $csql = "select *,fc.mstock as fstock from fanwe_cangku_menu fc inner JOIN fanwe_cangku cc on fc.cid = cc.id INNER JOIN fanwe_dc_menu f on f.id =fc.mid $msqlstr and fc.mid=".$item['mid'];
 //            $csql = "select * from fanwe_cangku_menu fc where cid=209";
             $row2 = $GLOBALS['db']->getAll($csql);
             $mtock = 0;

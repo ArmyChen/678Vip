@@ -204,7 +204,7 @@ var transferOrder = {
 
         //绑定表格计算
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({//表格计算
-            formula: ['price*planMoveQty=amount','standardInventoryQty=inventoryQty'],
+            formula: ['price*planMoveQty=amount','standardInventoryQty-planMoveQty=inventoryQty'],
             summary: [
                 {colModel: 'planMoveQty', objectId: 'qtySum'},
                 {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
