@@ -2589,8 +2589,15 @@ class ajaxModule extends KizBaseModule{
 //        $return['result'] = $dd_detail;
         $return['inventoryAmount'] = $inventoryAmount;
         $return['ccAmount'] = $ccAmount;
-        $return['profitAmount'] = 0;
-        $return['lossAmount'] = 0;
+        if($ccAmount>0){
+            $return['profitAmount'] = $ccAmount;
+            $return['lossAmount'] = 0;
+        }else{
+            $return['profitAmount'] = 0;
+            $return['lossAmount'] = $ccAmount;
+        }
+
+
 
         $return['details'] = $dd_detail;
         echo json_encode($return);exit;
@@ -2803,6 +2810,7 @@ class ajaxModule extends KizBaseModule{
             //查询商品信息
             $ccsql = "select * from fanwe_dc_menu where id=".$details[$key]['skuId'];
             $item = $GLOBALS['db']->getRow($ccsql);
+//            var_dump($details);die;
 //            var_dump($item);die;
             $data_stat[$key]['djid']=$djid;
             $data_stat[$key]['slid']=$slid;
@@ -2811,10 +2819,10 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['cid']=$details[$key]['skuTypeId'];
             $data_stat[$key]['mbarcode']=$item['barcode'];
             $data_stat[$key]['mname']=$item['name'];
-            $data_stat[$key]['stock']=$item['stock'];
-            $data_stat[$key]['mstock']=$item['stock'];
-            $data_stat[$key]['mprice']=$item['price'];
-            $data_stat[$key]['unit']=$item['unit'];
+            $data_stat[$key]['stock']=$details[$key]['inventoryQty'];
+            $data_stat[$key]['mstock']=$details[$key]['realTimeInventory'];
+            $data_stat[$key]['mprice']=$details[$key]['price'];
+            $data_stat[$key]['unit']=$details[$key]['uom'];
             $data_stat[$key]['funit']=$item['funit'];
             $data_stat[$key]['times']=$item['times'];
             $data_stat[$key]['pandianshu']=$details[$key]['ccQty'];
@@ -2824,14 +2832,17 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
 
             //这块由于JS能力较差，不方便计算。这个可以在页面上通过通过JS计算好后直接上传也可以
-            if(intval($_REQUEST['chayishu'][$item])>0){  //盘盈
-                $tongji_data['panying']+= ceil($details[$key]['ccQty']);
+            if(intval( $data_stat[$key]['chayishu'])>0){  //盘盈
+                $tongji_data['panying']+= $details[$key]['amountDiff'];
             }
-            if(intval($_REQUEST['chayishu'][$item])<0){  //盘亏
-                $tongji_data['pankui']+= ceil($details[$key]['ccQty']);
+            if(intval( $data_stat[$key]['chayishu'])<0){  //盘亏
+                $tongji_data['pankui']+= $details[$key]['amountDiff'];
             }
 
         }
+//        var_dump($tongji_data);
+        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $tongji_data ,"update","id=".$djid);
+//        var_dump($GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_danju where id=$djid"));die;
 //var_dump($data_stat);die;
         //插入Stat数据
         foreach ($data_stat as $value){

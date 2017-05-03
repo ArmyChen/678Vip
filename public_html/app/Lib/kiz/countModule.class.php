@@ -136,6 +136,7 @@ class countModule extends KizBaseModule
         $inventoryAmount = 0;
         $ccAmount = 0;
         $dd_detail = [];
+//        var_dump($clist);
         foreach ($clist as $key=>$item) {
             $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
             if (!empty($typeName)){
@@ -150,13 +151,13 @@ class countModule extends KizBaseModule
             $dd_detail[$key]['uom'] = $item['unit'];
             $dd_detail[$key]['price'] = $item['mprice'];
             $dd_detail[$key]['inventoryQty'] = $item['stock'];
-            $dd_detail[$key]['realTimeInventory'] = $item['stock'];
-            $dd_detail[$key]['ccQty'] = $item['stock'];
+            $dd_detail[$key]['realTimeInventory'] = $item['mstock'];
+            $dd_detail[$key]['ccQty'] = $item['pandianshu'];
             $dd_detail[$key]['qtyDiff'] = 0;
             $dd_detail[$key]['amountDiff'] = 0;
             $dd_detail[$key]['remarks'] = '';
             $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
-            $dd_detail[$key]['relTimeAmount'] = $item['stock']*$item['mprice'];
+            $dd_detail[$key]['relTimeAmount'] = $item['mstock']*$item['mprice'];
             $dd_detail[$key]['alreadyData'] = 1;
             $dd_detail[$key]['remarks'] =$item['memo'];
             $dd_detail[$key]['djid'] = $item['id'];
