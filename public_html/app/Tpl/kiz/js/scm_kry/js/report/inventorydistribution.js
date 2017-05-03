@@ -27,8 +27,8 @@ var inventorydistribution = {
             scroll: 1, // virtual scroll
             colNames:['商品大类', '商品中类', '商品编码', '商品名称（规格）', '单位', '库存合计'],
             colModel:[
-                {name: 'skuParentTypeName', index: 'skuParentTypeName', width: 80, align: 'center'},
-                {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
+                {name: 'skuParentTypeName', index: 'skuParentTypeName', width: 80, align: 'center',hidden:true},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center',hidden:true},
                 // {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 100, align: 'left'},
                 {name: 'skuName', index: 'skuName', width: 180, align: 'left',
@@ -352,7 +352,7 @@ var inventorydistribution = {
 
                                 groupHeaders1.push({
                                     startColumnName: 'qty_' + warehouse.warehouseId,
-                                    numberOfColumns: 2 ,
+                                    numberOfColumns: 3 ,
                                     titleText: warehouse.commercialName
                                 });
 
@@ -362,7 +362,7 @@ var inventorydistribution = {
                                 if(groupHeaders1.length > 0) {
                                     var preGroupHeader1 = groupHeaders1.pop();
                                     if (preGroupHeader1 && preGroupHeader1.titleText === warehouse.commercialName) {
-                                        preGroupHeader1.numberOfColumns += 2 ;
+                                        preGroupHeader1.numberOfColumns += 3 ;
                                     }
                                     groupHeaders1.push(preGroupHeader1);
                                 }
