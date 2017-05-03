@@ -136,8 +136,8 @@ class basicModule extends KizBaseModule
                 }
             }
         }
+        $listsort = _toFormatTree($list,"name");
 
-        $listsort = toFormatTree($list,"name");
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
         $GLOBALS['tmpl']->assign("page_title", "新增原料类别保存 保存并复制 返回");
