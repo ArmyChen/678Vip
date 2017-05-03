@@ -2453,8 +2453,8 @@ class ajaxModule extends KizBaseModule{
         if($cangku_id > -1){
             $str .= " and (cangku_id =$cangku_id)";
         }
-        if($moban_id){
-            $str .= " and (moban_id in (0,$moban_id))";
+        if($moban_id > -1){
+            $str .= " and (moban_id in (-1,0,$moban_id))";
         }
         if($begin_time){
             $str .=" and datetime > ".$begin_time." ";
@@ -2795,14 +2795,14 @@ class ajaxModule extends KizBaseModule{
         foreach ($clist as $key=>$item) {
 
             //查询商品信息
-            $ccsql = "select * from fanwe_dc_menu where id=".$item['skuId'];
+            $ccsql = "select * from fanwe_dc_menu where id=".$details[$key]['skuId'];
             $item = $GLOBALS['db']->getRow($ccsql);
-
+//            var_dump($item);die;
             $data_stat[$key]['djid']=$djid;
             $data_stat[$key]['slid']=$slid;
             $data_stat[$key]['mid']=$item['id'];
             $data_stat[$key]['cate_id']=$item['cate_id'];
-            $data_stat[$key]['cid']=$item['cid'];
+            $data_stat[$key]['cid']=$details[$key]['skuTypeId'];
             $data_stat[$key]['mbarcode']=$item['barcode'];
             $data_stat[$key]['mname']=$item['name'];
             $data_stat[$key]['stock']=$item['stock'];
@@ -2826,7 +2826,7 @@ class ajaxModule extends KizBaseModule{
             }
 
         }
-
+//var_dump($data_stat);die;
         //插入Stat数据
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$value);

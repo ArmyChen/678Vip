@@ -143,7 +143,7 @@ class countModule extends KizBaseModule
             }else{
                 $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
             }
-            $dd_detail[$key]['skuId'] = $item['id'];
+            $dd_detail[$key]['skuId'] = $item['mid'];
             $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
             $dd_detail[$key]['skuCode'] = $item['id'];
             $dd_detail[$key]['skuName'] = $item['mname'];
@@ -158,7 +158,7 @@ class countModule extends KizBaseModule
             $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
             $dd_detail[$key]['relTimeAmount'] = $item['stock']*$item['mprice'];
             $dd_detail[$key]['alreadyData'] = 1;
-            $dd_detail[$key]['remarks'] ='';
+            $dd_detail[$key]['remarks'] =$item['memo'];
             $dd_detail[$key]['djid'] = $item['id'];
             $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
             $ccAmount +=  $dd_detail[$key]['ccAmount'];
