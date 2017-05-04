@@ -15,6 +15,7 @@ var skuTemplate = {
         viewUrl : '&act=count_stock_view',
         lockUrl : '&act=count_stock_lock_ajax',
         unlockUrl : '&act=count_stock_unlock_ajax',
+        deleteUrl:'&act=count_stock_del_ajax',
         sortName : 'code',
         pager : '#gridPager',
         _now : new Date(),
@@ -180,11 +181,17 @@ var skuTemplate = {
             }
             return formData;
         };
+        $.showView = function(rowData){
+            return renderEnum.hidden;
+        };
 
         $.showEdit = function(rowData){
-        	var flag = renderEnum.disabled;
-        	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
-        	return flag;
+            var flag = renderEnum.disabled;
+            if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
+            return flag;
+        };
+        $.showDelete = function(rowData){
+           return renderEnum.normal;
         };
 
         $.show = function (rowData) {
@@ -198,14 +205,37 @@ var skuTemplate = {
         	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
         	return flag;
         };
+        //处理删除事件
+        $.doDelete = function(dataArgs){
+            Message.confirm({title:"<span style='color:red'>警告！！！</span>",describe:"请确认删除，删除之后不可恢复！<br/>出现的问题错误后果自负！"},function () {
+                $.ajax({
+                    url: _this.opts.urlRoot+ _this.opts.deleteUrl,
+                    type: "post",
+                    async: false,
+                    data: {id:dataArgs.postData.id},
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        if(data.success){
+                            $("#btn-query").trigger("click");
+                            $.layerMsg(data.message, true, {end:function(){window.location.href = countPath + '&act=count_stock_index';},shade: 0.3});
 
+                        }else{
+                            $.layerMsg(data.message, false, {end:function(){window.location.href = countPath + '&act=count_stock_index';},shade: 0.3});
+                        }
+                    },
+                    error: function () {
+                        $.layerMsg("网络错误", false);
+                    }
+                });
+            },null)
+        }
         $('#' + _this.opts.listGridId).dataGrid({
             formId: _this.opts.queryConditionsId,
             serializeGridDataCallback: $.beforeSend,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
             colNames: ['id', '模板编码', '模板名称', '编辑人', '最后修改时间', '状态', '操作'],
             colModel: [
-                {name: 'id', index: 'id', width: 50, hidden: true},
+                {name: 'id', index: 'id', width: 50, hidden: false},
                 {name: 'code', index: 'code', width: 160, align: 'left'},
                 {name: 'name', index: 'name', width: 160, align: 'left'},
                 {name: 'updaterName', index: 'updaterName', width: 160, align: 'center'},
@@ -235,6 +265,10 @@ var skuTemplate = {
                     url: _this.opts.urlRoot + _this.opts.unlockUrl,
                     code: "scm:button:stockcount:template:unlock",
                     render: $.showLock
+                },
+                delete:{
+                    render: $.showDelete,
+                    beforeCallback:'$.doDelete'
                 }
             }
         });

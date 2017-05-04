@@ -2298,6 +2298,34 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    //盘点模板列表
+    public function count_stock_del_ajax(){
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+
+        $res = $GLOBALS['db']->query("delete from fanwe_cangku_pandian_mb where id=".$id);
+//var_dump("delete from fanwe_cangku_pandian_mb where id=".$id);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '删除成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '删除失败';
+        }
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
     //获取商户选择
     public function getTempletCommercialJqGridData(){
         init_app_page();
