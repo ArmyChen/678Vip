@@ -286,7 +286,8 @@ class ajaxModule extends KizBaseModule{
         foreach ($check as $key=>$item) {
             $sql2 = "select * from fanwe_cangku_menu where cid=".$warehouseId." and mid=".$item['mmid'];
             $result = $GLOBALS['db']->getRow($sql2);
-            $data[$key]['id']=$item['id'];
+//            var_dump($result);
+            $data[$key]['id']=$item['mmid'];
             $data[$key]['skuName']=$item['skuName'];
             $data[$key]['skuCode']=$item['skuCode'];
             $data[$key]['uom']=$item['uom'];
@@ -2709,7 +2710,7 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['unit']=$item['unit'];
             $data_stat[$key]['funit']=$item['funit'];
             $data_stat[$key]['times']=$item['times'];
-            $data_stat[$key]['pandianshu']=$item['stock'];
+            $data_stat[$key]['pandianshu']=$item['mstock'];
             $data_stat[$key]['chayishu']=0;
             $data_stat[$key]['chanyijine']=0;
             $data_stat[$key]['memo']='';
@@ -2821,7 +2822,6 @@ class ajaxModule extends KizBaseModule{
         $tongji_data=array();
         $details = $_REQUEST['details'];
         foreach ($clist as $key=>$item) {
-
             //查询商品信息
             $ccsql = "select * from fanwe_dc_menu where id=".$details[$key]['skuId'];
             $item = $GLOBALS['db']->getRow($ccsql);
@@ -2830,8 +2830,8 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['djid']=$djid;
             $data_stat[$key]['slid']=$slid;
             $data_stat[$key]['mid']=$item['id'];
-            $data_stat[$key]['cate_id']=$item['cate_id'];
-            $data_stat[$key]['cid']=$details[$key]['skuTypeId'];
+            $data_stat[$key]['cate_id']=$details[$key]['skuTypeId'];
+            $data_stat[$key]['cid']=$warehouseId;
             $data_stat[$key]['mbarcode']=$item['barcode'];
             $data_stat[$key]['mname']=$item['name'];
             $data_stat[$key]['stock']=$details[$key]['inventoryQty'];
@@ -2854,11 +2854,51 @@ class ajaxModule extends KizBaseModule{
                 $tongji_data['pankui']+= $details[$key]['amountDiff'];
             }
 
+            //更新库存数量
+//            $cangku_data = array(
+//                'mstock'=>$data_stat[$key]['pandianshu'],
+//                'cid'=>$data_stat[$key]['cate_id'],
+//            );
+//            $r = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $cangku_data ,"update","id=".$data_stat[$key]['mid']);
+            $pandianshu = $data_stat[$key]['pandianshu'];
+
+
+            $list = $GLOBALS['db']->getAll('select * from fanwe_cangku_menu where mid='.$data_stat[$key]["mid"].' and cid='.$warehouseId);
+//            var_dump($list);
+            if(count($list)>0){
+               $sql = "update fanwe_cangku_menu set mstock=".intval($pandianshu)." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
+               $r = $GLOBALS['db']->query($sql);
+            }else{
+                //添加
+                $data_menu=array(
+                    "slid"=>$slid,
+                    "mid"=>$data_stat[$key]['mid'],
+                    "cid"=>$data_stat[$key]['cid'],
+                    "cate_id"=>$data_stat[$key]['cate_id'],
+                    "mbarcode"=>$data_stat[$key]['mbarcode'],
+                    "mname"=>$data_stat[$key]['mname'],
+                    "mstock"=>$data_stat[$key]['mstock'],
+                    "stock"=>$data_stat[$key]['pandianshu'],
+                    "minStock"=>$item['minStock'],
+                    "maxStock"=>$item['maxStock'],
+                    "unit"=>$data_stat[$key]['unit'],
+                    "funit"=>$data_stat[$key]['funit'],
+                    "times"=>$data_stat[$key]['times'],
+                    "type"=>$data_stat[$key]['type'],
+                    "ctime"=>date('Y-m-d H:i:s',time())
+                );
+                $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu ,"INSERT");
+
+            }
         }
+//        var_dump($data_stat);
 //        var_dump($tongji_data);
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $tongji_data ,"update","id=".$djid);
 //        var_dump($GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_danju where id=$djid"));die;
 //var_dump($data_stat);die;
+
+
+
         //插入Stat数据
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$value);

@@ -19,9 +19,9 @@
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
                args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_task_edit_saving_ajax',
                    customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">保存</a>
-            <a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doSave"
-               args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_task_edit_saving_ajax&type=2',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">确认</a>
+            <!--<a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doSave"-->
+               <!--args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=count_task_edit_saving_ajax&type=2',-->
+                   <!--customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">确认</a>-->
             <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=count&act=count_task_index');">返回</a>
         </div>
     </div>
@@ -53,7 +53,7 @@
                         <dt><label for="warehouseName">盘点仓库<strong class="red vam"> *</strong></label></dt>
                         <dd class="positionRelative">
 
-                            <input type="hidden" id="warehouseId" name="warehouseId" value="38904">
+                            <input type="hidden" id="warehouseId" name="warehouseId" value="{$glist.cangku_id}">
 
                             <input type="text" class="form-control w240 required dfdfdf" id="warehouseName"
                                    name="warehouseName" value="{$glist.warehousename}" readonly>

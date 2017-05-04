@@ -153,9 +153,9 @@ class countModule extends KizBaseModule
             $dd_detail[$key]['inventoryQty'] = $item['stock'];
             $dd_detail[$key]['realTimeInventory'] = $item['mstock'];
             $dd_detail[$key]['ccQty'] = $item['pandianshu'];
-            $dd_detail[$key]['qtyDiff'] = 0;
-            $dd_detail[$key]['amountDiff'] = 0;
-            $dd_detail[$key]['remarks'] = '';
+            $dd_detail[$key]['qtyDiff'] =$item['chayishu'];
+            $dd_detail[$key]['amountDiff'] =$item['chanyijine'];
+            $dd_detail[$key]['remarks'] = $item['memo'];
             $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
             $dd_detail[$key]['relTimeAmount'] = $item['mstock']*$item['mprice'];
             $dd_detail[$key]['alreadyData'] = 1;
@@ -164,6 +164,7 @@ class countModule extends KizBaseModule
             $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
             $ccAmount +=  $dd_detail[$key]['ccAmount'];
         }
+//        var_dump($clist);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", $list);
         $GLOBALS['tmpl']->assign("glist", $glist);
