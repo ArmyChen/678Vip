@@ -275,16 +275,31 @@ class ajaxModule extends KizBaseModule{
             $where .= " or g.barcode like '%".$_REQUEST['skuCodeOrName']."%'";
             $where .= " or g.id like '%".$_REQUEST['skuCodeOrName']."%' or g.pinyin like '%".$_REQUEST['skuCodeOrName']."%' )";
         }
-        if($warehouseId){
-            $where .= " and fcm.cid=".$warehouseId;
-        }
 
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,fcm.mstock as inventoryQty from fanwe_dc_menu g INNER JOIN fanwe_cangku_menu fcm on fcm.mid=g.id LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check=$GLOBALS['db']->getAll($sql);
+//var_dump($check);
+        $data=[];
+        foreach ($check as $key=>$item) {
+            $sql2 = "select * from fanwe_cangku_menu where cid=".$warehouseId." and mid=".$item['mmid'];
+            $result = $GLOBALS['db']->getRow($sql2);
+            $data[$key]['id']=$item['id'];
+            $data[$key]['skuName']=$item['skuName'];
+            $data[$key]['skuCode']=$item['skuCode'];
+            $data[$key]['uom']=$item['uom'];
+            $data[$key]['funit']=$item['funit'];
+            $data[$key]['times']=$item['times'];
+            $data[$key]['price']=$item['price'];
+            $data[$key]['pinyin']=$item['pinyin'];
+            $data[$key]['skuTypeId']=$item['skuTypeId'];
+            $data[$key]['skuTypeName']=$item['skuTypeName'];
+            $data[$key]['inventoryQty']=empty($result)?0:$result['mstock'];
 
+
+        }
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
 
         $return['page'] = $page;
@@ -293,7 +308,7 @@ class ajaxModule extends KizBaseModule{
         $return['status'] = true;
         $return['resMsg'] = null;
         if($check){
-            $return['dataList'] = $check;
+            $return['dataList'] = $data;
         }else{
             $return['status'] = false;
             $return['resMsg'] = "查无结果！";
