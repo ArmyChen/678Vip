@@ -2298,7 +2298,7 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
-    //盘点模板列表
+    //删除盘点模板
     public function count_stock_del_ajax(){
         init_app_page();
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
@@ -3229,4 +3229,40 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    //盘点盈亏表
+    public function stock_diff_ajax(){
+        init_app_page();
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $warehouseId = $_REQUEST['warehouseId'];
+        $taskTemplateIds = $_REQUEST['taskTemplateIds'];
+
+        if (($_REQUEST['confirmDateStart'])|| ($_REQUEST['confirmDateEnd'])){
+            $begin_time = strim($_REQUEST['confirmDateStart']);
+            $end_time = strim($_REQUEST['confirmDateEnd']);
+        }
+
+        //查询所有单据的商品
+        $sql = "select * from fanwe_cangku_pandian_stat where slid=$slid";
+        $list = $GLOBALS['db']->getAll($sql);
+
+
+
+        $data = [];
+        foreach ($list as $key=>$item) {
+
+        }
+
+        $return['page'] = $page;
+        $return['records'] = '';
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $data;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
 }

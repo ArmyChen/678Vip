@@ -76,20 +76,18 @@
             <!-- 盘点日期 end -->
 
             <!-- 商品状态 start -->
-            <div class="aside-column">
-                <h2>商品状态</h2>
-                <ul class="panel-list-type">
-                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>
-                        <input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>
-                    </li>
-                    <li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>
-                        <input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>
-                    </li>
-                    <li style="width: 33.33%;"><label class="checkbox" for="isDelete"><span></span>
-                        <input type="checkbox" name="isDelete" id="isDelete" value="1">删除</label>
-                    </li>
-                </ul>
-            </div>
+            <!--<div class="aside-column">-->
+                <!--<h2>商品状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isEnable"><span></span>-->
+                        <!--<input type="checkbox" name="isEnable" id="isEnable" checked value="1">启用</label>-->
+                    <!--</li>-->
+                    <!--<li style="width: 33.33%;"><label class="checkbox checkbox-check" for="isDisable"><span></span>-->
+                        <!--<input type="checkbox" name="isDisable" id="isDisable" checked value="1">停用</label>-->
+                    <!--</li>-->
+                   <!---->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 商品状态 end -->
         </form>
 
@@ -126,22 +124,20 @@
         //查询页面第一个输入框获得光标，输入框绑定enter事件
         $.setSearchFocus();
 
-        refreshWms($('select[name=commercialId]').val());
+//        refreshWms($('select[name=commercialId]').val());
 
         $(_gridTable).dataGrid({
             formId: "queryConditions",
-            url: '/scm_kry/report/cc/query',
-            colNames: ['商品大类', '商品中类', '商品编码', '商品名称（规格）', '单位',
+            url: ctxPath + '&act=stock_diff_ajax',
+            colNames: ['分类id', '商品分类', '商品编码', '商品名称（规格）', '单位','单价',
                 '盘盈金额合计', '盘亏金额合计', '差异金额合计', '盘盈数', '盘盈金额', '盘亏数', '盘亏金额', '差异数', '差异金额'],
             colModel: [
-                {name: 'typeBigName', index: 'typeBigName', width: 180, align: 'left'},
-                {name: 'typeMiddleName', index: 'typeMiddleName', width: 180, align: 'left'},
+                {name: 'typeId', index: 'typeId', width: 180, align: 'left'},
+                {name: 'typeName', index: 'typeName', width: 180, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 180, align: 'left'},
                 {name: 'skuName', index: 'skuName', width: 240, align: 'left',
                     formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDelete == 1) {
-                            return cellvalue + "<span style='color:red'>(已删除)</span>";
-                        } else if (rowObject.isDisable == 1) {
+                        if (rowObject.isDisable == 0) {
                             return cellvalue + "<span style='color:red'>(已停用)</span>";
                         } else {
                             return cellvalue;
@@ -149,6 +145,7 @@
                     }
                 },
                 {name: 'uom', index: 'uom', width: 120, align: 'center'},
+                {name: 'price', index: 'price', width: 120, align: 'center'},
                 {
                     name: 'amountOverage',
                     align: "right",hidden:true
@@ -247,11 +244,11 @@
 
         var commercialId = $('select[name=commercialId]').val();
 
-        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
-//          bkeruyun.promptMessage('请选择门店!');
-            $.layerMsg('请选择品牌/商户!', false);
-            return;
-        }
+//        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+////          bkeruyun.promptMessage('请选择门店!');
+//            $.layerMsg('请选择品牌/商户!', false);
+//            return;
+//        }
 
         var $gridObj = $(_gridTable);
 
@@ -277,11 +274,11 @@
     function load() {
         //验证
         var commercialId = $('select[name=commercialId]').val();
-        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
-//            bkeruyun.promptMessage('请选择门店!');
-            $.layerMsg('请选择品牌/商户!', false);
-            return;
-        }
+//        if (commercialId == null || commercialId == undefined || commercialId.length < 1) {
+////            bkeruyun.promptMessage('请选择门店!');
+//            $.layerMsg('请选择品牌/商户!', false);
+//            return;
+//        }
         var tpNames = "",allTpOld = $("#template-all-ul").find(".checkbox-check");
         for(var i = 0;i<allTpOld.length;i++){
             var each = $(allTpOld[i]).find("input").attr("data-text");
