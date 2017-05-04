@@ -2503,8 +2503,8 @@ class ajaxModule extends KizBaseModule{
         if($cangku_id > -1){
             $str .= " and (cangku_id =$cangku_id)";
         }
-        if($moban_id > -1){
-            $str .= " and (moban_id in (-1,0,$moban_id))";
+        if($moban_id > 0){
+            $str .= " and (moban_id in ($moban_id))";
         }
         if($begin_time){
             $str .=" and datetime > ".$begin_time." ";
@@ -2689,7 +2689,7 @@ class ajaxModule extends KizBaseModule{
             $dd_detail[$key]['skuCode'] = $item['id'];
             $dd_detail[$key]['skuName'] = $item['mname'];
             $dd_detail[$key]['uom'] = $item['unit'];
-            $dd_detail[$key]['price'] = $item['price'];
+            $dd_detail[$key]['price'] = $item['mprice'];
             $dd_detail[$key]['inventoryQty'] = $item['stock'];
             $dd_detail[$key]['realTimeInventory'] = $item['stock'];
             $dd_detail[$key]['ccQty'] = $item['stock'];
@@ -2718,13 +2718,19 @@ class ajaxModule extends KizBaseModule{
 
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $count_data ,"INSERT");
         $djid = $GLOBALS['db']->insert_id();
-
+//var_dump($clist);die;
 
         //封装单据详情
         //查询仓库下的商品，封装商品
         $data_stat=array();
         $tongji_data=array();
         foreach ($clist as $key=>$item) {
+            if($item['print'] == 4){
+                $item['price'] = $item['buyPrice'];
+            }else if($item['print'] == 3){
+                $item['price'] = $item['sellPrice2'];
+            }
+
             $data_stat[$key]['djid']=$djid;
             $data_stat[$key]['slid']=$slid;
             $data_stat[$key]['mid']=$item['id'];
@@ -2893,7 +2899,7 @@ class ajaxModule extends KizBaseModule{
 
             $list = $GLOBALS['db']->getAll('select * from fanwe_cangku_menu where mid='.$data_stat[$key]["mid"].' and cid='.$warehouseId);
 //            var_dump($list);
-            if(count($list)>0){
+            if(count($list)>0&&$warehouseId&&$data_stat[$key]['mid']){
                $sql = "update fanwe_cangku_menu set mstock=".intval($pandianshu)." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
                $r = $GLOBALS['db']->query($sql);
             }else{
@@ -2905,7 +2911,7 @@ class ajaxModule extends KizBaseModule{
                     "cate_id"=>$data_stat[$key]['cate_id'],
                     "mbarcode"=>$data_stat[$key]['mbarcode'],
                     "mname"=>$data_stat[$key]['mname'],
-                    "mstock"=>$data_stat[$key]['mstock'],
+                    "mstock"=>$data_stat[$key]['pandianshu'],
                     "stock"=>$data_stat[$key]['pandianshu'],
                     "minStock"=>$item['minStock'],
                     "maxStock"=>$item['maxStock'],
@@ -2916,7 +2922,7 @@ class ajaxModule extends KizBaseModule{
                     "ctime"=>date('Y-m-d H:i:s',time())
                 );
                 $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu ,"INSERT");
-
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$data_stat[$key]['pandianshu']." where id=".$data_stat[$key]['mid']);
             }
         }
 //        var_dump($data_stat);
@@ -2957,33 +2963,87 @@ class ajaxModule extends KizBaseModule{
         if($row){
             $data['isdisable'] = 2;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
+//
+//            //读取盘点单据详情页面数据
+//            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
+//            foreach($danju_stat as $k=>$v){
+//                //取得确认时间的实时库存, 更新到stat表，以备反确认的时候用
+//                $sqlstr="slid='$slid' and mid=".$v['mid']." and cid=".$v['cid'];
+//                $corrent_stock=$GLOBALS['db']->getOne("select mstock from fanwe_cangku_menu where ".$sqlstr);
+//                $corrent_stock_data=array(
+//                    "mstock"=>$corrent_stock
+//                );
+//                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$corrent_stock_data,"UPDATE","id=".$v['id']);
+//                $change_stock=$v['stock']-$corrent_stock; //创建到确认之前库存的变化
+//
+//                //更新cangku_menu 仓库ID、菜单ID、门店ID相同的菜品数量
+//                //由于这块在提交保存的时候已经确定了肯定是仓库存在的商品，所以这块不在验证cangku_menu中是否存在
+//                $data_menu=array(
+//                    'mstock'=>round($v['pandianshu']-$change_stock,2),//减去从仓库到确认这段时间内库存的变化
+//                    'ctime'=>to_date(NOW_TIME,'Y-m-d H:i:s')
+//                );
+//
+//
+//                //更新cangku_menu
+//                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_menu,"UPDATE",$sqlstr);
+//                //更新ｄｃ＿ｍｅｎｕ
+//                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
+//
+//            }
+        }
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 
-            //读取盘点单据详情页面数据
-            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
-            foreach($danju_stat as $k=>$v){
-                //取得确认时间的实时库存, 更新到stat表，以备反确认的时候用
-                $sqlstr="slid='$slid' and mid=".$v['mid']." and cid=".$v['cid'];
-                $corrent_stock=$GLOBALS['db']->getOne("select mstock from fanwe_cangku_menu where ".$sqlstr);
-                $corrent_stock_data=array(
-                    "mstock"=>$corrent_stock
-                );
-                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$corrent_stock_data,"UPDATE","id=".$v['id']);
-                $change_stock=$v['stock']-$corrent_stock; //创建到确认之前库存的变化
-
-                //更新cangku_menu 仓库ID、菜单ID、门店ID相同的菜品数量
-                //由于这块在提交保存的时候已经确定了肯定是仓库存在的商品，所以这块不在验证cangku_menu中是否存在
-                $data_menu=array(
-                    'mstock'=>round($v['pandianshu']-$change_stock,2),//减去从仓库到确认这段时间内库存的变化
-                    'ctime'=>to_date(NOW_TIME,'Y-m-d H:i:s')
-                );
-
-
-                //更新cangku_menu
-                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_menu,"UPDATE",$sqlstr);
-                //更新ｄｃ＿ｍｅｎｕ
-                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
-
-            }
+    //反确认单据
+    public function count_task_udoconfirm()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $where = " where 1=1 ";
+        $id = $_REQUEST['id'];
+        if($id){
+            $where .=" and id=$id";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_pandian_danju $where");
+        if($row){
+            $data['isdisable'] = 1;
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
+//
+//            //读取盘点单据详情页面数据
+//            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
+//            foreach($danju_stat as $k=>$v){
+//                //取得确认时间的实时库存, 更新到stat表，以备反确认的时候用
+//                $sqlstr="slid='$slid' and mid=".$v['mid']." and cid=".$v['cid'];
+//                $corrent_stock=$GLOBALS['db']->getOne("select mstock from fanwe_cangku_menu where ".$sqlstr);
+//                $corrent_stock_data=array(
+//                    "mstock"=>$corrent_stock
+//                );
+//                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_stat",$corrent_stock_data,"UPDATE","id=".$v['id']);
+//                $change_stock=$v['stock']-$corrent_stock; //创建到确认之前库存的变化
+//
+//                //更新cangku_menu 仓库ID、菜单ID、门店ID相同的菜品数量
+//                //由于这块在提交保存的时候已经确定了肯定是仓库存在的商品，所以这块不在验证cangku_menu中是否存在
+//                $data_menu=array(
+//                    'mstock'=>round($v['pandianshu']-$change_stock,2),//减去从仓库到确认这段时间内库存的变化
+//                    'ctime'=>to_date(NOW_TIME,'Y-m-d H:i:s')
+//                );
+//
+//
+//                //更新cangku_menu
+//                $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_menu,"UPDATE",$sqlstr);
+//                //更新ｄｃ＿ｍｅｎｕ
+//                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
+//
+//            }
         }
         if($res){
             $return['success'] = true;
@@ -3071,6 +3131,7 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
         $data_menu = array(
             'gys_code'=>empty($_REQUEST['supplierCode'])?time():$_REQUEST['supplierCode'],
             'name'=>$_REQUEST['supplierName'],
