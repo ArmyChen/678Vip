@@ -3308,6 +3308,8 @@ class ajaxModule extends KizBaseModule{
             $begin_time = strim($_REQUEST['confirmDateStart']);
             $end_time = strim($_REQUEST['confirmDateEnd']);
         }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
 
         $where = "where fcps.slid=$slid";
         if($warehouseId){
@@ -3316,16 +3318,34 @@ class ajaxModule extends KizBaseModule{
         if($taskTemplateIds){
             $where .= " and fcps.moban_id=$taskTemplateIds";
         }
+        if($begin_time_s){
+            $where .=" and fcps.ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $where .=" and fcps.ctime < ".$end_time_s." ";
+        }
         //查询所有单据的商品
         $sql = "select *,sum(fcps.chanyijine) as schanyijine,sum(fcps.pandianshu) as spandianshu,sum(fcps.chayishu) as schayishu from fanwe_cangku_pandian_stat fcps $where GROUP by fcps.mid";
         $list = $GLOBALS['db']->getAll($sql);
         //
 
-
+//var_dump($list);
 
 
         $data = [];
         foreach ($list as $key=>$item) {
+            $qtyOverage = 0;
+            $amountOverage = 0;
+            $qtyLoss = 0;
+            $amountLoss = 0;
+            if($item['spandianshu'] - $item['schayishu'] > 0&&$item['spandianshu']>$item['mstock']){
+                $qtyOverage = $item['spandianshu'] - $item['schayishu'];
+                $amountOverage= ($item['spandianshu'] - $item['schayishu'])*$item['price'];
+            }else{
+                $qtyLoss = $item['schayishu'] - $item['spandianshu'];
+                $amountLoss= ($item['spandianshu'] - $item['schayishu'])*$item['price'];
+            }
+
             $data[$key]['id'] = $item['id'];
             $data[$key]['djid'] = $item['djid'];
             $data[$key]['slid'] = $item['slid'];
@@ -3340,10 +3360,10 @@ class ajaxModule extends KizBaseModule{
             $data[$key]['uom'] = $item['unit'];
             $data[$key]['funit'] = $item['funit'];
             $data[$key]['times'] = $item['times'];
-            $data[$key]['qtyOverage'] = '-';
-            $data[$key]['amountOverage'] = '-';
-            $data[$key]['qtyLoss'] ='-';
-            $data[$key]['amountLoss'] = '-';
+            $data[$key]['qtyOverage'] = $qtyOverage;
+            $data[$key]['amountOverage'] = $amountOverage;
+            $data[$key]['qtyLoss'] =$qtyLoss;
+            $data[$key]['amountLoss'] = $amountLoss;
             $data[$key]['qtyDiff'] = $item['schayishu'];
             $data[$key]['amountDiff'] = $item['schanyijine'];
 
