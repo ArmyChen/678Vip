@@ -378,6 +378,7 @@ class ajaxModule extends KizBaseModule{
         }
         $datailinfo = array();
         $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+//        var_dump($oDetail);die;
         foreach($oDetail as $k=>$v){
             $datailinfo[$k]['mid'] = $v['skuId'];
             $datailinfo[$k]['unit'] = $v['uom'];
@@ -389,7 +390,7 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['type'] = $v['type'];
             $datailinfo[$k]['unit_type'] = $v['unit_type'];
             $datailinfo[$k]['price'] = $v['price'];
-            $datailinfo[$k]['num'] = $v['inventoryQty'];
+            $datailinfo[$k]['num'] = $v['actualQty'];
             $datailinfo[$k]['zmoney'] = $v['uom'];
             $datailinfo[$k]['memo'] = $v['memo'];
         }
@@ -607,7 +608,7 @@ class ajaxModule extends KizBaseModule{
                 $datailinfo[$k]['type'] = 2;
                 $datailinfo[$k]['unit_type'] = $v['unit_type'];
                 $datailinfo[$k]['price'] = $v['price'];
-                $datailinfo[$k]['num'] = $v['inventoryQty'];
+                $datailinfo[$k]['num'] = $v['actualQty'];
                 $datailinfo[$k]['zmoney'] = $v['uom'];
                 $datailinfo[$k]['memo'] = $v['memo'];
             }
@@ -636,7 +637,7 @@ class ajaxModule extends KizBaseModule{
             $datainGys['lihuo_user'] = $account_info['account_name'];
             $datainGys['gonghuoren'] = $bumen;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"INSERT");
-            var_dump($res);
+//            var_dump($res);
             if ($_REQUEST['type']==1){ //入库
                 $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
             }else{
