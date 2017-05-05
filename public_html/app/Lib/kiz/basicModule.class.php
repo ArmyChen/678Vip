@@ -32,7 +32,7 @@ class basicModule extends KizBaseModule
 //        $this->check_auth();
     }
     #仓库管理
-	public function basic_setting_index()
+    public function basic_setting_index()
     {
         init_app_page();
 
@@ -71,6 +71,47 @@ class basicModule extends KizBaseModule
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("page_title", "编辑仓库");
         $GLOBALS['tmpl']->display("pages/basic/settingEdit.html");
+    }
+    #单位管理
+    public function basic_unit_index()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "单位管理");
+        $GLOBALS['tmpl']->display("pages/basic/unit.html");
+    }
+
+    public function basic_unit_add()
+    {
+        init_app_page();
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增单位");
+        $GLOBALS['tmpl']->display("pages/basic/unitAdd.html");
+    }
+    public function basic_unit_edit()
+    {
+        init_app_page();
+        $id = $_REQUEST['id'];
+        $cangku=$GLOBALS['db']->getRow("select * from fanwe_dc_supplier_unit_cate where id=".$id);
+        $disable = "";
+        $enable = "";
+        if($cangku['is_effect']){
+            $disable = "checked";
+            $enable = "";
+        }else{
+            $disable = "";
+            $enable = "checked";
+        }
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangku", $cangku);
+        $GLOBALS['tmpl']->assign("disable", $disable);
+        $GLOBALS['tmpl']->assign("enable", $enable);
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "编辑单位");
+        $GLOBALS['tmpl']->display("pages/basic/unitEdit.html");
     }
 
     #期初设定

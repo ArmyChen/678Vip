@@ -828,6 +828,7 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($return);exit;
     }
 
+    //查询仓库
     public function dc_cangku_ajax(){
         init_app_page();
         $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
@@ -3306,15 +3307,37 @@ class ajaxModule extends KizBaseModule{
             $end_time = strim($_REQUEST['confirmDateEnd']);
         }
 
-        //查询所有单据的商品
-        $sql = "select * from fanwe_cangku_pandian_stat where slid=$slid";
-        $list = $GLOBALS['db']->getAll($sql);
+        $where = "where fcps.slid=$slid";
 
+        //查询所有单据的商品
+        $sql = "select * from fanwe_cangku_pandian_stat fcps $where GROUP by fcps.mid";
+        $list = $GLOBALS['db']->getAll($sql);
+        //
+
+//var_dump($list);
 
 
         $data = [];
         foreach ($list as $key=>$item) {
-
+            $data[$key]['id'] = $item['id'];
+            $data[$key]['djid'] = $item['djid'];
+            $data[$key]['slid'] = $item['slid'];
+            $data[$key]['typeId'] = $item['cate_id'];
+            $data[$key]['typeId'] = parent::get_dc_supplier_cate($item['cate_id'])?'':parent::get_dc_supplier_cate($item['cate_id'])['name'];
+            $data[$key]['skuCode'] = $item['mid'];
+            $data[$key]['cid'] = $item['cid'];
+            $data[$key]['mbarcode'] = $item['mbarcode'];
+            $data[$key]['mname'] = $item['mname'];
+            $data[$key]['mstock'] = $item['mstock'];
+            $data[$key]['price'] = $item['mprice'];
+            $data[$key]['uom'] = $item['unit'];
+            $data[$key]['funit'] = $item['funit'];
+            $data[$key]['times'] = $item['times'];
+            $data[$key]['pandianshu'] = $item['pandianshu'];
+            $data[$key]['chayishu'] = $item['chayishu'];
+            $data[$key]['chanyijine'] = $item['chanyijine'];
+            $data[$key]['memo'] = $item['memo'];
+            $data[$key]['ctime'] = $item['ctime'];
         }
 
         $return['page'] = $page;
@@ -3325,5 +3348,94 @@ class ajaxModule extends KizBaseModule{
 
         /* 数据 */
         echo json_encode($return);exit;
+    }
+
+    //查询单位
+    public function basic_unit_ajax(){
+        init_app_page();
+        $slid = intval($_REQUEST['id'])?intval($_REQUEST['id']):$GLOBALS['account_info']['slid'];;
+        $isdd = $_REQUEST['isDisable'];
+        $kw = $_REQUEST['name'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $where="where 1=1";
+        $where.=' and location_id='.$slid;
+
+        if($kw){
+            $where = " and name like '%$kw%'";
+        }
+        if(isset($isdd)){
+            $where .= " and is_effect=$isdd";
+        }
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "dc_supplier_unit_cate $where order by id desc limit $limit ");
+//        var_dump($list);
+        $records = $GLOBALS['db']->getOne("select count(id) from ".DB_PREFIX."dc_supplier_unit_cate ".$where);
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+
+        $cangkuArray = array();
+        foreach($list as $k=>$v){
+            $cangkuArray[$k]['id'] = $v['id'];
+            $cangkuArray[$k]['name'] = $v['name'];
+            $cangkuArray[$k]['isDisable'] = $v['is_effect'];
+        }
+
+        $return['dataList'] = $cangkuArray;
+        echo json_encode($return);exit;
+    }
+    /**
+     * 操作单位
+     */
+    public function basic_unit_edit(){
+        init_app_page();
+        $slid = intval($_REQUEST['slid'])?intval($_REQUEST['slid']):$GLOBALS['account_info']['slid'];
+        $id = intval($_REQUEST['id']);
+        $unitArray['location_id'] = $slid;
+        $unitArray['name'] = $_REQUEST['name'];
+        $unitArray['is_effect'] = $_REQUEST['isDisable'];
+//        var_dump($unitArray);die;
+        if($id > 0){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_unit_cate", $unitArray ,"UPDATE","id=".$id);
+        }else{
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_unit_cate", $unitArray ,"INSERT");
+        }
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+
+    /**
+     * 单位删除
+     */
+    public function ajax_unit_del()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $deleteSQL = "delete from fanwe_dc_supplier_unit_cate WHERE id=".$id;
+            $res = $GLOBALS['db']->query($deleteSQL);
+            if($res){
+                $return['success'] = true;
+                $return['message'] = "操作成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "操作失败";
+            }
+            echo json_encode($return);exit;
+
+        }
     }
 }

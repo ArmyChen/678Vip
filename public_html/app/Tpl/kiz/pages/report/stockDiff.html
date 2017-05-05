@@ -135,15 +135,7 @@
                 {name: 'typeId', index: 'typeId', width: 180, align: 'left'},
                 {name: 'typeName', index: 'typeName', width: 180, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 180, align: 'left'},
-                {name: 'skuName', index: 'skuName', width: 240, align: 'left',
-                    formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDisable == 0) {
-                            return cellvalue + "<span style='color:red'>(已停用)</span>";
-                        } else {
-                            return cellvalue;
-                        }
-                    }
-                },
+                {name: 'skuName', index: 'skuName', width: 240, align: 'left'},
                 {name: 'uom', index: 'uom', width: 120, align: 'center'},
                 {name: 'price', index: 'price', width: 120, align: 'center'},
                 {
@@ -227,9 +219,10 @@
     });
 
     function initDates() {
-        var currentDate = new Date().Format('yyyy-MM-dd');
-        $('#confirmDateStart').val(currentDate);
-        $('#confirmDateEnd').val(currentDate);
+//        var currentDate = new Date().Format('yyyy-MM-dd');
+//        var ecurrentDate = new Date('+3 day').Format('yyyy-MM-dd');
+//        $('#confirmDateStart').val(currentDate);
+//        $('#confirmDateEnd').val(ecurrentDate);
     }
 
 
