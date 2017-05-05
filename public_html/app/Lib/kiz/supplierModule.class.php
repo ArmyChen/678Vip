@@ -292,6 +292,8 @@ class supplierModule extends KizBaseModule
      */
     public function go_down_add()	{
         init_app_page();
+//        var_dump($GLOBALS['db']->getAll('select * from fanwe_cangku_menu'));
+
         $account_info = $GLOBALS['account_info'];
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];

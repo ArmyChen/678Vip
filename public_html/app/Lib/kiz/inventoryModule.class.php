@@ -266,6 +266,7 @@ class inventoryModule extends KizBaseModule{
      */
     public function go_up_index()	{
         init_app_page();
+//        var_dump($GLOBALS['db']->getAll("select * from fanwe_cangku_log where TYPE =2"));
 
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];

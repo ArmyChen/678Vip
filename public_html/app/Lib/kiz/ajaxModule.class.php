@@ -71,6 +71,8 @@ class ajaxModule extends KizBaseModule{
      * 入库列表ajax
      */
     public function go_down_index_ajax(){
+//        $r = $GLOBALS['db']->getAll("select * from fanwe_cangku_log where type=2");
+//        var_dump($r);die;
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
@@ -92,8 +94,11 @@ class ajaxModule extends KizBaseModule{
         }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-
-        $sqlstr="where a.gys is null ";
+        if($type == 1){
+            $sqlstr="where a.gys is null";
+        }else{
+            $sqlstr="where 1=1";
+        }
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
@@ -543,6 +548,8 @@ class ajaxModule extends KizBaseModule{
                     $return['refresh'] = false;
                     $return['success'] = false;
                     $return['message'] ="库存不足,非法提交！";
+                    echo json_encode($return);exit;
+
 //                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
                 }else{//操作减库存
                     $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
@@ -570,12 +577,72 @@ class ajaxModule extends KizBaseModule{
             $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
         }
         //采购入库单url封装
-        if($gys){
+        if(!empty($gys)){
+            //采购扣减库存，部门领料实际已经将商品出库
+            $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+            if($order_num>$check['mstock']){
+                $return['flag'] = null;
+                $return['exception'] = null;
+                $return['refresh'] = false;
+                $return['success'] = false;
+                $return['message'] ="库存不足,非法提交！";
+                echo json_encode($return);exit;
+            }else{//操作减库存
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+            }
+
+            $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+
+            //新增出库记录
+            $datailinfo = array();
+            $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+            foreach($oDetail as $k=>$v){
+                $datailinfo[$k]['mid'] = $v['skuId'];
+                $datailinfo[$k]['unit'] = $v['uom'];
+                $datailinfo[$k]['funit'] = $v['funit'];
+                $datailinfo[$k]['times'] = $v['times'];
+                $datailinfo[$k]['yuan_price'] = $v['price'];
+                $datailinfo[$k]['name'] = $v['skuName'];
+                $datailinfo[$k]['barcode'] = $v['skuCode'];
+                $datailinfo[$k]['type'] = 2;
+                $datailinfo[$k]['unit_type'] = $v['unit_type'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['num'] = $v['inventoryQty'];
+                $datailinfo[$k]['zmoney'] = $v['uom'];
+                $datailinfo[$k]['memo'] = $v['memo'];
+            }
+
+            $dd_detail=serialize($datailinfo);
+
+            $datainGys=$_REQUEST;
+
+            //采购入库单信息
+            $time = $_REQUEST['time'];
+            $gys = $_REQUEST['gys'];
+
+
+            if($time){
+                $datainGys['ctime'] =  strtotime($time);
+            }else{
+                $datainGys['ctime']= time()+ 60*60*8;
+            }
+
+            $datainGys['dd_detail']=$dd_detail;
+            $datainGys['slid']=$slid;
+            $datainGys['type'] = 2;
+            $datainGys['danjuhao'] = empty($_REQUEST['asnNoView'])?time():$_REQUEST['asnNoView'];
+            $datainGys['ywsort'] = $_REQUEST['senderId'];
+            $datainGys['cid'] = $_REQUEST['warehouseId'];
+            $datainGys['lihuo_user'] = $account_info['account_name'];
+            $datainGys['gonghuoren'] = $bumen;
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"INSERT");
+            var_dump($res);
             if ($_REQUEST['type']==1){ //入库
                 $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
             }else{
                 $return['data']['url'] = url("kiz","supplier#go_up_index&id=$slid");
             }
+//            var_dump($res);
         }
 
         $datain['zmoney'] = $amount;
