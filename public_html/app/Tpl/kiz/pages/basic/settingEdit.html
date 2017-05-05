@@ -62,22 +62,30 @@
                 </dl>
                 <dl class="panel-item">
                     <dt>
-                        <label for="isDisable" id="isDisable">状态<strong class="red vam"> *</strong></label>
+                        <label for="isDisable">状态<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <ul class="panel-list-type">
-                                <li>
-                                    <label class="checkbox checkbox-check" for="status-0" id="checkbox-0">
-                                        <input type="radio" name="isDisable" id="status-0" {$disable} value="1">启用</label>
-                                </li>
-                                <li>
-                                    <label class="checkbox" for="status-1" id="checkbox-1">
-                                        <input type="radio" name="isDisable" id="status-1" {$enable} value="0">停用</label>
-                                </li>
-                            </ul>
+                            <select id="isDisable" name="isDisable">
+                                <option value="1" {$disable}>启用</option>
+                                <option value="0" {$enable}>禁用</option>
+                            </select>
                         </div>
                     </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="isdeal">执行库<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <select id="isdeal" name="isdeal">
+                                <option value="1" {$ddisable}>启用</option>
+                                <option value="0" {$denable}>禁用</option>
+                            </select>
+                        </div>
+                    </dd>
+
                 </dl>
                 <!--<dl class="panel-item">-->
                     <!--<dt>-->

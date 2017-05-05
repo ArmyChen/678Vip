@@ -56,17 +56,27 @@ class basicModule extends KizBaseModule
         $cangku=$GLOBALS['db']->getRow("select * from fanwe_cangku where id=".$id);
         $disable = "";
         $enable = "";
-        if($cangku['isdisable']){
-            $disable = "checked";
+        if($cangku['isdisable']){//为1就是启用
+            $disable = "selected";
             $enable = "";
         }else{
             $disable = "";
-            $enable = "checked";
+            $enable = "selected";
         }
+        if($cangku['isdeal']){//为1就是启用
+            $ddisable = "selected";
+            $denable = "";
+        }else{
+            $ddisable = "";
+            $denable = "selected";
+        }
+//        var_dump($denable);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangku", $cangku);
         $GLOBALS['tmpl']->assign("disable", $disable);
+        $GLOBALS['tmpl']->assign("ddisable", $ddisable);
         $GLOBALS['tmpl']->assign("enable", $enable);
+        $GLOBALS['tmpl']->assign("denable", $denable);
 
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("page_title", "编辑仓库");

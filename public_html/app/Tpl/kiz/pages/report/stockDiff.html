@@ -129,10 +129,10 @@
         $(_gridTable).dataGrid({
             formId: "queryConditions",
             url: ctxPath + '&act=stock_diff_ajax',
-            colNames: ['分类id', '商品分类', '商品编码', '商品名称（规格）', '单位','单价',
+            colNames: ['id', '商品分类', '商品编码', '商品名称（规格）', '单位','单价',
                 '盘盈金额合计', '盘亏金额合计', '差异金额合计', '盘盈数', '盘盈金额', '盘亏数', '盘亏金额', '差异数', '差异金额'],
             colModel: [
-                {name: 'typeId', index: 'typeId', width: 180, align: 'left'},
+                {name: 'id', index: 'id', width: 180, align: 'left',hidden:true},
                 {name: 'typeName', index: 'typeName', width: 180, align: 'left'},
                 {name: 'skuCode', index: 'skuCode', width: 180, align: 'left'},
                 {name: 'skuName', index: 'skuName', width: 240, align: 'left'},

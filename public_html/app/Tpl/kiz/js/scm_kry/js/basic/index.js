@@ -105,20 +105,27 @@ var wareHouseList = {
             //formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id',  '仓库名称', '创建时间', '最后修改时间','扣减设定', '状态', '操作'],
+            colNames: ['id',  '仓库名称', '创建时间', '最后修改时间','执行库', '状态', '操作'],
             colModel: [
                 {name: 'id', index: 'ids', width: 50, hidden: true},
                 {name: 'warehouseName', index: 'warehouseName', align: "left", width: 120},
                 {name: 'createTime', index: 'createTime', align: "center", width: 180, hidden: true},
                 {name: 'updateTime', index: 'updateTime', align: "center", width: 180, hidden: true},
-                {name: 'deductionName', index: 'deductionname', align: "center", width: 120, hidden: true},
+                {name: 'isdeal', index: 'isdeal', align: "center", width: 120,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.isdeal == 0) {
+                            return "<span style='color:red'>禁用 </span>";
+                        } else {
+                            return "启用";
+                        }
+                    }},
                 {
                     name: 'isDisable',
                     index: 'isDisable',
                     align: "center",
                     width: 100,
                     formatter: function (cellvalue, options, rowObject) {
-                        if (!rowObject.isDisable) {
+                        if (rowObject.isDisable == 0) {
                             return "<span style='color:red'>停用 </span>";
                         } else {
                             return "启用";

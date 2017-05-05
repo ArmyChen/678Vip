@@ -863,6 +863,7 @@ class ajaxModule extends KizBaseModule{
             $cangkuArray[$k]['createTime'] = '';
             $cangkuArray[$k]['updateTime'] = '';
             $cangkuArray[$k]['isDisable'] = $v['isdisable'];
+            $cangkuArray[$k]['isdeal'] = $v['isdeal'];
             $cangkuArray[$k]['deductionName'] = '';
         }
 
@@ -884,6 +885,7 @@ class ajaxModule extends KizBaseModule{
         $cangkuArray['contact'] = '';
         $cangkuArray['name'] = $_REQUEST['warehouseName'];
         $cangkuArray['isdisable'] = $_REQUEST['isDisable'];
+        $cangkuArray['isdeal'] = $_REQUEST['isdeal'];
          if($id > 0){
              $cangkuexsit = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."cangku  where slid=".$slid." and id='".$id."'");
             if(!$cangkuexsit){
@@ -3230,7 +3232,7 @@ class ajaxModule extends KizBaseModule{
     }
 
 
-    //新增供应商
+    //新增部门
     public function bumen_add_ajax(){
         init_app_page();
 
@@ -3265,7 +3267,7 @@ class ajaxModule extends KizBaseModule{
         /* 数据 */
         echo json_encode($return);exit;
     }
-
+    //删除部门
     public function bumen_del_ajax(){
         init_app_page();
 
@@ -3308,13 +3310,18 @@ class ajaxModule extends KizBaseModule{
         }
 
         $where = "where fcps.slid=$slid";
-
+        if($warehouseId){
+            $where .= " and fcps.cid=$warehouseId";
+        }
+        if($taskTemplateIds){
+            $where .= " and fcps.moban_id=$taskTemplateIds";
+        }
         //查询所有单据的商品
-        $sql = "select * from fanwe_cangku_pandian_stat fcps $where GROUP by fcps.mid";
+        $sql = "select *,sum(fcps.chanyijine) as schanyijine,sum(fcps.pandianshu) as spandianshu,sum(fcps.chayishu) as schayishu from fanwe_cangku_pandian_stat fcps $where GROUP by fcps.mid";
         $list = $GLOBALS['db']->getAll($sql);
         //
 
-//var_dump($list);
+
 
 
         $data = [];
@@ -3323,19 +3330,23 @@ class ajaxModule extends KizBaseModule{
             $data[$key]['djid'] = $item['djid'];
             $data[$key]['slid'] = $item['slid'];
             $data[$key]['typeId'] = $item['cate_id'];
-            $data[$key]['typeId'] = parent::get_dc_supplier_cate($item['cate_id'])?'':parent::get_dc_supplier_cate($item['cate_id'])['name'];
+            $data[$key]['typeName'] = empty(parent::get_dc_current_supplier_cate($item['cate_id']))?'':parent::get_dc_current_supplier_cate($item['cate_id'])['name'];
             $data[$key]['skuCode'] = $item['mid'];
             $data[$key]['cid'] = $item['cid'];
             $data[$key]['mbarcode'] = $item['mbarcode'];
-            $data[$key]['mname'] = $item['mname'];
+            $data[$key]['skuName'] = $item['mname'];
             $data[$key]['mstock'] = $item['mstock'];
             $data[$key]['price'] = $item['mprice'];
             $data[$key]['uom'] = $item['unit'];
             $data[$key]['funit'] = $item['funit'];
             $data[$key]['times'] = $item['times'];
-            $data[$key]['pandianshu'] = $item['pandianshu'];
-            $data[$key]['chayishu'] = $item['chayishu'];
-            $data[$key]['chanyijine'] = $item['chanyijine'];
+            $data[$key]['qtyOverage'] = '-';
+            $data[$key]['amountOverage'] = '-';
+            $data[$key]['qtyLoss'] ='-';
+            $data[$key]['amountLoss'] = '-';
+            $data[$key]['qtyDiff'] = $item['schayishu'];
+            $data[$key]['amountDiff'] = $item['schanyijine'];
+
             $data[$key]['memo'] = $item['memo'];
             $data[$key]['ctime'] = $item['ctime'];
         }
