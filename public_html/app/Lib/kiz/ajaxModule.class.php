@@ -35,7 +35,7 @@ class ajaxModule extends KizBaseModule{
             "12"=>"其他出库",
             "13"=>"配送领料",
             "14"=>"品牌销售出库",
-            "15"=>"直拨出库"
+            "15"=>"直拨出入库"
         );
         $this->ywsort=$ywsort;
         $this->gonghuoren=array(
@@ -94,11 +94,12 @@ class ajaxModule extends KizBaseModule{
         }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-        if($type == 1){
-            $sqlstr="where a.gys is null";
-        }else{
-            $sqlstr="where 1=1";
-        }
+//        if($type == 1){
+//            $sqlstr="where a.gys is null";
+//        }else{
+//            $sqlstr="where 1=1";
+//        }
+        $sqlstr="where 1=1";
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
@@ -146,8 +147,16 @@ class ajaxModule extends KizBaseModule{
                 $v['type_show']	='出库';
                 $v['gonghuo_show']	='收货人';
             }
-
             $v['ywsort']=$this->ywsort[$v['ywsort']];
+            if(!empty($v['gys'])){
+                if($type == 1){
+                    $v['ywsort']='直拨入库';
+
+                }else{
+                    $v['ywsort']='直拨出库';
+
+                }
+            }
             $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
@@ -578,7 +587,7 @@ class ajaxModule extends KizBaseModule{
             $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
         }
         //采购入库单url封装
-        if(!empty($gys)){
+        if(!empty($bumen)){
             //采购扣减库存，部门领料实际已经将商品出库
             $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
             if($order_num>$check['mstock']){

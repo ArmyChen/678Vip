@@ -176,7 +176,7 @@ var asnSi = {
                 '入库仓库',
                 '入库金额',
                 '制单人',
-                // '领料部门',
+                '部门',
                 '保存日期'
                 // '供货',
                 // '理货员',
@@ -195,6 +195,7 @@ var asnSi = {
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
+                {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
                 // {name: 'cname', index: 'cname', align: "center", width: 90},
                 // {name: 'ywsort', index: 'ywsort', align: "center", width: 90},
