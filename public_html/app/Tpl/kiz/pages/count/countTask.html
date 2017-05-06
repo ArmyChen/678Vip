@@ -44,28 +44,12 @@
             <!-- 盘点模板start -->
             <div class="aside-column multi-select">
                 <h2>盘点模板</h2>
-                <div class="select-control"><em></em></div>
-                <div class="multi-select-con" style="display:none;">
-                    <ul class="multi-select-items">
-                        <li>
-                            <label class="checkbox" for="template-all">
-                                <span></span>
-                                <input type="checkbox" id="template-all">全部
-                            </label>
-                        </li>
-
-                        {foreach from=$templatelist item=item}
-                        <li>
-                            <label class="checkbox" for="template-{$item.id}">
-                                <span></span>
-                                <input type="checkbox" name="template" id="template-{$item.id}" value="{$item.id}" data-text="{$item.name}">{$item.name}
-                            </label>
-                        </li>
-                        {/foreach}
-
-                    </ul>
-                </div>
-                <input id="taskTemplateIds" name="taskTemplateIds" type="hidden" value="" />
+                <select name="taskTemplateIds" id="taskTemplateIds">
+                    <option value="">请选择模板</option>
+                    {foreach from=$templatelist item=item}
+                    <option value="{$item.id}">{$item.name}</option>
+                    {/foreach}
+                </select>
             </div>
             <!-- 盘点模板end -->
 
