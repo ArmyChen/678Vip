@@ -35,7 +35,7 @@ class ajaxModule extends KizBaseModule{
             "12"=>"其他出库",
             "13"=>"配送领料",
             "14"=>"品牌销售出库",
-
+            "15"=>"直拨出库"
         );
         $this->ywsort=$ywsort;
         $this->gonghuoren=array(
@@ -636,6 +636,7 @@ class ajaxModule extends KizBaseModule{
             $datainGys['cid'] = $_REQUEST['warehouseId'];
             $datainGys['lihuo_user'] = $account_info['account_name'];
             $datainGys['gonghuoren'] = $bumen;
+            $datainGys['zmoney'] = $amount;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"INSERT");
 //            var_dump($res);
             if ($_REQUEST['type']==1){ //入库

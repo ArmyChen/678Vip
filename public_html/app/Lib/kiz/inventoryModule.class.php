@@ -35,7 +35,7 @@ class inventoryModule extends KizBaseModule{
             "12"=>"其他出库",
             "13"=>"配送领料",
             "14"=>"品牌销售出库",
-
+            "15"=>"直拨出库"
         );
 		$this->ywsort=$ywsort;
         $this->gonghuoren=array(
