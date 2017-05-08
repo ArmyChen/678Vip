@@ -3547,4 +3547,173 @@ class ajaxModule extends KizBaseModule{
 
         }
     }
+
+    /**
+     * 报废单列表
+     */
+    public function outbound_scrap_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        if (($_REQUEST['createDateStart'])|| ($_REQUEST['createDateEnd'])){
+            $begin_time = strim($_REQUEST['createDateStart']);
+            $end_time = strim($_REQUEST['createDateEnd']);
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        //仓库列表
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        //改成一维数据
+        $cangku_name=array_column($cangkulist,'name','id');
+
+
+        $danjuhao = $_REQUEST['danjuhao'];
+
+
+        $cangku_id = $_REQUEST['warehouseId'];
+
+        $isdisable = $_REQUEST['status'];
+
+        $str="where slid=".$slid;
+        if($isdisable > -1){
+            $str .=  " and isdisable=".$isdisable;
+        }
+        if($danjuhao){
+            $str .= " and (danjuhao='$danjuhao')";
+        }
+        if($cangku_id){
+            $str .= " and (cangku_id ='$cangku_id'')";
+        }
+        if($begin_time_s){
+            $str .=" and datetime >= '".$begin_time."' ";
+        }
+        if($end_time_s){
+            $str .=" and datetime <= '".$end_time."' ";
+        }
+
+        $sql1 = "SELECT * FROM " . DB_PREFIX . "cangku_outbound  $str order by id desc limit $limit";
+        $sql2 = "SELECT * FROM " . DB_PREFIX . "cangku_outbound  $str order by id desc";
+//        var_dump($sql2);
+        $list = $GLOBALS['db']->getAll($sql1);
+        $list2 = $GLOBALS['db']->getAll($sql2);
+
+        foreach ($list as $k=>$v){
+            $list[$k]['cangku_name']=$cangku_name[$v['cangku_id']];
+            $list[$k]['moban_name']=$moban_name[$v['moban_id']];
+        }
+
+
+        /* 数据 */
+        $records = count($list2);
+        $return['page'] = 1;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $list;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+
+    }
+
+    /**
+     * 新增报废单
+     */
+    public function outbound_scrap_add_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $djid = $_REQUEST['$djid'];
+        //数组
+        $data_danju=array(
+            "danjuhao"=>time(), //此单据号可根据日期强制生成，确保唯一性
+            "supplier_id"=>$supplier_id,
+            "slid"=>$slid,
+            "cangku_id"=>$_REQUEST['warehouseId'],
+            "edit_user"=>$account_info['account_name'],
+            "outbound_num"=>$_REQUEST['planQty'],  //JS算出数量
+            "outbound_money"=>$_REQUEST['amountSum'], //JS算出金额
+            "memo"=>$_REQUEST['memo'],
+            "datetime"=>to_date(NOW_TIME,'Y-m-d H:i:s'),
+            "isdisable"=>1  //状态 1 保存  2确认  3反确认  -1 删除
+        );
+
+        //存在ID，则更新，否则插入，取到ID
+        if($djid){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound",$data_danju,"UPDATE","id='$djid'");
+        }else{
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound",$data_danju);
+            $djid= $GLOBALS['db']->insert_id();
+        }
+
+        //插入，取到ID
+
+//        $mid=$_REQUEST['mid'];
+        // var_dump($mid);
+        //从Stat表中删除不包含的ID
+        $GLOBALS['db']->query("delete from ".DB_PREFIX."cangku_outbound_stat where djid=$djid");
+        $detail = $_REQUEST['details'];
+        //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
+        $data_stat=array();
+        $planQty = 0;
+        $amountSum = 0;
+        foreach ($detail as $key=>$item) {
+            $result = $GLOBALS['db']->getRow('select * from fanwe_cangku_menu where cid='.$_REQUEST['warehouseId'].' and mid='.$detail[$key]['skuId']);
+            $data_stat[$key]['djid']=$djid;
+            $data_stat[$key]['slid']=$slid;
+            $data_stat[$key]['mid']= $detail[$key]['skuId'];
+            $data_stat[$key]['cate_id']= $detail[$key]['skuTypeId'];
+            $data_stat[$key]['cid']= $_REQUEST['warehouseId'];
+            $data_stat[$key]['mbarcode']= $detail[$key]['skuCode'];
+            $data_stat[$key]['mname']= $detail[$key]['skuName'];
+            $data_stat[$key]['stock']= $result['stock'];
+            $data_stat[$key]['mstock']= $result['mstock'];
+            $data_stat[$key]['mprice']= $detail[$key]['price'];
+            $data_stat[$key]['unit']= $result['unit'];
+            $data_stat[$key]['funit']= $result['funit'];
+            $data_stat[$key]['times']= $result['times'];
+            $data_stat[$key]['out_num']= $detail[$key]['planQty'];//报废数量
+            $data_stat[$key]['out_money']= $detail[$key]['amount'];  //报废金额
+            $data_stat[$key]['out_reason']= $detail[$key]['reasonId']; //报废原因
+            $data_stat[$key]['memo']= $detail[$key]['memo'];
+            $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
+            $planQty+= $detail[$key]['planQty'];//报废数量
+            $amountSum+=$detail[$key]['amount'];  //报废金额
+        }
+
+        //数组
+        $data_danju=array(
+            "id"=>$djid,
+            "outbound_num"=>$planQty,  //JS算出数量
+            "outbound_money"=>$amountSum, //JS算出金额
+        );
+
+        //存在ID，则更新，否则插入，取到ID
+        if($djid){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound",$data_danju,"UPDATE","id='$djid'");
+        }
+
+        //插入Stat数据
+        foreach ($data_stat as $value){
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound_stat",$value);
+        }
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 }

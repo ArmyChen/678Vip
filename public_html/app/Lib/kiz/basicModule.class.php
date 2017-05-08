@@ -339,7 +339,7 @@ class basicModule extends KizBaseModule
 
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("page_title", "库存预警设定");
-        $GLOBALS['tmpl']->display("pages/basic/inventoryWarning.html");
+        $GLOBALS['tmpl']->display("pages/basic/inventoryWarningEdit.html");
     }
     public function basic_inventoryWarning_edit()
     {

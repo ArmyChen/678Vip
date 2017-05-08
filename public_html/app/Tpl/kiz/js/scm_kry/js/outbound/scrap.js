@@ -7,7 +7,7 @@ var scrap = {
     $detailGrid : '',
     //默认参数
     opts : {
-        urlRoot : '/outbound/scrap',
+        urlRoot : ctxPath,
         templateId : -1,
         commandType : 0,
         queryConditionsId : 'queryConditions',
@@ -125,7 +125,7 @@ var scrap = {
             formId: _this.opts.queryConditionsId,
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['单据号', '保存 / 确认日期', '供应商名称', '退货仓库', '退回金额', '状态', '状态'],
+            colNames: ['单据号', '日期', '供应商名称', '退货仓库', '退回金额', '状态', '状态'],
             colModel: [
                 {name: 'outboundNo', index: 'outboundNo', width: 160, align: "center"},
                 {name: 'updateTime', index: 'updateTime', width: 160, align: "center"},
@@ -205,9 +205,10 @@ var scrap = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '单位', '价格', '报废数', '报废金额', '报废原因', '报废原因', '换算率', '标准单位换算率', '标准单位ID', '标准单位', '定价'],
+            colNames: ['商品编码', '所属分类id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '报废数', '报废金额', '报废原因', '报废原因', '换算率', '标准单位换算率', '标准单位ID', '标准单位', '定价'],
             colModel: [
-                {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
+                {name: 'skuId', index: 'skuId', width: 80,  sortable: !editable},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, sortable: !editable},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
@@ -363,25 +364,12 @@ $.detailsValidator = function (args) {
 $.saveCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-        var $id = $("#id");
-        var $btnCopy = $("#btnCopy");
-        if (!$id.val()) {
-            $id.val(rs.data.id);
-            $btnCopy.removeClass("hidden")
-            replaceUrl('/outbound/scrap/edit', 'id=' + rs.data.id);
-            $("#command-type-name").text("编辑");
-            document.title = '编辑报废单';
-        }
-        $.layerMsg(rs.message, true);
-        return;
+        $.layerMsg("操作成功！", true, {
+            end:function(){
+                window.location.href = outboundPath + "&act=outbound_scrap_index";
+            },shade: 0.3});
     } else {
-        if (rs.data != '' && rs.data != null) {
-            //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
-            $.layerOpen("操作失败:" + rs.message, rs.data);
-        } else {
-            //bkeruyun.promptMessage("操作失败:" + rs.message);
-            $.layerMsg("操作失败:" + rs.message, false);
-        }
+        $.layerMsg("操作失败！", true,{shade: 0.3});
     }
 };
 

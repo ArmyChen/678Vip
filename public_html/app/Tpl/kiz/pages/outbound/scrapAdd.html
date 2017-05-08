@@ -8,21 +8,21 @@
 
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10"  id="btnSave" function="$.doSave"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/outbound/scrap/save',
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=outbound_scrap_add_ajax',
                customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.saveCallback'}">保存</a>
-            <a code="scm:button:scrap:scrap:confirm" class="btn-link ml10"  id="btnConfirm" function="$.doConfirmOrder"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/outbound/scrap/confirm',
-               customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>
-            <a code="scm:button:scrap:scrap:add" class="btn-link ml10 hidden"
-               id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/outbound/scrap/copy'}">复制</a>
-            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/outbound/scrap/index');">返回</a>
+            <!--<a code="scm:button:scrap:scrap:confirm" class="btn-link ml10"  id="btnConfirm" function="$.doConfirmOrder"-->
+               <!--args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/outbound/scrap/confirm',-->
+               <!--customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>-->
+            <!--<a code="scm:button:scrap:scrap:add" class="btn-link ml10 hidden"-->
+               <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/outbound/scrap/copy'}">复制</a>-->
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=outbound&act=outbound_scrap_index');">返回</a>
         </div>
     </div>
 </div>
 
 <div class="center-block panel-group" id="accordion">
     <div class="panel" style="padding:0; margin-top: 10px;">
-        <form method="post" action="/scm_kry/outbound/scrap/save" id="baseInfoForm">
+        <form method="post" action="/kiz.php?ctl=ajax&act=outbound_scrap_add_ajax" id="baseInfoForm">
             <!-- 基本信息 start -->
             <div class="panel-heading">
                 <h3 class="panel-title"><em>基本信息</em></h3>
@@ -30,8 +30,10 @@
 
             <!-- hidden start -->
             <input type="hidden" id="id" name="id" value="">
-            <input type="hidden" id="outboundNo" name="outboundNo" value="BF201704070003"/>
+            <input type="hidden" id="outboundNo" name="outboundNo" value=""/>
             <input type="hidden" id="warehouseName" name="warehouseName" value=""/>
+            <input type="hidden" id="hqtySum" name="hqtySum" value=""/>
+            <input type="hidden" id="hamountSum" name="hamountSum" value=""/>
             <!-- hidden end -->
             <div class="panel-body">
                 <div class="clear">
@@ -41,7 +43,7 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="outboundNoView"
-                                           name="outboundNoView" value="BF201704070003"
+                                           name="outboundNoView" value=""
                                            placeholder="系统生成单据号" data-type="word" maxlength="14"
                                            disabled/>
                                 </div>
@@ -57,41 +59,30 @@
                                 <div class="pull-left w240">
                                     <select id="warehouseId" name="warehouseId" class="{required:true}">
 
+                                        {foreach from=$cangkulist item=item}
 
+                                        <option value="{$item.id}" >{$item.name}</option>
 
-
-
-                                        <option value="">请选择出库仓库</option>
-
-                                        <option value="9591"
-
-                                        >总仓库</option>
-
-                                        <option value="13260"
-
-                                        >饮品仓</option>
-
-                                        <option value="13261"
-
-                                        >酒水仓</option>
-
-                                        <option value="13262"
-
-                                        >原材料仓</option>
-
-                                        <option value="14838"
-
-                                        >4号库</option>
-
-                                        <option value="14839"
-
-                                        >5号库</option>
-
-
+                                        {/foreach}
 
                                     </select>
                                 </div>
                                 <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="memo">备注信息<strong class="white vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240 search-box">
+                                <TEXTAREA id="memo" name="memo" class="w240" style="height: 65px;"
+                                          placeholder="备注说明（可不填）" data-character="true"
+                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
+                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                    <div class="wrong"></div>
+                                </div>
                             </dd>
                         </dl>
                     </div>
@@ -114,20 +105,20 @@
                     <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
                     <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
                 </div>
-                <div style="display: inline-block" class="w200 pull-left ml5">
-                    <select id="changAllReason" class="">
-                        <option value="">批量修改报废原因</option>
+                <!--<div style="display: inline-block" class="w200 pull-left ml5">-->
+                    <!--<select id="changAllReason" class="">-->
+                        <!--<option value="">批量修改报废原因</option>-->
 
-                        <option value="13559">不良商品报废</option>
+                        <!--<option value="13559">不良商品报废</option>-->
 
-                        <option value="13560">其他原因报废</option>
+                        <!--<option value="13560">其他原因报废</option>-->
 
-                    </select>
-                </div>
+                    <!--</select>-->
+                <!--</div>-->
             </div>
 
 
-            <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+            <!--<div id="filterGridDiv" class="pull-left cut-off-rule"></div>-->
 
             <div class="panel-body">
                 <div class="inventoryTotal mr15" style="float: right;">

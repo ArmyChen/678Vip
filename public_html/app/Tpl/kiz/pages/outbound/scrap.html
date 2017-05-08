@@ -19,7 +19,7 @@
                 <h2>模糊查询</h2>
 
                 <div class="search-box">
-                    <input type="text" name="outboundNo" id="outboundNo" class="form-control" placeholder="请输入单据号"
+                    <input type="text" name="danjuhao" id="danjuhao" class="form-control" placeholder="请输入单据号"
                            data-format="sn" maxlength="14">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
@@ -33,46 +33,11 @@
                     <select class="form-control" name="warehouseId" id="warehouseId">
                         <option value="">请选择出库仓库</option>
 
+                        {foreach from=$cangkulist item=item}
 
+                        <option value="{$item.id}" >{$item.name}</option>
 
-
-                        <option value="9591">总仓库</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
-
-
-
-                        <option value="14838">4号库</option>
-
-
-
-
-
-
-                        <option value="14839">5号库</option>
-
+                        {/foreach}
 
 
                     </select>
@@ -99,10 +64,10 @@
                 <h2>状态</h2>
                 <ul class="panel-list-type">
                     <li><label class="checkbox checkbox-check" for="status-0"><span></span>
-                        <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
+                        <input type="checkbox" name="status" id="status-0" checked value="1">已保存</label>
                     </li>
                     <li><label class="checkbox" for="status-1"><span></span>
-                        <input type="checkbox" name="status" id="status-1" value="1">已确认</label></li>
+                        <input type="checkbox" name="status" id="status-1" value="2">已确认</label></li>
                 </ul>
             </div>
             <!-- 状态 end -->
@@ -126,9 +91,9 @@
 
 <script>
 
-    var urlRoot = "/scm_kry/outbound/scrap/";
-    var queryUrl = urlRoot + "query";
-    var editUrl = urlRoot + "edit";
+    var urlRoot =ctxPath;
+    var queryUrl = urlRoot + "&act=outbound_scrap_ajax";
+    var editUrl = outboundPath + "&act=outbound_scrap_edit";
     var withDrawUrl = urlRoot + 'withdraw';
     var deleteUrl = urlRoot + "delete";
     var viewUrl = urlRoot + "view";
@@ -154,47 +119,30 @@
         };
 
         $.showEditor = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showWithDraw = function(rowData){
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showConfirm = function (rowData) {
-            if (rowData.status==0) return renderEnum.normal;
-            if(rowData.status==1) return renderEnum.hidden;
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showDelete = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
         $.showCopy = function (rowData) {
-            return renderEnum.normal;
+            return renderEnum.hidden;
         }
 
         var $gridObj = $("#grid");
@@ -202,23 +150,24 @@
             formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: queryUrl,
-            colNames: ['单据号', '保存 / 确认日期', '出库仓库', '报废数量', '报废金额', '状态', '状态'],
+            colNames: ['单据号', '日期', '仓库id', '出库仓库', '报废数量', '报废金额', '状态', '状态'],
             colModel: [
-                {name: 'outboundNo', index: 'outboundNo', width: 160, align: "center"},
-                {name: 'updateTime', index: 'updateTime', width: 160, align: "center"},
-                {name: 'warehouseName', index: 'warehouseName', width: 160},
-                {name: 'qty', index: 'qty', width: 100, align: "right"},
+                {name: 'danjuhao', index: 'danjuhao', width: 160, align: "center"},
+                {name: 'datetime', index: 'datetime', width: 160, align: "center"},
+                {name: 'cangku_id', index: 'cangku_id', width: 160,hidden:true},
+                {name: 'cangku_name', index: 'cangku_name', width: 160},
+                {name: 'outbound_num', index: 'outbound_num', width: 100, align: "right"},
                 {
-                    name: 'amount',
-                    index: 'amount',
+                    name: 'outbound_money',
+                    index: 'outbound_money',
                     width: 120,
                     align: "right",
                     formatter: customCurrencyFormatter
                 },
-                {name: 'statusName', index: 'status', width: 100, align: "center"},
-                {name: 'status', index: 'status', width: 100, align: "center", hidden:true}
+                {name: 'isdisable', index: 'isdisable', width: 100, align: "center", formatter: disableFormatter},
+                {name: 'isdisable', index: 'isdisable', width: 100, align: "center", hidden:true}
             ],
-            sortname: 'outboundNo',
+            sortname: 'danjuhao',
             pager: "#gridPager",
             showOperate:true,
             actionParam: {
@@ -257,8 +206,17 @@
                     render: $.showCopy
                 }
             }
-        });
 
+        });
+        function disableFormatter(cellValue, options, rowObject) {
+           if(cellValue == 1){
+               return '已保存';
+           }else if(cellValue == 2){
+               return '已确认';
+           }else{
+               return '';
+            }
+        }
         $.setSearchFocus();
     });
 
