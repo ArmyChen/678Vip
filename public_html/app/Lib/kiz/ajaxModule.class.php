@@ -300,7 +300,6 @@ class ajaxModule extends KizBaseModule{
         foreach ($check as $key=>$item) {
             $sql2 = "select * from fanwe_cangku_menu where cid=".$warehouseId." and mid=".$item['mmid'];
             $result = $GLOBALS['db']->getRow($sql2);
-//            var_dump($result);
             $data[$key]['id']=$item['mmid'];
             $data[$key]['skuName']=$item['skuName'];
             $data[$key]['skuCode']=$item['skuCode'];

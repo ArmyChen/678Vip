@@ -338,6 +338,7 @@ class basicModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("page_title", "库存预警设定");
         $GLOBALS['tmpl']->display("pages/basic/inventoryWarningEdit.html");
     }

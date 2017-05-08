@@ -88,9 +88,9 @@
 <div class="center-block panel-group mt20">
     <!-- 选项卡组 start -->
     <div class="tab-nav">
-        <div class="btn-group" role="group" style="margin-left: 250px">
+        <div class="btn-group" style="display: none;" role="group" style="margin-left: 250px">
             <button id="tabNav1" data-box-id="tabBox_1" down-excel-id="freeDownExcel_1" save-id="btnSave" type="button" class="btn btn-default tab-btn isNotInit">单仓库设定</button>
-            <button id="tabNav2" data-box-id="tabBox_2" down-excel-id="freeDownExcel_2" save-id="btnSave2" type="button" class="btn btn-default tab-btn isNotInit">多仓库设定</button>
+            <button id="tabNav2"  data-box-id="tabBox_2" down-excel-id="freeDownExcel_2" save-id="btnSave2" type="button" class="btn btn-default tab-btn isNotInit">多仓库设定</button>
         </div>
         <div style="float: right;margin-top: 10px;">
             <span class="iconfont question color-g" data-content="1.库存上限/安全库存/库存下限不填写，则不进行库存提醒<br/>2.设置项必须满足库存上限>安全库存>库存下限>=0。"></span>
@@ -114,18 +114,9 @@
 
                                 <select class="form-control" name="warehouseId" id="warehouseId">
                                     <option value="">请选择设定仓库</option>
-
-                                    <option value="9591" >总仓库</option>
-
-                                    <option value="13260" >饮品仓</option>
-
-                                    <option value="13261" >酒水仓</option>
-
-                                    <option value="13262" >原材料仓</option>
-
-                                    <option value="14838" >4号库</option>
-
-                                    <option value="14839" >5号库</option>
+                                    {foreach from=$cangkulist item=item}
+                                        <option value="{$item.id}">{$item.name}</option>
+                                    {/foreach}
 
                                 </select>
 
@@ -144,8 +135,8 @@
                     <a class="btn btn-primary btn-large" id="btnDeleteSku" afterRemoved="$.afterRemoved" data-gridid="grid">移除商品</a>
                 </div>
 
-                <div id="filterGridDiv" data-showinventory="1"></div>
-                <div class="set-btn" onclick="$.batchSet()">批量设定</div>
+                <!--<div id="filterGridDiv" data-showinventory="1"></div>-->
+                <!--<div class="set-btn" onclick="$.batchSet()">批量设定</div>-->
             </div>
 
             <div class="panel-body" style="margin-top: -20px">
@@ -334,7 +325,7 @@
             warehouseId : $('#warehouseId').val(),
             warehouseIds:warehouseIds,
             editable : true,
-            commandType :'2',
+            commandType :'1',
             type : type,
             warehouses : warehouses
         };

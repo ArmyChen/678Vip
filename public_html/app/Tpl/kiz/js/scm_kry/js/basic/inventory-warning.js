@@ -31,10 +31,10 @@ var inventoryWarning = {
             rownumWidth: 40,
             rownumbers: true,
             shrinkToFit: false,
-            colNames: ['商品id', '库存类型', '商品中类','商品状态', '商品编码', '商品名称(规格)', '单位'],
+            colNames: ['商品id', /*'库存类型',*/ '商品分类','商品状态', '商品编码', '商品名称(规格)', '单位'],
             colModel: [
                 {name: 'skuId', index: 'skuId', width: 100, align: 'left',frozen : true,hidden:true,key:true},
-                {name: 'wmTypeName', index: 'wmTypeName', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
+                // {name: 'wmTypeName', index: 'wmTypeName', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
                 {name: 'isDisable', index: 'isDisable', width: 100, align: 'left',frozen : true,hidden:true},
                 {name: 'skuCode', index: 'skuCode', width: 100, align: "left",frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
