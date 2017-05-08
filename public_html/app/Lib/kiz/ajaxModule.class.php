@@ -3823,4 +3823,68 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+    /**
+     * 报废、退回原因设定
+     */
+    public function basic_reason_saving(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $content = $_REQUEST['content'];
+        $id = $_REQUEST['id'];
+        $reasonType = $_REQUEST['reasonType'];
+//        var_dump($GLOBALS['db']->query("TRUNCATE table fanwe_basic_reason"));
+//        var_dump($GLOBALS['db']->query("CREATE TABLE `fanwe_basic_reason`(`id` int(11) NOT NULL AUTO_INCREMENT ,`content` text,`reasonType` int(11) DEFAULT NULL,`slid` int(11) DEFAULT NULL,`supplier_id` int(11) DEFAULT NULL,`created` int(11) DEFAULT NULL,PRIMARY KEY(`id`))"));
+            if($id > 0){
+            $data=array(
+                'content'=>$content
+            );
+            $res=$GLOBALS['db']->autoExecute('fanwe_basic_reason',$data,'update','id='.$id);
+
+        }else{
+            $data=array(
+                'content'=>$content,
+                'reasonType'=>$reasonType,
+                'slid'=>$slid,
+                'supplier_id'=>$supplier_id,
+                'created'=>time()
+            );
+           $res= $GLOBALS['db']->autoExecute('fanwe_basic_reason',$data,'INSERT');
+
+        }
+
+        if($res){
+            $return['success'] = true;
+            $return['data'] = $data;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 删除报废、退回原因设定
+     */
+    public function basic_reason_del(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $res=$GLOBALS['db']->query('delete from fanwe_basic_reason where id='.$id);
+        }
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
 }

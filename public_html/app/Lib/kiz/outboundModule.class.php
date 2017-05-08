@@ -28,6 +28,7 @@ class outboundModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("reason2",  json_encode(parent::get_basic_reason_list(0,2)));
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("page_title", "新增报废单");
         $GLOBALS['tmpl']->display("pages/outbound/scrapAdd.html");

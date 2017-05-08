@@ -318,8 +318,10 @@ class basicModule extends KizBaseModule
     public function basic_reason_index()
     {
         init_app_page();
-
+//var_dump(parent::get_basic_reason_list(0,2));
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("reason1", parent::get_basic_reason_list(0,1));
+        $GLOBALS['tmpl']->assign("reason2",  parent::get_basic_reason_list(0,2));
         $GLOBALS['tmpl']->assign("page_title", "退回、报废原因设定");
         $GLOBALS['tmpl']->display("pages/basic/reason.html");
     }

@@ -21,14 +21,16 @@
                         <div class="additem-wrap" id="backSet">
                             <span class="icon-plus">添加</span>
 
+                            {foreach from=$reason1 item=item}
                             <div class="additem">
                                 <div class="search-box">
-                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13554" value="过期商品退回" old-value="过期商品退回" reason-type="1" placeholder="请输入退回原因" readonly disabled>
+                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="{$item.id}" value="{$item.content}" old-value="{$item.content}" reason-type="2" placeholder="请输入报废原因" readonly disabled>
                                     <span class="icon-editor"></span>
                                     <span class="wrong" style="display:none;">此项必填，为空不保存</span>
                                 </div>
                                 <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
                             </div>
+                            {/foreach}
 
                         </div>
                     </dd>
@@ -40,24 +42,17 @@
                     <dd>
                         <div class="additem-wrap" id="scrapSet">
                             <span class="icon-plus">添加</span>
-
+                            {foreach from=$reason2 item=item}
                             <div class="additem">
                                 <div class="search-box">
-                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13559" value="不良商品报废" old-value="不良商品报废" reason-type="2" placeholder="请输入报废原因" readonly disabled>
+                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="{$item.id}" value="{$item.content}" old-value="{$item.content}" reason-type="2" placeholder="请输入报废原因" readonly disabled>
                                     <span class="icon-editor"></span>
                                     <span class="wrong" style="display:none;">此项必填，为空不保存</span>
                                 </div>
                                 <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
                             </div>
+                            {/foreach}
 
-                            <div class="additem">
-                                <div class="search-box">
-                                    <input type="text" class="form-control required" name="backWhy" maxlength="36" id="13560" value="其他原因报废" old-value="其他原因报废" reason-type="2" placeholder="请输入报废原因" readonly disabled>
-                                    <span class="icon-editor"></span>
-                                    <span class="wrong" style="display:none;">此项必填，为空不保存</span>
-                                </div>
-                                <a href="#" class="close-1 ml10" style="display:none;">删除此项</a>
-                            </div>
 
                         </div>
                     </dd>
@@ -222,12 +217,12 @@
         reason.reasonType = $(obj).attr("reason-type");
 
         $.ajax({
-            url: ctx + "/reason/save",
+            url: ctxPath + "&act=basic_reason_saving",
             type: "post",
             async: false,
-            data: JSON.stringify(reason),
+            data: {id:reason.id,content:reason.content,reasonType:reason.reasonType},
             dataType: "json",
-            contentType: "application/json",
+            contentType: "application/x-www-form-urlencoded;charset=UTF-8",
             success: function (result) {
                 if (result.success) {
                     isSaveSuccess = true;
@@ -283,12 +278,12 @@
         reason.reasonType = obj.attr("reason-type");
 
         $.ajax({
-            url: ctx + "/reason/delete",
+            url: ctxPath + "&act=basic_reason_del",
             type: "post",
             async: false,
-            data: JSON.stringify(reason),
+            data: {id:reason.id},
             dataType: "json",
-            contentType: "application/json",
+            contentType: "application/x-www-form-urlencoded;charset=UTF-8",
             success: function (result) {
                 if (result.success) {
                     opResult = true;

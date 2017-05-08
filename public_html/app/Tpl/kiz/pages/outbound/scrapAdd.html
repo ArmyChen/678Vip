@@ -150,10 +150,10 @@
 <script>
     $(function() {
         var opts = {
-            urlRoot : "/scm_kry/outbound/scrap",
+            urlRoot : ctxPath,
             commandType : 1,
             gridData : eval([]),
-            reasons : [{"id":13559,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":null,"updaterName":null,"updateTime":"2016-12-02 14:16:27","version":0,"reasonType":2,"content":"不良商品报废","frequency":0},{"id":13560,"uuid":null,"brandId":12566,"brandName":null,"commercialId":-1,"commercialName":null,"isDelete":0,"creatorId":-1,"creatorName":null,"createTime":"2016-12-02 14:16:27","updaterId":null,"updaterName":null,"updateTime":"2016-12-02 14:16:27","version":0,"reasonType":2,"content":"其他原因报废","frequency":0}]
+            reasons : {$reason2}
         };
 
         scrap._init(opts);

@@ -542,6 +542,29 @@ class KizBaseModule{
         $pandianlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_pandian_mb where slid=".$slid);
         return $pandianlist;
     }
+
+    /**
+     * 查询报废原因
+     * @param int $id
+     * @return
+     */
+    public function get_basic_reason_list($id=0,$type=1){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        if($id>0){
+
+            $pandian=$GLOBALS['db']->getRow("select id,content from fanwe_basic_reason where id=".$id);
+            return $pandian;
+        }
+        $where = " 1=1";
+        if($type > 0){//退回原因
+            $where .=" and reasonType=$type";
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select id,content from fanwe_basic_reason where $where and slid=".$slid);
+        return $pandianlist;
+    }
 }
 
 ?>
