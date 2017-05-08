@@ -3691,6 +3691,14 @@ class ajaxModule extends KizBaseModule{
             $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
             $planQty+= $detail[$key]['planQty'];//报废数量
             $amountSum+=$detail[$key]['amount'];  //报废金额
+
+
+            //库存扣减
+            $data = array(
+                'mstock'=>  $result['mstock'] - $detail[$key]['planQty'],
+            );
+
+            $GLOBALS['db']->autoExecute('fanwe_cangku_menu',$data,'update','id='. $result['id']);
         }
 
         //数组
@@ -3709,6 +3717,8 @@ class ajaxModule extends KizBaseModule{
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound_stat",$value);
         }
+
+
 
         if($res){
             $return['success'] = true;
