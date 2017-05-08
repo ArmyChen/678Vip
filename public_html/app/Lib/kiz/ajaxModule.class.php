@@ -1153,7 +1153,11 @@ class ajaxModule extends KizBaseModule{
     function get_dc_supplier_menu($id = 30){
         $check=$GLOBALS['db']->getRow("select * from fanwe_dc_supplier_menu_cate where id = ".$id);
         if($check){
-            return $check['name'];
+            if(empty($check['name'])){
+                return '<span style="color:red">顶级分类</span>';
+            }else{
+                return $check['name'];
+            }
         }else{
             return '';
         }
@@ -3704,6 +3708,100 @@ class ajaxModule extends KizBaseModule{
         //插入Stat数据
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound_stat",$value);
+        }
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 查询库存信息
+     */
+    public function basic_inventoryWarning_selectSingleSku(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        //仓库ID
+        $cangku_id=$_REQUEST['warehouseId'];
+
+        $list=$GLOBALS['db']->getAll("select fcm.*,fdc.cate_id as cate_id from fanwe_cangku_menu fcm left join fanwe_dc_menu fdc on fcm.mid=fdc.id where slid=".$slid." and cid=".$cangku_id);
+        $data = [];
+        foreach ($list as $key=>$item) {
+            $data[$key]['skuId']=$item['mid'];
+            $data[$key]['skuName']=$item['mname'];
+            $data[$key]['skuCode']=$item['mbarcode'];
+            $data[$key]['uom']=$item['unit'];
+            $data[$key]['funit']=$item['funit'];
+            $data[$key]['times']=$item['times'];
+            $data[$key]['price']=$item['price'];
+            $data[$key]['pinyin']=$item['pinyin'];
+            $data[$key]['skuTypeId']= $item['cate_id'];
+            $data[$key]['skuTypeName']=$this->get_dc_supplier_menu($item['cate_id']);
+            $data[$key]['lowerInventory']=$item['minStock'];
+            $data[$key]['safetyInventory']=$item['safeStock'];
+            $data[$key]['upperInventory']=$item['maxStock'];
+        }
+        /* 数据 */
+//        $records = count($list);
+//        $return['page'] = 1;
+//        $return['records'] = $records;
+//        $return['total'] = ceil($records);
+//        $return['status'] = true;
+//        $return['resMsg'] = null;
+//        $return['dataList'] = $data;
+
+        /* 数据 */
+        echo json_encode($data);exit;
+
+    }
+
+    /**
+     * 保存库存预警设定
+     */
+    public function basic_inventoryWarning_saveSingle(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        //仓库ID
+        $cangku_id=$_REQUEST['warehouseId'];
+
+        //取到ID
+
+        $details=$_REQUEST['details'];
+
+        //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
+        $data_stat=array();
+        $res =false;
+//        var_dump($details);die;
+        foreach ($details as $key=>$item) {
+            $data_stat['minStock']=$item['lowerInventory'];
+            $data_stat['safeStock']=$item['safetyInventory'];
+            $data_stat['maxStock']=$item['upperInventory'];
+            $check_ising=$GLOBALS['db']->getRow("select id from fanwe_cangku_menu where slid=".$slid." and cid=".$cangku_id." and mid=".$item['skuId']);
+//            var_dump($check_ising);
+            if($check_ising){//存在，UPDate
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_stat,"UPDATE","id=".$check_ising['id']);
+//                var_dump($res);
+            }else{
+                //Insert
+                $data_stat['slid']=$slid;
+                $data_stat['mid']=$item;
+                $data_stat['cid']=$cangku_id;
+                $data_stat['mbarcode']=$item['skuCode'];
+                $data_stat['cate_id']=$item['skuTypeId'];
+                $data_stat['mname']=$item['skuName'];
+                $data_stat['unit']=$item['uom'];
+                $data_stat['ctime']=to_date(NOW_TIME,"Y-m-d H:i:s");
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu",$data_stat);
+            }
         }
 
         if($res){

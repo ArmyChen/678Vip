@@ -1,3 +1,4 @@
+
 /**
  * 库存预警
  * Created by anq on 2016/9/22.
@@ -6,12 +7,12 @@
 var inventoryWarning = {
     //默认参数
     opts : {
-        urlRoot : "/inventoryWarning",
-        querySingleUrl : '/selectSingleSku', //单仓库设定
-        queryMultiUrl : '/selectMultiSku', //多仓库设定
-        saveSingleUrl: '/saveSingle',
-        saveMultiUrl: '/saveMulti',
-        batchSetUrl: '/batchSet',
+        urlRoot : ctxPath,
+        querySingleUrl : '&act=basic_inventoryWarning_selectSingleSku', //单仓库设定
+        queryMultiUrl : '&act=basic_inventoryWarning_selectMulSku', //多仓库设定
+        saveSingleUrl: '&act=basic_inventoryWarning_saveSingle',
+        saveMultiUrl: '&act=basic_inventoryWarning_saveMulti',
+        batchSetUrl: '&act=basic_inventoryWarning_batchSet',
         commandType : '',
         singleShowed : false,
         multiShowed : false,
@@ -199,7 +200,7 @@ var inventoryWarning = {
         exportConditions.push({key : "导出时间", type : 'date'});
 
         $.ajax({
-            url: ctxPath + inventoryWarning.opts.urlRoot + _this.opts.querySingleUrl,
+            url: ctxPath + _this.opts.querySingleUrl,
             type: 'post',
             data: {warehouseId : warehouseId},
             dataType: 'json',
@@ -216,11 +217,11 @@ var inventoryWarning = {
             rowNum : 9999,
             multiselect: _this.opts.editable,
             datatype: 'local',
-            colNames: ['商品id',  '库存类型', '商品中类', '商品编码', '商品名称(规格)', '单位',
+            colNames: ['商品编号',  '分类id', '商品分类', '商品编码', '商品名称(规格)', '单位',
                 '库存下限' + _this.opts.tooltipText1, '安全库存' + _this.opts.tooltipText2, '库存上限' + _this.opts.tooltipText3],
             colModel: [
-                {name: 'skuId', index: 'skuId', width: 100, align: 'left',hidden:true,sortable: !_this.opts.editable,key:true},
-                {name: 'wmTypeName', index: 'wmTypeName', width: 100, align: 'left',sortable: !_this.opts.editable},
+                {name: 'skuId', index: 'skuId', width: 100, align: 'left',sortable: !_this.opts.editable,key:true},
+                {hidden:true,name: 'skuTypeId', index: 'skuTypeId', width: 100, align: 'left',sortable: !_this.opts.editable},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 100, align: 'left',sortable: !_this.opts.editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, align: "left",sortable: !_this.opts.editable},
                 {name: 'skuName', index: 'skuName', width: 100, align: 'left',sortable: !_this.opts.editable,
@@ -1079,7 +1080,7 @@ function saveSingle(args){
         return;
     }
     var gridData = $('#grid').jqGrid('getRowData');
-    var url=ctxPath + inventoryWarning.opts.urlRoot + inventoryWarning.opts.saveSingleUrl;
+    var url=ctxPath + inventoryWarning.opts.saveSingleUrl;
     if (gridData.length == 0) {
         layer.confirm('列表中没有商品，确定要保存？', {icon: 3, offset: '30%'}, function (index) {
             $.doSave({formId:'baseInfoForm',gridId:'grid',url:url,
