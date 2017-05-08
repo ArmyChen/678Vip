@@ -187,7 +187,7 @@ class basicModule extends KizBaseModule
                 }
             }
         }
-        $listsort = _toFormatTree($list,"name");
+        $listsort = toFormatTree($list,"name");
 
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("listsort", $listsort);
