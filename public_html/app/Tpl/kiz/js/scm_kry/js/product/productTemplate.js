@@ -5,12 +5,12 @@
 var productTemplate = {
     //默认参数
     opts : {
-        urlRoot : '/scm/template/product',
+        urlRoot : ctxPath,
         brandId : 1031,
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '/query',
+        queryUrl : '&act=product_moban_ajax',
         editUrl : '/update',
         viewUrl : '/view',
         lockUrl : '/lock',

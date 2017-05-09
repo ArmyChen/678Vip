@@ -39,9 +39,9 @@
         <div class="btn-wrap pull-right tar">
             <!--<a class="btn-link ml10" id="btnCopy">复制</a>-->
             <a class="btn-link ml10" id="btnSave" function="$.saveSkuBom"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=basic_skuBom_',
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=ajax_skuBom_add',
                gridDataId:'details',submitCallback:'$.saveCallback',confirm:true,mode:1}">保存</a>
-            <a class="btn-link ml10" id="btnCancel" onclick="$.goBack('/scm_kry/scm/skubom/index');">返回</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.goBack('/kiz.php?ctl=basic&act=basic_skuBom_index');">返回</a>
         </div>
     </div>
 </div>
@@ -63,7 +63,7 @@
                     <input type="hidden" id="skuId" name="skuId" value="">
                     <!-- hidden end -->
 
-                    <!--<div class="inventoryTotal mr15" style="padding-top: 0px;">-->
+                    <div class="inventoryTotal mr15" style="padding-top: 0px;">
                         <!--<span class="ellipsis-inline-block">编辑商品:</span>-->
                         <!--<span style="width: 200px; height: 28px; text-align: left; display: inline-block; margin-right: 40px; ">-->
                             <!--<select name="goods_id" id="goods_id">-->
@@ -73,22 +73,29 @@
                                 <!--<option></option>-->
                             <!--</select>-->
                         <!--</span>-->
-
-                        <!--<span class="iconfont question color-g" style="vertical-align: bottom" data-content="配方估算成本根据配方明细计算而来"></span>-->
-                        <!--<span class="ellipsis-inline-block">配方估算成本(品牌):</span>-->
-                        <!--<span class="ellipsis-inline-block" style="max-width: 300px;">-->
-                        	<!--<input type="text" id="bomReckonPrice" disabled="disabled" class="form-control" value="" style="width: 89px;text-align: center;height: 30px;"/>-->
+                        <!--<span class="ellipsis-inline-block">仓库:</span>-->
+                        <!--<span style="width: 200px; height: 28px; text-align: left; display: inline-block; margin-right: 40px; ">-->
+                        <!--<select name="warehouseId" id="warehouseId">-->
+                        <!--{foreach from=$cangkulist item=item}-->
+                            <!--<option value="{$item.id}">{$item.name}</option>-->
+                        <!--{/foreach}-->
+                        <!--</select>-->
                         <!--</span>-->
-                        <!--<span class="ellipsis-inline-block" style="margin-right: 40px;">元/<span class="uom">杯</span></span>-->
+                        <span class="iconfont question color-g" style="vertical-align: bottom" data-content="配方估算成本根据配方明细计算而来"></span>
+                        <span class="ellipsis-inline-block">配方估算成本:</span>
+                        <span class="ellipsis-inline-block" style="max-width: 300px;">
+                        	<input type="text" id="bomReckonPrice" name="bomReckonPrice" class="form-control" value="" style="width: 89px;text-align: center;height: 30px;"/>
+                        </span>
+                        <span class="ellipsis-inline-block" style="margin-right: 40px;">元/<span class="uom">杯</span></span>
 
-                        <!--<span class="iconfont question color-g" data-content="配方中的原物料能够生产的商品的总数量"></span>-->
-                        <!--<span class="ellipsis-inline-block">数量：</span>-->
-                        <!--<span class="ellipsis-inline-block">-->
-                            <!--<input type="text" name="baseNum" id="baseNum" class="form-control" placeholder="" data-limit='{5,5}' data-range='{0,99999.99999}'-->
-                                   <!--maxlength="14" data-format='float' value="1" style="width: 89px;text-align: center;height: 30px;"/>-->
-                        <!--</span>-->
-                        <!--<span class="ellipsis-inline-block uom" style="max-width: 80px;">杯</span>-->
-                    <!--</div>-->
+                        <span class="iconfont question color-g" data-content="配方中的原物料能够生产的商品的总数量"></span>
+                        <span class="ellipsis-inline-block">数量：</span>
+                        <span class="ellipsis-inline-block">
+                            <input type="text" name="baseNum" id="baseNum" class="form-control" placeholder="" data-limit='{5,5}' data-range='{0,99999.99999}'
+                                   maxlength="14" data-format='float' value="1" style="width: 89px;text-align: center;height: 30px;"/>
+                        </span>
+                        <span class="ellipsis-inline-block uom" style="max-width: 80px;">杯</span>
+                    </div>
                 </form>
 
                 <div id="gridDiv" class="mt20 clear detail-grid">

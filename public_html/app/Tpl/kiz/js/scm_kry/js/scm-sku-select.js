@@ -441,8 +441,8 @@ var scmSkuSelect = {
             width: width,
             colNames: [  _this.opts.sku + '编码',
                 // 'wmType',
-                // 'yieldRateStr',
-                // 'reckonPrice',
+                'yieldRateStr',
+                'reckonPrice',
                 // '库存类型',
                 '所属分类ID',
                 '所属分类',
@@ -463,10 +463,10 @@ var scmSkuSelect = {
             colModel: [
                 {name: 'id', index: 'id', hidden: false},
                 // {name: 'wmType', index: 'wmType', hidden: true},
-                // {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
-                // {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {
-                //     return rowObject.price;
-                // }},
+                {name: 'yieldRateStr', index: 'yieldRateStr', hidden: true},
+                {name: 'reckonPrice',index: 'reckonPrice',hidden:true,formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.price;
+                }},
                 // {name: 'wmTypeStr', index: 'wmType', align: "center"},
                 {name: 'skuTypeId', index: 'skuTypeId', align: "center", hidden: true},
                 {name: 'skuTypeName', index: 'skuTypeName', align: "center"},
@@ -999,6 +999,9 @@ $(function () {
                                 </div>\
                             </div>\
                         	   <input type="text" style="display:none;" name="skuScene" value="{{skuScene}}" />\
+                        	   <input type="text" style="display:none;" name="reckonPrice" value="{{reckonPrice}}" />\
+                        	   <input type="text" style="display:none;" name="yieldRateStr" value="{{yieldRateStr}}" />\
+                        	   <input type="text" style="display:none;" name="inventoryQty" value="{{inventoryQty}}" />\
                         	   <input type="text" style="display:none;" name="excludedSkuId" value="{{excludedSkuId}}" />\
                         	   <input type="text" style="display:none;" name="warehouseSelectId" value="{{warehouseId}}" />\
                         	   <input type="text" style="display:none;" name="supplierSelectId" value="{{supplierId}}" />\

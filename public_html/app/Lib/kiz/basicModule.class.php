@@ -350,7 +350,6 @@ class basicModule extends KizBaseModule
                         }*/
 
             $peifang_stat=unserialize($peifang_info['data_json']);
-
             foreach ($peifang_stat as $k=>$v){
                 $menu_info=$GLOBALS['db']->getRow("select b.name,b.barcode,b.print,c.name as cname from fanwe_dc_menu b  left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where b.id=".$v['menu_id']);
                 $v['id']=$v['menu_id'];
@@ -406,6 +405,7 @@ class basicModule extends KizBaseModule
         }
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("goodslist",parent::get_basic_goods_list());
         $GLOBALS['tmpl']->assign("peifang_info", $peifang_info);
         $GLOBALS['tmpl']->assign("list", json_encode($peifang_stat));

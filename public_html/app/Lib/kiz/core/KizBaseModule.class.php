@@ -586,6 +586,24 @@ class KizBaseModule{
         $list=$GLOBALS['db']->getAll("select * from fanwe_dc_menu where $where and location_id=".$slid);
         return $list;
     }
+//$list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id limit $limit desc ");
+    /**
+     * 获取生产模板列表
+     * @param int $id
+     * @return
+     */
+    public function get_product_template_list($id=0){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select id,name from fanwe_cangku_product_mb where id=".$id);
+            return $pandian;
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_product_mb where slid=".$slid);
+        return $pandianlist;
+    }
 }
 
 ?>

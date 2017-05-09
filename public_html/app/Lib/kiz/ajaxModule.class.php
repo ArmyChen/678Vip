@@ -84,6 +84,8 @@ class ajaxModule extends KizBaseModule{
         $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $warehouseId = $_REQUEST['warehouseId']?intval($_REQUEST['warehouseId']):'99';
+        $product_mb_id = $_REQUEST['product_mb_id'];
+
 
         if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
             $begin_time = strim($_REQUEST['begin_time']);
@@ -119,6 +121,9 @@ class ajaxModule extends KizBaseModule{
         }
         if($_REQUEST['danjuhao'] !=""){
             $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
+        }
+        if($product_mb_id){
+            $sqlstr .=" and a.product_mb_id =".$product_mb_id;
         }
 //        $sqlstr .=" and f.print <> 4";
 //        $sql2 = "select * from fanwe_cangku_log limit 1";
@@ -300,15 +305,24 @@ class ajaxModule extends KizBaseModule{
         foreach ($check as $key=>$item) {
             $sql2 = "select * from fanwe_cangku_menu where cid=".$warehouseId." and mid=".$item['mmid'];
             $result = $GLOBALS['db']->getRow($sql2);
+            if($item['print'] != 3){
+                $price =$item['buyPrice'];
+            }else{
+                $price =$item['price'];
+            }
             $data[$key]['id']=$item['mmid'];
             $data[$key]['skuName']=$item['skuName'];
             $data[$key]['skuCode']=$item['skuCode'];
             $data[$key]['uom']=$item['uom'];
+            $data[$key]['wmType']=$item['print'];
             $data[$key]['funit']=$item['funit'];
             $data[$key]['times']=$item['times'];
             $data[$key]['price']=$item['price'];
             $data[$key]['pinyin']=$item['pinyin'];
+            $data[$key]['reckonPrice'] = $price;
+            $data[$key]['reckonPriceStr'] = $price;
             $data[$key]['skuTypeId']=$item['skuTypeId'];
+            $data[$key]['yieldRateStr']=$item['chupinliu'];
             $data[$key]['skuTypeName']=$item['skuTypeName'];
             $data[$key]['inventoryQty']=empty($result)?0:$result['mstock'];
 
@@ -374,6 +388,7 @@ class ajaxModule extends KizBaseModule{
         //$slid = $account_info['slid'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $cid = $_REQUEST['warehouseId'];
+        $product_mb_id = $_REQUEST['product_mb_id'];
 
         $dhid = $_REQUEST['asnNoView']?intval($_REQUEST['asnNoView']):'0';
 
@@ -430,7 +445,9 @@ class ajaxModule extends KizBaseModule{
         if($bumen){
             $datain['gonghuoren'] = $bumen;
         }
-
+        if(!empty($product_mb_id)){
+            $datain['product_mb_id']=$product_mb_id;
+        }
         //更新仓库
         $detail=$_REQUEST['details'];
 
@@ -3884,6 +3901,11 @@ class ajaxModule extends KizBaseModule{
         }
         $arr = [];
         foreach ($list as $key=>$item) {
+            if($item['print'] != 3){
+                $price =$item['buyPrice'];
+            }else{
+                $price =$item['price'];
+            }
             $arr[$key]['id'] =$item['id'];
             $arr[$key]['skuTypeName'] =$item['kclx'];
             $arr[$key]['wmTypeName'] =$item['cname'];
@@ -3891,6 +3913,7 @@ class ajaxModule extends KizBaseModule{
             $arr[$key]['skuName'] =$item['name'];
             $arr[$key]['uom'] =$item['unit'];
             $arr[$key]['updateTime'] =$item['pfdate'];
+            $arr[$key]['reckonPrice'] = $price;
             $arr[$key]['statusName'] =$item['pf_status']?'已保存':'未编辑';
             $arr[$key]['status'] =$item['pf_status'];
         }
@@ -3912,17 +3935,17 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
-        $menu_id=$_REQUEST['menu_id'];
+        $slid = $account_info['slid'];
+        $menu_id=$_REQUEST['id'];
         //配方ID
         $pfid=$_REQUEST['pfid']?intval($_REQUEST['pfid']):0;
         //配方数组
         $data_peifang=array(
             "menu_id"=>$menu_id,
             "slid"=>$slid,
-            "gusuanchengben"=>$_REQUEST['gusuanchengben'],
+            "gusuanchengben"=>$_REQUEST['bomReckonPrice'],//估算成本
             "datetime"=>NOW_TIME,
-            "num"=>intval($_REQUEST['num'])
+            "num"=>intval($_REQUEST['baseNum'])//数量
         );
         //存在配方ID，则更新，否则插入，取到配方ID
         if($pfid){
@@ -3934,19 +3957,19 @@ class ajaxModule extends KizBaseModule{
 
         //插入配方，取到配方ID
 
-        $mid=$_REQUEST['mid'];
+        $mid=$_REQUEST['details'];
         // var_dump($mid);
         //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
         $data_stat=array();
         foreach ($mid as $key=>$item) {
             $data_stat[$key]['pfid']=$pfid;
             $data_stat[$key]['menu_id']=$item;
-            $data_stat[$key]['gusuan']=$_REQUEST['gusuan'][$item];
-            $data_stat[$key]['num_j']=$_REQUEST['num_j'][$item];
-            $data_stat[$key]['chupinliu']=$_REQUEST['chupinliu'][$item];
-            $data_stat[$key]['num_m']=$_REQUEST['num_m'][$item];
-            $data_stat[$key]['unit']=$_REQUEST['unit'][$item];
-            $data_stat[$key]['gusuanjine']=$_REQUEST['gusuanjine'][$item];
+            $data_stat[$key]['gusuan']=$mid[$key]['reckonPriceStr'];
+            $data_stat[$key]['num_j']=$mid[$key]['netQtyStr'];
+            $data_stat[$key]['chupinliu']=$mid[$key]['yieldRateStr'];
+            $data_stat[$key]['num_m']=$mid[$key]['qty'];
+            $data_stat[$key]['unit']=$mid[$key]['uom'];
+            $data_stat[$key]['gusuanjine']=$mid[$key]['reckonAmount'];
             $data_stat[$key]['datetime']=NOW_TIME;
         }
         // var_dump($data_stat);
@@ -3960,12 +3983,161 @@ class ajaxModule extends KizBaseModule{
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_peifang_stat",$value);
         }
-        if($res){//成功
-            showBizSuccess("配方设置成功！",0,url("biz","cangku#peifang&id=$slid"));
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
         }else{
-            showBizErr("错误！",0,url("biz","cangku#peifang&act=peifang_view&menu_id=$menu_id"));
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+
+
+    }
+
+    /**
+     * 生产模板
+     */
+    public function product_moban_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
+
+
+        $slid = intval($_REQUEST['id']);
+        $isdd = $_REQUEST['isdd'];
+        $moban_keywords = $_REQUEST['moban_keywords'];
+        $menu_keywords = $_REQUEST['menu_keywords'];
+        $accept_location = $_REQUEST['accept_location'];
+        !isset($isdd) && $isdd = 1;
+
+        $str="where slid=$slid and isdisable=".$isdd;
+
+        if($moban_keywords){
+            $str .= "and (name='$moban_keywords' or code='$moban_keywords')";
+        }
+        if($menu_keywords){
+            $str .= "and (accept_goods like '%$menu_keywords%')";
+        }
+        if($accept_location){
+            $str .= "and (accept_location like '%$accept_location%')";
         }
 
 
+
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id limit $limit desc ");
+        $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id  desc ");
+        $arr = [];
+        foreach ($list as $key=>$item) {
+            if($item['print'] != 3){
+                $price =$item['sbuy'];
+            }else{
+                $price =$item['price'];
+            }
+            $arr[$key]['mid'] =$item['mid'];
+            $arr[$key]['commercialName'] =$account_info['slname'];
+            $arr[$key]['skuCode'] =$item['mbarcode'];
+            $arr[$key]['skuName'] =$item['name'];
+            $arr[$key]['marketPrice'] = $price;
+            $arr[$key]['cost'] =$price*$item['sstock'];
+            $arr[$key]['uom'] =$item['unit'];
+            $arr[$key]['qty'] = intval($item['sstock']);
+            $arr[$key]['print'] =$item['print'];
+            $arr[$key]['cate_id'] =$item['cate_id'];
+        }
+
+        /* 数据 */
+        $records = count($list2);
+        $return['page'] = 1;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        $return['dataList'] = $arr;
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+    //新增生产模板
+    public function product_saving_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        //模板模板ID
+        $mbid=$_REQUEST['mbid']?intval($_REQUEST['mbid']):0;
+        //数组
+        $data_moban=array(
+            "edit_user"=>$account_info['account_name'],
+            "supplier_id"=>$supplier_id,
+            "slid"=>$slid,
+            "code"=>empty($_REQUEST['code'])?time():$_REQUEST['code'],
+            "name"=>$_REQUEST['name'],
+            "accept_location"=>serialize($_REQUEST['accept_location']),
+            "memo"=>$_REQUEST['memo'],
+            "datetime"=>to_date(NOW_TIME,'Y-m-d H:i:s'),
+            "isdisable"=>1
+        );
+
+        //存在ID，则更新，否则插入，取到ID
+        if($mbid){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_product_mb",$data_moban,"UPDATE","id='$mbid'");
+        }else{
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_product_mb",$data_moban);
+            $mbid= $GLOBALS['db']->insert_id();
+        }
+
+        //插入配方，取到配方ID
+
+        $mid=$_REQUEST['templateDetails'];
+        // var_dump($mid);
+        //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
+        $data_stat=array();
+        foreach ($mid as $key=>$item) {
+            $data_stat[$key]['id']=$item['id'];
+            $data_stat[$key]['mid']=$item['mid'];
+            $data_stat[$key]['cate_id']=$item['skuTypeId'];
+            $data_stat[$key]['cname']=$item['skuTypeName'];
+            $data_stat[$key]['name']=$item['skuName'];
+            $data_stat[$key]['unit']=$item['uom'];
+            $data_stat[$key]['price']=$item['price'];
+            $exceptShopStr = $item['exceptShopStr'];
+            $regStr = parent::get_tag_data($exceptShopStr);
+            $regStr = str_replace("\"","",$regStr);
+            if($regStr){
+                $feiS = explode(",",$regStr[0]);
+                $fei_slid=$feiS;
+            }else{
+                $fei_slid='';
+            }
+            $data_stat[$key]['fei_slid']=json_encode($fei_slid);
+        }
+
+        //更新配方里的data_json字段
+        $data_json=array('accept_goods'=>serialize($data_stat));
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_product_mb",$data_json,"UPDATE","id='$mbid'");
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
     }
 }

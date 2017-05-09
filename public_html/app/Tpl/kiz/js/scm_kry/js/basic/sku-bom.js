@@ -137,7 +137,7 @@ var skuBom = {
                     align: "left",
                     width: 200,
                     formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.isDisable == 1) {
+                        if (rowObject.isDisable == 0) {
                             return cellvalue + "<span style='color:red'>(已停用)</span>";
                         } else {
                             return cellvalue;
@@ -470,15 +470,16 @@ var skuBom = {
             //height: 390,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId','reckonPrice','库存类型', '商品分类', '原料编码', '原料名称(规格)','估算单价'+skuBom.opts.reckonPrice, '净料数量'+skuBom.opts.tipNetQty,'出成率'+skuBom.opts.tipYieldRate,'毛料数量'+skuBom.opts.tipQty,'单位','yieldRateNone','估算金额'+skuBom.opts.reckonAmount],
+            colNames: ['商品编码','price','reckonPrice','库存类型', '商品分类', '原料条码', '原料名称(规格)','估算单价'+skuBom.opts.reckonPrice, '净料数量'+skuBom.opts.tipNetQty,'出成率'+skuBom.opts.tipYieldRate,'毛料数量'+skuBom.opts.tipQty,'单位','yieldRateNone','估算金额'+skuBom.opts.reckonAmount],
             colModel: [
-                {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
-                {name: 'reckonPrice', index: 'reckonPrice', width: 100, hidden: true,formatter:function(cellvalue, options, rowObject){
+                {name: 'skuId', index: 'skuId', width: 80, sortable: !editable},
+                {hidden:true,name: 'price', index: 'reckonPrice', width: 80, sortable: !editable},
+                {hidden:true,name: 'reckonPrice', index: 'reckonPrice', width: 100,formatter:function(cellvalue, options, rowObject){
 	                	return rowObject.reckonPrice!=null&&rowObject.reckonPrice!="null"?rowObject.reckonPrice:0;
                 }},
                 {hidden:true,name: 'wmTypeStr', index: 'wmTypeStr', width: 100, sortable: !editable,
                 	formatter:function(cellvalue, options, rowObject){
-                		if (rowObject.isDisable == 1) {
+                		if (rowObject.isDisable == 0) {
                             return ("<span style='color:#9D9D9D;'>"+cellvalue+"</span>");
                         } else {
                             return cellvalue;
@@ -489,7 +490,7 @@ var skuBom = {
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable, formatter: $.skuIsDisableFormat},
                 {name: 'skuName', index: 'skuName', width: 170, sortable: !editable,
                     formatter:function (cellvalue, options, rowObject) {
-                        if (rowObject.isDisable == 1) {
+                        if (rowObject.isDisable == 0) {
                             return "<span style='color:#9D9D9D;'>" + cellvalue + "<span style='color:red'>(已停用)</span></span>";
                         } else {
                             return cellvalue;
@@ -499,16 +500,14 @@ var skuBom = {
                 {name: 'reckonPriceStr', index: 'reckonPriceStr', width: 100, align: "center",sortable: !editable,formatter:function(cellvalue, options, rowObject){
                 	var value = 0;
                 	if(rowObject.reckonPrice!=null&&rowObject.reckonPrice!="null") value=rowObject.reckonPrice;
-                	return rowObject.isDisable==1?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
+                	return rowObject.isDisable==0?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
                 }},
                 netQtyColModel,
                 {name: 'yieldRateStr', index: 'yieldRateStr', width: 100, sortable: !editable,align: "center",formatter:function(cellvalue, options, rowObject){
                 	var value = "-";
-                	if (rowObject.wmType==3||rowObject.wmType==4) {
-                		var rateStr = rowObject.yieldRateStr;
-                		value = rateStr.indexOf("%")!=-1?rateStr:(rateStr+"%");
-                    }
-                	return rowObject.isDisable==1?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
+                    var rateStr = rowObject.yieldRateStr;
+                    value = rateStr.indexOf("%")!=-1?rateStr:(rateStr+"%");
+                	return rowObject.isDisable==0?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
                 }},
                 qtyColModel,
                 {name: 'uom', index: 'uom', width: 100, sortable: !editable,align: "center", formatter: $.skuIsDisableFormat},
@@ -527,7 +526,7 @@ var skuBom = {
 	                	if(rowObject.qty&&rowObject.reckonPrice!=null){
 	                		value = math.chain(parseFloat(rowObject.reckonPrice)).multiply(parseFloat(rowObject.qty)).round(5).value;
 	                	}
-	                	return rowObject.isDisable==1?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
+	                	return rowObject.isDisable==0?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
                 	}
                 }
             ],
@@ -598,7 +597,7 @@ $.goBack = function (url) {
     if (result) {
         //注意：原项目中的layer(v1.9.3)的取消按钮(即第二个按钮)和关闭均执行cancel方法，无法区分，因而在配方编辑页面引入了layer(v3.0.1),并将源码中绑定到window的layer改名为layer3，避免覆盖原来的layer
         layer3.open(
-            {
+             {
                 icon: 3,
                 title: '提示',
                 offset: '30%',
@@ -730,42 +729,24 @@ function check(args){
 $.saveCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-        // window.location.href = skuBom.opts.urlRoot + "/index";
-        var skuBomVo = args.result.data;
-        skuBom.opts.baseNum = skuBomVo.baseNum;
-        skuBom.opts.gridData = skuBomVo.details;
-        switch (args.mode) {
-            case 1:
-                $.layerMsg("保存成功", true);
-                break;
-
-            case 2:
-                $.layerMsg("保存成功", true, {
-                    end: function () {
-                        skuBom.handleSwitchSku(args.skuBomId);
-                    }
-                });
-                break;
-
-            default:
-                $.layerMsg("保存成功", true, {
-                    end: function () {
-                        window.location.href = args.redirectUrl;
-                    }
-                });
+        if(confirm(rs.message + ",保存成功是否继续？")){
+            location.reload();
+        }else{
+            location.href=basicPath+"&act=basic_skuBom_index";
         }
 
+        return;
     } else {
         if (rs.data != '' && rs.data != null) {
-            $.layerOpen(rs.message, rs.data);
+            $.layerOpen("操作失败:" + rs.message, rs.data);
         } else {
-            $.layerMsg(rs.message, false);
+            $.layerMsg("操作失败:" + rs.message, false);
         }
     }
 };
 
 $.skuIsDisableFormat = function (cellvalue, options, rowObject) {
-    if (rowObject.isDisable == 1) {
+    if (rowObject.isDisable == 0) {
         return "<span style='color:#9D9D9D;'>" + cellvalue + "</span>";
     } else {
         return cellvalue;

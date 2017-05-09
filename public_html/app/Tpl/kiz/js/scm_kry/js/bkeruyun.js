@@ -2018,7 +2018,7 @@ $(function () {
             var formData, postData, contentType;
 
             if (gridId) {
-                contentType = "application/json;charset=UTF-8";
+                contentType = "application/x-www-form-urlencoded;charset=UTF-8";
                 formData = $form.getFormData();
                 postData = formData;
                 var gridDataId = 'details';
