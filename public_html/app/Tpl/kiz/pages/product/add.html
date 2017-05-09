@@ -1,0 +1,221 @@
+
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>新增生产模板</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnSave" function="$.formSubmitWithAjax"
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/scm/template/product/save',
+               customValidator:'$.detailsValidator',gridDataId:'templateDetails',submitCallback:'$.submitCallback'}">保存</a>
+
+            <a class="btn-link ml10" id="btnSave-bak" function="$.formSubmitWithAjax"
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/scm/template/product/save',
+	               customValidator:'$.detailsValidator',gridDataId:'templateDetails',submitCallback:'$.submitCallbackBak'}">保存并复制</a>
+
+            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/scm_kry/scm/template/product/index');">取消</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block panel-group" id="accordion">
+    <div class="panel" style="padding:0; margin-top: 10px;">
+        <form method="post" action="/scm_kry/scm/template/product/save" id="baseInfoForm" autocomplete="off">
+            <input type="hidden" value="[]" name="exceptShopDetails" id="exceptShopDetails"/>
+            <input type="hidden" value="[]" name="shopTemplateDetails" id="shopTemplateDetails"/>
+            <!-- 基本信息 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>基本信息</em></h3>
+            </div>
+
+            <!-- 模板id start -->
+            <input type="hidden" id="id" name="id" value="">
+            <!-- 模板id end -->
+            <div class="panel-body">
+                <div class="pull-left">
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="code">模板编码<strong class="red vam"> &ensp;</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="search-box pull-left w240">
+                                    <input type="text" class="form-control" id="code"
+                                           name="code" value=""
+                                           placeholder="若不填写，则系统自动生成" data-format="code" maxlength="8"
+                                    />
+
+                                    <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+
+                                    <div class="wrong"></div>
+                                </div>
+
+                                <div class="pull-left code-question" style="margin-left: 10px;">
+                                    <span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>PT+流水号</span>"></span>
+                                </div>
+
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="validityStartDate">开始日期<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240 search-box">
+                                    <input type="text" name="validityStartDate" id="validityStartDate"
+                                           class="form-control required"
+                                           placeholder="请选择开始日期" value="2017-05-09"
+                                           readonly data-date-startDate="2017-05-09">
+                                    <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                </div>
+
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="pull-left clear">
+                        <dl class="panel-item">
+                            <dt><label for="name">模板名称<strong class="red vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240 search-box">
+                                    <input type="text" class="form-control required" id="name" name="name"
+                                           value=""
+                                           placeholder="请输入生产模板名称" data-format="name" maxlength="24">
+                                    <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                </div>
+
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="pull-left">
+                        <dl class="panel-item">
+                            <dt><label for="validityEndDate">截止日期<strong class="white vam"> *</strong></label></dt>
+                            <dd class="positionRelative">
+                                <div class="pull-left w240 search-box">
+                                    <input type="text" name="validityEndDate" id="validityEndDate"
+                                           class="form-control" data-for-element="validityStartDate"
+                                           placeholder="空白默认永久有效" value=""
+                                           readonly data-date-startDate="2017-05-09">
+                                    <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="wrong"></div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="pull-left">
+                    <dl class="panel-item">
+                        <dt><label for="memo">备注信息<strong class="white vam"> *</strong></label></dt>
+                        <dd class="positionRelative">
+                            <div class="pull-left w260 search-box">
+                                <TEXTAREA id="memo" name="memo" class="w240" style="height: 65px;"
+                                          placeholder="备注说明（可不填）" data-character="true"
+                                          onpropertychange="if(value.length > 48) value=value.substr(0,48)"
+                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                            </div>
+
+                            <div class="wrong"></div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </form>
+
+        <!-- 基本信息 end -->
+
+        <!-- 单据明细信息 start -->
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>详细信息</em></h3>
+        </div>
+        <!-- 选项卡组 start -->
+        <div class="tab-nav" id="tab-ggoup">
+            <div class="btn-group" role="group">
+                <button data-tid="tab1" type="button" class="btn btn-default btn-active">商户授权</button>
+                <button data-tid="tab2" type="button" class="btn btn-default">商品信息</button>
+            </div>
+        </div>
+        <div id="info-main">
+            <!-- 商户页签 -->
+            <div id="tab1" class="panel-body">
+                <div class="mr10 ml10" style="float: left">
+                    <a class="btn btn-primary btn-large" id="btnSelectCommercial" callAfterSuccessFunc="$.resetExceptSelect();">添加商户</a>
+                    <a class="btn btn-primary btn-large" id="btnDeleteCommercial" callAfterSuccessFunc="$.resetExceptSelect();">移除商户</a>
+                </div>
+                <div class="inventoryTotal"><sapn>&nbsp;</sapn></div>
+                <div class="mt20 detail-grid">
+                    <table id="shop_grid"></table>
+                </div>
+            </div>
+
+            <!-- 商品页签 -->
+            <div id="tab2" class="panel-body" style="display: none;">
+                <!-- toolbar begin -->
+                <div class="ml10 mt10 mr20" style="float: left">
+                    <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afteradd="$.afterAdd">添加商品</a>
+                    <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterremoved="$.afterRemoved">移除商品</a>
+                    <div class="input-group search-box w200 pull-left ml5">
+                        <div class="input-group-addon"><img width="20" height="20" src="/scm_kry/themes/style/img/scanning.png" alt=""></div>
+                        <button type="button" name="close" class="close" aria-hidden="true">&times;</button>
+                        <input type="text" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g"  class="form-control" id="barcode" maxlength="40" placeholder="点击此处扫码添加"/>
+                    </div>
+                </div>
+
+                <div id="filterGridDiv" class="pull-left cut-off-rule"></div>
+                <span class="mr10" style="padding-top:20px;float: right;">
+		      		 注：若要设定某些商品不授权给某些门店，就在【非授权商户】列勾选！
+		       </span>
+                <!-- toolbar end -->
+                <div class="inventoryTotal"><sapn>&nbsp;</sapn></div>
+
+                <div class="detail-grid" style="margin-top:20px;">
+                    <!-- grid begin -->
+                    <table id="grid"></table>
+                    <!-- grid end -->
+                </div>
+            </div>
+        </div>
+        <!-- 单据明细信息 end -->
+    </div>
+</div>
+
+<div id="scmSkuSelectDiv" gridId="grid" skuIdColName="id" skuScene="51" qtyColName="null"></div>
+
+<div id="commercialSelectDiv" gridId="shop_grid" showBrand="true"></div>
+
+<input id="productTemplateId" name="productTemplateId" type="hidden" value="">
+<input id="productTemplateCode" name="productTemplateCode" type="hidden" value="">
+<!-- 单据作业 end -->
+<script src="/app/Tpl/kiz/js/scm_kry/js/scm.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-tooltip.js?v=20170503_161146" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-muliti-select.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/templet-commercial-select.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-unit-select.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/product/productTemplate.js?v=20170503_161146"></script>
+<script>
+    $(function() {
+        var opts = {
+            brandId : 12566,
+            urlRoot : "/scm_kry/scm/template/product",
+            commandType : 1,
+            gridData : [],
+            shopData : [],
+            skuTypes:[]
+        };
+
+        productTemplate._init(opts);
+
+        //时间选择提示处理
+        $("#validityStartDate").on("change",function(){
+            $(this).parent().parent().find(".wrong").html("");
+        });
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

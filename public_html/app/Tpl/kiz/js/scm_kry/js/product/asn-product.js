@@ -1,0 +1,449 @@
+/**
+ * Created by mayi on 2015/6/3.
+ */
+
+var asnProduct = {
+    $listGrid : '',
+    $detailGrid : '',
+    //默认参数
+    opts : {
+        urlRoot : '/scm/template/delivery',
+        templateId : -1,
+        commandType : 0,
+        queryConditionsId : 'queryConditions',
+        listGridId : 'grid',
+        queryUrl : '/query',
+        editUrl : '/edit',
+        deleteUrl : '/delete',
+        viewUrl : '/view',
+        confirmUrl : '/doconfirm',
+        withdrawUrl : '/withdraw',
+        sortName : 'code',
+        pager : '#gridPager',
+        _now : new Date(),
+        formId : 'baseInfoForm',
+        applyDateId : 'applyDate',
+        arriveDateId : 'arriveDate',
+        detailGridId : 'grid',
+        gridData : [],
+        currentSavedTempId : -1,//当前保存的模板id
+        isTempEnable : true,//进入页面时的模板是否可用
+        disableTempId : -1,//不可用的模板id
+        disableTempGridData : [],//不可用模板的商品明细
+        savedGridData : [],
+        skuTypeNameDivId : 'skuTypeNameDiv',
+        dataGridCal: new Object(),
+        loginAsBrand: false
+    },
+
+    //初始化
+    _init : function (args) {
+        var _this = this;
+        _this.opts = $.extend(true, this.opts, args || {});
+
+        switch (_this.opts.commandType)
+        {
+            case 0 ://列表查询
+                _this.$listGrid = $('#' + _this.opts.listGridId);
+                _this.initQueryList();
+                $.setSearchFocus();
+                break;
+            case 1 ://新增
+                _this.$detailGrid = $('#' + _this.opts.detailGridId);
+                _this.initTempSelect();
+                _this.initDetailGrid(true);
+                $.filterGrid.initSkuTypeNames();
+
+                if ($("#senderId").val() != '') {
+                    $("#senderId").change();
+                }
+                break;
+            case 2 ://编辑
+                _this.$detailGrid = $('#' + _this.opts.detailGridId);
+                _this.initTempSelect();
+                _this.initDetailGrid(true);
+                $.filterGrid.initSkuTypeNames();
+                 if($("#warehouseId").val()==''&&$("#warehouseName").val()!=''){
+                 	$.layerMsg('仓库：'+$("#warehouseName").val()+'已被停用，请重新选择', false);
+                 }
+                break;
+
+            default ://查看
+                _this.$detailGrid = $('#' + _this.opts.detailGridId);
+                $("select").siblings(".select-control").addClass("disabled");
+                _this.initPrintButton();
+                _this.initDetailGrid(false);
+                $.filterGrid.initSkuTypeNames();
+                break;
+        }
+    },
+
+    //初始化模板选择方法
+    initTempSelect : function() {
+        var _this = this;
+        $("#senderId").on("change", function() {
+            var templateId = $(this).val();
+            if (templateId == '') {
+                return;
+            }
+
+            var isSkuVo = false;//true表示是商品vo对象，此时id即为skuId；为false表示是单据明细对象，此时skuId就是真实的skuId
+            if (!_this.opts.isTempEnable && templateId == _this.opts.disableTempId) {
+                _this.opts.gridData = _this.opts.disableTempGridData;
+            } else if (templateId == _this.opts.currentSavedTempId) {
+                _this.opts.gridData = _this.opts.savedGridData;
+            } else {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url : _this.opts.urlRoot + "/getSkuOfTemplate?r=" + new Date().getTime(),
+                    data : {
+                        id: templateId,
+                        whId: parseInt($("#warehouseId").val()) || -1
+                    },
+                    dataType : 'json',
+                    success: function (data) {
+                        _this.opts.gridData = data.skuVos;
+                        isSkuVo = true;
+                    }
+                });
+            }
+            _this.reloadGrid(_this.opts.gridData, isSkuVo);
+
+            var gridCal = _this.opts.dataGridCal;
+            gridCal.summaryCalculate(gridCal.opts, _this.$detailGrid);
+        });
+    },
+
+    //重新加载表格数据
+    reloadGrid : function(data, isSkuVo) {
+        var _this = this;
+        _this.$detailGrid.clearGridData();
+        for(var i = 0; i < data.length; i++){
+            if (isSkuVo) {//true表示是商品vo对象，此时id即为skuId；为false表示是单据明细对象，此时skuId就是真实的skuId
+                data[i].skuId = data[i].id;
+            }
+            _this.$detailGrid.jqGrid("addRowData", i, data[i]);
+        }
+        $.filterGrid.initSkuTypeNames();
+    },
+
+    /**
+     * 初始打印按钮
+     */
+    initPrintButton : function() {
+
+        var _this = this;
+
+        $(document).delegate("#btnPrint", "click", function () {
+            var id = $('#id').val();
+            $.print.showPrintDialog({
+                urlRoot: _this.opts.urlRoot,
+                query: {
+                    id: id
+                }
+            });
+        });
+    },
+
+    //初始化单据作业明细表格
+    initDetailGrid : function(editable) {
+        var _this = this;
+        var $gridObj = _this.$detailGrid;
+        var qtyColModel = {
+            name: 'actualQty',
+            index: 'actualQty',
+            align: 'right',
+            width: 120,
+            sorttype:'number',
+            sortable: !editable
+        };
+
+        var editColModel = {
+            editable: true,
+            formatter: formatInputNumber,
+            unformat: unformatInput
+        };
+
+        if (editable) {
+            qtyColModel = $.extend(true, qtyColModel, editColModel || {});
+        }
+
+        $gridObj.dataGrid({
+            data: _this.opts.gridData,
+            datatype: 'local',
+            //multiselect: true,
+            showEmptyGrid: true,
+            //height: 300,
+            rownumbers: true,
+            rowNum : 10000,
+            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '入库数', '入库金额', '当前库存', '换算率', '标准单位换算率', '标准价格', '标准单位ID', '标准单位'],
+            colModel: [
+                {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
+                {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
+                {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
+                {name: 'uom', index: 'uom', width: 50, sortable: !editable, align: 'center'},
+                {
+                    name: 'price',
+                    index: 'price',
+                    width: 120,
+                    align: "right",
+                    sorttype:'number',
+                    sortable: !editable
+                    //formatter: customCurrencyFormatter
+                },
+                qtyColModel,
+                {name: 'amount', index: 'amount', width: 150, align: 'right',sorttype:'number', sortable: !editable},
+                {name: 'inventoryQty', index: 'inventoryQty', align: 'right', hidden: !editable, width: 150, sorttype:'number',sortable: !editable, formatter: customMinusToRedFormatter},
+                {name: 'skuConvert', index: 'skuConvert', align: 'right', hidden: true},
+                {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
+                {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
+                {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
+                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true}
+            ],
+            afterInsertRow: function (rowid, aData) {
+                //若没有金额或金额为0，则设置金额为0，fix bug 19905
+                if (!aData.amount) {
+                    $gridObj.jqGrid('setRowData', rowid, {amount: '0'});
+                }
+            }
+        });
+
+        _this.opts.dataGridCal = $gridObj.dataGridCal({
+            formula: ['price*actualQty=amount'],
+            summary: [
+                {colModel: 'actualQty', objectId: 'qtySum'},
+                {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
+            ]
+        });
+    },
+
+    //商品过滤
+    filterSku : function() {
+
+        var skuTypeName = $('#skuTypeName').find('option:selected').text();
+        if($('#skuTypeName').val() === ''){
+            skuTypeName = '';
+        }
+
+        var conditions1 = {
+            skuCode: $('#skuCodeOrName').val(),
+            skuTypeName: skuTypeName
+        };
+        var conditions2 = {
+            skuName: $('#skuCodeOrName').val(),
+            skuTypeName: skuTypeName
+        }
+
+
+        var rowIds1 = filterGridRowIds('grid', conditions1);
+        var rowIds2 = filterGridRowIds('grid', conditions2);
+        Array.prototype.push.apply(rowIds1, rowIds2);
+        filterGridRows('grid', rowIds1);
+    },
+
+    //初始化查询页面
+    initQueryList : function() {
+        //需要保存查询条件的页面
+        var arrUrl = [
+            'scm_kry/asn/product/edit',
+            'scm_kry/asn/product/view',
+            'scm_kry/asn/product/add'
+        ];
+        //保存查询条件
+        $.setQueryData(arrUrl);
+
+        var _this = this;
+        $.serializeGridDataCallback = function (formData) {
+            if (typeof formData.status == "object" || formData.status == undefined) {
+                formData["status"] = "-2";
+            }
+            return formData;
+        };
+
+        $.showEditor = function (rowData) {
+            if (rowData.status == 0) {
+                return renderEnum.normal;
+            }
+            return renderEnum.hidden;
+        };
+
+        $.showView = function (rowData) {
+            if (rowData.status == 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.hidden;
+        };
+
+        $.showConfirm = function (rowData) {
+            if(rowData.status==0) return renderEnum.normal;
+            if(rowData.status==1) return renderEnum.hidden;
+            return renderEnum.disabled;
+        };
+        
+        $.showWithDraw = function(rowData){
+       	    if (rowData.status == 1) {
+                return (rowData.sourceType==null||rowData.sourceType=="")?renderEnum.normal:renderEnum.disabled;
+            }
+            return renderEnum.hidden;
+       };
+
+        $.showDelete = function (rowData) {
+            if (rowData.status == 0) {
+                return renderEnum.normal;
+            }
+            return renderEnum.disabled;
+        };
+
+        $.showPrint = function (rowData) {
+            if (rowData.status == 1) {
+                return renderEnum.normal;
+            }
+            return renderEnum.disabled;
+        };
+
+        var $gridObj = $("#grid");
+        $gridObj.dataGrid({
+            formId: "queryConditions",
+            serializeGridDataCallback: $.serializeGridDataCallback,
+            url: _this.opts.urlRoot + _this.opts.queryUrl,
+            colNames: ['id', '单据号', '来源单据号', '保存 / 确认日期', '自产模板', '入库仓库', '入库数量', '入库金额', '状态', '编辑人', '状态'],
+            colModel: [
+                {name: 'id', index: 'id', width: 50, hidden: true},
+                {name: 'asnNo', index: 'asnNo', align: "center", width: 130},
+                {name: 'sourceOrderNo', index: 'sourceOrderNo', align: "center", width: 130, hidden: _this.opts.loginAsBrand},
+                {name: 'updateTime', index: 'updateTime', align: "center", width: 160},
+                {name: 'senderName', index: 'senderName', align: "left", width: 130},
+                {name: 'warehouseName', index: 'warehouseName', align: "left", width: 130},
+                {name: 'qty', index: 'qty', align: "right", width: 90},
+                {
+                    name: 'amount',
+                    index: 'amount',
+                    width: 90,
+                    align: "right",
+                    formatter: customCurrencyFormatter
+                },
+                {name: 'statusName', index: 'status', align: "center", width: 70},
+                {name: 'updaterName', index: 'updaterName', align: "center", width: 70, formatter: updaterNameFormatter},
+                {name: 'status', index: 'status', width: 150, hidden: true}
+            ],
+            sortname: 'asnNo',
+            pager: "#gridPager",
+            showOperate: true,
+            actionParam: {
+                editor: {
+                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    code: "scm:button:production:si:edit",
+                    render: $.showEditor
+                },
+                view: {
+                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    render: $.showView
+                },
+                confirm: {
+                    url: _this.opts.urlRoot + _this.opts.confirmUrl,
+                    code: "scm:button:production:si:confirm",
+                    render: $.showConfirm
+                },
+                withdraw: {
+                	url:_this.opts.urlRoot + _this.opts.withdrawUrl,
+                	code: "scm:button:production:si:withdraw",
+                    render: $.showWithDraw,
+                    redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
+                },
+                delete: {
+                    url: _this.opts.urlRoot + _this.opts.deleteUrl,
+                    code: "scm:button:production:si:delete",
+                    render: $.showDelete
+                },
+                print: {
+                    url: _this.opts.urlRoot,
+                    render: $.showPrint
+                }
+            }
+        });
+    }
+};
+
+//单据明细校验
+$.detailsValidator = function (args) {
+    var qtySum = $('#' + asnProduct.opts.detailGridId).jqGrid('getCol', 'actualQty', false, 'sum');
+    if (qtySum == 0) {
+        //bkeruyun.promptMessage('申请数不能全部为0');
+        $.layerMsg('入库数不能全部为0', false);
+        return false;
+    }
+
+    return true;
+};
+
+//保存回调
+$.saveCallback = function (args) {
+    var rs = args.result;
+    if (rs.success) {
+        var $id = $("#id");
+        if (!$id.val()) {
+            $id.val(rs.data.id);
+            replaceUrl('/asn/product/edit', 'id=' + rs.data.id);
+            $("#command-type-name").text("编辑");
+            document.title = '编辑自产入库单';
+        }
+
+        asnProduct.opts.currentSavedTempId = rs.data.senderId;
+        if (!asnProduct.opts.isTempEnable && rs.data.senderId == asnProduct.opts.disableTempId) {
+            asnProduct.opts.disableTempGridData = rs.data.details;
+        } else {
+            asnProduct.opts.savedGridData = rs.data.details;
+        }
+        //bkeruyun.promptMessage(rs.message);
+        $.layerMsg(rs.message, true);
+        return;
+    } else {
+        if (rs.data != '' && rs.data != null) {
+            //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
+            $.layerOpen("操作失败:" + rs.message, rs.data);
+        } else {
+            //bkeruyun.promptMessage("操作失败:" + rs.message);
+            $.layerMsg("操作失败:" + rs.message, false);
+        }
+    }
+};
+
+//确认回调
+$.confirmCallback = function (args) {
+    var rs = args.result;
+    if (rs.success) {
+        var id = rs.data.id;
+        var url = asnProduct.opts.urlRoot + '/view';
+        var token_new = args.token;
+        if(token_new) {
+            $('#t').val(token_new);
+        }
+        $.doForward({"url":url, "postData":{"id":id}});
+    } else {
+        if (rs.data != '' && rs.data != null) {
+            //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
+            $.layerOpen("操作失败:" + rs.message, rs.data);
+        } else {
+            //bkeruyun.promptMessage("操作失败:" + rs.message);
+            $.layerMsg("操作失败:" + rs.message, false);
+        }
+    }
+};
+
+/**
+ * 编辑人格式化
+ * @param cellvalue
+ * @param options
+ * @param rowObject
+ * @returns {*}
+ */
+function updaterNameFormatter(cellvalue, options, rowObject) {
+
+    if (!cellvalue) {
+        return rowObject.creatorName;
+    } else {
+        return cellvalue;
+    }
+}

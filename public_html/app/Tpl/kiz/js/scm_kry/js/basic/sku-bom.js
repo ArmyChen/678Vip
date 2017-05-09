@@ -17,7 +17,7 @@ var skuBom = {
         cachedQueryConditions : '',
         listGridId : 'grid',
         queryUrl : '&act=ajax_skuBom_index',
-        editUrl : '/edit',
+        editUrl : '&act=basic_skuBom_edit',
         deleteUrl : '/delete',
         viewUrl : '/view',
         confirmUrl : '/doconfirm',
@@ -108,9 +108,9 @@ var skuBom = {
         };
 
         $.showEdit = function (rowData) {
-        	var flag = renderEnum.disabled;
-        	if(rowData.isDisable == 0) flag = renderEnum.normal; //如果是ture则正常显示
-        	return flag;
+        	// var flag = renderEnum.disabled;
+        	// if(rowData.status == 0) flag = renderEnum.normal; //如果是ture则正常显示
+        	return renderEnum.normal;
         };
 
         $.showView = function (rowData) {
@@ -170,7 +170,7 @@ var skuBom = {
                     render: $.showView
                 },
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: basicPath + _this.opts.editUrl,
                     code: "scm:button:masterdata:skuBom:edit",
                     render: $.showEdit
                 }
@@ -470,13 +470,13 @@ var skuBom = {
             //height: 390,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId','reckonPrice','库存类型', '商品中类', '原料编码', '原料名称(规格)','估算单价'+skuBom.opts.reckonPrice, '净料数量'+skuBom.opts.tipNetQty,'出成率'+skuBom.opts.tipYieldRate,'毛料数量'+skuBom.opts.tipQty,'单位','yieldRateNone','估算金额'+skuBom.opts.reckonAmount],
+            colNames: ['skuId','reckonPrice','库存类型', '商品分类', '原料编码', '原料名称(规格)','估算单价'+skuBom.opts.reckonPrice, '净料数量'+skuBom.opts.tipNetQty,'出成率'+skuBom.opts.tipYieldRate,'毛料数量'+skuBom.opts.tipQty,'单位','yieldRateNone','估算金额'+skuBom.opts.reckonAmount],
             colModel: [
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
                 {name: 'reckonPrice', index: 'reckonPrice', width: 100, hidden: true,formatter:function(cellvalue, options, rowObject){
 	                	return rowObject.reckonPrice!=null&&rowObject.reckonPrice!="null"?rowObject.reckonPrice:0;
                 }},
-                {name: 'wmTypeStr', index: 'wmTypeStr', width: 100, sortable: !editable,
+                {hidden:true,name: 'wmTypeStr', index: 'wmTypeStr', width: 100, sortable: !editable,
                 	formatter:function(cellvalue, options, rowObject){
                 		if (rowObject.isDisable == 1) {
                             return ("<span style='color:#9D9D9D;'>"+cellvalue+"</span>");

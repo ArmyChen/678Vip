@@ -333,6 +333,8 @@ var bkeruyun = {
                     return "/kiz.php?ctl=supplier&"+ u;
                 }else if(p == 8){
                     return "/kiz.php?ctl=count&"+ u;
+                }else if(p == 9){
+                    return "/kiz.php?ctl=product&"+ u;
                 }else{
                     //return "/ww"
                     throw new Error("菜单未知参数p="+p);

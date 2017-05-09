@@ -1,0 +1,192 @@
+
+{include file="inc/header.html"}
+<style type="text/css">
+    .inventoryTotal span {
+        margin-left: 0px;
+    }
+
+    .ellipsis-inline-block {
+        display: inline-block;
+        vertical-align: bottom;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* 复制弹框左侧商品光标悬浮形状为手型，便于用户知道是可点击的 */
+    #productGrid td {
+        cursor: pointer;
+    }
+
+    .bg_red{
+        color:red;
+    }
+
+    .bg_gray{
+        color:#9D9D9D;
+    }
+
+    /* 消除受inventory.css的.inventoryTotal加粗的影响 */
+    .group-option,.chosen-single {
+        font-weight: normal;
+    }
+</style>
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>编辑商品配方</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <!--<a class="btn-link ml10" id="btnCopy">复制</a>-->
+            <a class="btn-link ml10" id="btnSave" function="$.saveSkuBom"
+               args="{formId:'baseInfoForm',gridId:'grid',url:'/kiz.php?ctl=ajax&act=basic_skuBom_',
+               gridDataId:'details',submitCallback:'$.saveCallback',confirm:true,mode:1}">保存</a>
+            <a class="btn-link ml10" id="btnCancel" onclick="$.goBack('/scm_kry/scm/skubom/index');">返回</a>
+        </div>
+    </div>
+</div>
+
+<div class="center-block panel-group" id="accordion">
+    <div class="panel" style="padding:0; margin-top: 10px;">
+        <!-- 单据明细信息 start -->
+        <div class="panel">
+            <div class="ml10 mt10" style="float: left">
+                <a class="btn btn-primary btn-large" id="btnSelectSku" beforeOpen="$.beforeOpen">添加原料</a>
+                <a class="btn btn-primary btn-large" id="btnDeleteSku" afterRemoved="$.changeBomReckonAmount">移除原料</a>
+                <span style="margin-left: 10px;">注：修改出成率后，会依据净料数量，重新计算毛料数量。</span>
+            </div>
+
+            <div class="panel-body">
+                <form method="post" action="/scm_kry/scm/skubom/save" id="baseInfoForm">
+                    <!-- hidden start -->
+
+                    <input type="hidden" id="skuId" name="skuId" value="">
+                    <!-- hidden end -->
+
+                    <!--<div class="inventoryTotal mr15" style="padding-top: 0px;">-->
+                        <!--<span class="ellipsis-inline-block">编辑商品:</span>-->
+                        <!--<span style="width: 200px; height: 28px; text-align: left; display: inline-block; margin-right: 40px; ">-->
+                            <!--<select name="goods_id" id="goods_id">-->
+                                <!--{foreach from=$goodslist item=item}-->
+                                    <!--<option value="{$item.id}">{$item.name}</option>-->
+                                <!--{/foreach}-->
+                                <!--<option></option>-->
+                            <!--</select>-->
+                        <!--</span>-->
+
+                        <!--<span class="iconfont question color-g" style="vertical-align: bottom" data-content="配方估算成本根据配方明细计算而来"></span>-->
+                        <!--<span class="ellipsis-inline-block">配方估算成本(品牌):</span>-->
+                        <!--<span class="ellipsis-inline-block" style="max-width: 300px;">-->
+                        	<!--<input type="text" id="bomReckonPrice" disabled="disabled" class="form-control" value="" style="width: 89px;text-align: center;height: 30px;"/>-->
+                        <!--</span>-->
+                        <!--<span class="ellipsis-inline-block" style="margin-right: 40px;">元/<span class="uom">杯</span></span>-->
+
+                        <!--<span class="iconfont question color-g" data-content="配方中的原物料能够生产的商品的总数量"></span>-->
+                        <!--<span class="ellipsis-inline-block">数量：</span>-->
+                        <!--<span class="ellipsis-inline-block">-->
+                            <!--<input type="text" name="baseNum" id="baseNum" class="form-control" placeholder="" data-limit='{5,5}' data-range='{0,99999.99999}'-->
+                                   <!--maxlength="14" data-format='float' value="1" style="width: 89px;text-align: center;height: 30px;"/>-->
+                        <!--</span>-->
+                        <!--<span class="ellipsis-inline-block uom" style="max-width: 80px;">杯</span>-->
+                    <!--</div>-->
+                </form>
+
+                <div id="gridDiv" class="mt20 clear detail-grid">
+                    <table id="grid"></table>
+                </div>
+            </div>
+        </div>
+        <!-- 单据明细信息 end -->
+    </div>
+</div>
+
+<!-- 商品选择 begin -->
+<div id="scmSkuSelectDiv" gridId="grid" skuScene="11" excludedSkuId="3466809" sku="原料"></div>
+<!-- 商品选择 end -->
+
+<!-- 单据作业 end -->
+<!--<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/masterdata/bom/layer/layer3.js?v=20170503_161146"></script>-->
+<!--<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/scm-filterGridData.js?v=20170503_161146"></script>-->
+<!--<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/masterdata/bom/sku-bom-copy.js?v=20170503_161146"></script>-->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/sku-bom.js?v=20170406_201331"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170503_161146"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/chosen.jquery.js?v=20170503_161146"></script>
+<script id="messageTemplate" type="text/html">
+    <div class="message-box">
+        <div class="hint">{{hint}}</div>
+        <div class="btns">
+            <button class="btn btn-primary" id="layerConfirm">确&nbsp;&nbsp;定</button>
+            {{if confirm}}
+            <button class="btn btn-default" id="layerClose">取&nbsp;&nbsp;消</button>
+            {{/if}}
+        </div>
+        {{if showDetail}}
+        <div class="hide-hint">
+            <span style="cursor: pointer;" id="hidHint">隐藏详情></span>
+        </div>
+        <div class="data-hint">{{dataHint}}</div>
+        <div class="datas">
+            {{if showTemplates}}
+            <table class="templates">
+                {{each dataList}}
+                <tr>
+                    <td>{{$value.a}}</td>
+                    <td>{{$value.b}}</td>
+                    <td>{{$value.c}}</td>
+                    <td>{{$value.d}}</td>
+                </tr>
+                {{/each}}
+            </table>
+            {{/if}}
+
+            {{if showBills}}
+            <table class="bills">
+                {{each dataList}}
+                <tr>
+                    <td title="{{$value.skuName}}">{{$value.skuName}}</td>
+
+                    <td title="{{$value.skuCode}}">{{$value.skuCode}}</td>
+                </tr>
+                {{/each}}
+            </table>
+            {{/if}}
+        </div>
+        {{/if}}
+    </div>
+</script>
+<script>
+    $(function() {
+        var opts = {
+            id: 2544139,
+            skuBomName:'',
+            baseNum: 1.00000,
+            urlRoot : ctxPath,
+            commandType : 2,
+            gridData : eval({$list})
+        };
+
+        //初始化chosen
+        function loadChosen(){
+            var config = {
+                '.chosen-select'           : {},
+                '.chosen-select-deselect'  : {allow_single_deselect:true},
+                '.chosen-select-no-single' : {disable_search_threshold:10},
+                '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+                '.chosen-select-width'     : {width:"100%"}
+            };
+            for (var selector in config) {
+                $(selector).chosen(config[selector]);
+            }
+
+            $('.chosen-container').css({"width" : "100%"});
+        }
+        loadChosen();
+
+        skuBom._init(opts);
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

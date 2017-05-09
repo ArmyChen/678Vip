@@ -565,6 +565,27 @@ class KizBaseModule{
         $pandianlist=$GLOBALS['db']->getAll("select id,content from fanwe_basic_reason where $where and slid=".$slid);
         return $pandianlist;
     }
+
+    /**
+     * 获取商品列表
+     * @param int $id
+     * @return
+     */
+    public function get_basic_goods_list($id=0,$type=1,$where='',$print=1){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select * from fanwe_dc_menu where id=".$id);
+            return $pandian;
+        }
+        if(empty($where)){//退回原因
+            $where .= ' 1=1';
+        }
+        /* 系统默认 */
+        $list=$GLOBALS['db']->getAll("select * from fanwe_dc_menu where $where and location_id=".$slid);
+        return $list;
+    }
 }
 
 ?>

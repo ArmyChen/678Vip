@@ -314,6 +314,104 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "商品配方设定");
         $GLOBALS['tmpl']->display("pages/basic/skuBom.html");
     }
+    public function basic_skuBom_edit()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $menu_id = $_REQUEST['id']?intval($_REQUEST['id']):0;
+
+        $peifang_sql="select * from fanwe_cangku_peifang where menu_id=".$menu_id;
+        $peifang_info=$GLOBALS['db']->getRow($peifang_sql);
+        if($peifang_info){
+            /*
+                        $peifang_stat=$GLOBALS['db']->getAll("select a.*,b.name,b.barcode,b.print,b.price,b.buyPrice,b.sellPrice2,b.customerPrice,b.chupinliu,b.unit,c.name as cname from fanwe_cangku_peifang_stat a left join fanwe_dc_menu b on a.menu_id=b.id left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where a.pfid=".$pfid);
+                        foreach ($peifang_stat as $k=>$v){
+                            $peifang_stat[$k]['kclx']=$this->kcnx[$v['print']];
+
+                            "0"=>"暂无",
+                        "1"=>"现制商品",
+                        "2"=>"预制商品",
+                        "3"=>"外购商品",
+                        "4"=>"原物料",
+                        "6"=>"半成品",
+            price 售卖价 buyPrice 采购价
+            sellPrice2 成本价 customprice 结算价
+
+
+                            if($v['print']==4 || $v['print']==3){
+                                $peifang_stat[$k]['gusuanchengben']=$v['buyPrice'];
+                            }elseif ($v['print']==6 || $v['print']==1){
+                                $peifang_stat[$k]['gusuanchengben']=$v['sellPrice2'];
+                            }
+
+
+                        }*/
+
+            $peifang_stat=unserialize($peifang_info['data_json']);
+
+            foreach ($peifang_stat as $k=>$v){
+                $menu_info=$GLOBALS['db']->getRow("select b.name,b.barcode,b.print,c.name as cname from fanwe_dc_menu b  left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where b.id=".$v['menu_id']);
+                $v['id']=$v['menu_id'];
+                $v['kclx']=$this->kcnx[$menu_info['print']];
+                $v['cname']=$menu_info['cname'];
+                $v['barcode']=$menu_info['barcode'];
+                $v['name']=$menu_info['name'];
+                $peifang_stat[$k]=$v;
+            }
+            // var_dump($peifang_stat);
+
+        }else{
+            $peifang_stat=$GLOBALS['db']->getAll("select b.id,b.name,b.barcode,b.print,b.price,b.buyPrice,b.sellPrice2,b.customerPrice,b.chupinliu,b.unit,c.name as cname from fanwe_dc_menu b  left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where b.location_id=".$slid);
+
+            foreach ($peifang_stat as $k=>$v){
+                $peifang_stat[$k]['kclx']=$this->kcnx[$v['print']];
+                /*
+                                "0"=>"暂无",
+                            "1"=>"现制商品",
+                            "2"=>"预制商品",
+                            "3"=>"外购商品",
+                            "4"=>"原物料",
+                            "6"=>"半成品",
+                price 售卖价 buyPrice 采购价
+                sellPrice2 成本价 customprice 结算价
+                                */
+
+                if($v['print']==4 || $v['print']==3){
+                    $peifang_stat[$k]['gusuan']=$v['buyPrice'];
+                }elseif ($v['print']==6 || $v['print']==1){
+                    $peifang_stat[$k]['gusuan']=$v['sellPrice2'];
+                }
+
+
+            }
+        }
+        $arr = [];
+        foreach ($arr as $key=>$item) {
+            $arr[$key]['skuId'] = $item['id'];
+            $arr[$key]['skuName'] = $item['name'];
+            $arr[$key]['skuCode'] = $item['barcode'];
+            $arr[$key]['print'] = parent::getCollectionValue($this->kcnx,$item['print']);
+            $arr[$key]['skuId'] = $item['price'];
+            $arr[$key]['skuId'] = $item['buyPrice'];
+            $arr[$key]['skuId'] = $item['sellPrice2'];
+            $arr[$key]['skuId'] = $item['customerPrice'];
+            $arr[$key]['skuId'] = $item['chupinliu'];
+            $arr[$key]['uom'] = $item['unit'];
+            $arr[$key]['skuId'] = $item['cname'];
+            $arr[$key]['yieldRateStr'] = $item['kclx'];
+            $arr[$key]['reckonPriceStr'] = $item['gusuan'];
+
+        }
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("goodslist",parent::get_basic_goods_list());
+        $GLOBALS['tmpl']->assign("peifang_info", $peifang_info);
+        $GLOBALS['tmpl']->assign("list", json_encode($peifang_stat));
+        $GLOBALS['tmpl']->assign("page_title", "编辑商品配方设定");
+        $GLOBALS['tmpl']->display("pages/basic/skuBomEdit.html");
+    }
     #退回、报废原因设定
     public function basic_reason_index()
     {

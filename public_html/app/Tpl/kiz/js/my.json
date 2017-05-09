@@ -232,6 +232,39 @@
     "url": "act=outbound_backstorage_index"
   },
   {
+    "code": "scm:production",
+    "id": 1260,
+    "levelId": "001001",
+    "name": "生产管理",
+    "parentId": 1255,
+    "platform": 9,
+    "sort": 9,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "scm:production:template:query#",
+    "id": 1279,
+    "levelId": "001001001",
+    "name": "生产模板",
+    "parentId": 1260,
+    "platform": 9,
+    "sort": 10,
+    "type": 1,
+    "url": "act=product_index"
+  },
+  {
+    "code": "scm:production:si:query#",
+    "id": 1296,
+    "levelId": "001001001",
+    "name": "生产入库单",
+    "parentId": 1260,
+    "platform": 9,
+    "sort": 10,
+    "type": 1,
+    "url": "act=product_inventory_index"
+  },
+  {
     "code": "scm:cc",
     "id": 1261,
     "levelId": "001001",
@@ -506,4 +539,5 @@
     "type": 1,
     "url": "act=report_sale_detail_index"
   }
+
 ]
