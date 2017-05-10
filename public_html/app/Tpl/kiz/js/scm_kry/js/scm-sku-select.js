@@ -75,7 +75,8 @@ var scmSkuSelect = {
         var _this = this;
 
         $('#skuSelectModal .form-item').width(280);
-        $('#skuSelectModal .form-item :last').css({"width":"120px", "margin-left":"60px"});
+        $('#skuSelectModal .form-item:first-child').width(245);
+        $('#skuSelectModal .form-item :last').css({"width":"213px", "margin-left":"10px"});
         $('#skuSelectModal .form-item .multi-select-con').css({"width":"152px", "top":"33px"});
         $('#skuSelectModal .form-item .multi-select-con ul').width(140);
         $('#skuSelectModal .form-item .select-control').width(150);
@@ -938,7 +939,7 @@ $(function () {
                         <form id="skuselectConditions" action="#" method="post" style="margin: 0">\
                             <div>\
                                 <div class="form-container clearfix">\
-                                    <div class="form-item">\
+                                    <div class="form-item" style="    width: 235px;">\
                                         <label class="control-label">库存类型</label>\
                                         <div class="control-label-con">\
                                             <div class="multi-select" >\
@@ -994,7 +995,8 @@ $(function () {
                                         </div>\
                                     </div>\
                                     <div class="form-item" style="float:right;">\
-                                			<a class="btn-blue btn-search" id="btnSearch" role="button" onclick="refreshSkuInfo(this)" style="margin-left: 30px;position:relative">查 询<span class="iconfont loading icon-b"></span></a>\
+                                        <a class="btn-blue btn-search" id="btnAdd" role="button" href="/kiz.php?ctl=basic&act=basic_warehouse_add" target="_blank" style="margin-left: 20px;position:relative;display:none">添　加<span class="iconfont loading icon-b"></span></a>\
+                                    	<a class="btn-blue btn-search" id="btnSearch" role="button" onclick="refreshSkuInfo(this)" style="margin-left: 20px;position:relative">查 询<span class="iconfont loading icon-b"></span></a>\
                                     </div>\
                                 </div>\
                             </div>\

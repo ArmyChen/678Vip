@@ -2624,7 +2624,7 @@ div[id^="divPreview"], div[id^="divPreview"] > img, .preview-img {
 
 .form-container .form-item {
     float: left;
-    width: 33%;
+    width: 24%;
     position: relative;
     padding: 10px 0;
 }
