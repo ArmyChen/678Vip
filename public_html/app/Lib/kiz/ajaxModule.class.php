@@ -58,6 +58,27 @@ class ajaxModule extends KizBaseModule{
         $this->kcnx=$kcnx;
     }
 
+    //查询商品名称是否重复
+    public function check_goods_name()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $name = $_REQUEST['name'];
+        $res = $GLOBALS['db']->getAll("select * from fanwe_cangku_menu where slid=$slid and mname='".$name."'");
+        if(count($res)>0){//成功
+            $return['success'] = true;
+            $return['message'] = '商品名称已存在';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '失败';
+        }
+
+        echo json_encode($return);exit;
+    }
+
     //common function
     public function get_hanzi()
     {
