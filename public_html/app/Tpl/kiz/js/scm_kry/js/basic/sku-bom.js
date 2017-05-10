@@ -505,8 +505,10 @@ var skuBom = {
                 netQtyColModel,
                 {name: 'yieldRateStr', index: 'yieldRateStr', width: 100, sortable: !editable,align: "center",formatter:function(cellvalue, options, rowObject){
                 	var value = "-";
-                    var rateStr = rowObject.yieldRateStr;
-                    value = rateStr.indexOf("%")!=-1?rateStr:(rateStr+"%");
+                	if(rateStr!=undefined){
+                        var rateStr = rowObject.yieldRateStr;
+                        value = rateStr.indexOf("%")!=-1?rateStr:(rateStr+"%");
+                    }
                 	return rowObject.isDisable==0?('<span style="color:#9D9D9D;">'+value+'</span>'):value;
                 }},
                 qtyColModel,

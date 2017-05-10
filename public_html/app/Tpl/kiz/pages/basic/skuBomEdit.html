@@ -61,6 +61,7 @@
                     <!-- hidden start -->
 
                     <input type="hidden" id="skuId" name="skuId" value="">
+                    <input type="hidden" id="menu_id" name="menu_id" value="{$menu_id}">
                     <!-- hidden end -->
 
                     <div class="inventoryTotal mr15" style="padding-top: 0px;">
@@ -165,9 +166,9 @@
 <script>
     $(function() {
         var opts = {
-            id: 2544139,
+            id: {$menu_id},
             skuBomName:'',
-            baseNum: 1.00000,
+            baseNum: $("#baseNum").val(),
             urlRoot : ctxPath,
             commandType : 2,
             gridData : eval({$list})

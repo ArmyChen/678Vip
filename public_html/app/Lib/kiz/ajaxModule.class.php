@@ -3936,7 +3936,7 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
-        $menu_id=$_REQUEST['id'];
+        $menu_id=$_REQUEST['menu_id'];
         //配方ID
         $pfid=$_REQUEST['pfid']?intval($_REQUEST['pfid']):0;
         //配方数组
@@ -3962,8 +3962,12 @@ class ajaxModule extends KizBaseModule{
         //构造数组，填入统计表 由于这个是临时用，没有JS特效，这块帮的比较麻烦，如果使用AJAX的话会相对简单，组成以下的数组就行了
         $data_stat=array();
         foreach ($mid as $key=>$item) {
+            $data_stat[$key]['mid']=$mid[$key]['skuId'];
+            $data_stat[$key]['cate_id']=$mid[$key]['skuTypeId'];
+            $data_stat[$key]['cate_name']=$mid[$key]['skuTypeName'];
+            $data_stat[$key]['skuName']=$mid[$key]['skuName'];
             $data_stat[$key]['pfid']=$pfid;
-            $data_stat[$key]['menu_id']=$item;
+            $data_stat[$key]['menu_id']=$menu_id;
             $data_stat[$key]['gusuan']=$mid[$key]['reckonPriceStr'];
             $data_stat[$key]['num_j']=$mid[$key]['netQtyStr'];
             $data_stat[$key]['chupinliu']=$mid[$key]['yieldRateStr'];
@@ -3975,7 +3979,8 @@ class ajaxModule extends KizBaseModule{
         // var_dump($data_stat);
         //更新配方里的data_json字段
         $data_json=array('data_json'=>serialize($data_stat));
-        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_peifang",$data_json,"UPDATE","id='$pfid'");
+
+        $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_peifang",$data_json,"UPDATE","menu_id='$menu_id'");
 
         //删除该配方的所有信息
         $GLOBALS['db']->query("delete from fanwe_cangku_peifang_stat where pfid=".$pfid);

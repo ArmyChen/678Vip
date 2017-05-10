@@ -324,6 +324,7 @@ class basicModule extends KizBaseModule
 
         $peifang_sql="select * from fanwe_cangku_peifang where menu_id=".$menu_id;
         $peifang_info=$GLOBALS['db']->getRow($peifang_sql);
+//var_dump($peifang_info);
         if($peifang_info){
             /*
                         $peifang_stat=$GLOBALS['db']->getAll("select a.*,b.name,b.barcode,b.print,b.price,b.buyPrice,b.sellPrice2,b.customerPrice,b.chupinliu,b.unit,c.name as cname from fanwe_cangku_peifang_stat a left join fanwe_dc_menu b on a.menu_id=b.id left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where a.pfid=".$pfid);
@@ -387,20 +388,19 @@ class basicModule extends KizBaseModule
             }
         }
         $arr = [];
-        foreach ($arr as $key=>$item) {
-            $arr[$key]['skuId'] = $item['id'];
-            $arr[$key]['skuName'] = $item['name'];
+        foreach ($peifang_stat as $key=>$item) {
+            $arr[$key]['skuId'] = $item['mid'];
+            $arr[$key]['skuName'] = $item['skuName'];
             $arr[$key]['skuCode'] = $item['barcode'];
             $arr[$key]['print'] = parent::getCollectionValue($this->kcnx,$item['print']);
-            $arr[$key]['skuId'] = $item['price'];
-            $arr[$key]['skuId'] = $item['buyPrice'];
-            $arr[$key]['skuId'] = $item['sellPrice2'];
-            $arr[$key]['skuId'] = $item['customerPrice'];
-            $arr[$key]['skuId'] = $item['chupinliu'];
+            $arr[$key]['netQtyStr'] = $item['num_j'];
+            $arr[$key]['qty'] = $item['num_m'];
+            $arr[$key]['skuTypeId'] = $item['cate_id'];
+            $arr[$key]['skuTypeName'] = $item['cate_name'];
+            $arr[$key]['yieldRateStr'] = $item['chupinliu'];
             $arr[$key]['uom'] = $item['unit'];
-            $arr[$key]['skuId'] = $item['cname'];
-            $arr[$key]['yieldRateStr'] = $item['kclx'];
-            $arr[$key]['reckonPriceStr'] = $item['gusuan'];
+            $arr[$key]['reckonPriceStr'] = $item['gusuanjine'];
+            $arr[$key]['reckonPrice'] = $item['gusuan'];
 
         }
 
@@ -408,7 +408,8 @@ class basicModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("goodslist",parent::get_basic_goods_list());
         $GLOBALS['tmpl']->assign("peifang_info", $peifang_info);
-        $GLOBALS['tmpl']->assign("list", json_encode($peifang_stat));
+        $GLOBALS['tmpl']->assign("menu_id", $_REQUEST['id']);
+        $GLOBALS['tmpl']->assign("list", json_encode($arr));
         $GLOBALS['tmpl']->assign("page_title", "编辑商品配方设定");
         $GLOBALS['tmpl']->display("pages/basic/skuBomEdit.html");
     }
