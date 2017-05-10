@@ -1110,9 +1110,16 @@ class ajaxModule extends KizBaseModule{
         if($_REQUEST['wmType']>-1){
             $where .= " and g.print=".$_REQUEST['wmType'];
         }
-        $sqlcount = "select count(id) from fanwe_dc_menu g $where";
-        $records = $GLOBALS['db']->getOne($sqlcount);
+        $sqlcount = "select count(id) as count from fanwe_dc_menu g $where";
+
+        $r = $GLOBALS['db']->getRow($sqlcount);
+        if(!empty($records)){
+            $records = $r['count'];
+        }else{
+            $records = 0;
+        }
         $sql = "select *,g.name as standerStr,g.id as id from fanwe_dc_menu g LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+
         $check=$GLOBALS['db']->getAll($sql);
 //var_dump(count($check));
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
@@ -1122,6 +1129,7 @@ class ajaxModule extends KizBaseModule{
         $return['total'] = ceil($records/$page_size);
         $return['status'] = true;
         $return['resMsg'] = null;
+
         if($check){
             $arr_list = array();
             foreach ($check as $item) {
@@ -1553,6 +1561,10 @@ class ajaxModule extends KizBaseModule{
                 "print"=>$skuList->wmType,
                 "pinyin"=>$skuList->skuAliasName,//拼音码
             );
+            if($unit){
+               $dc_menu_data =  array_merge($dc_menu_data,array("unit"=>$unit));
+            }
+
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu", $dc_menu_data ,"UPDATE","id=".$id);
             if($res){
                 $return['success'] = true;

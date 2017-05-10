@@ -236,7 +236,7 @@
 
         <!-- 商品单位开始 -->
         <div class="panel-heading">
-            <h3 class="panel-title"><em>商品单位 </em><span style="font-size: 12px;color: rgb(140, 139, 139);">备注：1、换算率以<最小单位>为准，一经设定，无法修改     2、单位和换算率设定完成后，一经保存，即绑定，无法修改</span>
+            <h3 class="panel-title"><em>商品单位 </em><span style="display: none;font-size: 12px;color: rgb(140, 139, 139);">备注：1、换算率以<最小单位>为准，一经设定，无法修改     2、单位和换算率设定完成后，一经保存，即绑定，无法修改</span>
             </h3>
         </div>
         <div class="panel-body">
@@ -264,19 +264,24 @@
                     <th width=""></th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr id="crm_unit_seed" style="display: table-row;">
+                <tbody id="crm_unit">
+                <tr id="crm_unit_seed" style="display: none;">
                     <td style="height: 38px;" class="crm_num"></td>
                     <td class="scm_input">
-                        <input class="unit_cache" data-type="unitName" data-left-max="8" data-right-max="5"
-                               style="height:34px;text-align: center;" type="text" value="{$dc_menu.unit}" disabled>
+                        <div class="select-group" style="width: 165px;">
+                            <div class="select-control">
+                                <em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>
+                            </div>
+                            <ul class="unit_list" style="display: none;" name="unit_list">
+                            </ul>
+                        </div>
                     </td>
                     <td>
                         =
                     </td>
                     <td>
                         <input class="crm_unit_convert" data-type="number" data-left-max="8" data-right-max="5"
-                               style="height:34px;text-align: center;" type="text" value="1" disabled>
+                               style="height:34px;text-align: center;" type="text" value="">
                     </td>
                     <td>
                         <span name="unit" class="unit"></span>
@@ -297,19 +302,24 @@
                             <span></span>
                         </label>
                     </td>
+                    <!--<td style="text-align: left;">-->
+                        <!--<span class="icon-plus" style="float: left;">添加</span>-->
+                        <!--<a href="#" class="close-1 ml10"-->
+                           <!--style="display: none;margin-left: 41px;margin-top: 3px;">删除此项</a>-->
+                    <!--</td>-->
                 </tr>
                 <tr style="display: table-row;">
                     <td style="height: 38px;" class="crm_num"></td>
                     <td class="scm_input">
-                        <!--<div class="select-group" style="width: 165px;">-->
-                        <!--<div class="select-control">-->
-                        <!--<em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>-->
-                        <!--</div>-->
-                        <!--<ul class="unit_list" style="display: none;" name="unit_list">-->
-                        <!--</ul>-->
-                        <!--</div>-->
-                        <input class="unit_cache" data-type="unitName" data-left-max="8" data-right-max="5"
-                               style="height:34px;text-align: center;" type="text" value="{$dc_menu.funit}" disabled>
+                        <div class="select-group" style="width: 165px;">
+                        <div class="select-control">
+                        <em data-id="-1" data-name="" class="unit_cache" name="unitName"></em>
+                        </div>
+                        <ul class="unit_list" style="display: none;" name="unit_list">
+                        </ul>
+                        </div>
+                        <!--<input class="unit_cache" data-type="unitName" data-left-max="8" data-right-max="5"-->
+                               <!--style="height:34px;text-align: center;" type="text" value="{$dc_menu.funit}" disabled>-->
                     </td>
                     <td>
                         =
@@ -594,6 +604,7 @@
                 each.find(".crm_unitSmall").addClass("checkbox-check");
                 each.find('.crm_unitStander').addClass("checkbox-check");
                 each.find(".crm_unitPurchase").addClass("checkbox-check");
+                console.log(each.find(".unit_list"));
                 each.find(".unit_list").html(Base.initSelect());
                 each.find('.crm_num').html(1);
                 crm_unit.append(each);
@@ -814,16 +825,18 @@
             for (var i = 1; i < allTr.length; i++) {
                 var each = {}, temp = $(allTr[i]), unitIds = temp.find('.unit_cache').attr("data-id");
                 if (unitIds == "-1") {
-                    $.layerMsg("请选择单位名称！", false);
-                    return false;
+//                    $.layerMsg("请选择单位名称！", false);
+
+//                   return false;
+                    unitIds = 0;
                 }
                 each.unitId = temp.find('.unit_cache').attr("data-id");
                 each.unitName = temp.find('.unit_cache').attr("data-name");
                 each.skuConvert = temp.find('.crm_unit_convert').val();
-                if(each.skuConvert==""){
-                    $.layerMsg("请填写换算率！", false);
-                    return false;
-                }
+//                if(each.skuConvert==""){
+//                    $.layerMsg("请填写换算率！", false);
+//                    return false;
+//                }
                 each.unitSmall = temp.find(".crm_unitSmall").hasClass("checkbox-check") ? 1 : 0;
                 each.unitStander = temp.find(".crm_unitStander").hasClass("checkbox-check") ? 1 : 0;
                 each.unitPurchase = temp.find(".crm_unitPurchase").hasClass("checkbox-check") ? 1 : 0;
