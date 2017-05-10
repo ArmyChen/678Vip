@@ -132,8 +132,8 @@ var productTemplate = {
                     }
                 },
                 error: function (data) {
-                    //bkeruyun.promptMessage('网络错误');
-                    $.layerMsg('网络错误', false);
+                    // bkeruyun.promptMessage('网络错误');
+                    // $.layerMsg('网络错误', false);
                 }
             });
 
@@ -265,49 +265,41 @@ var productTemplate = {
 
         var _this = this;
         $.beforeSend = function (formData) {
-            if (typeof formData.status == "object" || formData.status == undefined) {
-                formData["isDisable"] = "";
-            } else {
-                formData["isDisable"] = formData.status;
-            }
-            return formData;
+           return renderEnum.hidden;
         };
 
         $.showEdit = function(rowData){
-        	var flag = renderEnum.disabled;
-        	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
-        	return flag;
+            return renderEnum.hidden;
+
         };
         
         $.show = function (rowData) {
-        	var flag = renderEnum.hidden;
-        	if(!rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
-        	return flag;
+            return renderEnum.hidden;
+
         };
 
         $.showLock = function (rowData) {
-        	var flag = renderEnum.hidden;
-        	if(rowData.isDisable) flag = renderEnum.normal; //如果是ture则正常显示
-        	return flag;
+            return renderEnum.hidden;
+
         };
 
         $('#' + _this.opts.listGridId).dataGrid({
             formId: _this.opts.queryConditionsId,
             serializeGridDataCallback: $.beforeSend,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id', '模板编码', '模板名称', '开始日期', '截止日期', '编辑人','最后修改时间', '状态', '操作'],
+            colNames: ['id', '模板编码', '模板名称', /*'开始日期', '截止日期',*/ '编辑人','最后修改时间', '状态', '操作'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
                 {name: 'code', index: 'code', width: 160, align: 'left'},
                 {name: 'name', index: 'name', width: 160, align: 'left'},
-                {name: 'validityStartDate', index: 'validityStartDate', width: 160, align: 'center'},
+               /* {name: 'validityStartDate', index: 'validityStartDate', width: 160, align: 'center'},
                 {
                     name: 'validityEndDate',
                     index: 'validityEndDate',
                     width: 160,
                     align: 'center',
                     formatter: validityEndDateFormatter
-                },
+                },*/
                 {name: 'updaterName', index: 'updaterName', width: 160, align: 'center'},
                 {name: 'updateTime', index: 'updateTime', width: 160, align: 'center'},
                 {name: 'isDisable', index: 'isDisable', width: 100, formatter: disableFormatter, align: 'center'},
@@ -369,7 +361,7 @@ var productTemplate = {
         }
 
         function disableFormatter(cellValue, options, rowObject) {
-            return rowObject.isDisable ? '<span style="color: red">停用</span>' : '启用';
+            return rowObject.isDisable == 0 ? '<span style="color: red">停用</span>' : '启用';
         }
     },
     
@@ -568,7 +560,7 @@ $.submitCallback = function (args) {
     if (rs.success) {
     	var showMsg = $("#code").val().length==0;
     	if(showMsg){
-    		$.layerMsg("操作成功，"+$("#name").val()+"编码是：<span style='color:red;'>"+rs.data+"</span>", true, {end:function(){window.location.href = productTemplate.opts.urlRoot + '/index';},shade: 0.3});
+    		$.layerMsg("操作成功，"+$("#name").val()+"编码是：<span style='color:red;'>"+rs.data+"</span>", true, {end:function(){window.location.href = basicPath+"&act=product_index";},shade: 0.3});
     	}else{
     		$.layerMsg("操作成功！", true, {end:function(){window.location.href = productTemplate.opts.urlRoot + '/index';},shade: 0.3});
     	}

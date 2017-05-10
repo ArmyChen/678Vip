@@ -4008,7 +4008,7 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         //$slid = $account_info['slid'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
         $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
@@ -4016,15 +4016,12 @@ class ajaxModule extends KizBaseModule{
 
         $slidlist=$GLOBALS['db']->getAll("select id,name from fanwe_supplier_location where supplier_id=".$supplier_id);
 
-
-        $slid = intval($_REQUEST['id']);
         $isdd = $_REQUEST['isdd'];
         $moban_keywords = $_REQUEST['moban_keywords'];
         $menu_keywords = $_REQUEST['menu_keywords'];
         $accept_location = $_REQUEST['accept_location'];
-        !isset($isdd) && $isdd = 1;
 
-        $str="where slid=$slid and isdisable=".$isdd;
+        $str="where slid=$slid ";
 
         if($moban_keywords){
             $str .= "and (name='$moban_keywords' or code='$moban_keywords')";
@@ -4038,25 +4035,17 @@ class ajaxModule extends KizBaseModule{
 
 
 
-        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id limit $limit desc ");
+        $list = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id desc limit $limit ");
         $list2 = $GLOBALS['db']->getAll("SELECT * FROM " . DB_PREFIX . "cangku_product_mb  $str order by id  desc ");
-        $arr = [];
+        $data = [];
         foreach ($list as $key=>$item) {
-            if($item['print'] != 3){
-                $price =$item['sbuy'];
-            }else{
-                $price =$item['price'];
-            }
-            $arr[$key]['mid'] =$item['mid'];
-            $arr[$key]['commercialName'] =$account_info['slname'];
-            $arr[$key]['skuCode'] =$item['mbarcode'];
-            $arr[$key]['skuName'] =$item['name'];
-            $arr[$key]['marketPrice'] = $price;
-            $arr[$key]['cost'] =$price*$item['sstock'];
-            $arr[$key]['uom'] =$item['unit'];
-            $arr[$key]['qty'] = intval($item['sstock']);
-            $arr[$key]['print'] =$item['print'];
-            $arr[$key]['cate_id'] =$item['cate_id'];
+            $data[$key]['id'] = $item['id'];
+            $data[$key]['code'] = $item['code'];
+            $data[$key]['name'] = $item['name'];
+            $data[$key]['updaterName'] = $item['edit_user'];
+            $data[$key]['updateTime'] = $item['datetime'];
+            $data[$key]['isDisable'] = $item['isdisable'];
+            $data[$key]['status'] = $item['isdisable'];
         }
 
         /* 数据 */
@@ -4066,7 +4055,7 @@ class ajaxModule extends KizBaseModule{
         $return['total'] = ceil($records/$page_size);
         $return['status'] = true;
         $return['resMsg'] = null;
-        $return['dataList'] = $arr;
+        $return['dataList'] = $data;
 
         /* 数据 */
         echo json_encode($return);exit;
@@ -4077,7 +4066,7 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
         //模板模板ID
         $mbid=$_REQUEST['mbid']?intval($_REQUEST['mbid']):0;
         //数组
@@ -4092,7 +4081,6 @@ class ajaxModule extends KizBaseModule{
             "datetime"=>to_date(NOW_TIME,'Y-m-d H:i:s'),
             "isdisable"=>1
         );
-
         //存在ID，则更新，否则插入，取到ID
         if($mbid){
             $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_product_mb",$data_moban,"UPDATE","id='$mbid'");
