@@ -48,42 +48,13 @@
                 <h2>生产模板</h2>
 
                 <div>
-                    <select class="form-control" name="senderId" id="senderId">
+                    <select class="form-control" name="templateId" id="templateId">
                         <option value="">请选择生产模板</option>
+                        {foreach from=$productlist item=item}
 
+                        <option value="{$item.id}" >{$item.name}</option>
 
-
-
-                        <option value="4926">默认生产模板</option>
-
-
-
-
-
-
-                        <option value="24870">就看见</option>
-
-
-
-
-
-
-                        <option value="25514">77777</option>
-
-
-
-
-
-
-                        <option value="25515">火锅生产</option>
-
-
-
-
-
-
-                        <option value="25628">11111</option>
-
+                        {/foreach}
 
 
                     </select>
@@ -98,82 +69,11 @@
                 <div>
                     <select class="form-control" name="warehouseId" id="warehouseId">
                         <option value="">请选择入库仓库</option>
+                        {foreach from=$cangkulist item=item}
 
+                        <option value="{$item.id}">{$item.name}</option>
 
-
-
-                        <option value="9591">21211111111111111</option>
-
-
-
-
-
-
-                        <option value="13260">饮品仓</option>
-
-
-
-
-
-
-                        <option value="13261">酒水仓</option>
-
-
-
-
-
-
-                        <option value="13262">原材料仓</option>
-
-
-
-
-
-
-                        <option value="14838">4号库</option>
-
-
-
-
-
-
-                        <option value="14839">5号库</option>
-
-
-
-
-
-
-                        <option value="38900">测试1</option>
-
-
-
-
-
-
-                        <option value="38901">测试2</option>
-
-
-
-
-
-
-                        <option value="38902">测试3</option>
-
-
-
-
-
-
-                        <option value="38903">测试4</option>
-
-
-
-
-
-
-                        <option value="38904">测试5</option>
-
+                        {/foreach}
 
 
                     </select>
@@ -182,19 +82,19 @@
             <!-- 入库仓库 end -->
 
             <!-- 状态 start -->
-            <div class="aside-column">
-                <h2>状态</h2>
-                <ul class="panel-list-type">
-                    <li>
-                        <label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>
-                            <input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>
-                    </li>
-                    <li>
-                        <label class="checkbox" for="status-1" id="checkbox-1"><span></span>
-                            <input type="checkbox" name="status" id="status-1" value="1">已确认</label>
-                    </li>
-                </ul>
-            </div>
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-0" checked value="0">已保存</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox" for="status-1" id="checkbox-1"><span></span>-->
+                            <!--<input type="checkbox" name="status" id="status-1" value="1">已确认</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 状态 end -->
         </form>
         <a class="link undo-all" id="undo-all">全部撤销</a>

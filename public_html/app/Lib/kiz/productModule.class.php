@@ -10,6 +10,7 @@ class productModule extends KizBaseModule
         parent::__construct();
         global_run();
         $ywsort=array(
+            "-6"=>"生产入库",
             "-5"=>"生产退料",
             "-4"=>"退还入库",
             "-3"=>"预配退货",
@@ -99,6 +100,9 @@ class productModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("productlist", parent::get_product_template_list());
+
         $GLOBALS['tmpl']->assign("page_title", "生产单");
         $GLOBALS['tmpl']->display("pages/product/inventory.html");
     }
@@ -115,7 +119,7 @@ class productModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("productlist", parent::get_product_template_list());
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "新增生产单");
+        $GLOBALS['tmpl']->assign("page_title", "生产单");
         $GLOBALS['tmpl']->display("pages/product/inventoryAdd.html");
     }
 

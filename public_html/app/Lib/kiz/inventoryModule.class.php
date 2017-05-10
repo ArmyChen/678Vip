@@ -17,6 +17,7 @@ class inventoryModule extends KizBaseModule{
 
         global_run();
 		$ywsort=array(
+            "-6"=>"生产入库",
             "-5"=>"生产退料",
             "-4"=>"退还入库",
             "-3"=>"预配退货",

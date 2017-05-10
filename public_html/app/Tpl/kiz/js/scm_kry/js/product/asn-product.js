@@ -12,10 +12,11 @@ var asnProduct = {
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '&act=go_down_index_ajax',
-        editUrl : '/edit',
-        deleteUrl : '/delete',
-        viewUrl : '/view',
+        queryUrl : '&act=basic_product_index_ajax',
+        editUrl : '&act=go_down_index_view',
+        deleteUrl :'&act=go_down_delete_ajax',
+        viewUrl : '&act=go_down_index_view',
+        printUrl : '&act=go_down_print_view',
         confirmUrl : '/doconfirm',
         withdrawUrl : '/withdraw',
         sortName : 'code',
@@ -169,6 +170,20 @@ var asnProduct = {
             qtyColModel = $.extend(true, qtyColModel, editColModel || {});
         }
 
+        //构造数据 添加字段:当前库存(隐藏) = 当前库存
+        _this.opts.gridData.forEach(function(v,i){
+            v.standardInventoryQty = v.inventoryQty;
+        });
+
+        scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
+            formula: ['price*actualQty=amount','actualQty+standardInventoryQty=inventoryQty'],
+            summary: [
+                {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
+                {colModel: 'actualQty', objectId: 'qtySum'},
+                {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
+            ]
+        });
+
         $gridObj.dataGrid({
             data: _this.opts.gridData,
             datatype: 'local',
@@ -177,8 +192,9 @@ var asnProduct = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '入库数', '入库金额', '当前库存', '换算率', '标准单位换算率', '标准价格', '标准单位ID', '标准单位'],
+            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '入库数', '入库金额', '当前库存', '换算率', '标准单位换算率', '标准价格', '标准单位ID', '标准单位','当前库存（隐藏）'],
             colModel: [
+                {name: 'id', index: 'id', width: 80, hidden: true, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
@@ -200,7 +216,8 @@ var asnProduct = {
                 {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
                 {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
                 {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
-                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true}
+                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true},
+                {name: 'standardInventoryQty', index: 'standardInventoryQty', align: "center", hidden: true}
             ],
             afterInsertRow: function (rowid, aData) {
                 //若没有金额或金额为0，则设置金额为0，fix bug 19905
@@ -263,44 +280,31 @@ var asnProduct = {
         };
 
         $.showEditor = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
             return renderEnum.hidden;
         };
 
         $.showView = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showConfirm = function (rowData) {
-            if(rowData.status==0) return renderEnum.normal;
-            if(rowData.status==1) return renderEnum.hidden;
-            return renderEnum.disabled;
-        };
-        
-        $.showWithDraw = function(rowData){
-       	    if (rowData.status == 1) {
-                return (rowData.sourceType==null||rowData.sourceType=="")?renderEnum.normal:renderEnum.disabled;
-            }
             return renderEnum.hidden;
-       };
+        };
+
+        $.showWithDraw = function(rowData){
+            return renderEnum.hidden;
+        };
 
         $.showDelete = function (rowData) {
-            if (rowData.status == 0) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.hidden;
         };
 
         $.showPrint = function (rowData) {
-            if (rowData.status == 1) {
-                return renderEnum.normal;
-            }
-            return renderEnum.disabled;
+            return renderEnum.normal;
+        };
+
+        $.showCopy = function (rowData) {
+            return renderEnum.hidden;
         };
 
         var $gridObj = $("#grid");
@@ -316,7 +320,7 @@ var asnProduct = {
                 '入库仓库',
                 '入库金额',
                 '制单人',
-                '部门',
+                // '部门',
                 '保存日期'
                 // '供货',
                 // '理货员',
@@ -335,7 +339,7 @@ var asnProduct = {
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
-                {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
+                // {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
                 // {name: 'cname', index: 'cname', align: "center", width: 90},
                 // {name: 'ywsort', index: 'ywsort', align: "center", width: 90},
@@ -355,33 +359,38 @@ var asnProduct = {
             showOperate: true,
             actionParam: {
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
-                    code: "scm:button:production:si:edit",
+                    url: inventoryPath + _this.opts.editUrl,
+                    // code: "scm:button:inventory:si:edit",
                     render: $.showEditor
                 },
                 view: {
-                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    url: inventoryPath + _this.opts.viewUrl,
                     render: $.showView
                 },
                 confirm: {
-                    url: _this.opts.urlRoot + _this.opts.confirmUrl,
-                    code: "scm:button:production:si:confirm",
+                    url: inventoryPath + _this.opts.confirmUrl,
+                    // code: "scm:button:inventory:si:confirm",
                     render: $.showConfirm
                 },
                 withdraw: {
-                	url:_this.opts.urlRoot + _this.opts.withdrawUrl,
-                	code: "scm:button:production:si:withdraw",
+                    url:inventoryPath + _this.opts.withdrawUrl,
+                    // code: "scm:button:inventory:si:withdraw",
                     render: $.showWithDraw,
                     redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
                 },
                 delete: {
-                    url: _this.opts.urlRoot + _this.opts.deleteUrl,
-                    code: "scm:button:production:si:delete",
+                    url: inventoryPath + _this.opts.deleteUrl,
+                    // code: "scm:button:inventory:si:delete",
                     render: $.showDelete
                 },
                 print: {
-                    url: _this.opts.urlRoot,
+                    url: inventoryPath + _this.opts.printUrl,
                     render: $.showPrint
+                },
+                copy: {
+                    url: inventoryPath + _this.opts.copyUrl,
+                    // code: "scm:button:inventory:si:add",
+                    render: $.showCopy
                 }
             }
         });
@@ -404,31 +413,12 @@ $.detailsValidator = function (args) {
 $.saveCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-        var $id = $("#id");
-        if (!$id.val()) {
-            $id.val(rs.data.id);
-            replaceUrl('/asn/product/edit', 'id=' + rs.data.id);
-            $("#command-type-name").text("编辑");
-            document.title = '编辑自产入库单';
-        }
-
-        asnProduct.opts.currentSavedTempId = rs.data.senderId;
-        if (!asnProduct.opts.isTempEnable && rs.data.senderId == asnProduct.opts.disableTempId) {
-            asnProduct.opts.disableTempGridData = rs.data.details;
-        } else {
-            asnProduct.opts.savedGridData = rs.data.details;
-        }
-        //bkeruyun.promptMessage(rs.message);
-        $.layerMsg(rs.message, true);
-        return;
+        $.layerMsg("操作成功！", true, {
+            end:function(){
+                window.location.href = productPath + "&act=product_inventory_index";
+            },shade: 0.3});
     } else {
-        if (rs.data != '' && rs.data != null) {
-            //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
-            $.layerOpen("操作失败:" + rs.message, rs.data);
-        } else {
-            //bkeruyun.promptMessage("操作失败:" + rs.message);
-            $.layerMsg("操作失败:" + rs.message, false);
-        }
+        $.layerMsg("操作失败！", true,{shade: 0.3});
     }
 };
 
