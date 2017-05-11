@@ -4260,4 +4260,60 @@ class ajaxModule extends KizBaseModule{
         $return['dataList'] = $list;
         echo json_encode($return);exit;
     }
+
+    //入库单反确认
+    public function go_down_withdraw(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $disabled = 1;
+        $id = $_REQUEST['id'];
+        $sql = "update fanwe_cangku_log set isdisable=$disabled where id=$id";
+        $res = $GLOBALS['db']->query($sql);
+
+        //todo 需要新增一条入库记录
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
+    }
+
+    //入库单反确认
+    public function go_down_doconfirm(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $disabled = 2;
+        $id = $_REQUEST['id'];
+        $sql = "update fanwe_cangku_log set isdisable=$disabled where id=$id";
+        $res = $GLOBALS['db']->query($sql);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        //todo 需要新增一条入库记录
+
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
+    }
 }
