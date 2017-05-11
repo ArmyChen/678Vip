@@ -119,7 +119,7 @@ var cctask = {
             formId: _this.opts.queryConditionsId,
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id','单据号', '盘点仓库','模板名称', '盘盈金额', '盘亏金额','编辑人','最后修改时间', '状态', '状态','提示'],
+            colNames: ['id','单据号', '盘点仓库','模板名称', '盘盈金额', '盘亏金额','编辑人','创建时间', '状态', '状态','提示'],
             colModel: [
                 {name: 'id', index: 'id', width: 120, align: "center",hidden:true},
                 {name: 'ccTaskNo', index: 'ccTaskNo', width: 120, align: "center"},
