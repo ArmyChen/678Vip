@@ -322,6 +322,7 @@ var skuTemplate = {
                 {
                 	name: 'exceptShopStr',
                 	index: 'exceptShopStr',
+                    hidden: true,
                 	width: 80,
                 	sortable: false,
                 	formatter: function (cellvalue, options, rowObject){
@@ -451,15 +452,15 @@ $.resetExceptSelect = function(){
 
 //单据明细校验
 $.detailsValidator = function (args) {
-	var pageShopTempateData = $("#shop_grid").getCol('id');
-	if(pageShopTempateData.length==0){
-		$.layerMsg('请勾选授权商户！若不勾选，则在商户下选择不到该盘点模板！', false);
-        return false;
-	}else{
-		var allShop = new Array();
-		for(var i=0;i<pageShopTempateData.length;i++) allShop.push({shopId:pageShopTempateData[i]});
-		$("#shopTemplateDetails").val(JSON.stringify(allShop));
-	}
+	// var pageShopTempateData = $("#shop_grid").getCol('id');
+	// if(pageShopTempateData.length==0){
+	// 	$.layerMsg('请勾选授权商户！若不勾选，则在商户下选择不到该盘点模板！', false);
+     //    return false;
+	// }else{
+	// 	var allShop = new Array();
+	// 	for(var i=0;i<pageShopTempateData.length;i++) allShop.push({shopId:pageShopTempateData[i]});
+	// 	$("#shopTemplateDetails").val(JSON.stringify(allShop));
+	// }
 
     var rowData = $('#' + skuTemplate.opts.detailGridId).jqGrid('getRowData');
     if (rowData.length == 0) {
