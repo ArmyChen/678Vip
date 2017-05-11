@@ -18,7 +18,7 @@
 
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
                args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/update',
-                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback'}">保存</a>
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback',type:'post'}">保存</a>
             <a code="scm:button:cc:cc:confirm" class="btn-link ml10" id="btnConfirm" function="$.doConfirmOrder"
                args="{formId:'saveOrUpdateForm',gridId:'grid',url:'/scm_kry/cc/task/confirm',
                    customValidator:'$.saveOrUpdateValidator',submitCallback:'$.confirmCallback',confirmAfter:'$.confirmAfter'}">确认</a>
