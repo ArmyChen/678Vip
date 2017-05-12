@@ -12,6 +12,7 @@ var cctask = {
         editUrl : '&act=count_task_edit',
         viewUrl : '&act=count_task_view',
         confirmUrl : '&act=count_task_doconfirm',
+        withdrawUrl : '&act=count_task_udoconfirm',
         deleteUrl : '&act=count_task_delete',
         sortName : 'ccTaskNo',
         pager : '#gridPager',
@@ -98,8 +99,18 @@ var cctask = {
         $.showConfirm = function (rowData) {
             if(rowData.status == 1){
                 return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
             }
         };
+
+        $.showWithDraw = function(rowData){
+            if(rowData.status == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
+        }
 
         $.showDelete = function (rowData) {
             return renderEnum.hidden;
@@ -173,6 +184,11 @@ var cctask = {
                     render: $.showPrint
                 }
                 ,
+                withdraw: {
+                    url:ctxPath + _this.opts.withdrawUrl,
+                    // code: "scm:button:inventory:si:withdraw",
+                    render: $.showWithDraw
+                },
                 export: {
                     url: _this.opts.urlRoot+ _this.opts.exportUrl,
                     render: $.showExport

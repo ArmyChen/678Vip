@@ -145,10 +145,10 @@
     var urlRoot = ctxPath
     var queryUrl = urlRoot + "&act=go_down_index_ajax&type=2&id={$slid}";
     var editUrl = urlRoot + "edit";
-    var withDrawUrl = urlRoot + 'withdraw';
+    var withDrawUrl = urlRoot + '&act=go_down_withdraw';
     var deleteUrl = urlRoot + "delete";
     var viewUrl =inventoryPath + "&act=go_up_index_view";
-    var confirmUrl = urlRoot + "doconfirm";
+    var confirmUrl = urlRoot + "&act=go_down_doconfirm";
     var copyUrl = urlRoot + "copy";
     var printUrl = inventoryPath+"&act=go_up_print_view";
 
@@ -178,11 +178,19 @@
         };
 
         $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showWithDraw = function(rowData){
-            return renderEnum.hidden;
+            if(rowData.isdisable == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showDelete = function (rowData) {
@@ -234,7 +242,8 @@
                 '出库金额',
                 '制单人',
                 '部门',
-                '保存日期'
+                '保存日期',
+                '状态'
                 // '供货',
                 // '理货员',
                 // '金额',
@@ -254,6 +263,15 @@
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
+                {name: 'isdisable', index: 'isdisable', align: "center", width: 120,
+                    formatter:function(v){
+                        if(v==1){
+                            return "已保存";
+                        }else {
+                            return "已确认";
+                        }
+                    }
+                },
                 // {name: 'cname', index: 'cname', align: "center", width: 90},
                 // {name: 'ywsort', index: 'ywsort', align: "center", width: 90},
                 // {name: 'danjuhao', index: 'danjuhao', align: "center", width: 90},
@@ -288,8 +306,7 @@
                 withdraw: {
                     url: withDrawUrl,
                     code: "scm:button:inventory:so:withdraw",
-                    render: $.showWithDraw,
-                    redirectUrl: editUrl
+                    render: $.showWithDraw
                 },
                 delete: {
                     url: deleteUrl,

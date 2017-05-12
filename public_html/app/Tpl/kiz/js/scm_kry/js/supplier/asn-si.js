@@ -17,8 +17,8 @@ var asnSi = {
         deleteUrl :'&act=go_down_delete_ajax',
         viewUrl : '&act=go_down_index_view',
         printUrl : '&act=go_down_print_view',
-        confirmUrl : '/doconfirm',
-        withdrawUrl : '/withdraw',
+        confirmUrl : '&act=go_down_doconfirm',
+        withdrawUrl : '&act=go_down_withdraw',
         copyUrl: '/copy',
         sortName : 'code',
         pager : '#gridPager',
@@ -139,13 +139,22 @@ var asnSi = {
             return renderEnum.normal;
         };
 
+
         $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showWithDraw = function(rowData){
-            return renderEnum.hidden;
-       };
+            if(rowData.isdisable == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
+        };
        
         $.showDelete = function (rowData) {
             return renderEnum.hidden;
@@ -177,7 +186,8 @@ var asnSi = {
                 '入库仓库',
                 '入库金额',
                 '制单人',
-                '保存日期'
+                '保存日期',
+                '状态'
                 // '供货',
                 // '理货员',
                 // '金额',
@@ -198,6 +208,15 @@ var asnSi = {
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
+                {name: 'isdisable', index: 'isdisable', align: "center", width: 120,
+                    formatter:function(v){
+                        if(v==1){
+                            return "已保存";
+                        }else {
+                            return "已确认";
+                        }
+                    }
+                },
                 // {name: 'cname', index: 'cname', align: "center", width: 90},
                 // {name: 'ywsort', index: 'ywsort', align: "center", width: 90},
                 // {name: 'danjuhao', index: 'danjuhao', align: "center", width: 90},
