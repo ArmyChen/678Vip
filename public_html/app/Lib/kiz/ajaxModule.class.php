@@ -2692,35 +2692,35 @@ class ajaxModule extends KizBaseModule{
         $details = $_REQUEST['details'];
         foreach ($clist as $key=>$item) {
             //查询商品信息
-            $ccsql = "select * from fanwe_dc_menu where id=".$details[$key]['skuId'];
+            $ccsql = "select * from fanwe_dc_menu where id=" . $details[$key]['skuId'];
             $item = $GLOBALS['db']->getRow($ccsql);
 //            var_dump($details);die;
 //            var_dump($item);die;
-            $data_stat[$key]['djid']=$djid;
-            $data_stat[$key]['slid']=$slid;
-            $data_stat[$key]['mid']=$item['id'];
-            $data_stat[$key]['cate_id']=$details[$key]['skuTypeId'];
-            $data_stat[$key]['cid']=$warehouseId;
-            $data_stat[$key]['mbarcode']=$item['barcode'];
-            $data_stat[$key]['mname']=$item['name'];
-            $data_stat[$key]['stock']=$details[$key]['inventoryQty'];
-            $data_stat[$key]['mstock']=$details[$key]['realTimeInventory'];
-            $data_stat[$key]['mprice']=$details[$key]['price'];
-            $data_stat[$key]['unit']=$details[$key]['uom'];
-            $data_stat[$key]['funit']=$item['funit'];
-            $data_stat[$key]['times']=$item['times'];
-            $data_stat[$key]['pandianshu']=$details[$key]['ccQty'];
-            $data_stat[$key]['chayishu']=$details[$key]['qtyDiff'];
-            $data_stat[$key]['chanyijine']=$details[$key]['amountDiff'];
-            $data_stat[$key]['memo']=$details[$key]['remarks'];
-            $data_stat[$key]['ctime']=to_date(NOW_TIME,'Y-m-d H:i:s');
+            $data_stat[$key]['djid'] = $djid;
+            $data_stat[$key]['slid'] = $slid;
+            $data_stat[$key]['mid'] = $item['id'];
+            $data_stat[$key]['cate_id'] = $details[$key]['skuTypeId'];
+            $data_stat[$key]['cid'] = $warehouseId;
+            $data_stat[$key]['mbarcode'] = $item['barcode'];
+            $data_stat[$key]['mname'] = $item['name'];
+            $data_stat[$key]['stock'] = $details[$key]['inventoryQty'];
+            $data_stat[$key]['mstock'] = $details[$key]['realTimeInventory'];
+            $data_stat[$key]['mprice'] = $details[$key]['price'];
+            $data_stat[$key]['unit'] = $details[$key]['uom'];
+            $data_stat[$key]['funit'] = $item['funit'];
+            $data_stat[$key]['times'] = $item['times'];
+            $data_stat[$key]['pandianshu'] = $details[$key]['ccQty'];
+            $data_stat[$key]['chayishu'] = $details[$key]['qtyDiff'];
+            $data_stat[$key]['chanyijine'] = $details[$key]['amountDiff'];
+            $data_stat[$key]['memo'] = $details[$key]['remarks'];
+            $data_stat[$key]['ctime'] = to_date(NOW_TIME, 'Y-m-d H:i:s');
 
             //这块由于JS能力较差，不方便计算。这个可以在页面上通过通过JS计算好后直接上传也可以
-            if(intval( $data_stat[$key]['chayishu'])>0){  //盘盈
-                $tongji_data['panying']+= $details[$key]['amountDiff'];
+            if (intval($data_stat[$key]['chayishu']) > 0) {  //盘盈
+                $tongji_data['panying'] += $details[$key]['amountDiff'];
             }
-            if(intval( $data_stat[$key]['chayishu'])<0){  //盘亏
-                $tongji_data['pankui']+= $details[$key]['amountDiff'];
+            if (intval($data_stat[$key]['chayishu']) < 0) {  //盘亏
+                $tongji_data['pankui'] += $details[$key]['amountDiff'];
             }
 
             //更新库存数量
@@ -2729,44 +2729,16 @@ class ajaxModule extends KizBaseModule{
 //                'cid'=>$data_stat[$key]['cate_id'],
 //            );
 //            $r = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $cangku_data ,"update","id=".$data_stat[$key]['mid']);
-            $pandianshu = $data_stat[$key]['pandianshu'];
+//            $pandianshu = $data_stat[$key]['pandianshu'];
 
 
-            $list = $GLOBALS['db']->getAll('select * from fanwe_cangku_menu where mid='.$data_stat[$key]["mid"].' and cid='.$warehouseId);
-//            var_dump($list);
-            if(count($list)>0&&$warehouseId&&$data_stat[$key]['mid']){
-               $sql = "update fanwe_cangku_menu set mstock=".intval($pandianshu)." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
-               $r = $GLOBALS['db']->query($sql);
-            }else{
-                //添加
-                $data_menu=array(
-                    "slid"=>$slid,
-                    "mid"=>$data_stat[$key]['mid'],
-                    "cid"=>$data_stat[$key]['cid'],
-                    "cate_id"=>$data_stat[$key]['cate_id'],
-                    "mbarcode"=>$data_stat[$key]['mbarcode'],
-                    "mname"=>$data_stat[$key]['mname'],
-                    "mstock"=>$data_stat[$key]['pandianshu'],
-                    "stock"=>$data_stat[$key]['pandianshu'],
-                    "minStock"=>$item['minStock'],
-                    "maxStock"=>$item['maxStock'],
-                    "unit"=>$data_stat[$key]['unit'],
-                    "funit"=>$data_stat[$key]['funit'],
-                    "times"=>$data_stat[$key]['times'],
-                    "type"=>$data_stat[$key]['type'],
-                    "ctime"=>date('Y-m-d H:i:s',time())
-                );
-                $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu ,"INSERT");
-                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$data_stat[$key]['pandianshu']." where id=".$data_stat[$key]['mid']);
-            }
-        }
 //        var_dump($data_stat);
 //        var_dump($tongji_data);
-        $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $tongji_data ,"update","id=".$djid);
+            $GLOBALS['db']->autoExecute(DB_PREFIX . "cangku_pandian_danju", $tongji_data, "update", "id=" . $djid);
 //        var_dump($GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_danju where id=$djid"));die;
 //var_dump($data_stat);die;
 
-
+        }
 
         //插入Stat数据
         foreach ($data_stat as $value){
@@ -2798,7 +2770,42 @@ class ajaxModule extends KizBaseModule{
         if($row){
             $data['isdisable'] = 2;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
-//
+            $data_stat = $GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$row['id']);
+            foreach ($data_stat as $key=>$item) {
+                $warehouseId = $data_stat[$key]['cid'];
+
+                $list = $GLOBALS['db']->getAll('select * from fanwe_cangku_menu where mid='.$data_stat[$key]['mid'].' and cid='.$warehouseId);
+//            var_dump($list);
+                if(count($list)>0&&$warehouseId&&$data_stat[$key]['mid']){
+//                    $sql = "update fanwe_cangku_menu set mstock=".intval($data_stat[$key]['pandianshu'])." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
+//                    var_dump($sql);die;
+                    $sql = "update fanwe_cangku_menu set mstock=mstock+".intval($data_stat[$key]['chayishu'])." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
+                    $r = $GLOBALS['db']->query($sql);
+                }else{
+                    //添加
+                    $data_menu=array(
+                        "slid"=>$slid,
+                        "mid"=>$data_stat[$key]['mid'],
+                        "cid"=>$data_stat[$key]['cid'],
+                        "cate_id"=>$data_stat[$key]['cate_id'],
+                        "mbarcode"=>$data_stat[$key]['mbarcode'],
+                        "mname"=>$data_stat[$key]['mname'],
+                        "mstock"=>$data_stat[$key]['pandianshu'],
+                        "stock"=>$data_stat[$key]['pandianshu'],
+                        "minStock"=>$data_stat[$key]['minStock'],
+                        "maxStock"=>$data_stat[$key]['maxStock'],
+                        "unit"=>$data_stat[$key]['unit'],
+                        "funit"=>$data_stat[$key]['funit'],
+                        "times"=>$data_stat[$key]['times'],
+                        "type"=>$data_stat[$key]['type'],
+                        "ctime"=>date('Y-m-d H:i:s',time())
+                    );
+                    $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu ,"INSERT");
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$data_stat[$key]['pandianshu']." where id=".$data_stat[$key]['mid']);
+                }
+            }
+        }
+
 //            //读取盘点单据详情页面数据
 //            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
 //            foreach($danju_stat as $k=>$v){
@@ -2825,8 +2832,8 @@ class ajaxModule extends KizBaseModule{
 //                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
 //
 //            }
-        }
-        if($res){
+//        }
+        if($r){
             $return['success'] = true;
             $return['message'] = "操作成功";
         }else{
@@ -2852,7 +2859,43 @@ class ajaxModule extends KizBaseModule{
         if($row){
             $data['isdisable'] = 1;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_pandian_danju", $data ,"UPDATE","id=".$id);
-//
+            $data_stat = $GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$row['id']);
+//var_dump($data_stat);die;
+            foreach ($data_stat as $key=>$item) {
+                $warehouseId = $data_stat[$key]['cid'];
+
+                $list = $GLOBALS['db']->getAll('select * from fanwe_cangku_menu where mid='.$data_stat[$key]['mid'].' and cid='.$warehouseId);
+//            var_dump($list);
+                if(count($list)>0&&$warehouseId&&$data_stat[$key]['mid']){
+//                    $sql = "update fanwe_cangku_menu set mstock=".intval($data_stat[$key]['pandianshu'])." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
+//                    var_dump($sql);die;
+                    $sql = "update fanwe_cangku_menu set mstock=mstock-".intval($data_stat[$key]['chayishu'])." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
+                    $r = $GLOBALS['db']->query($sql);
+                }else{
+                    //添加
+                    $data_menu=array(
+                        "slid"=>$slid,
+                        "mid"=>$data_stat[$key]['mid'],
+                        "cid"=>$data_stat[$key]['cid'],
+                        "cate_id"=>$data_stat[$key]['cate_id'],
+                        "mbarcode"=>$data_stat[$key]['mbarcode'],
+                        "mname"=>$data_stat[$key]['mname'],
+                        "mstock"=>$data_stat[$key]['pandianshu'],
+                        "stock"=>$data_stat[$key]['pandianshu'],
+                        "minStock"=>$data_stat[$key]['minStock'],
+                        "maxStock"=>$data_stat[$key]['maxStock'],
+                        "unit"=>$data_stat[$key]['unit'],
+                        "funit"=>$data_stat[$key]['funit'],
+                        "times"=>$data_stat[$key]['times'],
+                        "type"=>$data_stat[$key]['type'],
+                        "ctime"=>date('Y-m-d H:i:s',time())
+                    );
+                    $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu ,"INSERT");
+                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$data_stat[$key]['pandianshu']." where id=".$data_stat[$key]['mid']);
+                }
+            }
+        }
+
 //            //读取盘点单据详情页面数据
 //            $danju_stat=$GLOBALS['db']->getAll("select * from fanwe_cangku_pandian_stat where djid=".$id);
 //            foreach($danju_stat as $k=>$v){
@@ -2879,8 +2922,8 @@ class ajaxModule extends KizBaseModule{
 //                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+".$v['chayishu']." where id=".$v['mid']);
 //
 //            }
-        }
-        if($res){
+//        }
+        if($r){
             $return['success'] = true;
             $return['message'] = "操作成功";
         }else{
@@ -4122,6 +4165,49 @@ class ajaxModule extends KizBaseModule{
         $res = $GLOBALS['db']->query($sql);
 
         //todo 需要新增一条入库记录
+        //查询入库记录
+        $sql2 = "select * from fanwe_cangku_log where id=$id";
+        $res2 = $GLOBALS['db']->getRow($sql2);
+        $detail = unserialize($res2['dd_detail']);
+        $cid = $res2['cid'];
+        //更新仓库
+        $bumen = $res2['gonghuoren'];
+        $gys = $res2['gys'];
+        $amount = 0;//总金额
+//        var_dump($detail);die;
+        foreach($detail as $k=>$v){
+            if (intval($v['mid'])==0){
+                continue;
+            }
+            $mid=$v['mid'];
+
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
+            $order_num=floatval($v['num']);
+
+            $cate_id=$v['cate_id'];
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+
+            //存在的话更新数量
+            if ($_REQUEST['type']==1){ //入库
+                $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstr);
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+            }else{ //出库
+                $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+            }
+
+            //
+            if ($_REQUEST['type']==1){ //入库
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+            }else{
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
+            }
+
+            $amount += $order_num*$v['price'];
+        }
 
         $return['flag'] = null;
         $return['exception'] = null;

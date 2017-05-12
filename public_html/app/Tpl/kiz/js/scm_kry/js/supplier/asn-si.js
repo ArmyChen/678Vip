@@ -18,7 +18,7 @@ var asnSi = {
         viewUrl : '&act=go_down_index_view',
         printUrl : '&act=go_down_print_view',
         confirmUrl : '&act=go_down_doconfirm&type=1',
-        withdrawUrl : '&act=go_down_withdraw',
+        withdrawUrl : '&act=go_down_withdraw&type=1',
         copyUrl: '/copy',
         sortName : 'code',
         pager : '#gridPager',
