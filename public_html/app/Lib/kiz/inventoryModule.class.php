@@ -315,6 +315,7 @@ class inventoryModule extends KizBaseModule{
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
 //        获取部门信息
+
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
