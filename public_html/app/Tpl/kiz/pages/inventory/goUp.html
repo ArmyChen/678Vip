@@ -146,7 +146,7 @@
     var queryUrl = urlRoot + "&act=go_down_index_ajax&type=2&id={$slid}";
     var editUrl = urlRoot + "edit";
     var withDrawUrl = urlRoot + '&act=go_down_withdraw&type=2';
-    var deleteUrl = urlRoot + "delete";
+    var deleteUrl = urlRoot + "go_down_delete_ajax&type=2";
     var viewUrl =inventoryPath + "&act=go_up_index_view";
     var confirmUrl = urlRoot + "&act=go_down_doconfirm&type=2";
     var copyUrl = urlRoot + "copy";
@@ -194,7 +194,7 @@
         };
 
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -239,6 +239,7 @@
                 // '来源单据号',
                 '出库原因',
                 '出库仓库',
+                '出库数量',
                 '出库金额',
                 '制单人',
                 '部门',
@@ -259,6 +260,7 @@
                 // {name: '', index: '', align: "center", width: 120},
                 {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
+                {name: 'znum', index: 'znum', align: "right", width: 70},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},

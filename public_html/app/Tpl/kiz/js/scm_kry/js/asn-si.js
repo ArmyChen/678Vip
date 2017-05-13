@@ -13,8 +13,8 @@ var asnSi = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=go_down_index_ajax&type=1',
-        editUrl : '&act=go_down_index_view',
-        deleteUrl :'&act=go_down_delete_ajax',
+        editUrl : '&act=go_down_index_view&type=1',
+        deleteUrl :'&act=go_down_delete_ajax&type=1',
         viewUrl : '&act=go_down_index_view',
         printUrl: '&act=go_down_print_view',
         confirmUrl : '&act=go_down_doconfirm&type=1',
@@ -156,7 +156,7 @@ var asnSi = {
        };
        
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -182,6 +182,7 @@ var asnSi = {
                 // '来源单据号',
                 '入库原因',
                 '入库仓库',
+                '入库数量',
                 '入库金额',
                 '制单人',
                 '部门',
@@ -201,6 +202,7 @@ var asnSi = {
                 // {name: '', index: '', align: "center", width: 120},
                 {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
+                {name: 'znum', index: 'znum', align: "right", width: 70},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
@@ -251,7 +253,7 @@ var asnSi = {
                     render: $.showWithDraw
                 },
                 delete: {
-                    url: inventoryPath + _this.opts.deleteUrl,
+                    url: ctxPath + _this.opts.deleteUrl,
                     // code: "scm:button:inventory:si:delete",
                     render: $.showDelete
                 },

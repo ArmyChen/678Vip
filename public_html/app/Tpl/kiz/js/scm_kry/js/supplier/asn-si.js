@@ -14,7 +14,7 @@ var asnSi = {
         listGridId : 'grid',
         queryUrl : '&act=go_down_index_ajax2&type=1',
         editUrl : '&act=go_down_index_view',
-        deleteUrl :'&act=go_down_delete_ajax',
+        deleteUrl :'&act=go_down_delete_ajax&type=1',
         viewUrl : '&act=go_down_index_view',
         printUrl : '&act=go_down_print_view',
         confirmUrl : '&act=go_down_doconfirm&type=1',
@@ -157,7 +157,7 @@ var asnSi = {
         };
        
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -184,6 +184,7 @@ var asnSi = {
                 '部门',
                 '供应商',
                 '入库仓库',
+                '入库数量',
                 '入库金额',
                 '制单人',
                 '保存日期',
@@ -205,6 +206,7 @@ var asnSi = {
                 {name: 'gonghuo', index: 'gonghuo', width: 120, align: "center"},
                 {name: 'gys', index: 'gys', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
+                {name: 'znum', index: 'znum', align: "right", width: 70},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
@@ -255,7 +257,7 @@ var asnSi = {
                     redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
                 },
                 delete: {
-                    url: supplierPath + _this.opts.deleteUrl,
+                    url: ctxPath + _this.opts.deleteUrl,
                     // code: "scm:button:inventory:si:delete",
                     render: $.showDelete
                 },

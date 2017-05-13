@@ -146,7 +146,7 @@
     var queryUrl = urlRoot + "&act=go_down_index_ajax2&type=2&id={$slid}";
     var editUrl = urlRoot + "edit";
     var withDrawUrl = urlRoot + '&act=go_down_withdraw&type=2';
-    var deleteUrl = urlRoot + "delete";
+    var deleteUrl = urlRoot + "go_down_delete_ajax&type=2";
     var viewUrl =inventoryPath + "&act=go_up_index_view";
     var confirmUrl = urlRoot + "&act=go_down_doconfirm&type=2";
     var copyUrl = urlRoot + "copy";
@@ -194,7 +194,7 @@
         };
 
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -241,6 +241,7 @@
                 '部门',
                 '供应商',
                 '退货仓库',
+                '退货数量',
                 '退货金额',
                 '制单人',
                 '保存日期',
@@ -262,6 +263,7 @@
                 {name: 'gonghuo', index: 'gonghuo', width: 120, align: "center"},
                 {name: 'gys', index: 'gys', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
+                {name: 'znum', index: 'znum', align: "right", width: 70},
                 {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
