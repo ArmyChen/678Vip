@@ -4422,4 +4422,78 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($return);exit;
     }
+
+    /**
+     * 删除入库单
+     */
+    public function go_down_ajax_del(){
+        init_app_page();
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $disabled = 1;
+        $id = $_REQUEST['id'];
+        $sql = "delete from fanwe_cangku_log where id=$id";
+        $res = $GLOBALS['db']->query($sql);
+
+        //todo 需要新增一条入库记录
+        //查询入库记录
+        $sql2 = "select * from fanwe_cangku_log where id=$id";
+        $res2 = $GLOBALS['db']->getRow($sql2);
+        $detail = unserialize($res2['dd_detail']);
+        $cid = $res2['cid'];
+        //更新仓库
+        $bumen = $res2['gonghuoren'];
+        $gys = $res2['gys'];
+        $amount = 0;//总金额
+//        var_dump($detail);die;
+        foreach($detail as $k=>$v){
+            if (intval($v['mid'])==0){
+                continue;
+            }
+            $mid=$v['mid'];
+
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
+            $order_num=floatval($v['num']);
+
+            $cate_id=$v['cate_id'];
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+
+            //存在的话更新数量
+            if ($_REQUEST['type']==1){ //入库
+                $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstr);
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+            }else{ //出库
+                $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+            }
+
+            //
+            if ($_REQUEST['type']==1){ //入库
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+            }else{
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
+            }
+
+            $amount += $order_num*$v['price'];
+        }
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
+    }
 }
