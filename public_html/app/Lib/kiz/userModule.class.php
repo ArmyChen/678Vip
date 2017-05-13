@@ -440,7 +440,7 @@ class userModule extends KizBaseModule{
 		es_cookie::delete("adm_id");		
 		es_session::delete("biz_nav_list");
 		es_session::delete("biz_account_auth");
-		$jump = url("biz","user#login");
+		$jump = url("kiz","inventory#go_down_index");
 		app_redirect($jump);
 	}
 	
@@ -516,15 +516,15 @@ class userModule extends KizBaseModule{
         ); 		
 		
 		$ht = new HyTool ();
-        $ht->sendMessage ($channelIdlist,$type,$message);	
-		
-		
-		
-		
-		
-		
-		
-				$data['jump'] = url("biz","user#logout");
+        $ht->sendMessage ($channelIdlist,$type,$message);
+
+
+
+
+
+
+
+				$data['jump'] = url("kiz","inventory#go_down_index");
 			}
 		}else{
 			$data['status'] = 0;
