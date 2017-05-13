@@ -132,7 +132,11 @@ var asnSi = {
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showView = function (rowData) {
