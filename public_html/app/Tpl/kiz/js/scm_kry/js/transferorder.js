@@ -201,6 +201,8 @@ var transferOrder = {
         _this.opts.gridData.forEach(function(v,i){
             if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
                 v.standardInventoryQty = v.inventoryQty;
+            }else{
+                v.inventoryQty = parseInt(v.actualQty) + parseInt(v.standardInventoryQty);
             }
         });
 

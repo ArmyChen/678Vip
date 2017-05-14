@@ -172,7 +172,11 @@ var asnProduct = {
 
         //构造数据 添加字段:当前库存(隐藏) = 当前库存
         _this.opts.gridData.forEach(function(v,i){
-            v.standardInventoryQty = v.inventoryQty;
+            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
+                v.standardInventoryQty = v.inventoryQty;
+            }else{
+                v.inventoryQty = parseInt(v.actualQty) + parseInt(v.standardInventoryQty);
+            }
         });
 
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({

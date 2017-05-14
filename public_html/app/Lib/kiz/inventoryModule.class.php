@@ -172,6 +172,7 @@ class inventoryModule extends KizBaseModule{
                 $datailinfo[$k]['inventoryQty'] = $v['num'];
 
             }
+//            var_dump($datailinfo);
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
