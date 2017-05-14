@@ -310,9 +310,11 @@ var asnSi = {
             priceModel = $.extend(true, priceModel, editColModel || {});
         }
 
-        //构造数据 添加字段:当前库存(隐藏) = 当前库存
+        //构造数据 添加字段:计算后库存(隐藏) = 计算后库存
         _this.opts.gridData.forEach(function(v,i){
-            v.standardInventoryQty = v.inventoryQty;
+            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
+                v.standardInventoryQty = v.inventoryQty;
+            }
         });
 
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
@@ -332,7 +334,7 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '计算后库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
@@ -420,9 +422,11 @@ var asnSi = {
             priceModel = $.extend(true, priceModel, editColModel || {});
         }
 
-        //构造数据 添加字段:当前库存(隐藏) = 当前库存
+        //构造数据 添加字段:计算后库存(隐藏) = 计算后库存
         _this.opts.gridData.forEach(function(v,i){
-            v.standardInventoryQty = v.inventoryQty;
+            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
+                v.standardInventoryQty = v.inventoryQty;
+            }
         });
 
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
@@ -442,7 +446,7 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['商品编码','skuId','cate_id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码','skuId','cate_id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '计算后库存', '计算后库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
             {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
             {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
@@ -462,7 +466,7 @@ var asnSi = {
                 formatter: customMinusToRedFormatterWithUnit,
                 unformat: unformatSpan
             },
-            {name: 'standardInventoryQty', index: 'standardInventoryQty', align: 'right', hidden: true},
+            {name: 'standardInventoryQty', index: 'standardInventoryQty',hidden:true, align: 'right'},
             {name: 'skuConvert', index: 'skuConvert', align: 'right', hidden: true},
             {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
             {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},

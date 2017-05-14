@@ -436,6 +436,7 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['unit_type'] = $v['unit_type'];
             $datailinfo[$k]['price'] = $v['price'];
             $datailinfo[$k]['num'] = $v['actualQty'];
+            $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
             $datailinfo[$k]['zmoney'] = $v['amount'];
             $datailinfo[$k]['memo'] = $v['memo'];
             $znum += $v['actualQty'];
@@ -517,6 +518,7 @@ class ajaxModule extends KizBaseModule{
                 $datailinfo[$k]['unit_type'] = $v['unit_type'];
                 $datailinfo[$k]['price'] = $v['price'];
                 $datailinfo[$k]['num'] = $v['actualQty'];
+                $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
                 $datailinfo[$k]['zmoney'] = $v['uom'];
                 $datailinfo[$k]['memo'] = $v['memo'];
             }
@@ -586,6 +588,7 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['unit_type'] = $v['unit_type'];
             $datailinfo[$k]['price'] = $v['price'];
             $datailinfo[$k]['num'] = $v['actualQty'];
+            $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
             $datailinfo[$k]['zmoney'] = $v['amount'];
             $datailinfo[$k]['memo'] = $v['memo'];
             $znum += $v['actualQty'];
@@ -668,6 +671,7 @@ class ajaxModule extends KizBaseModule{
                 $datailinfo[$k]['unit_type'] = $v['unit_type'];
                 $datailinfo[$k]['price'] = $v['price'];
                 $datailinfo[$k]['num'] = $v['actualQty'];
+                $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
                 $datailinfo[$k]['zmoney'] = $v['uom'];
                 $datailinfo[$k]['memo'] = $v['memo'];
             }
@@ -796,6 +800,7 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['unit_type'] = $v['unit_type'];
             $datailinfo[$k]['price'] = $v['price'];
             $datailinfo[$k]['num'] = $v['planMoveQty'];
+            $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
             $datailinfo[$k]['zmoney'] = $v['uom'];
             $datailinfo[$k]['memo'] = $v['memo'];
         }

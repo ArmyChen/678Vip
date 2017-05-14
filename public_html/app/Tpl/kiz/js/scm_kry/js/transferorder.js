@@ -199,7 +199,9 @@ var transferOrder = {
 
         //构造数据 添加字段:当前库存(隐藏) = 当前库存
         _this.opts.gridData.forEach(function(v,i){
-            v.standardInventoryQty = v.inventoryQty;
+            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
+                v.standardInventoryQty = v.inventoryQty;
+            }
         });
 
         //绑定表格计算
