@@ -46,9 +46,10 @@ var bumen_edit = {
             showEmptyGrid: true,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格','价格-hidden','非授权商户', '当前换算率', '标准单位换算率', '定价', '单位ID'],
+            colNames: ['skuId','cate_id', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格','价格-hidden','非授权商户', '当前换算率', '标准单位换算率', '定价', '单位ID'],
             colModel: [
                 {name: 'id', index: 'id', hidden: true},
+                {hidden:true,name: 'skuTypeId', index: 'skuTypeId', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
                 {name: 'skuTypeName', index: 'skuTypeName', sortable: false,width: 70, formatter: $.skuIsDisableFormat},
                 {name: 'skuCode', index: 'skuCode', sortable: false,width: 80, formatter: $.skuIsDisableFormat},
                 {

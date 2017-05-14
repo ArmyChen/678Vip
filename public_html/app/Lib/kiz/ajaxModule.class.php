@@ -469,17 +469,12 @@ class ajaxModule extends KizBaseModule{
         $datain['isdisable'] = 1;
         $datain['zmoney'] = $zmoney;
         $datain['znum'] = $znum;
+        $datain['memo'] = $_REQUEST['remarks'];
         if($bumen){
             $datain['gonghuoren'] = $bumen;
         }
 
-        if(!empty($bumen)){
-            if ($_REQUEST['type']==1){ //入库
-                $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
-            }else{
-                $return['data']['url'] = url("kiz","supplier#go_up_index&id=$slid");
-            }
-        }
+
         $return['flag'] = null;
         $return['exception'] = null;
         $return['refresh'] = false;
@@ -490,13 +485,19 @@ class ajaxModule extends KizBaseModule{
         }else{
             $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
         }
-        $detail = $_REQUEST['details'];
+        $detail2 = $_REQUEST['details'];
         $amount = 0;//总金额
-        foreach($detail as $k=>$v){
+        foreach($detail2 as $k=>$v){
             $order_num=floatval($v['planMoveQty']);
             $amount += $order_num*$v['price'];
         }
-
+        if(!empty($bumen)){
+            if ($_REQUEST['type']==1){ //入库
+                $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
+            }else{
+                $return['data']['url'] = url("kiz","supplier#go_up_index&id=$slid");
+            }
+        }
         //采购入库出库单
         //采购入库单url封装
         if(!empty($bumen)){
@@ -549,6 +550,162 @@ class ajaxModule extends KizBaseModule{
 
 //        $datain['zmoney'] = $amount;
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
+        echo json_encode($return);exit;
+    }
+
+    /**
+     * 入库编辑保存ajax
+     */
+    public function edit_saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        //$slid = $account_info['slid'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $cid = $_REQUEST['warehouseId'];
+        $dhid = $_REQUEST['asnNoView']?intval($_REQUEST['asnNoView']):'0';
+
+        $datailinfo = array();
+        $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+        $zmoney = 0;
+        $znum = 0;
+
+        foreach($oDetail as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['cate_id'] = $v['skuTypeId'];
+            $datailinfo[$k]['cid'] = $cid;
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['actualQty'];
+            $datailinfo[$k]['zmoney'] = $v['amount'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+            $znum += $v['actualQty'];
+            $zmoney += $v['price'];
+        }
+
+        $dd_detail=serialize($datailinfo);
+
+        $ddbz = $_REQUEST['ddbz']?intval($_REQUEST['ddbz']):'0';
+        $bumen = empty($_REQUEST['bumen'])?$_REQUEST['gonghuoren']:$_REQUEST['bumen'];
+        //if($unit_type==9){$unit_type==0;}
+        $datain=$_REQUEST;
+
+        //采购入库单信息
+        $time = $_REQUEST['time'];
+        $gys = $_REQUEST['gys'];
+
+
+        if($time){
+            $datain['ctime'] =  strtotime($time);
+        }else{
+            $datain['ctime']= time()+ 60*60*8;
+        }
+
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = empty($_REQUEST['asnNoView'])?time():$_REQUEST['asnNoView'];
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
+        $datain['isdisable'] = 1;
+        $datain['zmoney'] = $zmoney;
+        $datain['znum'] = $znum;
+        $datain['memo'] = $_REQUEST['remarks'];
+        if($bumen){
+            $datain['gonghuoren'] = $bumen;
+        }
+
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '保存成功';
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_down_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_up_index&id=$slid");
+        }
+        $detail2 = $_REQUEST['details'];
+        $amount = 0;//总金额
+        foreach($detail2 as $k=>$v){
+            $order_num=floatval($v['planMoveQty']);
+            $amount += $order_num*$v['price'];
+        }
+        if(!empty($bumen)){
+            if ($_REQUEST['type']==1){ //入库
+                $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
+            }else{
+                $return['data']['url'] = url("kiz","supplier#go_up_index&id=$slid");
+            }
+        }
+        //采购入库出库单
+        //采购入库单url封装
+        if(!empty($bumen)){
+            //新增出库记录
+            $datailinfo = array();
+            $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+            foreach($oDetail as $k=>$v){
+                $datailinfo[$k]['mid'] = $v['skuId'];
+                $datailinfo[$k]['unit'] = $v['uom'];
+                $datailinfo[$k]['cate_id'] = $v['skuTypeId'];
+                $datailinfo[$k]['funit'] = $v['funit'];
+                $datailinfo[$k]['times'] = $v['times'];
+                $datailinfo[$k]['yuan_price'] = $v['price'];
+                $datailinfo[$k]['name'] = $v['skuName'];
+                $datailinfo[$k]['barcode'] = $v['skuCode'];
+                $datailinfo[$k]['type'] = 2;
+                $datailinfo[$k]['unit_type'] = $v['unit_type'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['num'] = $v['actualQty'];
+                $datailinfo[$k]['zmoney'] = $v['uom'];
+                $datailinfo[$k]['memo'] = $v['memo'];
+            }
+
+            $dd_detail=serialize($datailinfo);
+
+            $datainGys=$_REQUEST;
+
+            //采购入库单信息
+            $time = $_REQUEST['time'];
+            $gys = $_REQUEST['gys'];
+
+
+            if($time){
+                $datainGys['ctime'] =  strtotime($time);
+            }else{
+                $datainGys['ctime']= time()+ 60*60*8;
+            }
+
+            $datainGys['dd_detail']=$dd_detail;
+            $datainGys['slid']=$slid;
+            $datainGys['type'] = 2;
+            $datainGys['danjuhao'] = empty($_REQUEST['asnNoView'])?time():$_REQUEST['asnNoView'];
+            $datainGys['ywsort'] = $_REQUEST['senderId'];
+            $datainGys['cid'] = $_REQUEST['warehouseId'];
+            $datainGys['lihuo_user'] = $account_info['account_name'];
+            $datainGys['gonghuoren'] = $bumen;
+            $datainGys['zmoney'] = $amount;
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"update","id=".$id);
+        }
+//        var_dump($datain);die;
+
+//        $datain['zmoney'] = $amount;
+        $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"update","id=".$id);
+
+//        $sql = "select * from fanwe_cangku_log where id=".$id;
+//        $result = $GLOBALS['db']->getRow($sql);
+//        var_dump($result);die;
         echo json_encode($return);exit;
     }
 

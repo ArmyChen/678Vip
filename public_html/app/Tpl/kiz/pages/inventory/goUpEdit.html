@@ -2,20 +2,13 @@
 <!-- 标题 -->
 <div class="article-header">
     <div class="center-block w1200">
-        <h1><span id="command-type-name">新增</span>{$page_title}</h1>
+        <h1><span id="command-type-name"></span>{$page_title}</h1>
 
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10"  id="btnSave" function="$.doSave"
-               args="{formId:'baseInfoForm',gridId:'grid',url:'?ctl=ajax&act=saving_ajax&type=1',
+               args="{formId:'baseInfoForm',gridId:'grid',url:'?ctl=ajax&act=edit_saving_ajax&type=2',
                customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.saveCallback',type:'post'}">保存</a>
-            <!--<a code="scm:button:inventory:si:confirm" class="btn-link ml10"  id="btnConfirm" function="$.doConfirmOrder"-->
-            <!--args="{formId:'baseInfoForm',gridId:'grid',url:'/scm_kry/asn/si/confirm',-->
-            <!--customValidator:'$.detailsValidator',gridDataId:'details',submitCallback:'$.confirmCallback'}">确认</a>-->
-
-            <!--<a class="btn-link ml10 hidden" code="scm:button:inventory:si:add"-->
-            <!--id="btnCopy" function="$.doCopyOrder" args="{orderIdSelector: '#id', url:'/scm_kry/asn/si/copy'}">复制</a>-->
-
-            <a class="btn-link ml10" id="btnCancel" onclick="$.notifyLeaving('/kiz.php?ctl=inventory&act=go_down_index');">返回</a>
+            <a class="btn-link ml10" id="btnCancel" function="$.doForward" args="{url:'/kiz.php?ctl=inventory&act=go_up_index'}">返回</a>
         </div>
     </div>
 </div>
@@ -29,7 +22,7 @@
             </div>
 
             <!-- hidden start -->
-            <input type="hidden" id="id" name="id" value="">
+            <input type="hidden" id="id" name="id" value="{$id}">
             <input type="hidden" id="asnNo" name="asnNo" value="RK201703200005"/>
             <input type="hidden" id="warehouseName" name="warehouseName" value=""/>
             <input type="hidden" id="sourceType" name="sourceType" value=""/>
@@ -42,9 +35,9 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="asnNoView"
-                                           name="asnNoView" value=""
+                                           name="asnNoView" value="{$result.danjuhao}" disabled
                                            placeholder="请输入单据号" data-type="word" maxlength="14" required
-                                    />
+                                           />
 
                                 </div>
                                 <div class="wrong"></div>
@@ -56,7 +49,7 @@
 
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="senderId">入库原因<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="senderId">出库原因<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <select id="senderId" name="senderId" class="{required:true}">
@@ -64,13 +57,12 @@
 
 
 
-                                        <!--<option value="">请选择入库原因</option>-->
+                                        <!--<option value="">请选择出库原因</option>-->
                                         {foreach from=$ywsort item=ywitem key=ywkey}
 
-                                        {if $ywkey lt '5' && $ywkey neq '-6'}
+                                        {if $ywkey gt '5'}
 
-
-                                        <option value="{$ywkey}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+                                        <option value="{$ywkey}" {if $result.ywsort eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
 
                                         {/if}
 
@@ -89,24 +81,14 @@
                 <div class="clear">
                     <div class="pull-left">
                         <dl class="panel-item">
-                            <dt><label for="warehouseId">入库仓库<strong class="red vam"> *</strong></label></dt>
+                            <dt><label for="warehouseId">出库仓库<strong class="red vam"> *</strong></label></dt>
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <select id="warehouseId" name="warehouseId" class="{required:true}">
-
-
-
-
-                                        <!--<option value="">请选择入库仓库</option>-->
-
                                         {foreach from=$cangkulist item=item}
 
-                                        <option value="{$item.id}" {if $ywsortid eq $ywkey} selected="selected" {/if}>{$item.name}</option>
-
+                                                <option value="{$item.id}" {if $item.id eq $result.cid} selected="selected" {/if}>{$item.name}</option>
                                         {/foreach}
-
-
-
                                     </select>
                                 </div>
                                 <div class="wrong"></div>
@@ -122,7 +104,7 @@
                                 <TEXTAREA id="remarks" name="remarks" class="w240" style="height: 65px;"
                                           placeholder="备注说明（可不填）" data-character="true"
                                           onpropertychange="if(value.length > 48) value=value.substr(0,48)"
-                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                          oninput="if(value.length > 48) value=value.substr(0,48)">{$result.memo}</TEXTAREA>
                                 </div>
                                 <div class="wrong"></div>
                             </dd>
@@ -136,8 +118,8 @@
         <!-- 单据明细信息 start -->
         <div class="panel-heading">
             <h3 class="panel-title"><em>单据明细</em></h3>
-        </div>
 
+        </div>
         <div class="ml10 mt10 mr20" style="float: left">
             <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
             <a class="btn btn-primary btn-large pull-left ml5" id="btnDeleteSku" afterRemoved="$.afterRemoved">移除商品</a>
@@ -147,44 +129,11 @@
                 <input type="text" data-format="number" class="form-control" id="barcode" maxlength="13" placeholder="点击此处扫码添加"/>
             </div>
         </div>
-
-        <!--<div id="filterGridDiv" class="pull-left cut-off-rule">-->
-        <!--<form method="get" action="#"><input name="tableid" type="text" class="hidden" value="">-->
-        <!--<div class="form-container ml10">-->
-        <!--<div class="form-item filter">-->
-        <!--<div class="control-label-con1" name="skuTypeNameDiv" style="width: 185px;display: none;">-->
-        <!--<div class="select-group">-->
-        <!--<div class="select-control"><em>请选择商品分类</em></div>-->
-        <!--<ul>-->
-        <!--<li>请选择商品分类</li>-->
-        <!--</ul>-->
-        <!--<select class="form-control select-style" name="skuTypeName" id="skuTypeName">-->
-        <!--<option value="">请选择商品分类</option>-->
-        <!--</select></div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="form-item filter">-->
-        <!--<div class="control-label-con1 search-box" style="width: 185px;display: none;"><input type="text"-->
-        <!--name="skuCodeOrName"-->
-        <!--class="form-control"-->
-        <!--placeholder="请输入商品编码/名称"-->
-        <!--data-format="skuName"-->
-        <!--maxlength="14">-->
-        <!--<button type="button" class="close" aria-hidden="true">×</button>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="form-item" style="width: 80px;"><a name="filterSearch" class="btn-blue btn-search"-->
-        <!--role="button"-->
-        <!--onclick="$.filterGrid.filterSku(this);">查 询</a></div>-->
-        <!--</div>-->
-        <!--</form>-->
-        <!--</div>-->
-
         <div class="panel-body">
             <div class="inventoryTotal mr15">
-                <span>入库数量合计：<span id="qtySum">
+                <span>出库数量合计：<span id="qtySum">
                     0</span></span>
-                <span>入库金额合计：<span id="amountSum">
+                <span>出库金额合计：<span id="amountSum">
                     ￥0</span></span>
             </div>
             <div class="mt20 detail-grid">
@@ -215,7 +164,7 @@
     $(function() {
         var opts = {
             urlRoot : ctxPath,
-            commandType : 1,
+            commandType : 9,
             gridData: eval({$dd_detail}),
             skuScene:72,
             skuTypes:eval([{"id":null,"uuid":null,"brandId":null,"brandName":null,"commercialId":null,"commercialName":null,"isDelete":null,"creatorId":null,"creatorName":null,"createTime":null,"updaterId":null,"updaterName":null,"updateTime":null,"version":0,"dishId":null,"skuName":null,"skuAliasName":null,"skuCode":null,"skuTypeId":170317,"skuDesc":null,"wmType":null,"uomId":null,"price":null,"barcode":null,"skuKey":null,"isDisable":null,"skuShops":null,"yieldRate":null,"skuTypeName":"奶慕奉茶","uom":null,"originalCcInventoryQty":null,"inventoryQty":null,"skuConvert":null,"skuConvertOfStandard":null,"standardUnitId":null,"standardUnitName":null,"standardPrice":null,"exceptShopStr":"","uomIdForTable":null,"supplierId":null,"wmTypeStr":null,"yieldRateStr":null,"skuNameSimple":null,"propStr":null,"wmTypeName":null}]),
@@ -223,8 +172,6 @@
         };
 
         asnSi._init(opts);
-        $("#btnAdd").show();//显示选择原料添加按钮
-
     });
 </script>
 

@@ -331,6 +331,9 @@ class KizBaseModule{
         if($mid > 0){
             $sql = "select * from fanwe_cangku_menu where mid=".$mid;
             $result = $GLOBALS['db']->getRow($sql);
+            if(empty($result)){
+                return 0;
+            }
             return $result;
         }
         return null;
@@ -345,11 +348,30 @@ class KizBaseModule{
         if($id > 0){
             $sql = "select * from fanwe_dc_menu where id=".$id;
             $result = $GLOBALS['db']->getRow($sql);
+            if(empty($result)){
+                return 0;
+            }
             return $result;
         }
         return null;
     }
 
+    /**
+     * 根据mid查询仓库信息
+     * @param $id
+     * @return mixed
+     */
+    public function getCangkuMenuInfoByMidCid($mid,$cid){
+        if($mid > 0){
+            $sql = "select * from fanwe_cangku_menu where cid=$cid and mid=".$mid;
+            $result = $GLOBALS['db']->getRow($sql);
+            if(empty($result)){
+                return 0;
+            }
+            return $result;
+        }
+        return null;
+    }
 
     /**
      * 根据id查询分类信息

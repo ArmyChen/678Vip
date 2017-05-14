@@ -144,10 +144,10 @@
 
     var urlRoot = ctxPath
     var queryUrl = urlRoot + "&act=go_down_index_ajax&type=2&id={$slid}";
-    var editUrl = urlRoot + "edit";
+    var editUrl = inventoryPath + "&act=go_up_index_edit&type=2";
     var withDrawUrl = urlRoot + '&act=go_down_withdraw&type=2';
     var deleteUrl = urlRoot + "&act=go_down_delete_ajax&type=2";
-    var viewUrl =inventoryPath + "&act=go_up_index_view";
+    var viewUrl =inventoryPath + "&act=go_up_index_view&type=2";
     var confirmUrl = urlRoot + "&act=go_down_doconfirm&type=2";
     var copyUrl = urlRoot + "copy";
     var printUrl = inventoryPath+"&act=go_up_print_view";
@@ -170,7 +170,11 @@
             return formData;
         };
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showView = function (rowData) {

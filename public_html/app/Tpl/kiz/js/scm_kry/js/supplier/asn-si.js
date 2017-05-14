@@ -13,7 +13,7 @@ var asnSi = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=go_down_index_ajax2&type=1',
-        editUrl : '&act=go_down_index_view',
+        editUrl : '&act=go_down_index_edit&type=1',
         deleteUrl :'&act=go_down_delete_ajax&type=1',
         viewUrl : '&act=go_down_index_view',
         printUrl : '&act=go_down_print_view',
@@ -250,15 +250,14 @@ var asnSi = {
                     render: $.showView
                 },
                 confirm: {
-                    url: supplierPath + _this.opts.confirmUrl,
+                    url: ctxPath + _this.opts.confirmUrl,
                     // code: "scm:button:inventory:si:confirm",
                     render: $.showConfirm
                 },
                 withdraw: {
-                	url:supplierPath + _this.opts.withdrawUrl,
+                	url:ctxPath + _this.opts.withdrawUrl,
                 	// code: "scm:button:inventory:si:withdraw",
                     render: $.showWithDraw,
-                    redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
                 },
                 delete: {
                     url: ctxPath + _this.opts.deleteUrl,
@@ -443,11 +442,12 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['商品编码','skuId', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码','skuId','cate_id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '当前库存', '当前库存(隐藏)', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
             {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
             {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
-            {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
+                {hidden:true,name: 'skuTypeId', index: 'skuTypeId', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
             {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
             {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
             {name: 'uom', index: 'uom', width: 50, sortable: !editable,align: "center", hidden: editable},
