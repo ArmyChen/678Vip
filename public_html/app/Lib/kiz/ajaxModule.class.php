@@ -4365,18 +4365,8 @@ class ajaxModule extends KizBaseModule{
                 $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
             }else{ //出库
                 $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
-                if($order_num>$check['mstock']){
-                    $return['flag'] = null;
-                    $return['exception'] = null;
-                    $return['refresh'] = false;
-                    $return['success'] = false;
-                    $return['message'] ="库存不足,非法提交！";
-                    echo json_encode($return);exit;
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
 
-//                    showBizErr("库存不足,非法提交，后果自负！",0,url("biz","cangku#index&id=$slid"));
-                }else{//操作减库存
-                    $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
-                }
             }
 
             //
