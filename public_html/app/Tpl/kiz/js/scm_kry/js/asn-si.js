@@ -317,7 +317,7 @@ var asnSi = {
         });
 
         scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
-            formula: ['price*actualQty=amount','actualQty+standardInventoryQty='],
+            formula: ['price*actualQty=amount','actualQty+standardInventoryQty=inventoryQty'],
             summary: [
                 {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
                 {colModel: 'actualQty', objectId: 'qtySum'},
