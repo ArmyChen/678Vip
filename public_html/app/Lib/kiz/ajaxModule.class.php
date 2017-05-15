@@ -27,6 +27,7 @@ class ajaxModule extends KizBaseModule{
             "2"=>"无订单入库",
             "3"=>"要货调入",
             "4"=>"初始库存",
+            "5"=>"仓库调拨",
             "6"=>"盘亏",
             "7"=>"无订单出库",
             "8"=>"要货调出",
@@ -789,12 +790,13 @@ class ajaxModule extends KizBaseModule{
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
-        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $slid = $account_info['slid'];
         $disable = 1;
 
         $datailinfo = array();
         foreach($_REQUEST['details'] as $k=>$v){
             $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['cate_id'] = $v['skuTypeId'];
             $datailinfo[$k]['unit'] = $v['uom'];
             $datailinfo[$k]['funit'] = $v['funit'];
             $datailinfo[$k]['times'] = $v['times'];
@@ -825,37 +827,7 @@ class ajaxModule extends KizBaseModule{
             if ($unit_type==1){  //使用的是副单位
                 $order_num=$order_num*$v['times']; //换算成主单位
             }
-            //减库
-            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
-            $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
-//            var_dump("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
-//            die;
-            $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
-//var_dump($res1);die;
-            $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
-            if($check){
-                $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
-            }else{
-                //添加
-                $data_menu=array(
-                    "slid"=>$slid,
-                    "mid"=>$mid,
-                    "cid"=>$cidtwo,
-                    "cate_id"=>$v['skuTypeId'],
-                    "mbarcode"=>$v['skuCode'],
-                    "mname"=>$v['skuTypeName'],
-                    "mstock"=>$order_num,
-                    "stock"=>$order_num,
-                    "minStock"=>10,
-                    "maxStock"=>10000,
-                    "unit"=>$v['uom'],
-                    "funit"=>$v['funit'],
-                    "times"=>$v['times'],
-                    "type"=>$v['type'],
-                    "ctime"=>to_date(NOW_TIME)
-                );
-                $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
-            }
+
 
             $amount += $order_num*$v['price'];
         }
@@ -889,22 +861,137 @@ class ajaxModule extends KizBaseModule{
             $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
         }
 
-        if($res1 && $res2){
-            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain);  //写入调拨记录
-            //写出库记录
-            $datain['ywsort']=5; //仓库调拨
-            $datain['gonghuoren']='cangku_'.$cidtwo;
-            unset($datain['cidtwo']); //销毁入库的仓库ID
-            $datain['type']=2;
-            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
-            $datain['cid']=$cidtwo;
-            $datain['type']=1;
-            $datain['gonghuoren']='cangku_'.$cid;
-            $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
-        }else{
-            $return['success'] = false;
-            $return['message'] = "查无结果！";
+//        if($res1 && $res2){
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain);  //写入调拨记录
+        //写出库记录
+        $datain['ywsort']=5; //仓库调拨
+        $datain['gonghuoren']='cangku_'.$cidtwo;
+        unset($datain['cidtwo']); //销毁入库的仓库ID
+        $datain['type']=2;
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+        $datain['cid']=$cidtwo;
+        $datain['type']=1;
+        $datain['gonghuoren']='cangku_'.$cid;
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
+//        }else{
+//            $return['success'] = false;
+//            $return['message'] = "查无结果！";
+//        }
+        echo json_encode($return);exit;
+    }
+
+    public function diaobo_index_doconfirm(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_diaobo where id=".$id);
+        $details = unserialize($row['dd_detail']);
+        $cid = $row['cid'];
+        $cidtwo = $row['cidtwo'];
+//var_dump($details);
+        foreach ($details as $v) {
+            $mid = $v['mid'];
+            $order_num = $v['num'];
+//            var_dump($v);die;
+            //减库
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
+            $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
+//            var_dump("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//            die;
+            $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//var_dump($res1);die;
+            $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
+            if($check){
+                $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
+            }else{
+                //添加
+                $data_menu=array(
+                    "slid"=>$slid,
+                    "mid"=>$mid,
+                    "cid"=>$cidtwo,
+                    "cate_id"=>$v['cate_id'],
+                    "mbarcode"=>$v['barcode'],
+                    "mname"=>$v['name'],
+                    "mstock"=>$order_num,
+                    "stock"=>$order_num,
+                    "minStock"=>10,
+                    "maxStock"=>10000,
+                    "unit"=>$v['unit'],
+                    "funit"=>$v['funit'],
+                    "times"=>$v['times'],
+                    "type"=>$v['type'],
+                    "ctime"=>to_date(NOW_TIME)
+                );
+                $res2=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
+            }
         }
+        //更新单据状态
+        $sql = "update fanwe_cangku_diaobo set isdisable=2 where id=$id";
+        $res = $GLOBALS['db']->query($sql);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '操作成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '操作失败';
+        }
+
+        /* 数据 */
+        echo json_encode($return);exit;
+    }
+
+    public function diaobo_index_withdraw(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_diaobo where id=".$id);
+        $details = unserialize($row['dd_detail']);
+        $cid = $row['cid'];
+        $cidtwo = $row['cidtwo'];
+
+        foreach ($details as $v) {
+            $mid = $v['mid'];
+            $order_num = $v['num'];
+
+            //减库
+            $sqlstr="where slid=$slid and mid=$mid and cid=$cid";	 //减库条件
+            $sqlstrtwo="where slid=$slid and mid=$mid and cid=$cidtwo";	 //加库条件
+//            var_dump("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//            die;
+            $res1=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//var_dump($res1);die;
+            $check=$GLOBALS['db']->getRow("select * from fanwe_cangku_menu ".$sqlstrtwo);
+            $res2=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,stock=stock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstrtwo);
+        }
+//更新单据状态
+        $sql = "update fanwe_cangku_diaobo set isdisable=1 where id=$id";
+        $res = $GLOBALS['db']->query($sql);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '操作成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '操作失败';
+        }
+
+        /* 数据 */
         echo json_encode($return);exit;
     }
 

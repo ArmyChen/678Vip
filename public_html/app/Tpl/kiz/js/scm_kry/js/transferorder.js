@@ -8,8 +8,8 @@ var transferOrder = {
         deleteUrl: '/delete',
         viewUrl: '&act=go_transfer_index_view',
         printUrl: '&act=go_transfer_print_view',
-        confirmUrl: '/doconfirm',
-        withdrawUrl: '/withdraw',
+        confirmUrl: '&act=diaobo_index_doconfirm',
+        withdrawUrl: '&act=diaobo_index_withdraw',
         //查询条件表单id
         queryFormId: 'queryConditions',
         //列表id
@@ -168,7 +168,7 @@ var transferOrder = {
                 	url: _this.opts.urlRoot + _this.opts.withdrawUrl,
                 	code: "scm:button:inventory:transfer:withdraw",
                     render: $.showWithDraw,
-                    redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
+                    // redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
                 },
                 delete: {
                     url: _this.opts.urlRoot + _this.opts.deleteUrl,
