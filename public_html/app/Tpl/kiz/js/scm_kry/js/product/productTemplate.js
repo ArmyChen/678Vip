@@ -267,7 +267,10 @@ var productTemplate = {
         $.beforeSend = function (formData) {
            return renderEnum.hidden;
         };
+        $.showView = function(rowData){
+            return renderEnum.hidden;
 
+        };
         $.showEdit = function(rowData){
             return renderEnum.hidden;
 
@@ -311,7 +314,8 @@ var productTemplate = {
             showOperate: true,
             actionParam: {
                 view: {
-                    url: _this.opts.urlRoot + _this.opts.viewUrl
+                    url: _this.opts.urlRoot + _this.opts.viewUrl,
+                    render:$.showView
                 },
                 editor: {
                     render: $.showEdit,
@@ -412,7 +416,8 @@ var productTemplate = {
                 {
                 	name: 'exceptShopStr', 
                 	index: 'exceptShopStr', 
-                	width: 80, 
+                	width: 80,
+                    hidden:true,
                 	sortable: false,
                 	formatter: function (cellvalue, options, rowObject){
                 		return '<input name="multiSelectIpt" type="hidden" class="checkbox-selected" value="'+rowObject.exceptShopStr+'" />';
@@ -526,15 +531,15 @@ $.resetExceptSelect = function(){
 
 //单据明细校验 
 $.detailsValidator = function (args) {
-	var pageShopTempateData = $("#shop_grid").getCol('id');
-	if(pageShopTempateData.length==0){
-		$.layerMsg('请勾选授权商户！若不勾选，则在商户下选择不到该自产模板！', false);
-        return false;
-	}else{
-		var allShop = new Array();
-		for(var i=0;i<pageShopTempateData.length;i++) allShop.push({shopId:pageShopTempateData[i]});
-		$("#shopTemplateDetails").val(JSON.stringify(allShop));
-	}
+	// var pageShopTempateData = $("#shop_grid").getCol('id');
+	// if(pageShopTempateData.length==0){
+	// 	$.layerMsg('请勾选授权商户！若不勾选，则在商户下选择不到该自产模板！', false);
+     //    return false;
+	// }else{
+	// 	var allShop = new Array();
+	// 	for(var i=0;i<pageShopTempateData.length;i++) allShop.push({shopId:pageShopTempateData[i]});
+	// 	$("#shopTemplateDetails").val(JSON.stringify(allShop));
+	// }
 
 	var rowData = $('#' + productTemplate.opts.detailGridId).jqGrid('getRowData');
     if (rowData.length == 0) {
@@ -558,12 +563,7 @@ $.detailsValidator = function (args) {
 $.submitCallback = function (args) {
     var rs = args.result;
     if (rs.success) {
-    	var showMsg = $("#code").val().length==0;
-    	if(showMsg){
-    		$.layerMsg("操作成功，"+$("#name").val()+"编码是：<span style='color:red;'>"+rs.data+"</span>", true, {end:function(){window.location.href = basicPath+"&act=product_index";},shade: 0.3});
-    	}else{
-    		$.layerMsg("操作成功！", true, {end:function(){window.location.href = productTemplate.opts.urlRoot + '/index';},shade: 0.3});
-    	}
+        $.layerMsg("操作成功", true, {end:function(){window.location.href = productPath+"&act=product_index";},shade: 0.3});
         return;
     } else {
         if (rs.data != '' && rs.data != null) {

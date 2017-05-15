@@ -151,25 +151,25 @@
         <!-- 选项卡组 start -->
         <div class="tab-nav" id="tab-ggoup">
             <div class="btn-group" role="group">
-                <button data-tid="tab1" type="button" class="btn btn-default btn-active">商户授权</button>
-                <button data-tid="tab2" type="button" class="btn btn-default">商品信息</button>
+                <!--<button data-tid="tab1" type="button" class="btn btn-default btn-active">商户授权</button>-->
+                <button data-tid="tab2" type="button" class="btn btn-default btn-active">商品信息</button>
             </div>
         </div>
         <div id="info-main">
             <!-- 商户页签 -->
-            <div id="tab1" class="panel-body">
-                <div class="mr10 ml10" style="float: left">
-                    <a class="btn btn-primary btn-large" id="btnSelectCommercial" callAfterSuccessFunc="$.resetExceptSelect();">添加商户</a>
-                    <a class="btn btn-primary btn-large" id="btnDeleteCommercial" callAfterSuccessFunc="$.resetExceptSelect();">移除商户</a>
-                </div>
-                <div class="inventoryTotal"><sapn>&nbsp;</sapn></div>
-                <div class="mt20 detail-grid">
-                    <table id="shop_grid"></table>
-                </div>
-            </div>
+            <!--<div id="tab1" class="panel-body">-->
+                <!--<div class="mr10 ml10" style="float: left;display: none;">-->
+                    <!--<a class="btn btn-primary btn-large" id="btnSelectCommercial" callAfterSuccessFunc="$.resetExceptSelect();">添加商户</a>-->
+                    <!--<a class="btn btn-primary btn-large" id="btnDeleteCommercial" callAfterSuccessFunc="$.resetExceptSelect();">移除商户</a>-->
+                <!--</div>-->
+                <!--<div class="inventoryTotal"><sapn>&nbsp;</sapn></div>-->
+                <!--<div class="mt20 detail-grid">-->
+                    <!--<table id="shop_grid"></table>-->
+                <!--</div>-->
+            <!--</div>-->
 
             <!-- 商品页签 -->
-            <div id="tab2" class="panel-body" style="display: none;">
+            <div id="tab2" class="panel-body" style="display: block;">
                 <!-- toolbar begin -->
                 <div class="ml10 mt10 mr20" style="float: left">
                     <a class="btn btn-primary btn-large pull-left" id="btnSelectSku" afterAdd="$.afterAdd">添加商品</a>
@@ -182,9 +182,9 @@
                 </div>
 
                 <!--<div id="filterGridDiv" class="pull-left cut-off-rule"></div>-->
-                <span class="mr10 mt10" style="padding-top:10px;float: right;">
-		      		 注：若要设定某些商品不授权给某些门店，就在【非授权商户】列勾选！
-		       </span>
+                <!--<span class="mr10 mt10" style="padding-top:10px;float: right;">-->
+		      		 <!--注：若要设定某些商品不授权给某些门店，就在【非授权商户】列勾选！-->
+		       <!--</span>-->
 
                 <!-- toolbar end -->
                 <div class="inventoryTotal"><sapn>&nbsp;</sapn></div>

@@ -2599,28 +2599,28 @@ class ajaxModule extends KizBaseModule{
         $lossAmount = 0;
         $dd_detail = [];
         foreach (unserialize($row['accept_goods']) as $key=>$item) {
-            $value = $GLOBALS['db']->getRow("select * from fanwe_dc_menu where id=".$item['id']);
-//var_dump($value);
+            $value = $GLOBALS['db']->getRow("select * from fanwe_cangku_menu where mid=".$item['id']);
+//var_dump($item);
             $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
             if (!empty($typeName)){
                 $dd_detail[$key]['skuTypeName'] = $typeName['name'];
             }else{
                 $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
             }
-            $dd_detail[$key]['skuId'] = $value['id'];
-            $dd_detail[$key]['skuTypeId'] = $value['cate_id'];
-            $dd_detail[$key]['skuCode'] = $value['id'];
-            $dd_detail[$key]['skuName'] = $value['name'];
+            $dd_detail[$key]['skuId'] = $value['mid'];
+            $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
+            $dd_detail[$key]['skuCode'] = $value['mbarcode'];
+            $dd_detail[$key]['skuName'] = $value['mname'];
             $dd_detail[$key]['uom'] = $value['unit'];
-            $dd_detail[$key]['price'] = $value['price'];
-            $dd_detail[$key]['inventoryQty'] = $value['stock'];
-            $dd_detail[$key]['realTimeInventory'] = $value['stock'];
-            $dd_detail[$key]['ccQty'] = $value['stock'];
+            $dd_detail[$key]['price'] = $item['price'];
+            $dd_detail[$key]['inventoryQty'] = $value['mstock'];
+            $dd_detail[$key]['realTimeInventory'] = $value['mstock'];
+            $dd_detail[$key]['ccQty'] = $value['mstock'];
             $dd_detail[$key]['qtyDiff'] = 0;
             $dd_detail[$key]['amountDiff'] = 0;
             $dd_detail[$key]['remarks'] = '';
-            $dd_detail[$key]['ccAmount'] = $value['stock']*$value['price'];
-            $dd_detail[$key]['relTimeAmount'] = $value['stock']*$value['price'];
+            $dd_detail[$key]['ccAmount'] = $value['mstock']*$item['price'];
+            $dd_detail[$key]['relTimeAmount'] = $value['mstock']*$item['price'];
             $dd_detail[$key]['alreadyData'] = 1;
             $dd_detail[$key]['remarks'] ='';
             $dd_detail[$key]['djid'] = $_REQUEST['id'];
