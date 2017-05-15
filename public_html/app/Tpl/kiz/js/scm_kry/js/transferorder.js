@@ -97,11 +97,19 @@ var transferOrder = {
         };
 
         $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1 || rowData.isdisable == ''){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showWithDraw = function(rowData){
-            return renderEnum.hidden;
+            if(rowData.isdisable == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showDelete = function (rowData) {
@@ -134,7 +142,7 @@ var transferOrder = {
                     align: "right",
                     formatter: customCurrencyFormatter
                 },
-                {name: 'statusName', index: 'status', width: 70, align: 'center', hidden: true},
+                {name: 'statusName', index: 'status', width: 70, align: 'center',formatter: disableFormatter},
                 {name: 'status', index: 'status', width: 100, hidden: true}
             ],
             sortname: _this.opts.sortName,
@@ -173,6 +181,15 @@ var transferOrder = {
                 }
             }
         });
+        function disableFormatter(cellValue, options, rowObject) {
+            if(cellValue == 1){
+                return '已保存';
+            }else if(cellValue == 2){
+                return '已确认';
+            }else{
+                return '已保存';
+            }
+        }
     },
 
     //初始化编辑界面表格

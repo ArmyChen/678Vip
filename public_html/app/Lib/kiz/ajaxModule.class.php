@@ -718,6 +718,9 @@ class ajaxModule extends KizBaseModule{
      */
     public function diaobo_list_ajax(){
         init_app_page();
+//        $res = $GLOBALS['db']->query("alter table fanwe_cangku_diaobo add isdisable int");
+//        $res = $GLOBALS['db']->getAll("show columns from fanwe_cangku_diaobo");
+//        var_dump($res);die;
         //$table =  $check=$GLOBALS['db']->getAll("select COLUMN_NAME,column_comment from INFORMATION_SCHEMA.Columns where table_name='fanwe_cangku_diaobo' ");print_r($table);exit;
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
@@ -757,6 +760,7 @@ class ajaxModule extends KizBaseModule{
 
         $records = $GLOBALS['db']->getOne($sqlc);
         $list=$GLOBALS['db']->getAll($sql);
+//        var_dump($list);die;
         foreach($list as $kl=>$vl){
             $vl['detail']=unserialize($vl['dd_detail']);
             $vl['fromWmName']= $cangku_names[$vl['cid']];
@@ -764,7 +768,7 @@ class ajaxModule extends KizBaseModule{
             $vl['transferOrderNo'] = $vl['danjuhao'];
             $vl['updateTime'] = to_date($vl['ctime'],'m-d H:i:s');
             $vl['statusName'] = "";
-            $vl['status'] = "";
+            $vl['status'] = $vl['isdisable'];
             $vl['amount'] = $vl['zmoney'];
             $list[$kl]=$vl;
         }
@@ -786,6 +790,7 @@ class ajaxModule extends KizBaseModule{
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $disable = 1;
 
         $datailinfo = array();
         foreach($_REQUEST['details'] as $k=>$v){
@@ -871,6 +876,7 @@ class ajaxModule extends KizBaseModule{
         $datain['zweight'] = 0.00;
         $datain['ztiji'] = 0.00;
         $datain['memo'] = $_REQUEST['memo']?$_REQUEST['memo']:"";
+        $datain['isdisable'] = $disable;
 
         $return['flag'] = null;
         $return['exception'] = null;
