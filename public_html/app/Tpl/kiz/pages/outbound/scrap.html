@@ -94,10 +94,10 @@
     var urlRoot =ctxPath;
     var queryUrl = urlRoot + "&act=outbound_scrap_ajax";
     var editUrl = outboundPath + "&act=outbound_scrap_edit";
-    var withDrawUrl = urlRoot + 'withdraw';
+    var withDrawUrl = urlRoot + "&act=outbound_scrap_withdraw";
     var deleteUrl = urlRoot + "delete";
     var viewUrl = urlRoot + "view";
-    var confirmUrl = urlRoot + "doconfirm";
+    var confirmUrl = urlRoot + "&act=outbound_scrap_doconfirm";
     var copyUrl = urlRoot + "copy";
 
     $(function () {
@@ -126,12 +126,20 @@
             return renderEnum.hidden;
         };
 
-        $.showWithDraw = function(rowData){
-            return renderEnum.hidden;
+        $.showConfirm = function (rowData) {
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
-        $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
+        $.showWithDraw = function(rowData){
+            if(rowData.isdisable == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showDelete = function (rowData) {
@@ -189,7 +197,7 @@
                     url: withDrawUrl,
                     render: $.showWithDraw,
                     code: "scm:button:scrap:scrap:withdraw",
-                    redirectUrl: editUrl
+//                    redirectUrl: editUrl
                 },
                 delete: {
                     url: deleteUrl,

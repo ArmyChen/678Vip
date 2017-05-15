@@ -3655,12 +3655,12 @@ class ajaxModule extends KizBaseModule{
             $amountSum+=$detail[$key]['amount'];  //报废金额
 
 
-            //库存扣减
-            $data = array(
-                'mstock'=>  $result['mstock'] - $detail[$key]['planQty'],
-            );
-
-            $GLOBALS['db']->autoExecute('fanwe_cangku_menu',$data,'update','id='. $result['id']);
+//            //库存扣减
+//            $data = array(
+//                'mstock'=>  $result['mstock'] - $detail[$key]['planQty'],
+//            );
+//
+//            $GLOBALS['db']->autoExecute('fanwe_cangku_menu',$data,'update','id='. $result['id']);
         }
 
         //数组
@@ -3691,6 +3691,99 @@ class ajaxModule extends KizBaseModule{
         }
         echo json_encode($return);exit;
     }
+
+
+    /**
+     * 确认报废单，库存扣减
+     */
+    public function outbound_scrap_doconfirm(){
+        //插入，取到ID
+        init_app_page();
+        $djid = $_REQUEST['id'];
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        //单据详情
+        $sql = "select * from fanwe_cangku_outbound_stat where djid=".$djid;
+        $detail = $GLOBALS['db']->getAll($sql);
+
+//        var_dump($detail);die;
+        foreach ($detail as $key=>$item) {
+            $result = $GLOBALS['db']->getRow('select * from fanwe_cangku_menu where cid='.$item['cid'].' and mid='.$item['mid']);
+
+            //库存扣减
+            $data = array(
+                'mstock'=>  $result['mstock'] - $item['out_num'],
+            );
+
+            $res = $GLOBALS['db']->autoExecute('fanwe_cangku_menu',$data,'update','id='. $result['id']);
+        }
+
+        //更新单据状态
+        $sql = "update fanwe_cangku_outbound set isdisable=2 where id=$djid";
+        $res = $GLOBALS['db']->query($sql);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+
+    }
+
+    /**
+     * 反确认报废单
+     */
+    /**
+     * 确认报废单，库存扣减
+     */
+    public function outbound_scrap_withdraw(){
+        //插入，取到ID
+        init_app_page();
+        $djid = $_REQUEST['id'];
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        //单据详情
+        $sql = "select * from fanwe_cangku_outbound_stat where djid=".$djid;
+        $detail = $GLOBALS['db']->getAll($sql);
+
+//        var_dump($detail);die;
+        foreach ($detail as $key=>$item) {
+            $result = $GLOBALS['db']->getRow('select * from fanwe_cangku_menu where cid='.$item['cid'].' and mid='.$item['mid']);
+
+            //库存扣减
+            $data = array(
+                'mstock'=>  $result['mstock'] + $item['out_num'],
+            );
+
+            $res = $GLOBALS['db']->autoExecute('fanwe_cangku_menu',$data,'update','id='. $result['id']);
+        }
+
+        //更新单据状态
+        $sql = "update fanwe_cangku_outbound set isdisable=1 where id=$djid";
+        $res = $GLOBALS['db']->query($sql);
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+
+        if($res){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "操作失败";
+        }
+        echo json_encode($return);exit;
+
+    }
+
 
     /**
      * 查询库存信息
