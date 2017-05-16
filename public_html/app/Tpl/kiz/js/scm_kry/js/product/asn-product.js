@@ -12,13 +12,13 @@ var asnProduct = {
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '&act=basic_product_index_ajax',
-        editUrl : '&act=basic_product_index_edit',
-        deleteUrl :'&act=basic_product_index_del',
+        queryUrl : '&act=basic_product_index_ajax&type=1',
+        editUrl : '&act=basic_product_index_edit&type=1',
+        deleteUrl :'&act=go_down_delete_ajax&type=1',
         viewUrl : '&act=basic_product_index_view',
-        printUrl : '&act=basic_product_index_print',
-        confirmUrl :  '&act=basic_product_index_confirm',
-        withdrawUrl :  '&act=basic_product_index_withdraw',
+        printUrl: '&act=go_down_print_view',
+        confirmUrl : '&act=go_down_doconfirm&type=1',
+        withdrawUrl : '&act=go_down_withdraw&type=1',
         sortName : 'code',
         pager : '#gridPager',
         _now : new Date(),
@@ -286,7 +286,11 @@ var asnProduct = {
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showView = function (rowData) {
@@ -294,15 +298,23 @@ var asnProduct = {
         };
 
         $.showConfirm = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showWithDraw = function(rowData){
-            return renderEnum.hidden;
+            if(rowData.isdisable == 2){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -365,36 +377,35 @@ var asnProduct = {
             showOperate: true,
             actionParam: {
                 editor: {
-                    url: inventoryPath + _this.opts.editUrl,
+                    url: productPath + _this.opts.editUrl,
                     // code: "scm:button:inventory:si:edit",
                     render: $.showEditor
                 },
                 view: {
-                    url: inventoryPath + _this.opts.viewUrl,
+                    url: productPath + _this.opts.viewUrl,
                     render: $.showView
                 },
                 confirm: {
-                    url: inventoryPath + _this.opts.confirmUrl,
+                    url: ctxPath + _this.opts.confirmUrl,
                     // code: "scm:button:inventory:si:confirm",
                     render: $.showConfirm
                 },
                 withdraw: {
-                    url:inventoryPath + _this.opts.withdrawUrl,
+                    url:ctxPath + _this.opts.withdrawUrl,
                     // code: "scm:button:inventory:si:withdraw",
-                    render: $.showWithDraw,
-                    redirectUrl: _this.opts.urlRoot + _this.opts.editUrl
+                    render: $.showWithDraw
                 },
                 delete: {
-                    url: inventoryPath + _this.opts.deleteUrl,
+                    url: ctxPath + _this.opts.deleteUrl,
                     // code: "scm:button:inventory:si:delete",
                     render: $.showDelete
                 },
                 print: {
-                    url: inventoryPath + _this.opts.printUrl,
+                    url: productPath + _this.opts.printUrl,
                     render: $.showPrint
                 },
                 copy: {
-                    url: inventoryPath + _this.opts.copyUrl,
+                    url: productPath + _this.opts.copyUrl,
                     // code: "scm:button:inventory:si:add",
                     render: $.showCopy
                 }

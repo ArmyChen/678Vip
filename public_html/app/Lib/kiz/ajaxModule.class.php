@@ -4818,6 +4818,7 @@ class ajaxModule extends KizBaseModule{
 
         $where = " where 1=1 ";
         $templateId = $_REQUEST['templateId'];
+        $warehouseId = $_REQUEST['warehouseId'];
         if($templateId){
             $where .=" and id=$templateId";
         }
@@ -4830,7 +4831,7 @@ class ajaxModule extends KizBaseModule{
         $lossAmount = 0;
         $dd_detail = [];
         foreach (unserialize($row['accept_goods']) as $key=>$item) {
-            $value = $GLOBALS['db']->getRow("select * from fanwe_cangku_menu where mid=".$item['id']);
+            $value = $GLOBALS['db']->getRow("select * from fanwe_cangku_menu where cid=".$warehouseId." and mid=".$item['id']);
 //var_dump($item);
             $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
             if (!empty($typeName)){
