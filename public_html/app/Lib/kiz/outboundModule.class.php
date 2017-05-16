@@ -38,7 +38,9 @@ class outboundModule extends KizBaseModule
         init_app_page();
         $id=$_REQUEST['id'];
         $sql = "select * from fanwe_cangku_outbound_stat where djid=".$id;
+        $sql2 = "select * from fanwe_cangku_outbound where id=".$id;
         $detail = $GLOBALS['db']->getAll($sql);
+        $result = $GLOBALS['db']->getRow($sql2);
         $datailinfo = array();
         foreach($detail as $k=>$v){
             $datailinfo[$k]['id'] = $v['mid'];//24733
@@ -49,15 +51,15 @@ class outboundModule extends KizBaseModule
             $datailinfo[$k]['skuName'] = $v['mname'];
             $datailinfo[$k]['uom'] = $v['unit'];
             $datailinfo[$k]['price'] = $v['mprice'];
-            $datailinfo[$k]['actualQty'] = $v['num'];
             $datailinfo[$k]['amount'] = $v['mprice']* $v['out_num'];
             $datailinfo[$k]['standardInventoryQty'] = $v['out_num'];
-            $datailinfo[$k]['inventoryQty'] = $v['out_num'];
+            $datailinfo[$k]['planQty'] = $v['out_num'];
+            $datailinfo[$k]['reasonId'] = $v['out_reason'];
 
         }
-
+//var_dump($result);
         $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
-        $GLOBALS['tmpl']->assign("result", $datailinfo);
+        $GLOBALS['tmpl']->assign("result", $result);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("reason2",  json_encode(parent::get_basic_reason_list(0,2)));
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());

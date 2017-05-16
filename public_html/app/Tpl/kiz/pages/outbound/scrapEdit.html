@@ -43,7 +43,7 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="outboundNoView"
-                                           name="outboundNoView" value=""
+                                           name="outboundNoView" value="{$result.danjuhao}"
                                            placeholder="系统生成单据号" data-type="word" maxlength="14"
                                            disabled/>
                                 </div>
@@ -61,7 +61,7 @@
 
                                         {foreach from=$cangkulist item=item}
 
-                                        <option value="{$item.id}"  {if $ywsortid eq $item.id} selected="selected" {/if}>{$item.name}</option>
+                                        <option value="{$item.id}"  {if $result.cangku_id eq $item.id} selected="selected" {/if}>{$item.name}</option>
 
                                         {/foreach}
 

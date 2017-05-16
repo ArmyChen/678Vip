@@ -4889,4 +4889,69 @@ class ajaxModule extends KizBaseModule{
         $return['details'] = $dd_detail;
         echo json_encode($return);exit;
     }
+
+    /**
+     * 删除报废单
+     */
+    public function outbound_scrap_del(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $sql = "select * from fanwe_cangku_outbound where id=$id";
+        $res = $GLOBALS['db']->getRow($sql);
+        if(!empty($res['isdisable']) && $res['isdisable'] == 2){
+
+            //查询入库记录
+            $sql = "select * from fanwe_cangku_outbound_stat where djid=".$id;
+            $detail = $GLOBALS['db']->getAll($sql);
+            //更新仓库
+            $amount = 0;//总金额
+
+            foreach($detail as $k=>$v){
+                if (intval($v['mid'])==0){
+                    continue;
+                }
+                $mid=$v['mid'];
+                $cid=$v['cid'];
+                $sqlstr="where slid=$slid and mid=$mid and cid=$cid";
+                $order_num=floatval($v['out_num']);
+
+                $cate_id=$v['cate_id'];
+                $unit_type=intval($v['unit_type']);
+                if ($unit_type==1){  //使用的是副单位
+                    $order_num=$order_num*$v['times']; //换算成主单位
+                }
+
+                //存在的话更新数量
+                $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock+$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+
+                //
+                $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock+$order_num where id=".$mid);
+
+
+                $amount += $order_num*$v['price'];
+            }
+        }
+        $sql = "delete from fanwe_cangku_outbound where id=$id";
+        $sql2 = "delete from fanwe_cangku_outbound_stat where djid=$id";
+        $res = $GLOBALS['db']->query($sql);
+        $res = $GLOBALS['db']->query($sql2);
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        if($res){//成功
+            $return['success'] = true;
+            $return['message'] = '保存成功';
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = '保存失败';
+        }
+
+        echo json_encode($return);exit;
+    }
 }
