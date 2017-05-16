@@ -96,7 +96,7 @@
     var editUrl = outboundPath + "&act=outbound_scrap_edit";
     var withDrawUrl = urlRoot + "&act=outbound_scrap_withdraw";
     var deleteUrl = urlRoot + "delete";
-    var viewUrl = urlRoot + "view";
+    var viewUrl = outboundPath + "&act=outbound_scrap_view";
     var confirmUrl = urlRoot + "&act=outbound_scrap_doconfirm";
     var copyUrl = urlRoot + "copy";
 
@@ -119,7 +119,11 @@
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showView = function (rowData) {
@@ -143,7 +147,7 @@
         };
 
         $.showDelete = function (rowData) {
-            return renderEnum.hidden;
+            return renderEnum.normal;
         };
 
         $.showPrint = function (rowData) {
@@ -158,8 +162,9 @@
             formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url: queryUrl,
-            colNames: ['单据号', '日期', '仓库id', '出库仓库', '报废数量', '报废金额', '状态', '状态'],
+            colNames: ['id','单据号', '日期', '仓库id', '出库仓库', '报废数量', '报废金额', '状态', '状态'],
             colModel: [
+                {name: 'id', index: 'id', width: 160, align: "center"},
                 {name: 'danjuhao', index: 'danjuhao', width: 160, align: "center"},
                 {name: 'datetime', index: 'datetime', width: 160, align: "center"},
                 {name: 'cangku_id', index: 'cangku_id', width: 160,hidden:true},

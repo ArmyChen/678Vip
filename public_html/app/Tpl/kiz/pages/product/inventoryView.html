@@ -34,7 +34,7 @@
                             <dd class="positionRelative">
                                 <div class="pull-left w240">
                                     <input type="text" class="form-control" id="asnNoView"
-                                           name="asnNoView" value=""
+                                           name="asnNoView" value="{$result.danjuhao}"
                                            placeholder="请输入单据号" data-type="word" maxlength="14" required
                                     />
 
@@ -92,7 +92,7 @@
 
                                         {foreach from=$cangkulist item=item}
 
-                                        <option value="{$item.id}" {if $result[ywsort] eq $item.id} selected="selected" {/if}>{$item.name}</option>
+                                        <option value="{$item.id}" {if $ywsortid eq $item.id} selected="selected" {/if}>{$item.name}</option>
 
                                         {/foreach}
 
@@ -139,7 +139,7 @@
                                 <TEXTAREA id="remarks" name="remarks" class="w240" style="height: 65px;"
                                           placeholder="备注说明（可不填）" data-character="true"
                                           onpropertychange="if(value.length > 48) value=value.substr(0,48)"
-                                          oninput="if(value.length > 48) value=value.substr(0,48)"></TEXTAREA>
+                                          oninput="if(value.length > 48) value=value.substr(0,48)">{$result.memo}</TEXTAREA>
                                 </div>
                                 <div class="wrong"></div>
                             </dd>

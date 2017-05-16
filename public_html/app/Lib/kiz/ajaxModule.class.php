@@ -3767,7 +3767,6 @@ class ajaxModule extends KizBaseModule{
         if($djid){
             $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound",$data_danju,"UPDATE","id='$djid'");
         }
-
         //插入Stat数据
         foreach ($data_stat as $value){
             $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_outbound_stat",$value);
