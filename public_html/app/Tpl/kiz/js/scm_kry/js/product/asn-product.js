@@ -13,12 +13,12 @@ var asnProduct = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=basic_product_index_ajax',
-        editUrl : '&act=go_down_index_view',
-        deleteUrl :'&act=go_down_delete_ajax',
-        viewUrl : '&act=go_down_index_view',
-        printUrl : '&act=go_down_print_view',
-        confirmUrl : '/doconfirm',
-        withdrawUrl : '/withdraw',
+        editUrl : '&act=basic_product_index_edit',
+        deleteUrl :'&act=basic_product_index_del',
+        viewUrl : '&act=basic_product_index_view',
+        printUrl : '&act=basic_product_index_print',
+        confirmUrl :  '&act=basic_product_index_confirm',
+        withdrawUrl :  '&act=basic_product_index_withdraw',
         sortName : 'code',
         pager : '#gridPager',
         _now : new Date(),
@@ -34,7 +34,8 @@ var asnProduct = {
         savedGridData : [],
         skuTypeNameDivId : 'skuTypeNameDiv',
         dataGridCal: new Object(),
-        loginAsBrand: false
+        loginAsBrand: false,
+        ccModel: 1,
     },
 
     //初始化
@@ -196,10 +197,11 @@ var asnProduct = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['id','skuId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '入库数', '入库金额', '当前库存', '换算率', '标准单位换算率', '标准价格', '标准单位ID', '标准单位','当前库存（隐藏）'],
+            colNames: ['id','skuId', 'skuTypeId', '所属分类', '商品编码', '商品名称(规格)', '单位', '价格', '入库数', '入库金额', '当前库存', '换算率', '标准单位换算率', '标准价格', '标准单位ID', '标准单位','当前库存（隐藏）'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: true, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
+                {name: 'skuTypeId', index: 'skuTypeId', hidden: true, width: 80, sortable: !editable},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
@@ -463,3 +465,73 @@ function updaterNameFormatter(cellvalue, options, rowObject) {
         return cellvalue;
     }
 }
+
+//=========================task template begin=============================
+//盘点模板下拉选中事件
+var isCancel = false,lastChoice = -1;
+$("#product_mb_id").on("change",function(){
+
+    //重置触发控制
+    if(isCancel){
+        isCancel = false;
+        return false;
+    }
+    var templateId = $(this).val(),
+        warehouseId = $("#warehouseId").val(),
+        ccModel = $("#ccModel").val(),
+        msg=templateId=="-1"?'不选模板，则盘点仓库内的所有商品，确定执行？':'选择此模板将清除原有商品，确定选择该模板？';
+
+    layer.confirm(msg, {icon:3, offset: '30%'} , function(index){
+        $.ajax({
+            url: ctxPath + "&act=product_template_info",
+            type: "post",
+            data: {warehouseId: warehouseId,templateId:templateId,ccModel: ccModel},
+            dataType: 'json',
+            async: false,
+            success: function(result){
+                var grid = $("#grid");
+                if(result.success == false){
+//             	            grid.jqGrid("clearGridData");
+//             	            $("#inventoryAmountSum,#ccAmountSum,#profitAmountSum,#lossAmountSum").html("");
+                    $.layerMsg(result.message, false, {
+                        shade: 0.3,
+                        end: function() {
+                            isCancel = true;
+                            restTemplate(lastChoice);//重置为上一个
+                        }
+                    });
+                    return false;
+                }
+
+                lastChoice = templateId;
+
+                asnProduct.reloadGrid(result.details);
+
+                $('#inventoryAmountSum').text("￥" + result.inventoryAmount);
+                $('#ccAmountSum').text("￥" + result.ccAmount);
+                $('#profitAmountSum').text("￥" + result.profitAmount);
+                $('#lossAmountSum').text("￥" + result.lossAmount);
+//                    cctask.updateRealTimeQty();//实实库存
+            },
+            error:function(xhr, status, error){/* do nothing */}
+        });
+        layer.close(index);
+    }, function(index){
+        isCancel = true;
+        restTemplate(lastChoice);//重置为上一个
+        layer.close(index);
+        return false;
+    });
+});
+
+//重置为上一个模板选择
+function restTemplate(lastChoice){
+    var target = $("#templateId"),tpArray = target.find("option"),tpLi = target.parent().find("ul li");
+    for(var i = 0;i<tpArray.length;i++){
+        if($(tpArray[i]).val()==lastChoice){
+            $(tpLi[i]).click();
+            return false;
+        }
+    }
+}
+//=========================task template end=============================

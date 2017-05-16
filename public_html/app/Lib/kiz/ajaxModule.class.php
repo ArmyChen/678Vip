@@ -4670,29 +4670,6 @@ class ajaxModule extends KizBaseModule{
                     $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu", $data_menu ,"INSERT");
                 }
 
-                //写入库商品明细
-//                $gonghuoren=$GLOBALS['db']->getOne("select gid from fanwe_cangku_bangding_gys where slid=$slid and mid=$mid"); //取得绑定的供应商
-//                if(!$cid){
-//                    $gonghuoren='linshi_3'; //临时供应商3
-//                }
-//                if($gys){
-//                    $data_gys=array(
-//                        "slid"=>$slid,
-//                        "mid"=>$mid,
-//                        "cid"=>$cid,
-//                        "mbarcode"=>$v['skuCode'],
-//                        "mname"=>$v['skuName'],
-//                        "stock"=>$order_num,
-//                        "gonghuoren"=>$gys,
-//                        "unit"=>$v['uom'],
-//                        "funit"=>$v['funit'],
-//                        "times"=>$v['times'],
-//                        "type"=>$v['type'],
-//                        "price"=>floatval($v['price']),
-//                        "ctime"=>to_date(NOW_TIME)
-//                    );
-//                    $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
-//                }
                 $data_gys=array(
                     "slid"=>$slid,
                     "mid"=>$mid,
@@ -4712,6 +4689,7 @@ class ajaxModule extends KizBaseModule{
                 );
                 $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_menu_gys", $data_gys ,"INSERT");
             }else{ //出库
+
                 $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
                 $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
 
@@ -4729,22 +4707,13 @@ class ajaxModule extends KizBaseModule{
 
         //采购入库出库单
         //采购入库单url封装
-        if(!empty($bumen)){
-            //采购扣减库存，部门领料实际已经将商品出库
-            $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
-            if($order_num>$check['mstock']){
-                $return['flag'] = null;
-                $return['exception'] = null;
-                $return['refresh'] = false;
-                $return['success'] = false;
-                $return['message'] ="库存不足,非法提交！";
-                echo json_encode($return);exit;
-            }else{//操作减库存
-                $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
-            }
-
-            $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
-        }
+//        if(!empty($bumen)){
+//            //采购扣减库存，部门领料实际已经将商品出库
+//            $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
+//            $res=$GLOBALS['db']->query("update ".DB_PREFIX."cangku_menu set mstock=mstock-$order_num,ctime='".to_date(NOW_TIME)."' ".$sqlstr);
+//
+//            $res=$GLOBALS['db']->query("update ".DB_PREFIX."dc_menu set stock=stock-$order_num where id=".$mid);
+//        }
 
         //更新单据状态
         $sql = "update fanwe_cangku_log set isdisable=$disabled where id=$id";
@@ -4839,6 +4808,85 @@ class ajaxModule extends KizBaseModule{
             $return['message'] = '保存失败';
         }
 
+        echo json_encode($return);exit;
+    }
+
+    //根据模板id获得生产单信息
+    public function product_template_info()
+    {
+        init_app_page();
+
+        $where = " where 1=1 ";
+        $templateId = $_REQUEST['templateId'];
+        if($templateId){
+            $where .=" and id=$templateId";
+        }
+        $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_product_mb $where");
+
+
+        $inventoryAmount = 0;
+        $ccAmount = 0;
+        $profitAmount = 0;
+        $lossAmount = 0;
+        $dd_detail = [];
+        foreach (unserialize($row['accept_goods']) as $key=>$item) {
+            $value = $GLOBALS['db']->getRow("select * from fanwe_cangku_menu where mid=".$item['id']);
+//var_dump($item);
+            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
+            if (!empty($typeName)){
+                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
+            }else{
+                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
+            }
+            $dd_detail[$key]['id'] = $value['id'];
+            $dd_detail[$key]['skuId'] = $value['mid'];
+            $dd_detail[$key]['skuTypeId'] = $value['cate_id'];
+            $dd_detail[$key]['skuCode'] = $value['mbarcode'];
+            $dd_detail[$key]['skuName'] = $value['mname'];
+            $dd_detail[$key]['uom'] = $value['unit'];
+            $dd_detail[$key]['price'] = $item['price'];
+            $dd_detail[$key]['inventoryQty'] = $value['mstock'];
+            $dd_detail[$key]['actualQty'] = 0;
+            $dd_detail[$key]['realTimeInventory'] = $value['mstock'];
+            $dd_detail[$key]['ccQty'] = $value['mstock'];
+            $dd_detail[$key]['qtyDiff'] = 0;
+            $dd_detail[$key]['amountDiff'] = 0;
+            $dd_detail[$key]['remarks'] = '';
+            $dd_detail[$key]['amount'] = 0;
+            $dd_detail[$key]['relTimeAmount'] = 0;
+            $dd_detail[$key]['alreadyData'] = 1;
+            $dd_detail[$key]['remarks'] ='';
+            $dd_detail[$key]['djid'] = $_REQUEST['id'];
+            $dd_detail[$key]['skuConvert'] = '';
+            $dd_detail[$key]['skuConvertOfStandard'] = '';
+            $dd_detail[$key]['standardPrice'] = '';
+            $dd_detail[$key]['standardUnitId'] = '';
+            $dd_detail[$key]['standardUnitName'] = '';
+            $dd_detail[$key]['standardInventoryQty'] =$value['mstock'];
+
+            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
+            $ccAmount +=  $dd_detail[$key]['ccAmount'];
+        }
+
+//        $return['flag'] = null;
+//        $return['exception'] = null;
+//        $return['refresh'] = false;
+//        $return['success'] = true;
+//        $return['message'] = '';
+//        $return['result'] = $dd_detail;
+        $return['inventoryAmount'] = $inventoryAmount;
+        $return['amount'] = $ccAmount;
+        if($ccAmount>0){
+            $return['profitAmount'] = $ccAmount;
+            $return['lossAmount'] = 0;
+        }else{
+            $return['profitAmount'] = 0;
+            $return['lossAmount'] = $ccAmount;
+        }
+
+
+
+        $return['details'] = $dd_detail;
         echo json_encode($return);exit;
     }
 }
