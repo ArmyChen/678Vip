@@ -863,16 +863,116 @@ class ajaxModule extends KizBaseModule{
 
 //        if($res1 && $res2){
         $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain);  //写入调拨记录
-        //写出库记录
-        $datain['ywsort']=5; //仓库调拨
-        $datain['gonghuoren']='cangku_'.$cidtwo;
-        unset($datain['cidtwo']); //销毁入库的仓库ID
-        $datain['type']=2;
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
-        $datain['cid']=$cidtwo;
-        $datain['type']=1;
-        $datain['gonghuoren']='cangku_'.$cid;
-        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
+//        //写出库记录
+//        $datain['ywsort']=5; //仓库调拨
+//        $datain['gonghuoren']='cangku_'.$cidtwo;
+//        unset($datain['cidtwo']); //销毁入库的仓库ID
+//        $datain['type']=2;
+//        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+//        $datain['cid']=$cidtwo;
+//        $datain['type']=1;
+//        $datain['gonghuoren']='cangku_'.$cid;
+//        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
+//        }else{
+//            $return['success'] = false;
+//            $return['message'] = "查无结果！";
+//        }
+        echo json_encode($return);exit;
+    }
+
+
+    /**
+     * 调拨ajax
+     */
+    public function edit_diaobo_saving_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $disable = 1;
+
+        $datailinfo = array();
+        foreach($_REQUEST['details'] as $k=>$v){
+            $datailinfo[$k]['mid'] = $v['skuId'];
+            $datailinfo[$k]['cate_id'] = $v['skuTypeId'];
+            $datailinfo[$k]['unit'] = $v['uom'];
+            $datailinfo[$k]['funit'] = $v['funit'];
+            $datailinfo[$k]['times'] = $v['times'];
+            $datailinfo[$k]['yuan_price'] = $v['price'];
+            $datailinfo[$k]['name'] = $v['skuName'];
+            $datailinfo[$k]['barcode'] = $v['skuCode'];
+            $datailinfo[$k]['type'] = $v['type'];
+            $datailinfo[$k]['unit_type'] = $v['unit_type'];
+            $datailinfo[$k]['price'] = $v['price'];
+            $datailinfo[$k]['num'] = $v['planMoveQty'];
+            $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
+            $datailinfo[$k]['zmoney'] = $v['uom'];
+            $datailinfo[$k]['memo'] = $v['memo'];
+        }
+        $dd_detail=serialize($datailinfo);
+        $cid=intval($_REQUEST['fromWmId']);
+        $cidtwo=intval($_REQUEST['toWmId']);
+
+        //更新仓库
+        $detail=$_REQUEST['details'];
+
+        $amount = 0;//总金额
+
+        foreach($detail as $k=>$v){
+            $mid=$v['skuId'];
+            $order_num=floatval($v['planMoveQty']);
+            $unit_type=intval($v['unit_type']);
+            if ($unit_type==1){  //使用的是副单位
+                $order_num=$order_num*$v['times']; //换算成主单位
+            }
+
+
+            $amount += $order_num*$v['price'];
+        }
+
+        $datain=$_REQUEST;
+        $datain['ctime']= time()+ 60*60*8;
+        $datain['dd_detail']=$dd_detail;
+        $datain['slid']=$slid;
+        $datain['type'] = $_REQUEST['type'];
+        $datain['danjuhao'] = to_date(NOW_TIME,"YmdHis").rand(4);
+        $datain['ywsort'] = $_REQUEST['senderId'];
+        $datain['cid'] = $_REQUEST['warehouseId'];
+        $datain['lihuo_user'] = $account_info['account_name'];
+        $datain['cid'] = $cid;
+        $datain['cidtwo'] = $cidtwo;
+        $datain['znum'] = $order_num;
+        $datain['zmoney'] = $amount;
+        $datain['zweight'] = 0.00;
+        $datain['ztiji'] = 0.00;
+        $datain['memo'] = $_REQUEST['memo']?$_REQUEST['memo']:"";
+        $datain['isdisable'] = $disable;
+
+        $return['flag'] = null;
+        $return['exception'] = null;
+        $return['refresh'] = false;
+        $return['success'] = true;
+        $return['message'] = '保存成功';
+        if ($_REQUEST['type']==1){ //入库
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
+        }else{
+            $return['data']['url'] = url("kiz","inventory#go_transfer_index&id=$slid");
+        }
+
+//        if($res1 && $res2){
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_diaobo", $datain,'update','id='.$id);  //写入调拨记录
+//        //写出库记录
+//        $datain['ywsort']=5; //仓库调拨
+//        $datain['gonghuoren']='cangku_'.$cidtwo;
+//        unset($datain['cidtwo']); //销毁入库的仓库ID
+//        $datain['type']=2;
+//        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+//        $datain['cid']=$cidtwo;
+//        $datain['type']=1;
+//        $datain['gonghuoren']='cangku_'.$cid;
+//        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
 //        }else{
 //            $return['success'] = false;
 //            $return['message'] = "查无结果！";
@@ -889,6 +989,7 @@ class ajaxModule extends KizBaseModule{
 
         $row = $GLOBALS['db']->getRow("select * from fanwe_cangku_diaobo where id=".$id);
         $details = unserialize($row['dd_detail']);
+//        var_dump($row);die;
         $cid = $row['cid'];
         $cidtwo = $row['cidtwo'];
 //var_dump($details);
@@ -934,6 +1035,34 @@ class ajaxModule extends KizBaseModule{
         $return['flag'] = null;
         $return['exception'] = null;
         $return['refresh'] = false;
+
+        //确认移库单的时候新增出入库记录
+        $datain=$details;
+        $datain['ctime']= time()+ 60*60*8;
+        $datain['dd_detail']=$row['dd_detail'];
+        $datain['slid']=$slid;
+        $datain['type'] = $row['type'];
+        $datain['danjuhao'] = to_date(NOW_TIME,"YmdHis").rand(4);
+        $datain['cid'] = $row['cid'];
+        $datain['lihuo_user'] = $row['lihuo_user'];
+        $datain['cid'] = $cid;
+        $datain['cidtwo'] = $cidtwo;
+        $datain['znum'] = $row['znum'];
+        $datain['zmoney'] = $row['zmoney'];
+        $datain['zweight'] = $row['zweight'];
+        $datain['ztiji'] = $row['ztiji'];
+        $datain['memo'] = $row['memo']?$row['memo']:"";
+        $datain['isdisable'] = 2;
+
+        $datain['ywsort']=5; //仓库调拨
+        $datain['gonghuoren']='cangku_'.$cidtwo;
+        unset($datain['cidtwo']); //销毁入库的仓库ID
+        $datain['type']=2;
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入出库记录
+        $datain['cid']=$cidtwo;
+        $datain['type']=1;
+        $datain['gonghuoren']='cangku_'.$cid;
+        $res=$GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain);  //写入入库记录
 
 
         if($res){//成功

@@ -481,7 +481,53 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->display("pages/inventory/goTransferAdd.html");
 
     }
+    /**
+     * 仓库移库查询
+     */
+    public function go_transfer_index_edit()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $slid = $account_info['slid'];
+        /*获取入库信息*/
+        $id = $_REQUEST['id'];
+        if($id > 0){
+            $sql = "select * from fanwe_cangku_diaobo where id=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+//var_dump($result);
+            $datailinfo = array();
+            foreach(unserialize($result['dd_detail']) as $k=>$v){
+                $datailinfo[$k]['id'] = $v['mid'];//24733
+                $datailinfo[$k]['skuId'] = $v['mid'];
+                $datailinfo[$k]['skuTypeId'] = $v['cate_id'];
+                $datailinfo[$k]['skuTypeName'] = empty($this->get_dc_supplier_menu($v['cate_id']))?"":$this->get_dc_supplier_menu($v['cate_id'])['name'];
+                $datailinfo[$k]['skuCode'] = $v['barcode'];
+                $datailinfo[$k]['skuName'] = $v['name'];
+                $datailinfo[$k]['uom'] = $v['unit'];
+                $datailinfo[$k]['price'] = $v['price'];
+                $datailinfo[$k]['planMoveQty'] = $v['num'];
+                $datailinfo[$k]['amount'] = $v['price']* $v['num'];
+                $datailinfo[$k]['standardInventoryQty'] = $v['ssnum'];
+                $datailinfo[$k]['inventoryQty'] = $v['num'];
 
+            }
+//var_dump($datailinfo);
+            $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
+            $GLOBALS['tmpl']->assign("result", $result);
+        }else{
+            $GLOBALS['tmpl']->assign("page_title", "移库单");
+            $GLOBALS['tmpl']->display("pages/inventory/goDown.html");
+        }
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
+        $GLOBALS['tmpl']->assign("page_title", "查看移库单");
+        $GLOBALS['tmpl']->display("pages/inventory/goTransferEdit.html");
+
+    }
     #入库单打印
     public function go_down_print_view(){
         init_app_page();

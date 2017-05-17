@@ -4,7 +4,7 @@ var transferOrder = {
     opts: {
         urlRoot: ctxPath,
         queryUrl: '&act=diaobo_list_ajax',
-        editUrl: '/edit',
+        editUrl: '&act=go_transfer_index_edit',
         deleteUrl: '/delete',
         viewUrl: '&act=go_transfer_index_view',
         printUrl: '&act=go_transfer_print_view',
@@ -89,7 +89,11 @@ var transferOrder = {
         };
 
         $.showEditor = function (rowData) {
-            return renderEnum.hidden;
+            if(rowData.isdisable == 1 || rowData.isdisable == ''){
+                return renderEnum.normal;
+            }else{
+                return renderEnum.hidden;
+            }
         };
 
         $.showView = function (rowData) {
@@ -151,7 +155,7 @@ var transferOrder = {
             showOperate: true,
             actionParam: {
                 editor: {
-                    url: _this.opts.urlRoot + _this.opts.editUrl,
+                    url: inventoryPath + _this.opts.editUrl,
                     code: "scm:button:inventory:transfer:edit",
                     render: $.showEditor
                 },
