@@ -1917,7 +1917,12 @@ class ajaxModule extends KizBaseModule{
             $row2 = $GLOBALS['db']->getAll($csql);
             $mtock = 0;
 //var_dump($row2);
+
+            if(empty($row2)){
+                $output['skuVOs'][$key]['titleVOs']=[];
+            }
             foreach ($row2 as $key2=>$item2) {
+
 //                var_dump($item2);
                 if($item['print'] != 3){
                     $price =$item['buyPrice'];

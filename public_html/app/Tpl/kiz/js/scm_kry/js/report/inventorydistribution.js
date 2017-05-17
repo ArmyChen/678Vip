@@ -262,8 +262,8 @@ var inventorydistribution = {
             var finalColModels = [];
 
             //每次仅获取前7列，即是商品基本信息所在的列
-            var fixedColNames = inventorydistribution.opts.gridOpts.colNames.slice(0, 7);
-            var fixedColModel = inventorydistribution.opts.gridOpts.colModel.slice(0, 7);
+            var fixedColNames = inventorydistribution.opts.gridOpts.colNames.slice(0, 6);
+            var fixedColModel = inventorydistribution.opts.gridOpts.colModel.slice(0, 6);
 
             var dynamicColNames = [],
                 dynamicColModel = [],
