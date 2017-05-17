@@ -303,7 +303,7 @@ class supplierModule extends KizBaseModule
     }
 
     /**
-     * 仓库采购退货编辑
+     * 仓库验收退货编辑
      */
     public function go_up_index_edit()	{
         init_app_page();
@@ -347,7 +347,7 @@ class supplierModule extends KizBaseModule
 
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
-            $GLOBALS['tmpl']->assign("page_title", "采购退货单");
+            $GLOBALS['tmpl']->assign("page_title", "验收退货单");
             $GLOBALS['tmpl']->display("pages/supplier/goUp.html");
         }
 
@@ -360,7 +360,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign('bumen',parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
-        $GLOBALS['tmpl']->assign("page_title", "编辑采购退货单");
+        $GLOBALS['tmpl']->assign("page_title", "编辑验收退货单");
         $GLOBALS['tmpl']->display("pages/supplier/goUpEdit.html");
 
     }
@@ -406,7 +406,7 @@ class supplierModule extends KizBaseModule
             $GLOBALS['tmpl']->assign("dd_detail", json_encode($datailinfo));
             $GLOBALS['tmpl']->assign("result", $result);
         }else{
-            $GLOBALS['tmpl']->assign("page_title", "采购退货单");
+            $GLOBALS['tmpl']->assign("page_title", "验收退货单");
             $GLOBALS['tmpl']->display("pages/supplier/goDown.html");
         }
 
@@ -415,7 +415,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("id",$_REQUEST['id']);
-        $GLOBALS['tmpl']->assign("page_title", "查看采购退货单");
+        $GLOBALS['tmpl']->assign("page_title", "查看验收退货单");
         $GLOBALS['tmpl']->display("pages/supplier/goUpView.html");
 
     }
@@ -484,7 +484,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("end_time", $end_time);
         $GLOBALS['tmpl']->assign("slid", $location_id);
         $GLOBALS['tmpl']->assign("danjuhao", $_REQUEST['danjuhao']);
-        $GLOBALS['tmpl']->assign("page_title", "采购退货单");
+        $GLOBALS['tmpl']->assign("page_title", "验收退货单");
         $GLOBALS['tmpl']->display("pages/supplier/goUp.html");
 
     }
@@ -505,7 +505,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("gys", parent::get_gys_list($slid));
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
-        $GLOBALS['tmpl']->assign("page_title", "采购退货单");
+        $GLOBALS['tmpl']->assign("page_title", "验收退货单");
         $GLOBALS['tmpl']->display("pages/supplier/goUpAdd.html");
 
     }
@@ -562,7 +562,7 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/supplier/goDownPrint.html");
     }
 
-    #采购退货单打印
+    #验收退货单打印
     public function go_up_print_view(){
         init_app_page();
         $account_info = $GLOBALS['account_info'];
@@ -608,8 +608,8 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("dd_detail", $datailinfo);
         $GLOBALS['tmpl']->assign("result", $result);
 
-        $GLOBALS['tmpl']->assign("page_title", "打印采购退货单");
-        $GLOBALS['tmpl']->assign("header", $slname."采购退货单");
+        $GLOBALS['tmpl']->assign("page_title", "打印验收退货单");
+        $GLOBALS['tmpl']->assign("header", $slname."验收退货单");
         $GLOBALS['tmpl']->assign("printType", $printType);
         $GLOBALS['tmpl']->display("pages/supplier/goDownPrint.html");
     }

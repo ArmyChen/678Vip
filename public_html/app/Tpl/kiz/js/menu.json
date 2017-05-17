@@ -883,7 +883,7 @@
         "code": "scm:purchase:return:query#",
         "id": 1273,
         "levelId": "001001001",
-        "name": "采购退货单",
+        "name": "验收退货单",
         "parentId": 1257,
         "platform": 3,
         "sort": 40,

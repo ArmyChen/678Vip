@@ -2310,7 +2310,7 @@ class ajaxModule extends KizBaseModule{
                             if($item['type']==1){
                                 $type = '验收入库单';
                             }elseif($item['type']==2){
-                                $type = '采购退货单';
+                                $type = '验收退货单';
                             }else{
                                 $type = '其他';
                             }
@@ -2339,7 +2339,7 @@ class ajaxModule extends KizBaseModule{
                         if($item['type']==1){
                             $type = '验收入库单';
                         }elseif($item['type']==2){
-                            $type = '采购退货单';
+                            $type = '验收退货单';
                         }else{
                             $type = '其他';
                         }
