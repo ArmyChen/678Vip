@@ -180,7 +180,7 @@
     "code": "scm:purchase:asn:query#",
     "id": 1272,
     "levelId": "001001001",
-    "name": "采购入库单",
+    "name": "验收入库单",
     "parentId": 1257,
     "platform": 7,
     "sort": 30,

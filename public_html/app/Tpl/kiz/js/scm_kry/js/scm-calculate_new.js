@@ -96,7 +96,7 @@
         cellCalculate: function (formulas, cellObj, grid) {
             var mathRepair = this.mathRepair;
 
-            //采购入库单与采购出库单，可输入总价格
+            //验收入库单与采购出库单，可输入总价格
             if(formulas[0].result == 'price'){
                 if(cellObj.name == 'amount'){
                     formulas = [formulas[0],formulas[2]];

@@ -450,7 +450,7 @@ class ajaxModule extends KizBaseModule{
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
 
-        //采购入库单信息
+        //验收入库单信息
         $time = $_REQUEST['time'];
         $gys = $_REQUEST['gys'];
 
@@ -501,7 +501,7 @@ class ajaxModule extends KizBaseModule{
             }
         }
         //采购入库出库单
-        //采购入库单url封装
+        //验收入库单url封装
         if(!empty($bumen)){
             //新增出库记录
             $datailinfo = array();
@@ -528,7 +528,7 @@ class ajaxModule extends KizBaseModule{
 
             $datainGys=$_REQUEST;
 
-            //采购入库单信息
+            //验收入库单信息
             $time = $_REQUEST['time'];
             $gys = $_REQUEST['gys'];
 
@@ -603,7 +603,7 @@ class ajaxModule extends KizBaseModule{
         //if($unit_type==9){$unit_type==0;}
         $datain=$_REQUEST;
 
-        //采购入库单信息
+        //验收入库单信息
         $time = $_REQUEST['time'];
         $gys = $_REQUEST['gys'];
 
@@ -654,7 +654,7 @@ class ajaxModule extends KizBaseModule{
             }
         }
         //采购入库出库单
-        //采购入库单url封装
+        //验收入库单url封装
         if(!empty($bumen)){
             //新增出库记录
             $datailinfo = array();
@@ -681,7 +681,7 @@ class ajaxModule extends KizBaseModule{
 
             $datainGys=$_REQUEST;
 
-            //采购入库单信息
+            //验收入库单信息
             $time = $_REQUEST['time'];
             $gys = $_REQUEST['gys'];
 
@@ -2308,7 +2308,7 @@ class ajaxModule extends KizBaseModule{
                         if(strpos($gys, $supplier) !==false){
                             $category =parent::get_dc_current_supplier_cate($row['cate_id']);
                             if($item['type']==1){
-                                $type = '采购入库单';
+                                $type = '验收入库单';
                             }elseif($item['type']==2){
                                 $type = '采购退货单';
                             }else{
@@ -2337,7 +2337,7 @@ class ajaxModule extends KizBaseModule{
                     }else{
                         $category =parent::get_dc_current_supplier_cate($row['cate_id']);
                         if($item['type']==1){
-                            $type = '采购入库单';
+                            $type = '验收入库单';
                         }elseif($item['type']==2){
                             $type = '采购退货单';
                         }else{
@@ -4839,7 +4839,7 @@ class ajaxModule extends KizBaseModule{
         }
 
         //采购入库出库单
-        //采购入库单url封装
+        //验收入库单url封装
 //        if(!empty($bumen)){
 //            //采购扣减库存，部门领料实际已经将商品出库
 //            $check=$GLOBALS['db']->getRow("select mstock from fanwe_cangku_menu ".$sqlstr);
