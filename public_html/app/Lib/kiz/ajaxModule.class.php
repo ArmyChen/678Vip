@@ -275,6 +275,101 @@ class ajaxModule extends KizBaseModule{
     }
 
     /**
+     * 部门领料列表ajax
+     */
+    public function go_bumen_index_ajax2(){
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
+        $warehouseId = $_REQUEST['warehouseId']?intval($_REQUEST['warehouseId']):'99';
+        $bumen = $_REQUEST['gonghuoren'];
+        $gys = $_REQUEST['gys'];
+        $status = $_REQUEST['status'];
+        if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当月的
+            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        $sqlstr="where a.gys is not null ";
+        $sqlstr.=' and ( a.slid='.$location_id.')';
+
+        if($begin_time_s){
+            $sqlstr .=" and a.ctime > ".$begin_time_s." ";
+        }
+        if($end_time_s){
+            $sqlstr .=" and a.ctime < ".$end_time_s." ";
+        }
+        if ($type !=99 ){
+            $sqlstr .=" and a.type = ".$type." ";
+        }
+        if ($warehouseId !=99 ){
+            $sqlstr .=" and a.cid = ".$warehouseId." ";
+        }
+        if ($ywsortid !=99 ){
+            $sqlstr .=" and a.ywsort = ".$ywsortid." ";
+        }
+        if ($bumen){
+            $sqlstr .=" and a.gonghuoren = '".$bumen."' ";
+        }
+        if ($gys){
+            $sqlstr .=" and a.gys = '".$gys."' ";
+        }
+        if ($status!=99){
+            $sqlstr .=" and a.type = ".$status." ";
+        }
+        if($_REQUEST['danjuhao'] !=""){
+            $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
+        }
+//        $sqlstr .=" and f.print <> 4";
+//        $sql2 = "select * from fanwe_cangku_log limit 1";
+//        var_dump($GLOBALS['db']->getRow($sql2));
+        $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc limit ".$limit;
+        $sqlrecords="select count(a.id) as tot from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc";
+//        var_dump($sql);
+        $return = array();
+        $records = $GLOBALS['db']->getOne($sqlrecords);
+        $list = $GLOBALS['db']->getAll($sql);
+//        var_dump($list);die;
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+
+        foreach($list as $k=>$v){
+            $v['ctime']=to_date($v['ctime'],'m-d H:i:s');
+            $v['detail']=unserialize($v['dd_detail']);
+
+            if ($v['type']==1){
+                $v['type_show']	='入库';
+                $v['gonghuo_show']	='供货人';
+            }else{
+                $v['type_show']	='出库';
+                $v['gonghuo_show']	='收货人';
+            }
+
+            $v['ywsort']=$this->ywsort[$v['ywsort']];
+            $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
+            $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
+            $list[$k]=$v;
+        }
+        $return['dataList'] = $list;
+        echo json_encode($return);exit;
+    }
+
+    /**
      * 商品搜索列表ajax
      */
     public function goods_list_ajax()

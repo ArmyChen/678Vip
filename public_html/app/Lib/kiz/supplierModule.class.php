@@ -613,7 +613,50 @@ class supplierModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("printType", $printType);
         $GLOBALS['tmpl']->display("pages/supplier/goDownPrint.html");
     }
+    ##部门领料明细
+    /**
+     * 仓库采购入库查询
+     */
+    public function go_bumen_index()	{
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+//        var_dump($account_info);die;
+        $supplier_id = $account_info['supplier_id'];
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $location_id = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        $type = $_REQUEST['type']?intval($_REQUEST['type']):'99';
+        $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
 
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当月的
+            $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
+            $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
+        }
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign("type", $type);
+        $GLOBALS['tmpl']->assign("begin_time", $begin_time);
+        $GLOBALS['tmpl']->assign("end_time", $end_time);
+        $GLOBALS['tmpl']->assign("gonghuoren", parent::get_bumen_list($slid));
+        $GLOBALS['tmpl']->assign("slid", $location_id);
+        $GLOBALS['tmpl']->assign("danjuhao", $_REQUEST['danjuhao']);
+        $GLOBALS['tmpl']->assign("page_title", "部门领料明细");
+        $GLOBALS['tmpl']->display("pages/supplier/goBumen.html");
+
+    }
 }
 
 ?>

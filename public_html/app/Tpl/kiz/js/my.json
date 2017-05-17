@@ -188,6 +188,17 @@
     "url": "act=go_up_index"
   },
   {
+    "code": "scm:purchase:return:query#",
+    "id": 1274,
+    "levelId": "001001001",
+    "name": "6-2-6-部门领料明细表",
+    "parentId": 1257,
+    "platform": 7,
+    "sort": 40,
+    "type": 1,
+    "url": "act=go_bumen_index"
+  },
+  {
     "code": "scm:scrap",
     "id": 1259,
     "levelId": "001001",
