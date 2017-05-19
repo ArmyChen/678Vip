@@ -1,0 +1,280 @@
+
+{include file="inc/header.html"}
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>账号列表</h1>
+
+        <div class="btn-wrap pull-right tar">
+            <!-- 当创建按钮包含btn-disabled 时 不能创建 -->
+            <a href="/mind/auth/userBrand/add" class="btn-link ml10"
+               id="creatBtn">创建</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="center-block w1200 mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form>
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2 id="reg-time">模糊查询</h2>
+
+                <div class="search-box">
+                    <input type="text" name="nameOrAccount" class="form-control" placeholder="账号、姓名" id="nameOrAccount">
+                    <button type="button" class="close" aria-hidden="true">×</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+            <!-- 角色 start -->
+            <div class="aside-column panel-search">
+                <h2>角色</h2>
+
+                <div>
+                    <select id="roleId">
+                        <option value="">请选择角色</option>
+
+                        <option value="56073">admin</option>
+
+                        <option value="58156">客户测试</option>
+
+                        <option value="59499">手机端</option>
+
+                        <option value="68792">分销商演示账号</option>
+
+                        <option value="69173">权限</option>
+
+                        <option value="74171">合伙人</option>
+
+                        <option value="74172">服务员</option>
+
+                        <option value="76101">收银</option>
+
+                        <option value="76488">qzy</option>
+
+                        <option value="77245">邹</option>
+
+                    </select>
+                </div>
+            </div>
+            <!-- 角色 end -->
+            <!-- 选择门店 start -->
+            <div class='aside-column multi-select  '>
+                <h2>选择门店</h2>
+                <div class="select-control"><em id="cmId-all-em"></em></div>
+                <div class="multi-select-con" style="display:none;">
+                    <ul class="multi-select-items" id="cmId-all-ul"></ul>
+                </div>
+                <input name="shopIds" id="indicatorsSelect1" type="hidden" value="" />
+            </div>
+            <!-- 选择门店 end -->
+            <a class="btn-blue btn-search" role="button" onclick="queryByCondition()">查 询</a>
+        </form>
+    </div>
+    <!-- 左栏 end -->
+    <!-- 右栏 start -->
+    <div class="main">
+        <p>
+            <font size="2" face="Verdana" color="red">
+                注：所有账号 登入后台初始密码为：kry888，登入收银设备初始密码为：888888
+            </font>
+        </p>
+        <div class="panel" style="margin-bottom: 0;">
+            <div class="panel-body" style="padding: 0 20px;">
+                <table id="grid"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/mind/js/bootstrap/js/bootstrap.js"></script>
+<script src="/mind/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/mind/js/umeditor/umeditor.config.js"></script>
+<script src="/mind/js/umeditor/umeditor.min.js"></script>
+<script src="/mind/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/mind/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/mind/js/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script src="/mind/js/jquery-json-2.4.js"></script>
+<script src="/mind/js/jquery.validate/jquery.validate.js"></script>
+<script src="/mind/js/jquery.validate/additional_methods.js"></script>
+<script src="/mind/js/jquery.validate/jquery.metadata.js"></script>
+<script src="/mind/js/jquery.validate/messages_cn.js"></script>
+<!--  <script src="/mind/js/jquery.validate/cmxform.css"></script>-->
+<!-- jqgrid start -->
+
+<script src="/mind/js/plugins/jqGrid/jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
+<script src="/mind/js/plugins/jqGrid/jqGrid-4.4.3/js/i18n/grid.locale-cn.js"></script>
+<script src="/mind/js/plugins/jqGrid/dataGrid.js"></script>
+
+
+<!-- jqgrid end -->
+<!--[if lt IE 10]>
+<script src="/mind/js/JPlaceholder.js"></script>
+<![endif]-->
+<script src="/mind/js/bkeruyun.js?version=5.18"></script>
+<script src="/mind/js/messageBox.js"></script>
+<script src="/mind/js/ajaxfileupload-2.1GD.js"></script>
+<script src="/mind/js/pageQuery.js"></script>
+<script src="/mind/js/netUtil.js"></script>
+<!--[if IE]>
+<script src="/mind/js/ie.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    <!--
+    var ctxPath="/mind";
+    var ctxFullPath="http://b.keruyun.com:80/mind";
+    var _loginUrl='http://b.keruyun.com';
+    //-->
+</script>
+
+<script type="text/html" id="tmp-bkeruyun-multipleCheck">
+    <div class="multiple-select" style="position: relative;">
+        <div class="select-control"><em id="{{containerId}}-em">{{checkAllObj.name}}</em></div>
+        <div class="multiple-select-con multi-select-con" style="top:32px;display: none;">
+            <ul class="multiple-select-items" id="{{containerId}}-ul">
+                <li>
+                    <label class="checkbox checkbox-check" for="{{containerId}}-check-all">
+                        <span></span>
+                        <input type="checkbox" checked="checked" name="{{containerId+'-check-all'}}" id="{{containerId}}-check-all"
+                               data-text="{{checkAllObj.name}}">{{#checkAllObj.name}}
+                    </label>
+                </li>
+                {{each list as item index}}
+                <li>
+                    <label class="checkbox checkbox-check" for="{{containerId+'-item-'+index}}">
+                        <span></span>
+                        <input type="checkbox" name="{{containerId+'-item'}}" id="{{containerId+'-item-'+index}}"  data-checked-all="{{containerId}}-check-all"
+                               checked="checked" value="{{item.value}}"  data-value="{{item.value}}" data-text="{{item.name}}">{{#item.name}}
+                    </label>
+                    {{if item.children}}
+                    <ul class="sub-items" style="width: 89%;margin-left: 10%;">
+                        {{each item.children as subItem subIndex}}
+                        <li class="sub-item">
+                            <label class="checkbox checkbox-check" for="{{containerId+'-item-'+index+'-sub-'+subIndex}}">
+                                <span></span>
+                                <input type="checkbox" name="{{containerId+'-item'}}" id="{{containerId+'-item-'+index+'-sub-'+subIndex}}"  data-checked-all="{{containerId}}-check-all"
+                                       checked="checked" value="{{subItem.value}}"  data-value="{{subItem.value}}" data-text="{{subItem.name}}">{{#subItem.name}}
+                            </label>
+                        </li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        <input type="hidden" class="multiple-val" value="">
+    </div>
+</script>
+<script src="/mind/js/auth/commercial-auth-select.js"></script>
+<script>
+    var $gridObj = $("#grid");
+    function queryByCondition() {
+        $gridObj.jqGrid("setGridParam", {
+            postData: {
+                'account': $("[name='nameOrAccount']").val(),
+                'roleId': $("#roleId").val(),
+                'shopIds':$("#indicatorsSelect1").val()
+            }
+        });
+        $gridObj.refresh();
+    }
+    $(function () {
+        $("#nameOrAccount").val("");
+        $("#roleId").val("");
+//            enabledFlag ： 1表示启用，2表示停用
+//            source_flag：1:用户(b.kry用户创建,) 2:系统(b.kry不可见,系统自动创建,如营销发布员)3:品牌(只读模式,系统自动创建如admin)
+
+        $.showEditorIcon = function (rowData) {
+            if (1 != rowData.sourceFlag || 2 == rowData.enabledFlag)
+                return false;
+            else
+                return true;
+        };
+
+        $.showClockIcon = function (rowData) {
+            if(rowData.sourceFlag==3){
+                return true;
+            }else{
+                if (1 != rowData.sourceFlag || 2 == rowData.enabledFlag)
+                    return false;
+                else
+                    return true;
+            }
+        };
+
+        $.showUnlockIcon = function (rowData) {
+            return rowData.enabledFlag == 2;
+        };
+
+        $.showUpdatePasswordIcon = function (rowData) {
+            if(rowData.sourceFlag==3){
+                return true;
+            }else {
+                if (1 != rowData.sourceFlag || 2 == rowData.enabledFlag)
+                    return false;
+                else
+                    return true;
+            }
+        };
+        $.extraRender=function(rowData){
+            if( rowData.sourceFlag==3){
+                return 'disabled';
+            }
+        };
+
+        //编辑，选择模板授权门店，在下面填写url。点击按钮后会带本条模板ID作为参数传过去。id=？
+        baseUrl = "/mind/auth/userBrand",
+            queryUrl = baseUrl + "/query";
+        editorUrl = baseUrl + "/update";
+        updatePasswordUrl = baseUrl + "/resetPassword";
+        updateStatusFlagUrl = baseUrl + "/updateStatusFlag";
+        $gridObj.dataGrid({
+            url: queryUrl,
+            postData: {},
+            colNames: ['id', '账号', '角色', '姓名', '手机', '归属', '更新时间'],
+            colModel: [
+                {name: 'id', index: 'id', hidden: true},
+                {name: 'account', index: 'account', width: 160, align: 'center'},
+                {name: 'roleName', index: 'roleName', width: 160, align: 'center'},
+                {name: 'name', index: 'name', width: 160, align: 'center'},
+                {name: 'mobile', index: 'mobile', width: 160, align: 'center'},
+                {name: 'shopName', index: 'shopName', width: 160, align: 'center'},
+                {name: 'serverUpdateTime', index: 'serverUpdateTime', width: 160, align: 'center'}
+            ],
+            rowNum: 10,
+            rowList: [10, 20],
+            pager: "#gridPager",
+            showOperate: true,
+            operateColName: "操作",
+            actionParam: {
+                editor: {
+                    url: editorUrl,
+                    render: 'disabled',
+                    showExpression: $.showEditorIcon
+                }, updatepassword: {
+                    url: updatePasswordUrl,
+                    render: 'disabled',
+                    showExpression: $.showUpdatePasswordIcon
+                }, clock: {
+                    url: updateStatusFlagUrl,
+                    showExpression: $.showClockIcon,
+                    extraRender: $.extraRender
+                }, unlock: {
+                    url: updateStatusFlagUrl,
+                    showExpression: $.showUnlockIcon
+                }
+            }
+        });
+
+    })
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

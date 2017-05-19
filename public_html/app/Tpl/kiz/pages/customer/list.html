@@ -1,0 +1,567 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/api"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/getscript?v=2.0&amp;ak=D8fde80e0d8f96000b89da6da12e410f&amp;services=&amp;t=20170517145936"></script>
+    <style type="text/css">img[src="/mind/themes/style/img/ad/on-mobile-code-report.png"] {
+        display: none !important;
+    }</style>
+    <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/getscript"></script>
+    <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/SearchInfoWindow_min.js"></script>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="http://b.keruyun.com/b_kry/themes/style/img/favicon.ico" type="image/x-icon">
+    <link href="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/index.css" rel="stylesheet">
+    <title>顾客列表</title>
+
+    {* 加载浏览器兼容 *}
+    {function name="load_compatible"}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="keywords" content="{if $page_keyword}{$page_keyword}{else}{$site_seo.keyword}{/if}商家中心" />
+    <meta name="description" content="{if $page_description}{$page_description}{else}{$site_seo.description}{/if}商家中心" />
+    <script type="text/javascript">
+        var APP_ROOT = '{$APP_ROOT}';
+        {if app_conf("APP_MSG_SENDER_OPEN") eq 1}
+        var send_span = {function name="app_conf" v="SEND_SPAN"}000;
+        var IS_RUN_CRON = 1;
+        var DEAL_MSG_URL = '{url x="index" r="cron#deal_msg_list"}';
+        {/if}
+        var AJAX_URL	= '{url x="kiz" r="ajax"}';
+
+        //关于图片上传的定义
+        var LOADER_IMG = '{$TMPL}/images/loader_img.gif';
+        var LOADER_IMG_GIF = '{$TMPL}/images/css_bg/loading.gif';
+        var UPLOAD_SWF = '{$TMPL}/js/utils/Moxie.swf';
+        var UPLOAD_XAP = '{$TMPL}/js/utils/Moxie.xap';
+        var MAX_IMAGE_SIZE = '{function name='app_conf' v='MAX_IMAGE_SIZE'}';
+        var MAX_SP_IMAGE = '<?php echo MAX_SP_IMAGE; ?>';
+        var ALLOW_IMAGE_EXT = '{function name='app_conf' v='ALLOW_IMAGE_EXT'}';
+        var UPLOAD_URL = '{url x="biz" r="file#upload"}';
+
+        //关于编辑器上传的定义
+        var K_UPLOAD_URL = "{url r="kiz" b="file#upload"}";
+        var K_BASE_PATH = '{$TMPL}/js/utils/kindeditor/';
+        var K_THEMES_PATH = '{$TMPL}/css/utils/kindeditor/';
+
+        var OFC_SWF = '{$TMPL}/js/open-flash-chart.swf';
+    </script>1
+
+    {include file="inc/css2.html"}
+    {include file="inc/js2.html"}
+</head>
+<body ryt13232="1" style="">
+<div id="app-placeholder" class="transparent-container">
+    <div data-reactroot="" class="application">
+
+        <div id="header">
+            <input type="hidden" id="loginSessionId" value="5ea8172a3f7b40418c8a3fa77b440e52">
+            <div class="nav-tabs" id="nav-fixed">
+                <div class="center-block">
+                    <h1 id="logo" style="background-image: url({$opreview});"></h1>
+                    <ul class="nav head-new-nav"></ul>
+                    <span style="background:white">
+                <!-- 登录信息 start -->
+                <div class="user-info">
+                    <div class="user-info-view">
+                        <div class="photo" style="background-image: url({$preview});background-size: 100% 100%;"></div>
+                        <div style="display: inline;float: left">
+                            <ul>
+                                <li title="{$account_info.account_name}">&nbsp;{$account_info.account_name}</li>
+                                <li title="{$supplier_name} ">&nbsp;{$supplier_name}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="list-group" style="display: none;">
+                        <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
+                        <a href="{url x="biz" r="user#edit_password"}" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
+                        <a href="#" id="logout" class="list-group-item logout">退出登录</a>
+                    </div>
+                </div>
+                        <!-- 登录信息 end -->
+
+
+
+                        <!-- 切换门店弹窗 start -->
+                <div id="changeCommercialModal" class="modal fade in mapModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <a class="close" data-dismiss="modal">&times;</a>
+                                <h3>切换门店</h3>
+                            </div>
+                            <div class="modal-body modal-main">
+                                <div id="map_container" class="col-md-8 map-content">
+
+                                </div>
+
+                                <div class="col-md-4 search-content">
+                                    <div class="clearfix">
+                                        <div class="search-box" id="goodsTypeSearch">
+                                            <input type="text" id="searchCommercial" class="form-control" placeholder="根据门店名称或地址搜索"
+                                                   maxlength="48" value="">
+                                            <span id="js-type-search-button" class="icon-search" title="搜索">搜索</span>
+                                        </div>
+                                        <div class="shop-content" id="shop_list">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        <!-- 切换门店弹窗 end -->
+		</span>
+                </div>
+            </div>
+
+        </div>
+        <main class="container">
+            <div class="views-wrap">
+                <div class="view">
+                    <div>
+                        <div style="display: block;">
+                            <div class="view-inner">
+                                <div class="view__banner clearfix">
+                                    <div class="left">
+                                        <div class="ant-breadcrumb"><span><span
+                                                class="ant-breadcrumb-link">顾客</span><span
+                                                class="ant-breadcrumb-separator">/</span></span><span><span
+                                                class="ant-breadcrumb-link">顾客列表</span><span
+                                                class="ant-breadcrumb-separator">/</span></span></div>
+                                    </div>
+                                    <div class="right">
+                                        <button type="button" class="ant-btn ant-btn-ghost"><i
+                                                class="anticon anticon-download "></i><span>导 入</span></button>
+                                        <button type="button" class="ant-btn ant-btn-ghost"><i
+                                                class="anticon anticon-file-excel "></i><span>导 出</span></button>
+                                        <button type="button" class="ant-btn ant-btn-ghost"><span>开通会员</span></button>
+                                        <button type="button" class="ant-btn ant-btn-ghost"><span>预置顾客</span></button>
+                                    </div>
+                                </div>
+                                <div class="view__controller">
+                                    <div class="query-builder expand">
+                                        <div class="query-builder-base" data-base="true">
+                                            <div class="clearfix">
+                                                <div class="left">
+                                                    <form class="ant-form ant-form-inline">
+                                                        <div class="ant-row ant-form-item">
+                                                            <div class="ant-form-item-label"><label
+                                                                    class="">姓名/手机号码</label></div>
+                                                            <div class="">
+                                                                <div class="ant-form-item-control ">
+                                                                    <div class="bui-commonInput"><span
+                                                                            class="ant-input-wrapper"><input type="text"
+                                                                                                             placeholder="请输入姓名/手机号码(四位以上)"
+                                                                                                             value=""
+                                                                                                             class="ant-input ant-input-lg"></span><i
+                                                                            class="anticon anticon-close-circle bui-commonInput__close"
+                                                                            style="visibility: hidden;"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ant-row ant-form-item">
+                                                            <div class="ant-form-item-label"><label
+                                                                    class="">顾客类型</label></div>
+                                                            <div class="">
+                                                                <div class="ant-form-item-control ">
+                                                                    <div class="ant-select-lg ant-select ant-select-enabled"
+                                                                         style="width: 75px;">
+                                                                        <div class="ant-select-selection
+            ant-select-selection--single" role="combobox" aria-autocomplete="list" aria-haspopup="true"
+                                                                             aria-expanded="false" tabindex="0">
+                                                                            <div class="ant-select-selection__rendered">
+                                                                                <div unselectable="unselectable"
+                                                                                     class="ant-select-selection__placeholder"
+                                                                                     style="display: block; -webkit-user-select: none;">
+                                                                                    请选择
+                                                                                </div>
+                                                                            </div>
+                                                                            <span class="ant-select-arrow"
+                                                                                  unselectable="unselectable"
+                                                                                  style="-webkit-user-select: none;"><b></b></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ant-row ant-form-item">
+                                                            <div class="ant-form-item-label"><label
+                                                                    class="">加入门店</label></div>
+                                                            <div class="">
+                                                                <div class="ant-form-item-control ">
+                                                                    <div class="bui-multiselect">
+                                                                        <button type="button"
+                                                                                class="bui-multiselect__trigger"
+                                                                                title="全部"><span class="text-ellipsis">全部</span>
+                                                                        </button>
+                                                                        <ul class="bui-multiselect__menu">
+                                                                            <li class="bui-multiselect__option bui-multiselect__option--all bui-multiselect__option--selected">
+                                                                                全部
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="bui-link-btn expand-trigger expand"
+                                                                data-size-trigger="true"><!-- react-text: 112 -->更多条件
+                                                            <!-- /react-text --><i
+                                                                    class="anticon anticon-circle-down "></i></button>
+                                                        <button type="button" class="bui-link-btn">重置</button>
+                                                        <button type="button"
+                                                                class="ant-btn ant-btn-primary bui-btn--green">
+                                                            <span>查 询</span></button>
+                                                    </form>
+                                                </div>
+                                                <div class="right">
+                                                    <div class="button-group-container"><span class="button-group-left">新建</span><span
+                                                            class="button-group-right">+</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="query-builder-expand" data-expand="true">
+                                            <form class="ant-form ant-form-inline" _lpchecked="1">
+                                                <div class="ant-row ant-form-item">
+                                                    <div class="ant-form-item-label"><label class="">会员等级</label></div>
+                                                    <div class="">
+                                                        <div class="ant-form-item-control ">
+                                                            <div class="bui-multiselect">
+                                                                <button type="button" class="bui-multiselect__trigger"
+                                                                        title="请选择"><span
+                                                                        class="text-ellipsis">请选择</span></button>
+                                                                <ul class="bui-multiselect__menu">
+                                                                    <li class="bui-multiselect__option bui-multiselect__option--all">
+                                                                        全部
+                                                                    </li>
+                                                                    <li class="bui-multiselect__option">普通会员</li>
+                                                                    <li class="bui-multiselect__option">黄金会员</li>
+                                                                    <li class="bui-multiselect__option">钻石会员</li>
+                                                                    <li class="bui-multiselect__option">铂金会员</li>
+                                                                    <li class="bui-multiselect__option">黑卡会员</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ant-row ant-form-item">
+                                                    <div class="ant-form-item-label"><label class="">顾客来源</label></div>
+                                                    <div class="">
+                                                        <div class="ant-form-item-control ">
+                                                            <div class="bui-multiselect">
+                                                                <button type="button" class="bui-multiselect__trigger"
+                                                                        title="请选择"><span
+                                                                        class="text-ellipsis">请选择</span></button>
+                                                                <ul class="bui-multiselect__menu">
+                                                                    <li class="bui-multiselect__option bui-multiselect__option--all">
+                                                                        全部
+                                                                    </li>
+                                                                    <li class="bui-multiselect__option">未知</li>
+                                                                    <li class="bui-multiselect__option">Pad</li>
+                                                                    <li class="bui-multiselect__option">手机app</li>
+                                                                    <li class="bui-multiselect__option">其他系统导入</li>
+                                                                    <li class="bui-multiselect__option">微信</li>
+                                                                    <li class="bui-multiselect__option">支付宝</li>
+                                                                    <li class="bui-multiselect__option">商家官网</li>
+                                                                    <li class="bui-multiselect__option">百度</li>
+                                                                    <li class="bui-multiselect__option">后台</li>
+                                                                    <li class="bui-multiselect__option">百度外卖</li>
+                                                                    <li class="bui-multiselect__option">饿了么</li>
+                                                                    <li class="bui-multiselect__option">美团外卖</li>
+                                                                    <li class="bui-multiselect__option">大众点评</li>
+                                                                    <li class="bui-multiselect__option">熟客</li>
+                                                                    <li class="bui-multiselect__option">糯米点菜</li>
+                                                                    <li class="bui-multiselect__option">Os Mobile</li>
+                                                                    <li class="bui-multiselect__option">开放平台</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ant-row ant-form-item">
+                                                    <div class="ant-form-item-label"><label class="">升级会员</label></div>
+                                                    <div class="">
+                                                        <div class="ant-form-item-control ">
+                                                            <div class="date-range-picker"><span
+                                                                    class="ant-calendar-picker"><span><input readonly=""
+                                                                                                             value=""
+                                                                                                             placeholder="请选择开始时间"
+                                                                                                             class="ant-calendar-range-picker ant-input"><span
+                                                                    class="ant-calendar-picker-icon"></span></span></span><span
+                                                                    class="date-range-picker-split">到</span><span
+                                                                    class="ant-calendar-picker"><span><input disabled=""
+                                                                                                             readonly=""
+                                                                                                             value=""
+                                                                                                             placeholder="请选择结束时间"
+                                                                                                             class="ant-calendar-range-picker ant-input"><span
+                                                                    class="ant-calendar-picker-icon"></span></span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="view__content--s">
+                                    <div class="table-text-center clearfix">
+                                        <div class="">
+                                            <div class="ant-spin"><span class="ant-spin-dot"></span></div>
+                                            <div class="ant-spin-container">
+                                                <div class="ant-table ant-table-large ant-table-scroll-position-left">
+                                                    <div class="ant-table-content">
+                                                        <div class=""><span><div class="ant-table-body"><table class=""><colgroup><col><col><col><col><col><col><col><col><col></colgroup><thead
+                                                                class="ant-table-thead"><tr><th class=""><span><i
+                                                                class="anticon anticon-setting "></i></span></th><th
+                                                                class=""><span><!-- react-text: 204 -->姓名
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 207 -->手机号码
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 210 -->升级会员
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 213 -->会员等级
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 216 -->加入门店
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 219 -->来源
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 222 -->状态
+                                                            <!-- /react-text --></span></th><th class=""><span><!-- react-text: 225 -->操作
+                                                            <!-- /react-text --></span></th></tr></thead><tbody
+                                                                class="ant-table-tbody"><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 267 --></td><td class=""><span
+                                                                class="text-ellipsis">孙大设备</span></td><td class=""><!-- react-text: 271 -->18871852855
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 273 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 275 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 277 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 279 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 281 -->_
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 289 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 291 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 292 -->1
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">小红</span></td><td class=""><!-- react-text: 296 -->18871483255
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 298 -->2017-05-19
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 300 -->普通会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 302 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 304 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 306 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 314 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 316 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 317 -->3
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">liwenchao</span></td><td class=""><!-- react-text: 321 -->18871583185
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 323 -->2017-05-17
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 325 -->钻石会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 327 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 329 -->Os Mobile
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 331 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 339 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 341 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 342 -->1
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">李嘉潼</span></td><td class=""><!-- react-text: 346 -->18871483189
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 348 -->2017-05-16
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 350 -->普通会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 352 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 354 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 356 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 364 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 366 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 367 -->1
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">陈</span></td><td class=""><!-- react-text: 371 -->15235485215
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 373 -->2017-05-16
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 375 -->普通会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 377 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 379 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 381 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 389 --></td><td class=""><span
+                                                                class="text-ellipsis">林</span></td><td class=""><!-- react-text: 393 -->15245214852
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 395 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 397 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 399 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 401 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 403 -->_
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 411 --></td><td class=""><span
+                                                                class="text-ellipsis">林</span></td><td class=""><!-- react-text: 415 -->15248512472
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 417 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 419 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 421 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 423 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 425 -->_
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 433 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 435 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 436 -->1
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">张三</span></td><td class=""><!-- react-text: 440 -->13612312312
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 442 -->2017-05-16
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 444 -->普通会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 446 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 448 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 450 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 458 --><span
+                                                                    style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(243, 89, 89);"><!-- react-text: 460 -->VIP
+                                                                <!-- /react-text --><!-- react-text: 461 -->1
+                                                                <!-- /react-text --></span></td><td class=""><span
+                                                                class="text-ellipsis">周义星</span></td><td class=""><!-- react-text: 465 -->15623451496
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 467 -->2017-05-15
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 469 -->普通会员
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 471 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 473 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 475 -->启用
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr><tr
+                                                                class="ant-table-row  ant-table-row-level-0"><td
+                                                                class=""><span
+                                                                class="ant-table-row-indent indent-level-0"
+                                                                style="padding-left: 0px;"></span>
+                                                            <!-- react-empty: 483 --></td><td class=""><span
+                                                                class="text-ellipsis">一王王王</span></td><td class=""><!-- react-text: 487 -->13429856866
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 489 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 491 -->-
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 493 -->客如云电商部1号演示门店
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 495 -->Pad
+                                                            <!-- /react-text --></td><td class=""><!-- react-text: 497 -->_
+                                                            <!-- /react-text --></td><td class=""><div><i
+                                                                class="anticon anticon-eye icon--blue" title="查看详情"></i><i
+                                                                class="anticon anticon-edit icon--blue" title="编辑"></i></div></td></tr></tbody></table></div></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- react-empty: 231 --><!-- react-empty: 232 --><!-- react-empty: 233 -->
+                                    <!-- react-empty: 234 --></div>
+                                <div class="view__pagination">
+                                    <ul class="ant-pagination "><span class="ant-pagination-total-text"><!-- react-text: 504 -->共
+                                        <!-- /react-text --><!-- react-text: 505 -->12<!-- /react-text -->
+                                        <!-- react-text: 506 -->页 共<!-- /react-text --><!-- react-text: 507 -->120
+                                        <!-- /react-text --><!-- react-text: 508 -->条<!-- /react-text --></span>
+                                        <li title="上一页" class="ant-pagination-disabled ant-pagination-prev"><a></a></li>
+                                        <li title="1"
+                                            class="ant-pagination-item ant-pagination-item-1 ant-pagination-item-active">
+                                            <a>1</a></li>
+                                        <li title="2" class="ant-pagination-item ant-pagination-item-2 "><a>2</a></li>
+                                        <li title="3" class="ant-pagination-item ant-pagination-item-3 "><a>3</a></li>
+                                        <li title="4" class="ant-pagination-item ant-pagination-item-4 "><a>4</a></li>
+                                        <li title="5" class="ant-pagination-item ant-pagination-item-5 "><a>5</a></li>
+                                        <li title="下一页" class=" ant-pagination-next"><a></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<input type="hidden" id="cbk_" name="cbk_" value="953a72cfb7dfe6a70892e2ea5e51eb28">
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/g2.2.1.5.js"></script>
+<i title="Web Colour Picker" style="display: none;"></i><i title="Web Colour Picker" style="display: none;"></i><i
+        title="Web Colour Picker" style="display: none;"></i><i title="Web Colour Picker" style="display: none;"></i>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/lodash4.17.4.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/moment.2.17.0.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/react15.3.2.min.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/react-dom15.3.2.min.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/seamless-immutable.6.1.4.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/g2.js"></script>
+<i title="Web Colour Picker" style="display: none;"></i><i title="Web Colour Picker" style="display: none;"></i><i
+        title="Web Colour Picker" style="display: none;"></i><i title="Web Colour Picker" style="display: none;"></i>
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/jquery-1.10.2.min.js"></script>
+<!--<script type="text/javascript">-->
+<!--$(function () {-->
+<!--if($("#cbk_").val()==""){-->
+<!--$.ajax({-->
+<!--url:"/b_kry/authority/cbk",-->
+<!--async:false,-->
+<!--success: function(data){-->
+<!--$("#cbk_").val(data);-->
+<!--}-->
+<!--});-->
+<!--}-->
+<!--var SHOP_TOKEN = {'focus': false, 'click': true};-->
+<!--$(window).focus(function () {-->
+<!--SHOP_TOKEN.focus = true;-->
+<!--});-->
+<!--$(document).mouseover(function () {-->
+<!--if (SHOP_TOKEN.focus) {-->
+<!--$.get("/b_kry/authority/checkIsSwitched?cbk=" + $("#cbk_").val() + "&ts=" + new Date().getTime(), function (data) {-->
+<!--if (data.isSwitched == true) {-->
+<!--if (SHOP_TOKEN.click) {-->
+<!--SHOP_TOKEN.click = false;-->
+<!--alert('\u95e8\u5e97\u5df2\u5207\u6362,\u8bf7\u91cd\u65b0\u5237\u65b0\u9875\u9762');-->
+<!--window.location.href = "/b_kry/";-->
+<!--}-->
+<!--}-->
+<!--});-->
+<!--SHOP_TOKEN.focus = false;-->
+<!--}-->
+<!--});-->
+<!--});-->
+<!--</script>-->
+<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/common.js"></script>
+<!--<script src="/app/Tpl/kiz/js/scm_kry/js/customer/cfiles/index.js"></script>-->
+</body>
+</html>

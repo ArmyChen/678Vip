@@ -188,17 +188,6 @@
     "url": "act=go_up_index"
   },
   {
-    "code": "scm:purchase:return:query#",
-    "id": 1274,
-    "levelId": "001001001",
-    "name": "6-2-6-部门领料明细表",
-    "parentId": 1257,
-    "platform": 7,
-    "sort": 40,
-    "type": 1,
-    "url": "act=go_bumen_index"
-  },
-  {
     "code": "scm:scrap",
     "id": 1259,
     "levelId": "001001",
@@ -538,6 +527,82 @@
     "sort": 25,
     "type": 1,
     "url": "act=report_sale_detail_index"
+  },
+  {
+    "code": "scm:purchase:return:query#",
+    "id": 1274,
+    "levelId": "001001001",
+    "name": "6-7-17-部门领料明细表",
+    "parentId": 1263,
+    "platform": 7,
+    "sort": 40,
+    "type": 1,
+    "url": "act=go_bumen_index"
+  },
+  {
+    "code": "loyalty:membertrunk:v5",
+    "id": 1848,
+    "levelId": "001",
+    "name": "顾客",
+    "parentId": 0,
+    "platform": 11,
+    "sort": 1,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "loyalty:member:v5",
+    "id": 1193,
+    "levelId": "001001",
+    "name": "3-1-顾客",
+    "parentId": 1848,
+    "platform": 11,
+    "sort": 1,
+    "type": 1,
+    "url": "act=customer_list"
+  },
+  {
+    "code": "mind:shezhi",
+    "id": 130,
+    "levelId": "001",
+    "name": "设置",
+    "parentId": 0,
+    "platform": 1,
+    "sort": 5,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "mind:shezhi:quanxianshezhi",
+    "id": 163,
+    "levelId": "001001",
+    "name": "5-权限设置",
+    "parentId": 130,
+    "platform": 12,
+    "sort": 3,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "mind:shezhi:quanxianshezhi:jiaoseshezhi",
+    "id": 164,
+    "levelId": "001001001",
+    "name": "5-1-角色设置",
+    "parentId": 163,
+    "platform": 12,
+    "sort": 1,
+    "type": 1,
+    "url": "act=role_list"
+  },
+  {
+    "code": "mind:shezhi:quanxianshezhi:zhanghaoguanli",
+    "id": 165,
+    "levelId": "001001001",
+    "name": "5-2-账号管理",
+    "parentId": 163,
+    "platform": 12,
+    "sort": 1,
+    "type": 1,
+    "url": "act=userBrand_list"
   }
-
 ]

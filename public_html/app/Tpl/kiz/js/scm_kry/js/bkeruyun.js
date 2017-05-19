@@ -335,6 +335,10 @@ var bkeruyun = {
                     return "/kiz.php?ctl=count&"+ u;
                 }else if(p == 9){
                     return "/kiz.php?ctl=product&"+ u;
+                }else if(p == 11){
+                    return "/kiz.php?ctl=customer&"+ u;
+                }else if(p == 12){
+                    return "/kiz.php?ctl=role&"+ u;
                 }else{
                     //return "/ww"
                     throw new Error("菜单未知参数p="+p);
@@ -412,7 +416,6 @@ var bkeruyun = {
         }
         return nodes;
     },
-
     currentLink: function () {
         var currentUrl=window.location.href;
         currentUrl = currentUrl.substring(currentUrl.indexOf("://")+3);

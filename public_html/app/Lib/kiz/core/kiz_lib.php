@@ -79,8 +79,8 @@ function global_run()
 
     if ($adm_id == 0) {
         if (empty($account_info)) {
-// 		$cookie_aname = es_cookie::get("account_name")?es_cookie::get("account_name"):'';
-// 		$cookie_apwd = es_cookie::get("account_pwd")?es_cookie::get("account_pwd"):'';
+// 		$cookie_aname = es_cookie::get.txt("account_name")?es_cookie::get.txt("account_name"):'';
+// 		$cookie_apwd = es_cookie::get.txt("account_pwd")?es_cookie::get.txt("account_pwd"):'';
 
 // 		if($cookie_aname!=''&&$cookie_apwd!=''&&!es_session::get("account_info"))
 // 		{

@@ -1,0 +1,64 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2&ak=D8fde80e0d8f96000b89da6da12e410f"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js?v1.0"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+    <link rel='shortcut icon' href='/b_kry/themes/style/img/favicon.ico' rel='shortcut icon' type='image/x-icon'>
+    <link href='http://loyalstatic.keruyun.net/loyalty-bui/prod/static/dist-811c18ac294dedc70a36/index.css' rel='stylesheet'>
+    <title>客如云商家管理系统</title>
+</head>
+<body>
+<div id="app-placeholder" class="transparent-container"></div>
+<input type="hidden" id="cbk_" name="cbk_" value="" />
+<script src="http://loyalstatic.keruyun.net/asset/g2.2.1.5.js"></script>
+<script src="http://loyalstatic.keruyun.net/asset/lodash4.17.4.js"></script>
+<script src="http://loyalstatic.keruyun.net/asset/moment.2.17.0.js"></script>
+<script src="http://loyalstatic.keruyun.net/asset/react15.3.2.min.js"></script>
+<script src="http://loyalstatic.keruyun.net/asset/react-dom15.3.2.min.js"></script>
+<script src="http://loyalstatic.keruyun.net/asset/seamless-immutable.6.1.4.js"></script>
+<script src="https://a.alipayobjects.com/g/datavis/g2/2.1.5/g2.js"></script>
+<script src="/b_kry/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        if($("#cbk_").val()==""){
+            $.ajax({
+                url:"/b_kry/authority/cbk",
+                async:false,
+                success: function(data){
+                    $("#cbk_").val(data);
+                }
+            });
+        }
+        var SHOP_TOKEN = {'focus': false, 'click': true};
+        $(window).focus(function () {
+            SHOP_TOKEN.focus = true;
+        });
+        $(document).mouseover(function () {
+            if (SHOP_TOKEN.focus) {
+                $.get("/b_kry/authority/checkIsSwitched?cbk=" + $("#cbk_").val() + "&ts=" + new Date().getTime(), function (data) {
+                    if (data.isSwitched == true) {
+                        if (SHOP_TOKEN.click) {
+                            SHOP_TOKEN.click = false;
+                            alert('\u95e8\u5e97\u5df2\u5207\u6362,\u8bf7\u91cd\u65b0\u5237\u65b0\u9875\u9762');
+                            window.location.href = "/b_kry/";
+                        }
+                    }
+                });
+                SHOP_TOKEN.focus = false;
+            }
+        });
+    });
+</script>
+<script src="http://loyalstatic.keruyun.net/loyalty-bui/prod/static/dist-811c18ac294dedc70a36/common.js"></script>
+<script src="http://loyalstatic.keruyun.net/loyalty-bui/prod/static/dist-811c18ac294dedc70a36/index.js"></script>
+
+</body>
+</html>

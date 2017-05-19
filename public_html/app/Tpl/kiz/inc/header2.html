@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    {* 加载浏览器兼容 *}
+    {function name="load_compatible"}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="keywords" content="{if $page_keyword}{$page_keyword}{else}{$site_seo.keyword}{/if}商家中心" />
+    <meta name="description" content="{if $page_description}{$page_description}{else}{$site_seo.description}{/if}商家中心" />
+    <script type="text/javascript">
+        var APP_ROOT = '{$APP_ROOT}';
+        {if app_conf("APP_MSG_SENDER_OPEN") eq 1}
+        var send_span = {function name="app_conf" v="SEND_SPAN"}000;
+        var IS_RUN_CRON = 1;
+        var DEAL_MSG_URL = '{url x="index" r="cron#deal_msg_list"}';
+        {/if}
+        var AJAX_URL	= '{url x="kiz" r="ajax"}';
+
+        //关于图片上传的定义
+        var LOADER_IMG = '{$TMPL}/images/loader_img.gif';
+        var LOADER_IMG_GIF = '{$TMPL}/images/css_bg/loading.gif';
+        var UPLOAD_SWF = '{$TMPL}/js/utils/Moxie.swf';
+        var UPLOAD_XAP = '{$TMPL}/js/utils/Moxie.xap';
+        var MAX_IMAGE_SIZE = '{function name='app_conf' v='MAX_IMAGE_SIZE'}';
+        var MAX_SP_IMAGE = '<?php echo MAX_SP_IMAGE; ?>';
+        var ALLOW_IMAGE_EXT = '{function name='app_conf' v='ALLOW_IMAGE_EXT'}';
+        var UPLOAD_URL = '{url x="biz" r="file#upload"}';
+
+        //关于编辑器上传的定义
+        var K_UPLOAD_URL = "{url r="kiz" b="file#upload"}";
+        var K_BASE_PATH = '{$TMPL}/js/utils/kindeditor/';
+        var K_THEMES_PATH = '{$TMPL}/css/utils/kindeditor/';
+
+        var OFC_SWF = '{$TMPL}/js/open-flash-chart.swf';
+    </script>
+
+    <title>{if $page_title}{$page_title} - {/if}{$site_seo.title}商家中心</title>
+
+    {include file="inc/css2.html"}
+    {include file="inc/js2.html"}
+</head>
+<body>
+<input type="hidden" id="t" name="t" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
+<input type="hidden" id="t_2" name="t_2" value="1227303c-1d51-4f3b-8665-2bd198f8b523"/>
+<div id="header">
+    <input type="hidden" id="loginSessionId" value="5ea8172a3f7b40418c8a3fa77b440e52">
+    <div class="nav-tabs" id="nav-fixed">
+        <div class="center-block">
+            <h1 id="logo" style="background-image: url({$opreview});"></h1>
+            <ul class="nav head-new-nav"></ul>
+            <span style="background:white">
+                <!-- 登录信息 start -->
+                <div class="user-info">
+                    <div class="user-info-view">
+                        <div class="photo" style="background-image: url({$preview});background-size: 100% 100%;"></div>
+                        <div style="display: inline;float: left">
+                            <ul>
+                                <li title="{$account_info.account_name}">&nbsp;{$account_info.account_name}</li>
+                                <li title="{$supplier_name} ">&nbsp;{$supplier_name}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="list-group" style="display: none;">
+                        <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
+                        <a href="{url x="biz" r="user#edit_password"}" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
+                        <a href="#" id="logout" class="list-group-item logout">退出登录</a>
+                    </div>
+                </div>
+                <!-- 登录信息 end -->
+
+
+
+                <!-- 切换门店弹窗 start -->
+                <div id="changeCommercialModal" class="modal fade in mapModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <a class="close" data-dismiss="modal">&times;</a>
+                                <h3>切换门店</h3>
+                            </div>
+                            <div class="modal-body modal-main">
+                                <div id="map_container" class="col-md-8 map-content">
+
+                                </div>
+
+                                <div class="col-md-4 search-content">
+                                    <div class="clearfix">
+                                        <div class="search-box" id="goodsTypeSearch">
+                                            <input type="text" id="searchCommercial" class="form-control" placeholder="根据门店名称或地址搜索"
+                                                   maxlength="48" value="">
+                                            <span id="js-type-search-button" class="icon-search" title="搜索">搜索</span>
+                                        </div>
+                                        <div class="shop-content" id="shop_list">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 切换门店弹窗 end -->
+		</span>
+        </div>
+    </div>
+
+</div>
