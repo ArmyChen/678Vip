@@ -368,7 +368,7 @@ class ajaxModule extends KizBaseModule{
             foreach ($v['detail'] as $k2 => $v2) {
                 $goods_detail[$k2]['skuTypeId'] = $v2['cate_id'];
                 $goods_detail[$k2]['id'] = $v2['mid'];
-                $goods_detail[$k2]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($v2['cate_id']))?'':parent::get_dc_current_supplier_cate($v2['cate_id']['name']);
+                $goods_detail[$k2]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($v2['cate_id']))?'':parent::get_dc_current_supplier_cate($v2['cate_id'])['name'];
                 $goods_detail[$k2]['skuCode'] = $v2['mid'];
                 $goods_detail[$k2]['skuName'] = $v2['name'];
                 $goods_detail[$k2]['uom'] = $v2['unit'];
