@@ -1651,7 +1651,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 #header {
 	height: 142px;
-	min-width: 1220px;
+	min-width: 100%;
+}
+
+#header .center-block {
+	height: 142px;
+	width: 100%;
 }
 
 #footer {
@@ -1688,7 +1693,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .center-block {
-	width: 100%;
+	width: 1200px;
 }
 
 .center-block:after {

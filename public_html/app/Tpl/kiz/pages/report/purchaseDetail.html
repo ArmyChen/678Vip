@@ -78,7 +78,19 @@
             <form id="queryConditions" action="#" method="post" autocomplete="off">
 
                 <input type="text" class="hidden">
-
+                <!-- 订单类型 start -->
+                <div class="aside-column">
+                    <h2>订单类型</h2>
+                    <ul class="panel-list-type">
+                        <li><label class="checkbox checkbox-check"><span></span>
+                            <input type="checkbox" name="type" value="1" checked>验收入库单</label>
+                        </li>
+                        <li><label class="checkbox"><span></span>
+                            <input type="checkbox" name="type" value="2">验收退货单</label>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 订单类型 end -->
                 <!-- 单据号 start -->
                 <div class="aside-column panel-search">
                     <h2>模糊查询</h2>
@@ -233,19 +245,7 @@
 
                 <!-- 查询日期 end -->
 
-                <!-- 订单类型 start -->
-                <div class="aside-column" id="orderTypeHid" style="display:none;">
-                    <h2>订单类型</h2>
-                    <ul class="panel-list-type">
-                        <li><label class="checkbox checkbox-check"><span></span>
-                            <input type="checkbox" name="type" value="1" checked>验收入库单</label>
-                        </li>
-                        <li><label class="checkbox checkbox-check"><span></span>
-                            <input type="checkbox" name="type" value="2" checked>验收退货单</label>
-                        </li>
-                    </ul>
-                </div>
-                <!-- 订单类型 end -->
+
                 <!-- ===================更多条件===================== -->
             </form>
             <a class="link searchMore" id="searchMore" data-status="0">更多条件</a>
