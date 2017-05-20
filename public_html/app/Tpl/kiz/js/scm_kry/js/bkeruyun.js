@@ -25,7 +25,7 @@ var bkeruyun = {
      */
     addFooter: function () {
         if ($("#footer").length < 1) {
-            $("body").append('<div id="footer" class="footerPs">©2012 keruyun.com 京ICP备12039470号</div>');
+            // $("body").append('<div id="footer" class="footerPs">©2012 keruyun.com 京ICP备12039470号</div>');
         }
     },
     /**
