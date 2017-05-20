@@ -1,397 +1,246 @@
 /**
- * Created by mayi on 2015/6/3.
+ * 库存分布明细表
+ * @auth linc, Jun 6 2016
  */
 
 var asnSi = {
-    $listGrid : '',
-    $detailGrid : '',
     //默认参数
     opts : {
         urlRoot : ctxPath,
-        templateId : -1,
-        commandType : 0,
-        queryConditionsId : 'queryConditions',
-        listGridId : 'grid',
-        queryUrl : '&act=go_bumen_index_ajax2',
-        editUrl : '&act=go_down_index_edit',
-        deleteUrl :'&act=go_down_delete_ajax',
-        viewUrl : '&act=go_down_index_view',
-        printUrl : '&act=go_down_print_view',
-        confirmUrl : '&act=go_down_doconfirm',
-        withdrawUrl : '&act=go_down_withdraw',
-        copyUrl: '/copy',
-        sortName : 'code',
-        pager : '#gridPager',
-        formId : 'baseInfoForm',
-        detailGridId : 'grid',
-        gridData : [],
-        skuTypeNameDivId : 'skuTypeNameDiv',
-        warehouseId :'#fromWmId',
-        taxRate : '',
-        skuScene:'',
-        skuTypes:[]
+        queryUrl : "&act=go_bumen_index_ajax2",
+        exportUrl : "&act=go_bumen_index_export",
+        queryData : "",
+        footerData : {},
+        oldCommercialId : "",
+        listGridId: '#grid',
+        queryConditionId: 'queryConditions',
+        cachedQueryConditions: '', //缓存页面条件
+        sorting : false,//是否正在排序，防止死循环
+        gridOpts: {
+            data: [],
+            datatype: 'local',
+            showEmptyGrid: true,
+            autowidth: true,
+            //rowNum: 9999,
+            shrinkToFit: false,
+            rowNum: 50,
+            scroll: 1, // virtual scroll
+            colNames:['id','类别id','类别', '编号', '名称', '单位', '价格'],
+            colModel:[
+                {name: 'id', index: 'id', width: 80, align: 'center',hidden:true},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center',hidden:true},
+                {name: 'skuTypeName', index: 'skuTypeId', width: 80, align: 'center'},
+                {name: 'skuCode', index: 'skuCode', width: 80, align: 'center'},
+                // {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
+                {name: 'skuName', index: 'skuName', width: 100, align: 'left'},
+                {name: 'uom', index: 'uom', width: 180, align: 'left'},
+                {name: 'price', index: 'price', width: 60, align: 'center'},
+            ],
+            footerrow: true,
+            gridComplete: function() {
+                var $gridObj = $(this);
+
+                var rowData = $gridObj.getDataIDs();
+                var $gridDom = $('#gbox_' + $gridObj.jqGrid('getGridParam', 'id'));
+                var $gridDivDom = $gridDom.parent();
+                var $notSearch = $gridDom.parent().find(".notSearchContent");
+
+                if (rowData.length > 0) {
+                    //表格有数据，显示表格元素，并隐藏无数据提示元素
+                    $gridDivDom.show();
+                    $gridDom.show();
+                    if ($notSearch.length > 0) {
+                        $notSearch.hide();
+                    }
+
+                    $(".ui-jqgrid-sdiv").show();
+                    $(this).footerData("set", asnSi.opts.footerData);
+                } else {
+                    //表格无数据，隐藏表格自身元素，显示无数据提示元素
+                    $gridDom.hide();
+                    $gridDivDom.show();
+                    if ($notSearch.length > 0) {
+                        $notSearch.show();
+                    } else {
+                        var notData = bkeruyun.notQueryData("没有查到数据，试试其他查询条件吧！");
+                        $gridDivDom.append(notData);
+                    }
+
+                    $(".ui-jqgrid-sdiv").hide();
+                }
+            },
+            onSortCol: function (index, iCol ,sortorder) {
+
+                if(!asnSi.opts.sorting){
+                    //排序开始
+                    asnSi.opts.sorting = true;
+
+                    $("#search").click();
+                    $("#grid").sortGrid(index, false, sortorder);
+
+                    //排序结束
+                    asnSi.opts.sorting = false;
+                    return 'stop';
+                }
+            }
+        }
     },
 
     //初始化
     _init : function (args) {
+
         var _this = this;
+
         _this.opts = $.extend(true, this.opts, args || {});
 
-        switch (_this.opts.commandType)
-        {
-            case 0 ://列表查询
-                _this.$listGrid = $('#' + _this.opts.listGridId);
-                _this.initQueryList();
-                $.setSearchFocus();
-                break;
-            case 1 ://新增
-                _this.$detailGrid = $('#' + _this.opts.detailGridId);
-                _this.initDetailGrid(true);
-                $.filterGrid.initSkuTypeNames();
-                break;
-            case 9 ://新增出库
-                _this.$detailGrid = $('#' + _this.opts.detailGridId);
-                _this.initChukuDetailGrid(true);
-                $.filterGrid.initSkuTypeNames();
-                break;
-            case 2 ://编辑
-                _this.$detailGrid = $('#' + _this.opts.detailGridId);
-                _this.initDetailGrid(true);
-                _this.checkWarehouse();
-                $.filterGrid.initSkuTypeNames();
-                break;
-            case 7://复制
-                _this.$detailGrid = $('#' + _this.opts.detailGridId);
-                _this.initDetailGrid(true);
-                _this.checkWarehouse();
-                $.filterGrid.initSkuTypeNames();
-                _this.updateInfoWhenCopy();
-                break;
+        // delegateCheckbox('wmTypeIds', '#wm-type-all', false);
+        // delegateCheckbox('skuTypeIds', '#sku-type-all', false);
+        //
+        // //默认勾选第一个商户（品牌或商户）
+        // if($('#commercialId-1')) {
+        //     $('#commercialId-1').click();
+        // }
 
-            default ://查看
-                $("select").siblings(".select-control").addClass("disabled");
-                _this.$detailGrid = $('#' + _this.opts.detailGridId);
-                _this.initDetailGrid(false);
-                $.filterGrid.initSkuTypeNames();
-                break;
+        $(_this.opts.listGridId).dataGrid(_this.opts.gridOpts);
+
+        _this.opts.cachedQueryConditions = serializeFormById(_this.opts.queryConditionsId);//缓存查询条件
+
+        _this.delegateQuery();
+
+        _this.delegateExport();
+
+        _this.delegateUndoAll();
+
+        $('#search').click();
+
+        $.setSearchFocus();
+
+        if(commercialId!="-1"){
+            refreshWms(commercialId);
         }
     },
 
-    //检查仓库是否停用
-    checkWarehouse: function () {
-        var warehouseId = $("#warehouseId").val(),
-            warehouseName = $("#warehouseName").val();
-
-        if(warehouseId == '' && warehouseName != ''){
-            $.layerMsg('仓库：' + warehouseName + '已被停用，请重新选择', false);
-        }
-    },
-
-    //商品过滤
-    filterSku : function() {
-
-        var skuTypeName = $('#skuTypeName').find('option:selected').text();
-        if($('#skuTypeName').val() === ''){
-            skuTypeName = '';
-        }
-
-        var conditions1 = {
-            skuCode: $('#skuCodeOrName').val(),
-            skuTypeName: skuTypeName
-        };
-        var conditions2 = {
-            skuName: $('#skuCodeOrName').val(),
-            skuTypeName: skuTypeName
-        }
-
-        var rowIds1 = filterGridRowIds('grid', conditions1);
-        var rowIds2 = filterGridRowIds('grid', conditions2);
-        Array.prototype.push.apply(rowIds1, rowIds2);
-        filterGridRows('grid', rowIds1);
-    },
-
-    //初始化查询页面
-    initQueryList : function() {
-        //需要保存查询条件的页面
-        var arrUrl = [
-            'scm_kry/asn/si/edit',
-            'scm_kry/asn/si/view',
-            'scm_kry/asn/si/add',
-            'scm_kry/asn/si/copy'
-        ];
-        //保存查询条件
-        $.setQueryData(arrUrl);
+    delegateQuery : function(){
 
         var _this = this;
 
-        $.serializeGridDataCallback = function (formData) {
-            if (typeof formData.isdisable == "object" || formData.isdisable == undefined) {
-                formData["status"] = "-2";
-            }
-            return formData;
-        };
-
-        $.showEditor = function (rowData) {
-            if(rowData.isdisable == 1){
-                return renderEnum.normal;
-            }else{
-                return renderEnum.hidden;
-            }
-        };
-
-        $.showView = function (rowData) {
-            return renderEnum.normal;
-        };
-
-
-        $.showConfirm = function (rowData) {
-            if(rowData.isdisable == 1){
-                return renderEnum.normal;
-            }else{
-                return renderEnum.hidden;
-            }
-        };
-
-        $.showWithDraw = function(rowData){
-            if(rowData.isdisable == 2){
-                return renderEnum.normal;
-            }else{
-                return renderEnum.hidden;
-            }
-        };
-       
-        $.showDelete = function (rowData) {
-            return renderEnum.normal;
-        };
-
-        $.showPrint = function (rowData) {
-            return renderEnum.normal;
-        };
-
-        $.showCopy = function (rowData) {
-            return renderEnum.hidden;
-        };
-        //更多查询
-        $("#searchMore").on("click",function(){
-            bkeruyun.searchMore(this,$("#commercialCol,#updateCol"),"更多条件","隐藏更多");
+        //查询按钮点击
+        $(document).delegate("#search", "click", function () {
+            _this.query();
         });
+    },
 
-        var $gridObj = $("#grid");
-        $gridObj.dataGrid({
-            formId: "queryConditions",
-            serializeGridDataCallback: $.serializeGridDataCallback,
-            url: _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: [
-                'id',
-                '单据号',
-                // '来源单据号',
-                '部门',
-                '供应商',
-                '仓库',
-                '数量',
-                '金额',
-                '制单人',
-                '保存日期',
-                '类型',
-                '状态'
-                // '供货',
-                // '理货员',
-                // '金额',
-                // '数量',
-                // '体积',
-                // '重量',
-                // '物流',
-                // '运费'
-            ],
-            colModel: [
-                {name: 'id', index: 'id',  align: "center", width: 50},
-                {name: 'danjuhao', index: 'danjuhao', align: "center", width: 120},
-                // {name: '', index: '', align: "center", width: 120},
-                // {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
-                {name: 'gonghuo', index: 'gonghuo', width: 120, align: "center"},
-                {name: 'gys', index: 'gys', width: 120, align: "center"},
-                {name: 'cname', index: 'cname', width: 120, align: "center"},
-                {name: 'znum', index: 'znum', align: "right", width: 70},
-                {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
-                {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
-                {name: 'ctime', index: 'ctime', align: "center", width: 120},
-                {name: 'type_show', index: 'type_show', align: "center", width: 120},
-                {name: 'isdisable', index: 'isdisable', align: "center", width: 120,
-                    formatter:function(v){
-                        if(v==1){
-                            return "已保存";
-                        }else {
-                            return "已确认";
-                        }
-                    }
-                },
-                // {name: 'cname', index: 'cname', align: "center", width: 90},
-                // {name: 'ywsort', index: 'ywsort', align: "center", width: 90},
-                // {name: 'danjuhao', index: 'danjuhao', align: "center", width: 90},
-                // {name: 'memo', index: 'memo', align: "center", width: 90},
-                // {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
-                // {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 90},
-                // {name: 'zmoney', index: 'zmoney', align: "center", width: 70},
-                // {name: 'znum', index: 'znum', align: "center", width: 130},
-                // {name: 'ztiji', index: 'ztiji', align: "center", width: 70},
-                // {name: 'zweight', index: 'zweight', align: "center", width: 70},
-                // {name: 'wuliu_company', index: 'wuliu_company', align: "center", width: 70},
-                // {name: 'wuliu_yunfei', index: 'wuliu_yunfei', align: "center", width: 70},
-            ],
-            sortname: 'ctime',
-            pager: "#gridPager",
-            showOperate: false,
-            actionParam: {
-                editor: {
-                    url: supplierPath + _this.opts.editUrl,
-                    // code: "scm:button:inventory:si:edit",
-                    render: $.showEditor
-                },
-                view: {
-                    url: supplierPath + _this.opts.viewUrl,
-                    render: $.showView
-                },
-                confirm: {
-                    url: ctxPath + _this.opts.confirmUrl,
-                    // code: "scm:button:inventory:si:confirm",
-                    render: $.showConfirm
-                },
-                withdraw: {
-                	url:ctxPath + _this.opts.withdrawUrl,
-                	// code: "scm:button:inventory:si:withdraw",
-                    render: $.showWithDraw,
-                },
-                delete: {
-                    url: ctxPath + _this.opts.deleteUrl,
-                    // code: "scm:button:inventory:si:delete",
-                    render: $.showDelete
-                },
-                print: {
-                    url: supplierPath + _this.opts.printUrl,
-                    render: $.showPrint
-                },
-                copy: {
-                    url: supplierPath + _this.opts.copyUrl,
-                    // code: "scm:button:inventory:si:add",
-                    render: $.showCopy
+    delegateExport : function(){
+
+        var _this = this;
+
+        //导出按钮点击
+        $(document).delegate("#export", "click", function () {
+
+            var currentQueryConditions = serializeFormById(_this.opts.queryConditionId);
+
+            if(currentQueryConditions != _this.opts.cachedQueryConditions){
+                $.layerMsg('条件已改变，请先点击查询按钮！', false);
+                return;
+            }
+
+            if (_this.opts.gridOpts.data.length == 0) {
+                $.layerMsg('导出记录为空！', false);
+                return;
+            }
+
+            var conditions = $.extend(true, {}, $('#' + _this.opts.queryConditionId).getFormData() || {});
+
+            conditions = '?' + $.param(conditions, true);
+
+            var skuNameOrCode = $('#skuNameOrCode').val();
+            var wmTypeNames = $('#wmTypeId-all-em').text();
+            var skuTypeNames = $('#skuTypeId-all-em').text();
+            var commercialNames = $('#commercialId-all-em').text();
+            var warehouseNames = $('#wmId-all-em').text();
+
+            conditions = conditions.replace('skuNameOrCode', 'skuNameOrCodeNotWanted');
+            conditions += ('&skuNameOrCode=' + skuNameOrCode);
+            conditions += ('&wmTypeNames=' + wmTypeNames);
+            conditions += ('&skuTypeNames=' + skuTypeNames);
+            conditions += ('&commercialNames=' + commercialNames);
+            conditions += ('&warehouseNames=' + warehouseNames);
+
+            conditions = encodeURI(encodeURI(conditions));
+
+            window.open(_this.opts.urlRoot + _this.opts.exportUrl + conditions, '_blank');
+        });
+    },
+
+    delegateUndoAll : function(){
+        $("#undo-all").on("click",function(){
+            //默认勾选第一个商户（品牌或商户）
+            if(commercialId!="-1"){
+                refreshWms(commercialId);
+                $("#oneCommercial").find("li").click();
+                $("#oneCommercial").find("input").val(commercialId);
+            }else{
+                if($('#commercialId-1')) {
+                    $('#commercialId-1').click();
                 }
             }
         });
     },
 
-    //初始化单据作业明细表格
-    initDetailGrid : function(editable) {
-        var _this = this;
-        var $gridObj = _this.$detailGrid;
+    //查询
+    query : function () {
 
-        var qtyColModel = {
-            name: 'actualQty',
-            index: 'actualQty',
-            align: 'right',
-            width: 120,
-            sorttype:'number',
-            sortable: !editable
-        };
-        var priceModel = {
-            name: 'price',
-            index: 'price',
-            width: 100,
-            align: 'right',
-            sorttype:'number',
-            sortable: !editable
-        };
-
-        var editColModel = {
-            editable: true,
-            formatter: formatInputNumber,
-            unformat: unformatInput
-        };
-
-        if (editable) {
-            qtyColModel = $.extend(true, qtyColModel, editColModel || {});
-            priceModel = $.extend(true, priceModel, editColModel || {});
-        }
-
-        //构造数据 添加字段:当期库存 = 计算后库存
-        _this.opts.gridData.forEach(function(v,i){
-            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
-                v.standardInventoryQty = v.inventoryQty;
-            }else{
-                v.inventoryQty = parseInt(v.actualQty) + parseInt(v.standardInventoryQty);
-            }
-        });
-
-        scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
-            formula: ['price*actualQty=amount','actualQty+standardInventoryQty=inventoryQty'],
-            summary: [
-                {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
-                {colModel: 'actualQty', objectId: 'qtySum'},
-                {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
-            ]
-        });
-
-        $gridObj.dataGrid({
-            data: _this.opts.gridData,
-            datatype: 'local',
-            multiselect: (editable && _this.opts.isSourceOrderIdNull),
-            showEmptyGrid: true,
-            //height: 300,
-            rownumbers: true,
-            rowNum : 10000,
-            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
-            colModel: [
-                {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
-                {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
-                {name: 'skuTypeId', index: 'skuTypeId', width: 80, hidden: true, sortable: !editable},
-                {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
-                {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
-                {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
-                {name: 'uom', index: 'uom', width: 100, sortable: !editable,align: "center", hidden: editable},
-                {name: 'uom', index: 'uom', width: 100, sortable: !editable, align: 'center', hidden: !editable,
-                    formatter: $.unitSelectFormatter,
-                    unformat : unformatSelect
-                },
-                priceModel,
-                qtyColModel,
-                {name: 'amount', index: 'amount', width: 100, align: 'right', sorttype:'number',sortable: !editable},
-                {name: 'inventoryQty', index: 'inventoryQty', align: 'right', hidden: !editable, width: 100, sorttype:'number',sortable: !editable,
-                    formatter: customMinusToRedFormatterWithUnit,
-                    unformat: unformatSpan
-                },
-                {name: 'standardInventoryQty', index: 'standardInventoryQty', align: 'right', hidden: true},
-                {name: 'skuConvert', index: 'skuConvert', align: 'right', hidden: true},
-                {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
-                {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
-                {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
-                {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true}
-            ],
-            afterInsertRow: function (rowid, aData) {
-                $gridObj.jqGrid('setRowData', rowid, {/* skuId: rowid, */ taxRate: _this.opts.taxRate});
-                $gridObj.find(":text").first().keyup();
-
-                $.removeSelectTitle(rowid); //移除下拉框列的表格title
-            }
-        });
-
-        if(editable) $.delegateClickSelectGroup($gridObj);
-    },
-    /**
-     * 复制单据时，更新商品的税率，总金额和总数量（商品可能存在停用删除未授权等情况，这些商品是不显示的，所以原来的总金额和总数量可能不正确）
-     */
-    updateInfoWhenCopy: function () {
         var _this = this;
 
-        var $gridObj = _this.$detailGrid;
-        var gridDataIDs = $gridObj.jqGrid('getDataIDs');
-        var $qtySum = $("#qtySum"),
-            $amountSum = $("#amountSum");
-        if (gridDataIDs.length > 0) {
-            $gridObj.find('.gridInput').first().trigger('propertychange');
-        } else {
-            $qtySum.text('');
-            $amountSum.text('');
+        var conditions = $.extend(true, {}, $('#' + _this.opts.queryConditionId).getFormData() || {});
+
+        //若只选择一个仓库时转换成数组，便于后台接收
+        if (typeof conditions.wmTypeIds == "string") {
+            var wmTypeIds = [];
+            wmTypeIds.push(conditions.wmTypeIds);
+            conditions["wmTypeIds"] = wmTypeIds;
         }
+        if (typeof conditions.wmIds == "string") {
+            var wmIds = [];
+            wmIds.push(conditions.wmIds);
+            conditions["wmIds"] = wmIds;
+        }
+        if (typeof conditions.skuTypeIds == "string") {
+            var skuTypeIds = [];
+            skuTypeIds.push(conditions.skuTypeIds);
+            conditions["skuTypeIds"] = skuTypeIds;
+        }
+        if (typeof conditions.commercialIds == "string") {
+            var commercialIds = [];
+            commercialIds.push(conditions.commercialIds);
+            conditions["commercialIds"] = commercialIds;
+        }
+
+
+        // conditions = JSON.stringify(conditions);
+        conditions = serializeFormById("queryConditions");
+
+        $("#load_grid").show();
+        $.ajax({
+            type: "post",
+            async: true,
+            url : _this.opts.urlRoot + _this.opts.queryUrl+'&'+conditions,
+            contentType : 'application/json;charset=UTF-8',
+            data : {},
+            dataType : 'json',
+            success: function (data) {
+                //var data = $.parseJSON(json);
+                if (data.skuVOs) {
+                    _this.buildTable(data.skuVOs);
+                    _this.opts.cachedQueryConditions = serializeFormById(_this.opts.queryConditionId);//缓存查询条件
+                } else {
+                    $.layerMsg('查询失败！');
+                }
+                $("#load_grid").hide();
+            }
+        });
     },
+
     //构建表格
     buildTable : function (skuVOs) {
 
@@ -404,8 +253,8 @@ var asnSi = {
             var finalColModels = [];
 
             //每次仅获取前7列，即是商品基本信息所在的列
-            var fixedColNames = inventorydistribution.opts.gridOpts.colNames.slice(0, 6);
-            var fixedColModel = inventorydistribution.opts.gridOpts.colModel.slice(0, 6);
+            var fixedColNames = asnSi.opts.gridOpts.colNames.slice(0, 6);
+            var fixedColModel = asnSi.opts.gridOpts.colModel.slice(0, 6);
 
             var dynamicColNames = [],
                 dynamicColModel = [],
@@ -553,189 +402,22 @@ var asnSi = {
             $("#grid").dataGrid(_this.opts.gridOpts);
         }
     },
-    //初始化出库单据作业明细表格
-    initChukuDetailGrid : function(editable) {
-        var _this = this;
-        var $gridObj = _this.$detailGrid;
 
-        var qtyColModel = {
-            name: 'actualQty',
-            index: 'actualQty',
-            align: 'right',
-            width: 120,
-            sorttype:'number',
-            sortable: !editable
-        };
-        var priceModel = {
-            name: 'price',
-            index: 'price',
-            width: 100,
-            align: 'right',
-            sorttype:'number',
-            sortable: !editable
-        };
-
-        var editColModel = {
-            editable: true,
-            formatter: formatInputNumber,
-            unformat: unformatInput
-        };
-
-        if (editable) {
-            qtyColModel = $.extend(true, qtyColModel, editColModel || {});
-            priceModel = $.extend(true, priceModel, editColModel || {});
+    //数量格式化
+    qtyFormatter : function(cellvalue, options, rowObject) {
+        if (!!cellvalue || cellvalue == 0) {
+            return customMinusToRedFormatter(cellvalue);
         }
 
-        //构造数据 添加字段:当期库存 = 计算后库存
-        _this.opts.gridData.forEach(function(v,i){
-            if(v.standardInventoryQty == 0 || v.standardInventoryQty == undefined ){
-                v.standardInventoryQty = v.inventoryQty;
-            }else{
-                v.inventoryQty = parseInt(v.actualQty) + parseInt(v.standardInventoryQty);
-            }
-        });
-
-        scmSkuSelect.opts.dataGridCal = $gridObj.dataGridCal({
-            formula: ['price*actualQty=amount','standardInventoryQty-actualQty=inventoryQty'],
-            summary: [
-                {colModel: 'inventoryQty', objectId: 'inventoryQtySum'},
-                {colModel: 'actualQty', objectId: 'qtySum'},
-                {colModel: 'amount', objectId: 'amountSum', showCurrencySymbol: true}
-            ]
-        });
-
-        $gridObj.dataGrid({
-            data: _this.opts.gridData,
-            datatype: 'local',
-            multiselect: (editable && _this.opts.isSourceOrderIdNull),
-            showEmptyGrid: true,
-            //height: 300,
-            rownumbers: true,
-            rowNum : 10000,
-            colNames: ['商品编码','skuId','cate_id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '出库数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
-            colModel: [
-            {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
-            {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
-                {hidden:true,name: 'skuTypeId', index: 'skuTypeId', width: 100, align: 'left',frozen : true,sortable: !($('#editable').val()=='true'?true:false)},
-                {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
-            {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
-            {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
-            {name: 'uom', index: 'uom', width: 50, sortable: !editable,align: "center", hidden: editable},
-            {name: 'uom', index: 'uom', width: 50, sortable: !editable, align: 'center', hidden: !editable,
-                formatter: $.unitSelectFormatter,
-                unformat : unformatSelect
-            },
-            priceModel,
-            qtyColModel,
-            {name: 'amount', index: 'amount', width: 100, align: 'right', sorttype:'number',sortable: !editable},
-            {name: 'inventoryQty', index: 'inventoryQty', align: 'right', hidden: !editable, width: 100, sorttype:'number',sortable: !editable,
-                formatter: customMinusToRedFormatterWithUnit,
-                unformat: unformatSpan
-            },
-            {name: 'standardInventoryQty', index: 'standardInventoryQty',hidden:true, align: 'right'},
-            {name: 'skuConvert', index: 'skuConvert', align: 'right', hidden: true},
-            {name: 'skuConvertOfStandard', index: 'skuConvertOfStandard', align: 'right', hidden: true},
-            {name: 'standardPrice', index: 'standardPrice', align: "center", hidden: true},
-            {name: 'standardUnitId', index: 'standardUnitId', align: "center", hidden: true},
-            {name: 'standardUnitName', index: 'standardUnitName', align: "center", hidden: true}],
-            afterInsertRow: function (rowid, aData) {
-            $gridObj.jqGrid('setRowData', rowid, {/* skuId: rowid, */ taxRate: _this.opts.taxRate});
-            $gridObj.find(":text").first().keyup();
-
-            $.removeSelectTitle(rowid); //移除下拉框列的表格title
-        }
-    });
-
-
-
-        if(editable) $.delegateClickSelectGroup($gridObj);
+        return '-';
     },
-};
 
-//单据明细校验
-$.detailsValidator = function (args) {
-    var $grid = $('#' + asnSi.opts.detailGridId);
-
-    var gridData = $grid.jqGrid('getRowData');
-    if (gridData.length == 0) {
-        $.layerMsg('请先添加商品', false);
-        return false;
-    }
-
-    // var qtyOfNoUom = $grid.find('.select-unit > .red-border').length;
-    // if (qtyOfNoUom > 0) {
-    //     $.layerMsg('还有商品未选择单位', false);
-    //     return false;
-    // }
-
-    var qtySum = $grid.jqGrid('getCol', 'actualQty', false, 'sum');
-    if (qtySum == 0) {
-        $.layerMsg('出库数不能全部为0', false);
-        return false;
-    }
-
-    return true;
-};
-
-//保存回调
-$.saveCallback = function (args) {
-    var rs = args.result;
-    if (rs.success) {
-        // var $id = $("#id");
-        // if (!$id.val()) {
-        //     $id.val(rs.data.id);
-        //    replaceUrl('/asn/si/edit', 'id=' + rs.data.id);
-        //     $("#command-type-name").text("编辑");
-        //     document.title = '编辑出库单';
-        //
-        //     $("#btnCopy").removeClass("hidden");
-        // }
-        // $.layerMsg(, true);
-        if(confirm(rs.message + ",是否继续添加？")){
-            location.reload();
-        }else{
-            location.href=rs.data.url;
+    //金额格式换
+    amountFormatter : function(cellvalue, options, rowObject) {
+        if (!!cellvalue || cellvalue == 0) {
+            return '￥' + cellvalue;
         }
 
-        return;
-    } else {
-        if (rs.data != '' && rs.data != null) {
-            $.layerOpen("操作失败:" + rs.message, rs.data);
-        } else {
-            $.layerMsg("操作失败:" + rs.message, false);
-        }
+        return '-';
     }
 };
-
-//确认回调
-$.confirmCallback = function (args) {
-    var rs = args.result;
-    if (rs.success) {
-        var id = rs.data.id;
-        var url = asnSi.opts.urlRoot + '/view';
-        var token_new = args.token;
-        if(token_new) {
-            $('#t').val(token_new);
-        }
-        $.doForward({"url":url, "postData":{"id":id}});
-    } else {
-        if (rs.data != '' && rs.data != null) {
-            //bkeruyun.promptMessage("操作失败:" + rs.message, rs.data + "<br>");
-            $.layerOpen("操作失败:" + rs.message, rs.data);
-        } else {
-            //bkeruyun.promptMessage("操作失败:" + rs.message);
-            $.layerMsg("操作失败:" + rs.message, false);
-        }
-    }
-};
-
-//查看页面打印方法
-function print(id){
-    $.print.showPrintDialog({
-        urlRoot: asnSi.opts.urlRoot,
-        query: {
-            id: id
-        }
-    });
-}
-

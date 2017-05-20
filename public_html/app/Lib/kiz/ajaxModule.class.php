@@ -347,11 +347,11 @@ class ajaxModule extends KizBaseModule{
         $return['total'] = ceil($records/$page_size);
         $return['status'] = true;
         $return['resMsg'] = null;
+        $mid = [];
 
         foreach($list as $k=>$v){
             $v['ctime']=to_date($v['ctime'],'m-d H:i:s');
             $v['detail']=unserialize($v['dd_detail']);
-
             if ($v['type']==1){
                 $v['type_show']	='验收入库';
                 $v['gonghuo_show']	='供货人';
@@ -364,7 +364,21 @@ class ajaxModule extends KizBaseModule{
             $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
+            $goods_detail = [];
+            foreach ($v['detail'] as $k2 => $v2) {
+                $goods_detail[$k2]['skuTypeId'] = $v2['cate_id'];
+                $goods_detail[$k2]['id'] = $v2['mid'];
+                $goods_detail[$k2]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($v2['cate_id']))?'':parent::get_dc_current_supplier_cate($v2['cate_id']['name']);
+                $goods_detail[$k2]['skuCode'] = $v2['mid'];
+                $goods_detail[$k2]['skuName'] = $v2['name'];
+                $goods_detail[$k2]['uom'] = $v2['unit'];
+                $goods_detail[$k2]['price'] = $v2['price'];
+
+                array_push($mid,$goods_detail);
+            }
         }
+        var_dump($mid);
+
         $return['dataList'] = $list;
         echo json_encode($return);exit;
     }
