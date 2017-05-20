@@ -29,7 +29,7 @@ var asnSi = {
             colModel:[
                 {name: 'id', index: 'id', width: 80, align: 'center',hidden:true},
                 {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center',hidden:true},
-                {name: 'skuTypeName', index: 'skuTypeId', width: 80, align: 'center'},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 80, align: 'center'},
                 // {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
                 {name: 'skuName', index: 'skuName', width: 100, align: 'left'},
@@ -115,9 +115,9 @@ var asnSi = {
 
         $.setSearchFocus();
 
-        if(commercialId!="-1"){
-            refreshWms(commercialId);
-        }
+        // if(commercialId!="-1"){
+        //     refreshWms(commercialId);
+        // }
     },
 
     delegateQuery : function(){
@@ -195,26 +195,26 @@ var asnSi = {
         var conditions = $.extend(true, {}, $('#' + _this.opts.queryConditionId).getFormData() || {});
 
         //若只选择一个仓库时转换成数组，便于后台接收
-        if (typeof conditions.wmTypeIds == "string") {
-            var wmTypeIds = [];
-            wmTypeIds.push(conditions.wmTypeIds);
-            conditions["wmTypeIds"] = wmTypeIds;
-        }
-        if (typeof conditions.wmIds == "string") {
-            var wmIds = [];
-            wmIds.push(conditions.wmIds);
-            conditions["wmIds"] = wmIds;
-        }
-        if (typeof conditions.skuTypeIds == "string") {
-            var skuTypeIds = [];
-            skuTypeIds.push(conditions.skuTypeIds);
-            conditions["skuTypeIds"] = skuTypeIds;
-        }
-        if (typeof conditions.commercialIds == "string") {
-            var commercialIds = [];
-            commercialIds.push(conditions.commercialIds);
-            conditions["commercialIds"] = commercialIds;
-        }
+        // if (typeof conditions.wmTypeIds == "string") {
+        //     var wmTypeIds = [];
+        //     wmTypeIds.push(conditions.wmTypeIds);
+        //     conditions["wmTypeIds"] = wmTypeIds;
+        // }
+        // if (typeof conditions.wmIds == "string") {
+        //     var wmIds = [];
+        //     wmIds.push(conditions.wmIds);
+        //     conditions["wmIds"] = wmIds;
+        // }
+        // if (typeof conditions.skuTypeIds == "string") {
+        //     var skuTypeIds = [];
+        //     skuTypeIds.push(conditions.skuTypeIds);
+        //     conditions["skuTypeIds"] = skuTypeIds;
+        // }
+        // if (typeof conditions.commercialIds == "string") {
+        //     var commercialIds = [];
+        //     commercialIds.push(conditions.commercialIds);
+        //     conditions["commercialIds"] = commercialIds;
+        // }
 
 
         // conditions = JSON.stringify(conditions);
@@ -229,9 +229,10 @@ var asnSi = {
             data : {},
             dataType : 'json',
             success: function (data) {
+                // console.log(data);
                 //var data = $.parseJSON(json);
-                if (data.skuVOs) {
-                    _this.buildTable(data.skuVOs);
+                if (data) {
+                    _this.buildTable(data.goods_detail);
                     _this.opts.cachedQueryConditions = serializeFormById(_this.opts.queryConditionId);//缓存查询条件
                 } else {
                     $.layerMsg('查询失败！');
@@ -266,102 +267,102 @@ var asnSi = {
             var pushedGroupHeaders2 = [];
             var pushedWarehouses = [];
 
-            $.each(skuVOs, function(i, sku) {
-
-                $.each(sku.titleVOs, function(j, warehouse) {
-
-                    if(warehouse.qty != undefined && warehouse.qty != null) {
-                        sku['qty_' + warehouse.warehouseId] = warehouse.qty;
-                        sku['amount_' + warehouse.warehouseId] = warehouse.amount;
-                        sku['price_' + warehouse.warehouseId] = warehouse.price;
-                    }
-
-                    if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
-                        footerData['qty_' + warehouse.warehouseId] = parseInt(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
-                    } else{
-                        footerData['qty_' + warehouse.warehouseId] = warehouse.qty;
-                    }
-
-                    if(footerData['amount_' + warehouse.warehouseId] != undefined && footerData['amount_' + warehouse.warehouseId] != null){
-                        footerData['amount_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['amount_' + warehouse.warehouseId]) + parseFloat(warehouse.amount));
-                    } else{
-                        footerData['amount_' + warehouse.warehouseId] = warehouse.amount;
-                    }
-                    if(footerData['price_' + warehouse.warehouseId] != undefined && footerData['price_' + warehouse.warehouseId] != null){
-                        footerData['price_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['price_' + warehouse.warehouseId]) + parseFloat(warehouse.price));
-                    } else{
-                        footerData['price_' + warehouse.warehouseId] = warehouse.price;
-                    }
-
-                    if(pushedWarehouses.indexOf(warehouse.warehouseId) < 0){
-
-                        pushedWarehouses.push(warehouse.warehouseId);
-
-                        dynamicColNames.push('库存');
-                        dynamicColNames.push('单价');
-                        dynamicColNames.push('库存金额');
-
-                        dynamicColModel.push({
-                            name: 'qty_' + warehouse.warehouseId,
-                            index: 'qty_' + warehouse.warehouseId,
-                            width: 60,
-                            align: "right",
-                            sorttype: "number",
-                            formatter: _this.qtyFormatter
-                        });
-
-                        dynamicColModel.push({
-                            name: 'price_' + warehouse.warehouseId,
-                            index: 'price_' + warehouse.warehouseId,
-                            width: 60,
-                            align: "right",
-                            sorttype: "number",
-                            formatter: _this.qtyFormatter
-                        });
-
-
-                        dynamicColModel.push({
-                            name: 'amount_' + warehouse.warehouseId,
-                            index: 'amount_' + warehouse.warehouseId,
-                            width: 75,
-                            align: "right",
-                            sorttype: "number",
-                            formatter: _this.amountFormatter
-                        });
-
-                        if(pushedGroupHeaders2.indexOf(warehouse.warehouseId) < 0){
-
-                            groupHeaders2.push({
-                                startColumnName: 'qty_' + warehouse.warehouseId,
-                                numberOfColumns: 3,
-                                titleText: warehouse.warehouseName
-                            });
-
-                            pushedGroupHeaders2.push(warehouse.warehouseId);
-
-                            if(pushedGroupHeaders1.indexOf(warehouse.commercialId) < 0){
-
-                                groupHeaders1.push({
-                                    startColumnName: 'qty_' + warehouse.warehouseId,
-                                    numberOfColumns: 3 ,
-                                    titleText: warehouse.commercialName
-                                });
-
-                                pushedGroupHeaders1.push(warehouse.commercialId);
-
-                            }else {
-                                if(groupHeaders1.length > 0) {
-                                    var preGroupHeader1 = groupHeaders1.pop();
-                                    if (preGroupHeader1 && preGroupHeader1.titleText === warehouse.commercialName) {
-                                        preGroupHeader1.numberOfColumns += 3 ;
-                                    }
-                                    groupHeaders1.push(preGroupHeader1);
-                                }
-                            }
-                        }
-                    }
-                });
-            });
+            // $.each(skuVOs, function(i, sku) {
+            //
+            //     $.each(sku.goods, function(j, warehouse) {
+            //
+            //         if(warehouse.qty != undefined && warehouse.qty != null) {
+            //             sku['qty_' + warehouse.warehouseId] = warehouse.qty;
+            //             sku['amount_' + warehouse.warehouseId] = warehouse.amount;
+            //             sku['price_' + warehouse.warehouseId] = warehouse.price;
+            //         }
+            //
+            //         if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
+            //             footerData['qty_' + warehouse.warehouseId] = parseInt(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
+            //         } else{
+            //             footerData['qty_' + warehouse.warehouseId] = warehouse.qty;
+            //         }
+            //
+            //         if(footerData['amount_' + warehouse.warehouseId] != undefined && footerData['amount_' + warehouse.warehouseId] != null){
+            //             footerData['amount_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['amount_' + warehouse.warehouseId]) + parseFloat(warehouse.amount));
+            //         } else{
+            //             footerData['amount_' + warehouse.warehouseId] = warehouse.amount;
+            //         }
+            //         if(footerData['price_' + warehouse.warehouseId] != undefined && footerData['price_' + warehouse.warehouseId] != null){
+            //             footerData['price_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['price_' + warehouse.warehouseId]) + parseFloat(warehouse.price));
+            //         } else{
+            //             footerData['price_' + warehouse.warehouseId] = warehouse.price;
+            //         }
+            //
+            //         if(pushedWarehouses.indexOf(warehouse.warehouseId) < 0){
+            //
+            //             pushedWarehouses.push(warehouse.warehouseId);
+            //
+            //             dynamicColNames.push('库存');
+            //             dynamicColNames.push('单价');
+            //             dynamicColNames.push('库存金额');
+            //
+            //             dynamicColModel.push({
+            //                 name: 'qty_' + warehouse.warehouseId,
+            //                 index: 'qty_' + warehouse.warehouseId,
+            //                 width: 60,
+            //                 align: "right",
+            //                 sorttype: "number",
+            //                 formatter: _this.qtyFormatter
+            //             });
+            //
+            //             dynamicColModel.push({
+            //                 name: 'price_' + warehouse.warehouseId,
+            //                 index: 'price_' + warehouse.warehouseId,
+            //                 width: 60,
+            //                 align: "right",
+            //                 sorttype: "number",
+            //                 formatter: _this.qtyFormatter
+            //             });
+            //
+            //
+            //             dynamicColModel.push({
+            //                 name: 'amount_' + warehouse.warehouseId,
+            //                 index: 'amount_' + warehouse.warehouseId,
+            //                 width: 75,
+            //                 align: "right",
+            //                 sorttype: "number",
+            //                 formatter: _this.amountFormatter
+            //             });
+            //
+            //             if(pushedGroupHeaders2.indexOf(warehouse.warehouseId) < 0){
+            //
+            //                 groupHeaders2.push({
+            //                     startColumnName: 'qty_' + warehouse.warehouseId,
+            //                     numberOfColumns: 3,
+            //                     titleText: warehouse.warehouseName
+            //                 });
+            //
+            //                 pushedGroupHeaders2.push(warehouse.warehouseId);
+            //
+            //                 if(pushedGroupHeaders1.indexOf(warehouse.commercialId) < 0){
+            //
+            //                     groupHeaders1.push({
+            //                         startColumnName: 'qty_' + warehouse.warehouseId,
+            //                         numberOfColumns: 3 ,
+            //                         titleText: warehouse.commercialName
+            //                     });
+            //
+            //                     pushedGroupHeaders1.push(warehouse.commercialId);
+            //
+            //                 }else {
+            //                     if(groupHeaders1.length > 0) {
+            //                         var preGroupHeader1 = groupHeaders1.pop();
+            //                         if (preGroupHeader1 && preGroupHeader1.titleText === warehouse.commercialName) {
+            //                             preGroupHeader1.numberOfColumns += 3 ;
+            //                         }
+            //                         groupHeaders1.push(preGroupHeader1);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     });
+            // });
 
 
             //商品基本信息所在的colName/colModel
@@ -374,27 +375,26 @@ var asnSi = {
             _this.opts.gridOpts.colNames = finalColNames;
             _this.opts.gridOpts.colModel = finalColModels;
             _this.opts.gridOpts.data = skuVOs;
-            _this.opts.footerData = footerData;
+            // _this.opts.footerData = footerData;
 
             var $gridDiv =  $("#gridDiv");
             _this.opts.gridOpts.shrinkToFit = (680 + 135 * groupHeaders2.length) < $gridDiv.width();
 
             $gridDiv.empty().html('<table id="grid"></table>');
-            var $grid = $(_this.opts.listGridId);
-            $grid.dataGrid(_this.opts.gridOpts);
+            $("#grid").dataGrid(_this.opts.gridOpts);
 
-            $grid.jqGrid('setGroupHeaders', {
-                useColSpanStyle: true,
-                groupHeaders: groupHeaders1
-            });
-
-            $grid.jqGrid('setGroupHeaders', {
-                useColSpanStyle: true,
-                groupHeaders: groupHeaders2
-            });
-
-            //修改商品信息的rowspan值，使其支持三行合并
-            $("th[role='columnheader'][rowspan='2']").attr("rowspan", "3");
+            // $grid.jqGrid('setGroupHeaders', {
+            //     useColSpanStyle: true,
+            //     groupHeaders: groupHeaders1
+            // });
+            //
+            // $grid.jqGrid('setGroupHeaders', {
+            //     useColSpanStyle: true,
+            //     groupHeaders: groupHeaders2
+            // });
+            //
+            // //修改商品信息的rowspan值，使其支持三行合并
+            // $("th[role='columnheader'][rowspan='2']").attr("rowspan", "3");
         } else {
             _this.opts.gridOpts.data = [];
 

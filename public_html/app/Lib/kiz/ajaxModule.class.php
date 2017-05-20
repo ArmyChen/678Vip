@@ -347,8 +347,9 @@ class ajaxModule extends KizBaseModule{
         $return['total'] = ceil($records/$page_size);
         $return['status'] = true;
         $return['resMsg'] = null;
+        $goods_detail = [];
+        $num = 0;
         $mid = [];
-
         foreach($list as $k=>$v){
             $v['ctime']=to_date($v['ctime'],'m-d H:i:s');
             $v['detail']=unserialize($v['dd_detail']);
@@ -364,22 +365,67 @@ class ajaxModule extends KizBaseModule{
             $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
-            $goods_detail = [];
             foreach ($v['detail'] as $k2 => $v2) {
-                $goods_detail[$k2]['skuTypeId'] = $v2['cate_id'];
-                $goods_detail[$k2]['id'] = $v2['mid'];
-                $goods_detail[$k2]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($v2['cate_id']))?'':parent::get_dc_current_supplier_cate($v2['cate_id'])['name'];
-                $goods_detail[$k2]['skuCode'] = $v2['mid'];
-                $goods_detail[$k2]['skuName'] = $v2['name'];
-                $goods_detail[$k2]['uom'] = $v2['unit'];
-                $goods_detail[$k2]['price'] = $v2['price'];
-
-                array_push($mid,$goods_detail);
+                $goods_detail[$num]['skuTypeId'] = $v2['cate_id'];
+                $goods_detail[$num]['type'] = $v['type'];
+                $goods_detail[$num]['num'] = $v2['num'];
+                $goods_detail[$num]['mid'] = $v2['mid'];
+                $goods_detail[$num]['id'] = $v['id'];
+                $goods_detail[$num]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($v2['cate_id']))?'':parent::get_dc_current_supplier_cate($v2['cate_id'])['name'];
+                $goods_detail[$num]['skuCode'] = $v2['mid'];
+                $goods_detail[$num]['skuName'] = $v2['name'];
+                $goods_detail[$num]['uom'] = $v2['unit'];
+                $goods_detail[$num]['price'] = $v2['price'];
+                $num ++;
+                array_push($mid,$v2['mid']);
             }
         }
-        var_dump($mid);
+        $mids = array_unique($mid);
+        $goods=[];
+        $goods1=[];
+        $goods2=[];
+        foreach ($mids as $k => $v) {
+            foreach ($goods_detail as $k2 => $v2) {
+                if($v == $v2['mid']){
+                    if($v2['type'] == 1){
+                        $goods1[$k2]['skuTypeId'] = $v2['skuTypeId'];
+                        $goods1[$k2]['mid'] = $v2['mid'];
+                        $goods1[$k2]['id'] = $v2['id'];
+                        $goods1[$k2]['skuTypeName'] = $v2['skuTypeName'];
+                        $goods1[$k2]['skuCode'] = $v2['skuCode'];
+                        $goods1[$k2]['skuName'] = $v2['skuName'];
+                        $goods1[$k2]['uom'] = $v2['uom'];
+                        $goods1[$k2]['price'] += $v2['price'];
+                        $goods1[$k2]['num'] += $v2['num'];
+                    }else{
+                        $goods2[$k2]['skuTypeId'] = $v2['skuTypeId'];
+                        $goods2[$k2]['mid'] = $v2['mid'];
+                        $goods2[$k2]['id'] = $v2['id'];
+                        $goods2[$k2]['skuTypeName'] = $v2['skuTypeName'];
+                        $goods2[$k2]['skuCode'] = $v2['skuCode'];
+                        $goods2[$k2]['skuName'] = $v2['skuName'];
+                        $goods2[$k2]['uom'] = $v2['uom'];
+                        $goods2[$k2]['price'] += $v2['price'];
+                        $goods2[$k2]['num'] += $v2['num'];
+                    }
 
-        $return['dataList'] = $list;
+                    $goods[$k2]['skuTypeId'] = $v2['skuTypeId'];
+                    $goods[$k2]['mid'] = $v2['mid'];
+                    $goods[$k2]['id'] = $v2['id'];
+                    $goods[$k2]['skuTypeName'] = $v2['skuTypeName'];
+                    $goods[$k2]['skuCode'] = $v2['skuCode'];
+                    $goods[$k2]['skuName'] = $v2['skuName'];
+                    $goods[$k2]['uom'] = $v2['uom'];
+                    $goods[$k2]['price'] += $v2['price'];
+                }
+            }
+        }
+
+
+        $return['goods'] = $goods;
+        $return['goods1'] = $goods1;
+        $return['goods2'] = $goods2;
+        $return['goods_detail'] = $goods_detail;
         echo json_encode($return);exit;
     }
 
