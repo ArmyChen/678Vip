@@ -326,9 +326,9 @@ class ajaxModule extends KizBaseModule{
         if ($gys){
             $sqlstr .=" and a.gys = '".$gys."' ";
         }
-        if ($status!=99){
-            $sqlstr .=" and a.type = ".$status." ";
-        }
+//        if ($status!=99){
+//            $sqlstr .=" and a.type = ".$status." ";
+//        }
         if($_REQUEST['danjuhao'] !=""){
             $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
@@ -353,10 +353,10 @@ class ajaxModule extends KizBaseModule{
             $v['detail']=unserialize($v['dd_detail']);
 
             if ($v['type']==1){
-                $v['type_show']	='入库';
+                $v['type_show']	='验收入库';
                 $v['gonghuo_show']	='供货人';
             }else{
-                $v['type_show']	='出库';
+                $v['type_show']	='验收退货';
                 $v['gonghuo_show']	='收货人';
             }
 

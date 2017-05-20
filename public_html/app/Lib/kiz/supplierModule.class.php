@@ -642,9 +642,8 @@ class supplierModule extends KizBaseModule
         }
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
-        $cangkulist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku where slid=".$slid);
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
         $GLOBALS['tmpl']->assign("type", $type);
