@@ -25,16 +25,21 @@ var asnSi = {
             shrinkToFit: false,
             rowNum: 50,
             scroll: 1, // virtual scroll
-            colNames:['id','类别id','类别', '编号', '名称', '单位', '价格'],
+            colNames:['id','类别id','类别', '编号', '名称', '单位', '单价', '直拨', '退料', '合计', '直拨','退料','合计'],
             colModel:[
-                {name: 'id', index: 'id', width: 80, align: 'center',hidden:true},
-                {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center',hidden:true},
+                {name: 'id', index: 'id', width: 80, align: 'center'},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center'},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 80, align: 'center'},
-                // {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center'},
                 {name: 'skuName', index: 'skuName', width: 100, align: 'left'},
                 {name: 'uom', index: 'uom', width: 180, align: 'left'},
                 {name: 'price', index: 'price', width: 60, align: 'center'},
+                {name: 'zhinum', index: 'zhinum', width: 80, align: 'center'},
+                {name: 'tuinum', index: 'tuinum', width: 80, align: 'center'},
+                {name: 'sumnum', index: 'sumnum', width: 80, align: 'center'},
+                {name: 'zhiprice', index: 'zhiprice', width: 80, align: 'center'},
+                {name: 'tuiprice', index: 'tuiprice', width: 80, align: 'center'},
+                {name: 'sumprice', index: 'sumprice', width: 100, align: 'left'},
             ],
             footerrow: true,
             gridComplete: function() {
@@ -157,14 +162,14 @@ var asnSi = {
             var wmTypeNames = $('#wmTypeId-all-em').text();
             var skuTypeNames = $('#skuTypeId-all-em').text();
             var commercialNames = $('#commercialId-all-em').text();
-            var warehouseNames = $('#wmId-all-em').text();
+            var vDataNames = $('#wmId-all-em').text();
 
             conditions = conditions.replace('skuNameOrCode', 'skuNameOrCodeNotWanted');
             conditions += ('&skuNameOrCode=' + skuNameOrCode);
             conditions += ('&wmTypeNames=' + wmTypeNames);
             conditions += ('&skuTypeNames=' + skuTypeNames);
             conditions += ('&commercialNames=' + commercialNames);
-            conditions += ('&warehouseNames=' + warehouseNames);
+            conditions += ('&vDataNames=' + vDataNames);
 
             conditions = encodeURI(encodeURI(conditions));
 
@@ -232,7 +237,7 @@ var asnSi = {
                 // console.log(data);
                 //var data = $.parseJSON(json);
                 if (data) {
-                    _this.buildTable(data.goods_detail);
+                    _this.buildTable(data);
                     _this.opts.cachedQueryConditions = serializeFormById(_this.opts.queryConditionId);//缓存查询条件
                 } else {
                     $.layerMsg('查询失败！');
@@ -253,118 +258,70 @@ var asnSi = {
             var finalColNames = [];
             var finalColModels = [];
 
-            //每次仅获取前7列，即是商品基本信息所在的列
-            var fixedColNames = asnSi.opts.gridOpts.colNames.slice(0, 6);
-            var fixedColModel = asnSi.opts.gridOpts.colModel.slice(0, 6);
+            //每次仅获取前6列，即是商品基本信息所在的列
+            var fixedColNames = asnSi.opts.gridOpts.colNames;
+            var fixedColModel = asnSi.opts.gridOpts.colModel;
 
             var dynamicColNames = [],
                 dynamicColModel = [],
                 groupHeaders1 = [],
                 groupHeaders2 = [],
-                footerData = {qtySum : "合计"};
+                groupHeaders3 = [],
+                footerData = {price : "合计"};
 
-            var pushedGroupHeaders1 = [];
-            var pushedGroupHeaders2 = [];
-            var pushedWarehouses = [];
+            var data = skuVOs.goods;
+            groupHeaders1.push({
+                startColumnName: 'id',
+                numberOfColumns: 7 ,
+                titleText: '物品'
+            });
+            groupHeaders2.push({
+                startColumnName: 'zhinum',
+                numberOfColumns: 3 ,
+                titleText: '数量'
+            });
+            groupHeaders3.push({
+                startColumnName: 'zhiprice',
+                numberOfColumns: 3 ,
+                titleText: '金额'
+            });
+            $.each(data, function(j, e) {
+                if(footerData['zhinum'] != undefined && footerData['zhinum'] != null){
+                    footerData['zhinum'] = parseInt(parseInt(footerData['zhinum']) + parseInt(e.zhinum));
+                } else{
+                    footerData['zhinum'] = e.zhinum;
+                }
 
-            // $.each(skuVOs, function(i, sku) {
-            //
-            //     $.each(sku.goods, function(j, warehouse) {
-            //
-            //         if(warehouse.qty != undefined && warehouse.qty != null) {
-            //             sku['qty_' + warehouse.warehouseId] = warehouse.qty;
-            //             sku['amount_' + warehouse.warehouseId] = warehouse.amount;
-            //             sku['price_' + warehouse.warehouseId] = warehouse.price;
-            //         }
-            //
-            //         if(footerData['qty_' + warehouse.warehouseId] != undefined && footerData['qty_' + warehouse.warehouseId] != null){
-            //             footerData['qty_' + warehouse.warehouseId] = parseInt(parseInt(footerData['qty_' + warehouse.warehouseId]) + parseInt(warehouse.qty));
-            //         } else{
-            //             footerData['qty_' + warehouse.warehouseId] = warehouse.qty;
-            //         }
-            //
-            //         if(footerData['amount_' + warehouse.warehouseId] != undefined && footerData['amount_' + warehouse.warehouseId] != null){
-            //             footerData['amount_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['amount_' + warehouse.warehouseId]) + parseFloat(warehouse.amount));
-            //         } else{
-            //             footerData['amount_' + warehouse.warehouseId] = warehouse.amount;
-            //         }
-            //         if(footerData['price_' + warehouse.warehouseId] != undefined && footerData['price_' + warehouse.warehouseId] != null){
-            //             footerData['price_' + warehouse.warehouseId] = $.toFixed(parseFloat(footerData['price_' + warehouse.warehouseId]) + parseFloat(warehouse.price));
-            //         } else{
-            //             footerData['price_' + warehouse.warehouseId] = warehouse.price;
-            //         }
-            //
-            //         if(pushedWarehouses.indexOf(warehouse.warehouseId) < 0){
-            //
-            //             pushedWarehouses.push(warehouse.warehouseId);
-            //
-            //             dynamicColNames.push('库存');
-            //             dynamicColNames.push('单价');
-            //             dynamicColNames.push('库存金额');
-            //
-            //             dynamicColModel.push({
-            //                 name: 'qty_' + warehouse.warehouseId,
-            //                 index: 'qty_' + warehouse.warehouseId,
-            //                 width: 60,
-            //                 align: "right",
-            //                 sorttype: "number",
-            //                 formatter: _this.qtyFormatter
-            //             });
-            //
-            //             dynamicColModel.push({
-            //                 name: 'price_' + warehouse.warehouseId,
-            //                 index: 'price_' + warehouse.warehouseId,
-            //                 width: 60,
-            //                 align: "right",
-            //                 sorttype: "number",
-            //                 formatter: _this.qtyFormatter
-            //             });
-            //
-            //
-            //             dynamicColModel.push({
-            //                 name: 'amount_' + warehouse.warehouseId,
-            //                 index: 'amount_' + warehouse.warehouseId,
-            //                 width: 75,
-            //                 align: "right",
-            //                 sorttype: "number",
-            //                 formatter: _this.amountFormatter
-            //             });
-            //
-            //             if(pushedGroupHeaders2.indexOf(warehouse.warehouseId) < 0){
-            //
-            //                 groupHeaders2.push({
-            //                     startColumnName: 'qty_' + warehouse.warehouseId,
-            //                     numberOfColumns: 3,
-            //                     titleText: warehouse.warehouseName
-            //                 });
-            //
-            //                 pushedGroupHeaders2.push(warehouse.warehouseId);
-            //
-            //                 if(pushedGroupHeaders1.indexOf(warehouse.commercialId) < 0){
-            //
-            //                     groupHeaders1.push({
-            //                         startColumnName: 'qty_' + warehouse.warehouseId,
-            //                         numberOfColumns: 3 ,
-            //                         titleText: warehouse.commercialName
-            //                     });
-            //
-            //                     pushedGroupHeaders1.push(warehouse.commercialId);
-            //
-            //                 }else {
-            //                     if(groupHeaders1.length > 0) {
-            //                         var preGroupHeader1 = groupHeaders1.pop();
-            //                         if (preGroupHeader1 && preGroupHeader1.titleText === warehouse.commercialName) {
-            //                             preGroupHeader1.numberOfColumns += 3 ;
-            //                         }
-            //                         groupHeaders1.push(preGroupHeader1);
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     });
-            // });
+                if(footerData['zhiprice'] != undefined && footerData['zhiprice'] != null){
+                    footerData['zhiprice'] = parseFloat(parseFloat(footerData['zhiprice']) + parseFloat(e.zhiprice));
+                } else{
+                    footerData['zhiprice'] = e.zhiprice;
+                }
 
+                if(footerData['tuiprice'] != undefined && footerData['tuiprice'] != null){
+                    footerData['tuiprice'] = parseFloat(parseFloat(footerData['tuiprice']) + parseFloat(e.tuiprice));
+                } else{
+                    footerData['tuiprice'] = e.tuiprice;
+                }
 
+                if(footerData['tuinum'] != undefined && footerData['tuinum'] != null){
+                    footerData['tuinum'] = parseInt(parseInt(footerData['tuinum']) + parseInt(e.tuinum));
+                } else{
+                    footerData['tuinum'] = e.tuinum;
+                }
+
+                if(footerData['sumprice'] != undefined && footerData['sumprice'] != null){
+                    footerData['sumprice'] = parseFloat(parseFloat(footerData['sumprice']) + parseFloat(e.sumprice));
+                } else{
+                    footerData['sumprice'] = e.sumprice;
+                }
+
+                if(footerData['sumnum'] != undefined && footerData['sumnum'] != null){
+                    footerData['sumnum'] = parseInt(parseInt(footerData['sumnum']) + parseInt(e.sumnum));
+                } else{
+                    footerData['sumnum'] = e.sumnum;
+                }
+            });
             //商品基本信息所在的colName/colModel
             Array.prototype.push.apply(finalColNames, fixedColNames);
             Array.prototype.push.apply(finalColModels, fixedColModel);
@@ -374,27 +331,37 @@ var asnSi = {
 
             _this.opts.gridOpts.colNames = finalColNames;
             _this.opts.gridOpts.colModel = finalColModels;
-            _this.opts.gridOpts.data = skuVOs;
-            // _this.opts.footerData = footerData;
+            _this.opts.gridOpts.data = data;
+            _this.opts.footerData = footerData;
 
             var $gridDiv =  $("#gridDiv");
-            _this.opts.gridOpts.shrinkToFit = (680 + 135 * groupHeaders2.length) < $gridDiv.width();
+            _this.opts.gridOpts.shrinkToFit = (680 + 135 * groupHeaders1.length*groupHeaders2.length*groupHeaders3.length) < $gridDiv.width();
 
             $gridDiv.empty().html('<table id="grid"></table>');
             $("#grid").dataGrid(_this.opts.gridOpts);
 
-            // $grid.jqGrid('setGroupHeaders', {
-            //     useColSpanStyle: true,
-            //     groupHeaders: groupHeaders1
-            // });
-            //
-            // $grid.jqGrid('setGroupHeaders', {
-            //     useColSpanStyle: true,
-            //     groupHeaders: groupHeaders2
-            // });
-            //
+            $("#grid").jqGrid('setGroupHeaders', {
+                useColSpanStyle: true,
+                groupHeaders: [
+                    {
+                        startColumnName: 'id',
+                        numberOfColumns: 7 ,
+                        titleText: '物品'
+                    },
+                    {
+                        startColumnName: 'zhinum',
+                        numberOfColumns: 3 ,
+                        titleText: '数量'
+                    },
+                    {
+                        startColumnName: 'zhiprice',
+                        numberOfColumns: 3 ,
+                        titleText: '金额'
+                    }
+                ]
+            });
             // //修改商品信息的rowspan值，使其支持三行合并
-            // $("th[role='columnheader'][rowspan='2']").attr("rowspan", "3");
+            // $("th[role='columnheader'][rowspan='1']").attr("rowspan", "2");
         } else {
             _this.opts.gridOpts.data = [];
 
