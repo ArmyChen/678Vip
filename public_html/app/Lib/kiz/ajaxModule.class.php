@@ -2420,14 +2420,16 @@ class ajaxModule extends KizBaseModule{
         if($cid){
             $where .= " and c.id =".$cid;
         }
-        if($billDateStart){
+        if ($billDateStart || $billDateEnd){
             $startTime = strtotime($billDateStart);
-            $where .= " and a.ctime > $startTime";
-        }
-        if($billDateEnd){
             $endTime = strtotime($billDateEnd);
-            $where .= " and a.ctime < $endTime";
+        }else{	 //默认为当月的
+            $startTime=strtotime(date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00");
+            $endTime=strtotime(date('Y-m-d', strtotime("$billDateEnd  -1 day")).' 23:59:59');
         }
+        $where .= " and a.ctime > $startTime";
+        $where .= " and a.ctime < $endTime";
+//echo $endTime;die;
 
 //        if($supplier){
 //            $where .= " and a.gys like '%".$supplier."%'";

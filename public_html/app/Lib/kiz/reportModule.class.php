@@ -222,6 +222,8 @@ class reportModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
+        $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("page_title", "销售明细表");
         $GLOBALS['tmpl']->display("pages/report/saleDetail.html");
     }
