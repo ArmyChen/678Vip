@@ -303,7 +303,7 @@ class ajaxModule extends KizBaseModule{
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
 
-        $sqlstr="where a.gys is not null ";
+        $sqlstr="where a.gonghuoren is not null ";
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
@@ -401,7 +401,6 @@ class ajaxModule extends KizBaseModule{
             foreach ($goods_detail as $k2 => $v2) {
                 if($v == $v2['mid']){
                     $item = parent::get_cangku_log_list($v2['id']);
-
                     $goods[$mnum]['skuTypeId'] = $v2['skuTypeId'];
                     $goods[$mnum]['mid'] = $v2['mid'];
                     $goods[$mnum]['id'] = $v2['id'];
@@ -410,13 +409,13 @@ class ajaxModule extends KizBaseModule{
                     $goods[$mnum]['skuName'] = $v2['skuName'];
                     $goods[$mnum]['uom'] = $v2['uom'];
                     $goods[$mnum]['type'] = $v2['type'];
-                    if($v2['type'] == 1 && !empty($item['gonghuoren'])){//直拨
+                    if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == 15){//直拨
                         $zhinum += $v2['num'];
                         $zhiprice += $v2['price'];
-                    }else if($v2['type'] == 2 && !empty($item['gonghuoren'])){//退料
+                    }else if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == -5){//退料
                         $tuinum += $v2['num'];
                         $tuiprice += $v2['price'];
-                    }else if($v2['type'] == 1 && empty($item['gonghuoren'])){//仓拨
+                    }else if($v2['type'] == 2 && !empty($item['gonghuoren']) && $item['ywsort'] == 10){//仓拨
                         $cangnum += $v2['num'];
                         $cangprice += $v2['price'];
                     }

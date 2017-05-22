@@ -352,6 +352,7 @@ class inventoryModule extends KizBaseModule{
         $GLOBALS['tmpl']->assign("cangkulist", $cangkulist);
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
         $GLOBALS['tmpl']->assign("ywsortid", $ywsortid);
+        $GLOBALS['tmpl']->assign('bumen',parent::get_bumen_list($slid));
         $GLOBALS['tmpl']->assign("page_title", "入库单");
         $GLOBALS['tmpl']->display("pages/inventory/goDownAdd.html");
 
