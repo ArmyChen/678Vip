@@ -25,21 +25,23 @@ var asnSi = {
             shrinkToFit: false,
             rowNum: 50,
             scroll: 1, // virtual scroll
-            colNames:['id','类别id','类别', '编号', '名称', '单位', '单价', '直拨', '退料', '合计', '直拨','退料','合计'],
+            colNames:['id','类别id','类别', '编号', '名称', '单位', '单价', '直拨','仓拨', '退料', '合计', '直拨','仓拨','退料','合计'],
             colModel:[
-                {name: 'id', index: 'id', width: 80, align: 'center'},
-                {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center'},
+                {name: 'id', index: 'id', width: 80, align: 'center',hidden:true},
+                {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center',hidden:true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 80, align: 'center'},
-                {name: 'skuName', index: 'skuName', width: 100, align: 'left'},
-                {name: 'uom', index: 'uom', width: 180, align: 'left'},
+                {name: 'skuName', index: 'skuName', width: 100, align: 'center'},
+                {name: 'uom', index: 'uom', width: 180, align: 'center'},
                 {name: 'price', index: 'price', width: 60, align: 'center'},
                 {name: 'zhinum', index: 'zhinum', width: 80, align: 'center'},
+                {name: 'cangnum', index: 'cangnum', width: 80, align: 'center'},
                 {name: 'tuinum', index: 'tuinum', width: 80, align: 'center'},
                 {name: 'sumnum', index: 'sumnum', width: 80, align: 'center'},
                 {name: 'zhiprice', index: 'zhiprice', width: 80, align: 'center'},
+                {name: 'cangprice', index: 'cangprice', width: 80, align: 'center'},
                 {name: 'tuiprice', index: 'tuiprice', width: 80, align: 'center'},
-                {name: 'sumprice', index: 'sumprice', width: 100, align: 'left'},
+                {name: 'sumprice', index: 'sumprice', width: 100, align: 'center'}
             ],
             footerrow: true,
             gridComplete: function() {
@@ -270,21 +272,6 @@ var asnSi = {
                 footerData = {price : "合计"};
 
             var data = skuVOs.goods;
-            groupHeaders1.push({
-                startColumnName: 'id',
-                numberOfColumns: 7 ,
-                titleText: '物品'
-            });
-            groupHeaders2.push({
-                startColumnName: 'zhinum',
-                numberOfColumns: 3 ,
-                titleText: '数量'
-            });
-            groupHeaders3.push({
-                startColumnName: 'zhiprice',
-                numberOfColumns: 3 ,
-                titleText: '金额'
-            });
             $.each(data, function(j, e) {
                 if(footerData['zhinum'] != undefined && footerData['zhinum'] != null){
                     footerData['zhinum'] = parseInt(parseInt(footerData['zhinum']) + parseInt(e.zhinum));
@@ -321,6 +308,18 @@ var asnSi = {
                 } else{
                     footerData['sumnum'] = e.sumnum;
                 }
+
+                if(footerData['cangnum'] != undefined && footerData['cangnum'] != null){
+                    footerData['cangnum'] = parseInt(parseInt(footerData['cangnum']) + parseInt(e.cangnum));
+                } else{
+                    footerData['cangnum'] = e.cangnum;
+                }
+
+                if(footerData['cangprice'] != undefined && footerData['cangprice'] != null){
+                    footerData['cangprice'] = parseInt(parseInt(footerData['cangprice']) + parseInt(e.cangprice));
+                } else{
+                    footerData['cangprice'] = e.cangprice;
+                }
             });
             //商品基本信息所在的colName/colModel
             Array.prototype.push.apply(finalColNames, fixedColNames);
@@ -350,12 +349,12 @@ var asnSi = {
                     },
                     {
                         startColumnName: 'zhinum',
-                        numberOfColumns: 3 ,
+                        numberOfColumns: 4 ,
                         titleText: '数量'
                     },
                     {
                         startColumnName: 'zhiprice',
-                        numberOfColumns: 3 ,
+                        numberOfColumns: 4 ,
                         titleText: '金额'
                     }
                 ]

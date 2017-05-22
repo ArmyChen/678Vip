@@ -290,6 +290,7 @@ class ajaxModule extends KizBaseModule{
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
         $warehouseId = $_REQUEST['warehouseId']?intval($_REQUEST['warehouseId']):'99';
         $bumen = $_REQUEST['gonghuoren'];
+        $skuNameOrCode = $_REQUEST['skuNameOrCode'];
         $gys = $_REQUEST['gys'];
         $status = $_REQUEST['status'];
         if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
@@ -311,9 +312,9 @@ class ajaxModule extends KizBaseModule{
         if($end_time_s){
             $sqlstr .=" and a.ctime < ".$end_time_s." ";
         }
-        if ($type !=99 ){
-            $sqlstr .=" and a.type = ".$type." ";
-        }
+//        if ($type !=99 ){
+//            $sqlstr .=" and a.type = ".$type." ";
+//        }
         if ($warehouseId !=99 ){
             $sqlstr .=" and a.cid = ".$warehouseId." ";
         }
@@ -332,6 +333,11 @@ class ajaxModule extends KizBaseModule{
         if($_REQUEST['danjuhao'] !=""){
             $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
+
+        if($skuNameOrCode){
+            $sqlstr .= " and (a.dd_detail like '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%')";
+        }
+
 //        $sqlstr .=" and f.print <> 4";
 //        $sql2 = "select * from fanwe_cangku_log limit 1";
 //        var_dump($GLOBALS['db']->getRow($sql2));
@@ -385,8 +391,17 @@ class ajaxModule extends KizBaseModule{
         $mnum = -1;
         foreach ($mids as $k => $v) {
             $mnum++;
+            $zhinum=0;
+            $cangnum=0;
+            $tuinum=0;
+            $zhiprice=0;
+            $cangprice=0;
+            $tuiprice=0;
+
             foreach ($goods_detail as $k2 => $v2) {
                 if($v == $v2['mid']){
+                    $item = parent::get_cangku_log_list($v2['id']);
+
                     $goods[$mnum]['skuTypeId'] = $v2['skuTypeId'];
                     $goods[$mnum]['mid'] = $v2['mid'];
                     $goods[$mnum]['id'] = $v2['id'];
@@ -395,23 +410,30 @@ class ajaxModule extends KizBaseModule{
                     $goods[$mnum]['skuName'] = $v2['skuName'];
                     $goods[$mnum]['uom'] = $v2['uom'];
                     $goods[$mnum]['type'] = $v2['type'];
-                    if($v2['type'] == 1){
-                        $goods[$mnum]['zhiprice'] += $v2['num']*$v2['price'];
-                        $goods[$mnum]['zhinum'] += $v2['num'];
-                        $goods[$mnum]['tuiprice'] += 0;
-                        $goods[$mnum]['tuinum'] += 0;
-                    }else{
-                        $goods[$mnum]['zhiprice'] += 0;
-                        $goods[$mnum]['zhinum'] += 0;
-                        $goods[$mnum]['tuiprice'] += $v2['num']*$v2['price'];
-                        $goods[$mnum]['tuinum'] += $v2['num'];
+                    if($v2['type'] == 1 && !empty($item['gonghuoren'])){//直拨
+                        $zhinum += $v2['num'];
+                        $zhiprice += $v2['price'];
+                    }else if($v2['type'] == 2 && !empty($item['gonghuoren'])){//退料
+                        $tuinum += $v2['num'];
+                        $tuiprice += $v2['price'];
+                    }else if($v2['type'] == 1 && empty($item['gonghuoren'])){//仓拨
+                        $cangnum += $v2['num'];
+                        $cangprice += $v2['price'];
                     }
-                    $goods[$mnum]['sumprice'] += $v2['num']*$v2['price'];
-                    $goods[$mnum]['sumnum'] += $v2['num'];
-                    $goods[$mnum]['price'] = $v2['price'];
 
+
+                    $goods[$mnum]['price'] = $v2['price'];
                 }
+                $goods[$mnum]['zhinum'] = $zhinum;
+                $goods[$mnum]['zhiprice'] = $zhiprice;
+                $goods[$mnum]['tuinum'] = $tuinum;
+                $goods[$mnum]['tuiprice'] = $tuiprice;
+                $goods[$mnum]['cangnum'] = $cangnum;
+                $goods[$mnum]['cangprice'] = $cangprice;
+                $goods[$mnum]['sumnum'] = $zhinum + $cangnum - $tuinum;
+                $goods[$mnum]['sumprice'] = $zhiprice + $cangprice - $tuiprice;
             }
+
         }
 
         $return['goods'] = $goods;

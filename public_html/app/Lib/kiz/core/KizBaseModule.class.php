@@ -626,6 +626,24 @@ class KizBaseModule{
         $pandianlist=$GLOBALS['db']->getAll("select id,name from fanwe_cangku_product_mb where slid=".$slid);
         return $pandianlist;
     }
+
+    /**
+     * 根据单据ｉｄ获取仓库ｌｏｇ
+     * @param int $id
+     * @return
+     */
+    public function get_cangku_log_list($id=0){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select * from fanwe_cangku_log where id=".$id);
+            return $pandian;
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_cangku_log where slid=".$slid);
+        return $pandianlist;
+    }
 }
 
 ?>
