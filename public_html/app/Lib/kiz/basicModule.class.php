@@ -361,7 +361,22 @@ class basicModule extends KizBaseModule
                 $peifang_stat[$k]=$v;
             }
             // var_dump($peifang_stat);
+            $arr = [];
+            foreach ($peifang_stat as $key=>$item) {
+                $arr[$key]['skuId'] = $item['mid'];
+                $arr[$key]['skuName'] = $item['skuName'];
+                $arr[$key]['skuCode'] = $item['barcode'];
+                $arr[$key]['print'] = parent::getCollectionValue($this->kcnx,$item['print']);
+                $arr[$key]['netQtyStr'] = $item['num_j'];
+                $arr[$key]['qty'] = $item['num_m'];
+                $arr[$key]['skuTypeId'] = $item['cate_id'];
+                $arr[$key]['skuTypeName'] = $item['cate_name'];
+                $arr[$key]['yieldRateStr'] = $item['chupinliu'];
+                $arr[$key]['uom'] = $item['unit'];
+                $arr[$key]['reckonPriceStr'] = $item['gusuanjine'];
+                $arr[$key]['reckonPrice'] = $item['gusuan'];
 
+            }
         }else{
             $peifang_stat=$GLOBALS['db']->getAll("select b.id,b.name,b.barcode,b.print,b.price,b.buyPrice,b.sellPrice2,b.customerPrice,b.chupinliu,b.unit,c.name as cname from fanwe_dc_menu b  left join fanwe_dc_supplier_menu_cate c on b.cate_id=c.id where b.location_id=".$slid);
 
@@ -386,24 +401,27 @@ class basicModule extends KizBaseModule
 
 
             }
-        }
-        $arr = [];
-        foreach ($peifang_stat as $key=>$item) {
-            $arr[$key]['skuId'] = $item['mid'];
-            $arr[$key]['skuName'] = $item['skuName'];
-            $arr[$key]['skuCode'] = $item['barcode'];
-            $arr[$key]['print'] = parent::getCollectionValue($this->kcnx,$item['print']);
-            $arr[$key]['netQtyStr'] = $item['num_j'];
-            $arr[$key]['qty'] = $item['num_m'];
-            $arr[$key]['skuTypeId'] = $item['cate_id'];
-            $arr[$key]['skuTypeName'] = $item['cate_name'];
-            $arr[$key]['yieldRateStr'] = $item['chupinliu'];
-            $arr[$key]['uom'] = $item['unit'];
-            $arr[$key]['reckonPriceStr'] = $item['gusuanjine'];
-            $arr[$key]['reckonPrice'] = $item['gusuan'];
 
+            $arr = [];
+            foreach ($peifang_stat as $key=>$item) {
+                $it = parent::getCangkuMenuInfoByMid($item['id']);
+                $arr[$key]['skuId'] = $item['id'];
+                $arr[$key]['skuName'] = $item['name'];
+                $arr[$key]['skuCode'] = $item['barcode'];
+                $arr[$key]['print'] =  $item['print'];
+                $arr[$key]['netQtyStr'] = 0;
+                $arr[$key]['qty'] = 0;
+                $arr[$key]['skuTypeId'] = $it['cate_id'];
+                $arr[$key]['skuTypeName'] = $item['cname'];
+                $arr[$key]['yieldRateStr'] = $item['chupinliu'];
+                $arr[$key]['uom'] = $item['unit'];
+                $arr[$key]['reckonPriceStr'] = $item['price'];
+                $arr[$key]['reckonPrice'] =$item['price'];
+
+            }
         }
 
+//var_dump($peifang_stat);
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("goodslist",parent::get_basic_goods_list());
