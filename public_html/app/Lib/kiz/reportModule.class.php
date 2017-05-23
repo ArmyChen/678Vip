@@ -220,10 +220,18 @@ class reportModule extends KizBaseModule
     public function report_sale_detail_index()
     {
         init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
 
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("ywsort", $this->ywsort);
+        $GLOBALS['tmpl']->assign("listsort",$listsort);
         $GLOBALS['tmpl']->assign("page_title", "销售明细表");
         $GLOBALS['tmpl']->display("pages/report/saleDetail.html");
     }

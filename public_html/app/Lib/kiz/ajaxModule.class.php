@@ -5255,4 +5255,257 @@ class ajaxModule extends KizBaseModule{
 
         echo json_encode($return);exit;
     }
+
+    /**
+     * 销售明细表列表
+     */
+    public function report_sale_detail_ajax(){
+        init_app_page();
+        $s_account_info = $GLOBALS["account_info"];
+
+        $supplier_id = intval($s_account_info['supplier_id']);
+        $mid=$_REQUEST['id'];
+        if ($mid==""){$mid=$s_account_info['slid'];}
+        $action=$_REQUEST['action'];
+        //var_dump($s_account_info);
+
+        $CURRENT_URL='http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+//        $GLOBALS['tmpl']->assign("zffslist",$zffslist2);
+//        $GLOBALS['tmpl']->assign("CURRENT_URL",$CURRENT_URL);
+
+        $name = strim($_REQUEST['name']);
+        $company_id = strim($_REQUEST['company_id']);
+        $cate_id = strim($_REQUEST['cate_id']);
+
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当天的时间
+            $start=to_date(NOW_TIME,"Y-m-d");
+            $startstr=strtotime($start);
+            $startend=strtotime($start)+24*3600-1;
+            $begin_time=date("Y-m-d H:i:s",$startstr);
+            $end_time=date("-1 month",$startend);
+        }
+
+
+
+
+        //$begin_time_s = to_timespan($begin_time,"Y-m-d H:i");
+        //$end_time_s = to_timespan($end_time,"Y-m-d H:i");
+        $begin_time_s = strtotime($begin_time);
+        $end_time_s = strtotime($end_time);
+
+        //排序开始
+
+        if (isset ( $_REQUEST ['_sort'] )) {
+            $sort = $_REQUEST ['_sort'] ? 'desc' : 'asc';
+        } else {
+            $sort = 'asc';
+        }
+        $order=$_REQUEST ['_order'];
+        if(isset($order))
+        {
+            $oderstr = " order by a.".$order." ".$sort;
+            if($order=='pnum' || $order=='goodszong' || $order=='pmoney' || $order=='profit' || $order=='tuinum'){
+                $oderstr = " order by ".$order." ".$sort;
+            }
+            $sortImg=array($order=>'<img src="/admin/Tpl/default/Common/images/'.$sort.'.gif" width="12" height="17" border="0" align="absmiddle">');
+        }else{
+            $oderstr = "";
+            $sortImg=array();
+        }
+        $sort = $sort == 'asc' ? 1 : 0; //排序方式
+//        $GLOBALS['tmpl']->assign ( 'sort', $sort );
+//        $GLOBALS['tmpl']->assign ( 'order', $order );
+//        $GLOBALS['tmpl']->assign ( 'sortImg', $sortImg );
+//
+//
+//        $GLOBALS['tmpl']->assign("cate_id",$cate_id);
+        //var_dump($_REQUEST);
+
+
+
+        $pnumstr="";
+        if($mid!=""){
+            $sqlstr = "WHERE a.id = b.pid and b.zhifustatus=1 and a.location_id =  '".$mid."'";
+            $sqlstr2 = "WHERE a.location_id =  '".$mid."'";
+            $sqltuistr= "where d.zhifustatus=9 and d.bufentui=0 and d.slid =  '".$mid."'";
+        }else{
+            $sqlstr = "WHERE a.id = b.pid and b.zhifustatus=1 and a.location_id in (".implode(",",$s_account_info['location_ids']).")";
+            $sqlstr2 = "WHERE a.location_id in (".implode(",",$s_account_info['location_ids']).")";
+            $sqltuistr = "WHERE d.zhifustatus=9 and d.bufentui=0 and d.slid in (".implode(",",$s_account_info['location_ids']).")";
+        }
+        if($name!=""){
+            $sqlstr .=" and (a.name like '%".$name."%' or a.barcode like '".$name."') ";
+            $sqlstr2 .=" and (a.name like '%".$name."%' or a.barcode like '".$name."') ";
+        }
+//        if($begin_time_s){
+//            $sqlstr .=" and b.otime > ".$begin_time_s." ";
+//            $pnumstr .=" and otime > ".$begin_time_s." ";
+//            $sqltuistr  .=" and d.otime > ".$begin_time_s." ";
+//        }
+//        if($end_time_s){
+//            $sqlstr .=" and b.otime < ".$end_time_s." ";
+//            $pnumstr .=" and otime <".$end_time_s." ";
+//            $sqltuistr  .=" and d.otime <".$end_time_s." ";
+//        }
+        if($company_id!=""){
+            $sqlstr .=" and (a.company=".$company_id.") ";
+            $sqlstr2 .=" and (a.company=".$company_id.") ";
+            $companyname = $GLOBALS['db']->getOne("select name from " . DB_PREFIX . "dc_supplier_companyname where id=".$company_id);
+            $companyselect='<option value="'.$company_id.'" selected="selected" >'.$companyname.'</option>';
+        }
+        if($cate_id!=""){
+            $sqlstr .=" and (a.cate_id=".$cate_id.") ";
+            $sqlstr2 .=" and (a.cate_id=".$cate_id.") ";
+            $idselectname = $GLOBALS['db']->getOne("select name from " . DB_PREFIX . "dc_supplier_menu_cate where id=".$cate_id);
+            $idselect='<option value="'.$cate_id.'" selected="selected" >'.$idselectname.'</option>';
+        }
+
+
+//        $GLOBALS['tmpl']->assign("name",$name);
+//        $GLOBALS['tmpl']->assign("begin_time",$begin_time);
+//        $GLOBALS['tmpl']->assign("end_time",$end_time);
+//        $GLOBALS['tmpl']->assign("slid",$mid);
+//        $GLOBALS['tmpl']->assign("idselect",$idselect);
+//        $GLOBALS['tmpl']->assign("companyselect",$companyselect);
+
+        //echo $begin_time;
+        $skuNameOrCode = $_REQUEST['skuNameOrCode'];
+        $skuTypeIds = $_REQUEST['skuTypeIds'];
+        $billDateStart = $_REQUEST['billDateStart'];
+        $billDateEnd = $_REQUEST['billDateEnd'];
+        if ($billDateStart || $billDateEnd){
+            $startTime = strtotime($billDateStart);
+            $endTime = strtotime($billDateEnd);
+        }else{	 //默认为当月的
+            $startTime=strtotime(date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00");
+            $endTime=strtotime(date('Y-m-d', strtotime("$billDateEnd  -1 day")).' 23:59:59');
+        }
+//        $sqlstr .= " and a.ctime > $startTime";
+        $sqlstr .=" and b.otime > ".$startTime." ";
+//        $sqlstr .= " and a.ctime < $endTime";
+        $sqlstr .=" and b.otime > ".$endTime." ";
+//echo $sqlstr;die;
+        //dc_menu
+        if($skuNameOrCode){
+            $sqlstr .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+        }
+        if($skuTypeIds>-1){
+            $parentids = parent::get_dc_supplier_cate($skuTypeIds);
+            $sqlstr .= " and g.cate_id in ( $parentids )";
+        }
+        //分类
+        $conditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
+        $conditions .= " and location_id=".$mid;
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+        $sqlsort.=$conditions . " order by sort desc";
+        $listsort = array();
+        $wsublist = array();
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        foreach($wmenulist as $wmenu)
+        {
+            if($wmenu['wcategory'] != '0') $wsublist[$wmenu['wcategory']][] = $wmenu;
+        }
+        foreach($wmenulist as $wmenu0)
+        {
+            if($wmenu0['wcategory'] == '0')
+            {
+                $listsort[] = $wmenu0;
+
+                foreach($wsublist[$wmenu0['id']] as $wmenu1)
+                {
+                    $listsort[] = $wmenu1;
+                    foreach($wsublist[$wmenu1['id']] as $wmenu2)
+                    {
+                        $listsort[] = $wmenu2;
+                        foreach($wsublist[$wmenu2['id']] as $wmenu3)
+                        {
+                            $listsort[] = $wmenu3;
+                        }
+                    }
+                }
+            }
+        }
+
+//        $GLOBALS['tmpl']->assign("sortlist", $listsort);
+
+        //
+        $menu_companyname_list = $GLOBALS['db']->getAll("select id,name from ".DB_PREFIX."dc_supplier_companyname");
+//        $GLOBALS['tmpl']->assign("menu_companyname_list", $menu_companyname_list);
+
+        $waiter_list=$GLOBALS['db']->getAll("select sno,realname from ".DB_PREFIX."waiter where slid=".$mid);
+//        $GLOBALS['tmpl']->assign("waiter_list", $waiter_list);
+
+        //分页
+        $page_size = $_REQUEST['rows']?$_REQUEST['rows']:20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+
+        //$sql="SELECT a.id, a.name, a.barcode, a.cate_id, a.stock, a.price, a.buyPrice, SUM( b.pnum ) AS pnum, SUM( b.pmoney*b.pnum ) AS pmoney, c.name AS classname,SUM( b.pnum * b.pprice) as goodszong,SUM( (b.pmoney - b.pchengben )*b.pnum) as profit FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id ".$oderstr." limit ".$limit;
+        $sql="SELECT a.id, a.name, a.barcode, a.cate_id, a.price, a.buyPrice, SUM( b.pnum ) AS pnum, SUM( b.pmoney*b.pnum ) AS pmoney, SUM( b.pnum * b.pprice) as goodszong,SUM( (b.pmoney - b.pchengben )*b.pnum) as profit FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id ".$oderstr." limit ".$limit;
+        $sqlCOunt="SELECT count(0) FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id ".$oderstr;
+        // echo $sql;
+        $sql2="SELECT a.id, a.name, a.barcode, a.cate_id,  a.price, a.buyPrice, SUM( b.pnum ) AS pnum, SUM( b.pmoney*b.pnum ) AS pmoney,SUM( b.pnum * b.pprice) as goodszong,SUM( (b.pmoney - b.pchengben )*b.pnum) as profit FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id";
+
+//        $sql_count="SELECT count(a.id) FROM fanwe_dc_menu a ".$sqlstr2;
+
+        $sqltui="select sum(d.pnum) as pnum,pid from orders_tj d ".$sqltuistr." group by pid";
+        //echo $sqltui;
+        $sqltuidata = $GLOBALS['db']->getAll($sqltui);
+        $sqlqutuidata=array_reduce($sqltuidata, create_function('$v,$w', '$v[$w["pid"]]=$w["pnum"];return $v;'));
+
+        $sqltui="select sum(d.pnum) as pnum,sum(d.pnum*d.pprice) as bftprice,sum(d.pnum*d.pmoney) as bftpmoney,sum(d.pnum*(d.pmoney-d.pchengben)) as bftprofit,d.pid from orders_tj d ".str_replace("bufentui=0","bufentui=1",$sqltuistr)."  group by pid";
+        //echo $sqltui;
+        $sqltuidata = $GLOBALS['db']->getAll($sqltui);
+        $sqlbufentuidata=array_reduce($sqltuidata, create_function('$v,$w', '$v[$w["pid"]]=$w["pnum"];$v[$w["pid"]."_price"]=$w["bftprice"];$v[$w["pid"]."_money"]=$w["bftpmoney"];$v[$w["pid"]."_profit"]=$w["bftprofit"];return $v;'));
+        //var_dump($sqlbufentuidata);
+        if ($action=="excel"){
+            //  $sql="SELECT a.id, a.name, a.barcode, a.cate_id,  a.price, a.buyPrice, SUM( b.pnum ) AS pnum, SUM( b.pmoney ) AS pmoney,SUM( b.pnum * b.pprice) as goodszong,SUM( (b.pmoney - b.pchengben )*b.pnum) as profit FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id ".$oderstr;
+            $sql="SELECT a.id, a.name, a.barcode, a.cate_id, a.price, a.buyPrice, SUM( b.pnum ) AS pnum, SUM( b.pmoney*b.pnum ) AS pmoney, SUM( b.pnum * b.pprice) as goodszong,SUM( (b.pmoney - b.pchengben )*b.pnum) as profit FROM fanwe_dc_menu a LEFT JOIN orders_tj b ON a.id = b.pid LEFT JOIN fanwe_dc_supplier_menu_cate c ON a.cate_id = c.id ".$sqlstr." GROUP BY a.id ".$oderstr;
+            $sql_count="SELECT count(a.id) FROM fanwe_dc_menu a ".$sqlstr2;
+            //  echo '<br>'.$sql_count;
+        }
+        //最终版
+//        array_reduce($slidlist, create_function('$v,$w', '$v[$w["id"]]=$w["name"];return $v;'));
+//        var_dump($sql);die;
+
+        $list = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sqlCOunt));
+
+//        $list2 = $GLOBALS['db']->getAll($sql2);
+
+        $list_tj=array();
+        foreach($list as $k=>$v){
+
+            //$list[$k]['tuinum']=floatval($sqlqutuidata[$v['id']])+floatval($sqlbufentuidata[$v['id']]);  //全退数字
+            $list[$k]['pnum']=$v['pnum']-floatval($sqlbufentuidata[$v['id']]);  //实际卖出
+            $list[$k]['goodszong']=$v['goodszong']-floatval($sqlbufentuidata[$v['id']."_price"]); //减掉部分退总价
+            $list[$k]['pmoney']=$v['pmoney']-floatval($sqlbufentuidata[$v['id']."_money"]);//减掉部分退实收
+            //$list[$k]['profit']=$v['profit']-floatval($sqlbufentuidata[$v['id']."_profit"]);//利润
+            //$list[$k]['shishouzhanbi']=number_format(($list[$k]['pmoney']/$list[$k]['goodszong']),4)*100;
+            $list[$k]['cname'] = empty(parent::get_dc_current_supplier_cate($v['cate_id']))?'':parent::get_dc_current_supplier_cate($v['cate_id'])['name'];
+            $list_tj['pnum']+=$list[$k]['pnum'];
+            $list_tj['goodszong']+=$list[$k]['goodszong'];
+            $list_tj['pmoney']+=$list[$k]['pmoney'];
+
+        }
+//echo $records;die;
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records/$page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if($records >0){
+            $return['dataList'] = $list;
+        }else{
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);exit;
+    }
 }

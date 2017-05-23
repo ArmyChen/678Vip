@@ -19,13 +19,13 @@
                 <div class="aside-column panel-search">
                     <h2>模糊查询</h2>
                     <div class="search-box">
-                        <input type="text" name="skuName" id="skuName" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="64">
+                        <input type="text" name="skuNameOrCode" id="skuNameOrCode" class="form-control" placeholder="请输入商品编码/名称" data-format="skuName" maxlength="64">
                         <button type="button" class="close" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="search-box mt10">
-                        <input type="text" name="orderNo" id="orderNo" class="form-control" placeholder="请输入单据号" data-format="sn" maxlength="14">
-                        <button type="button" class="close" aria-hidden="true">&times;</button>
-                    </div>
+                    <!--<div class="search-box mt10">-->
+                        <!--<input type="text" name="orderNo" id="orderNo" class="form-control" placeholder="请输入单据号" data-format="sn" maxlength="14">-->
+                        <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                    <!--</div>-->
                 </div>
                 <!-- 单据号 end -->
 
@@ -121,7 +121,7 @@
                 <!-- 单据日期 end -->
             </form>
             <a class="link undo-all" id="undo-all_1">全部撤销</a>
-            <a class="btn-blue btn-search" id="search">查 询</a>
+            <a class="btn-blue btn-search" id="search" onclick="load()">查 询</a>
         </div>
         <!-- 左栏 end -->
 
@@ -132,10 +132,11 @@
                     <div class="notSearchContent">没有查到数据，试试其他查询条件吧！</div>
                 </div>
 
-                <div id="showData" style="display: none">
+                <div id="showData">
                     <!-- grid start -->
                     <div id="gridDiv">
                         <table id="grid"></table>
+                        <div id="gridPager"></div>
                     </div>
                     <!-- grid end -->
                 </div>
