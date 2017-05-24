@@ -5379,22 +5379,27 @@ class ajaxModule extends KizBaseModule{
         if ($billDateStart || $billDateEnd){
             $startTime = strtotime($billDateStart);
             $endTime = strtotime($billDateEnd);
+                    $sqlstr .=" and b.otime > ".$startTime;
+
+                    $sqlstr .=" and b.otime < ".$endTime;
+
         }else{	 //默认为当月的
             $startTime=strtotime(date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00");
-            $endTime=strtotime(date('Y-m-d', strtotime("$billDateEnd  -1 day")).' 23:59:59');
+            $endTime=strtotime(date('Y-m-01', strtotime(" +1 month")).' 23:59:59');
+            $sqlstr .=" and b.otime > ".$startTime;
+
+            $sqlstr .=" and b.otime < ".$endTime;
         }
 //        $sqlstr .= " and a.ctime > $startTime";
-        $sqlstr .=" and b.otime > ".$startTime." ";
 //        $sqlstr .= " and a.ctime < $endTime";
-        $sqlstr .=" and b.otime > ".$endTime." ";
 //echo $sqlstr;die;
         //dc_menu
         if($skuNameOrCode){
-            $sqlstr .= " and (g.name like '%".$skuNameOrCode."%' or g.barcode LIKE '%".$skuNameOrCode."%' or g.id LIKE '%".$skuNameOrCode."%' or g.pinyin LIKE '%".$skuNameOrCode."%')";
+            $sqlstr .= " and (a.name like '%".$skuNameOrCode."%' or a.barcode LIKE '%".$skuNameOrCode."%' or a.id LIKE '%".$skuNameOrCode."%' or a.pinyin LIKE '%".$skuNameOrCode."%')";
         }
         if($skuTypeIds>-1){
             $parentids = parent::get_dc_supplier_cate($skuTypeIds);
-            $sqlstr .= " and g.cate_id in ( $parentids )";
+            $sqlstr .= " and a.cate_id in ( $parentids )";
         }
         //分类
         $conditions .= " where wlevel<4 and supplier_id = ".$supplier_id; // 查询条件
