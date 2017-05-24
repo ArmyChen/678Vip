@@ -411,13 +411,13 @@ class ajaxModule extends KizBaseModule{
                     $goods[$mnum]['type'] = $v2['type'];
                     if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == 15){//直拨
                         $zhinum += $v2['num'];
-                        $zhiprice += $v2['price'];
+                        $zhiprice += $v2['num']*$v2['price'];
                     }else if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == -5){//退料
                         $tuinum += $v2['num'];
-                        $tuiprice += $v2['price'];
+                        $tuiprice += $v2['num']*$v2['price'];
                     }else if($v2['type'] == 2 && !empty($item['gonghuoren']) && $item['ywsort'] == 10){//仓拨
                         $cangnum += $v2['num'];
-                        $cangprice += $v2['price'];
+                        $cangprice += $v2['num']*$v2['price'];
                     }
 
 
