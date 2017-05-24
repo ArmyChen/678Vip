@@ -334,9 +334,9 @@ class ajaxModule extends KizBaseModule{
             $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
 
-        if($skuNameOrCode){
-            $sqlstr .= " and (a.dd_detail like '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%' or a.dd_detail LIKE '%".$skuNameOrCode."%')";
-        }
+//        if($skuNameOrCode){
+//            $sqlstr .= " and (a.dd_detail like '%".$skuNameOrCode."%' )";
+//        }
 
 //        $sqlstr .=" and f.print <> 4";
 //        $sql2 = "select * from fanwe_cangku_log limit 1";
@@ -372,6 +372,15 @@ class ajaxModule extends KizBaseModule{
             $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
             foreach ($v['detail'] as $k => $v2) {
+                $dc_menu = parent::getDcMenuInfoByMid($v2['mid']);
+                if(!empty($dc_menu['pinyin'])){
+                    if($skuNameOrCode){
+                        if(strtolower($dc_menu['pinyin']) != strtolower($skuNameOrCode)){
+                            continue;
+                        }
+                    }
+                }
+
                 $goods_detail[$num]['skuTypeId'] = $v2['cate_id'];
                 $goods_detail[$num]['type'] = $v['type'];
                 $goods_detail[$num]['num'] = $v2['num'];

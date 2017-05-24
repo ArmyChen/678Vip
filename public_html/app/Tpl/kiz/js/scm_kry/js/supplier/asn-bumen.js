@@ -29,10 +29,10 @@ var asnSi = {
             colModel:[
                 {name: 'id', index: 'id', width: 80, align: 'center',hidden:true},
                 {name: 'skuTypeId', index: 'skuTypeId', width: 80, align: 'center',hidden:true},
-                {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center'},
+                {name: 'skuTypeName', index: 'skuTypeName', width: 100, align: 'center'},
                 {name: 'skuCode', index: 'skuCode', width: 80, align: 'center'},
-                {name: 'skuName', index: 'skuName', width: 100, align: 'center'},
-                {name: 'uom', index: 'uom', width: 180, align: 'center'},
+                {name: 'skuName', index: 'skuName', width: 180, align: 'center'},
+                {name: 'uom', index: 'uom', width: 80, align: 'center'},
                 {name: 'price', index: 'price', width: 60, align: 'center'},
                 {name: 'zhinum', index: 'zhinum', width: 80, align: 'center'},
                 {name: 'cangnum', index: 'cangnum', width: 80, align: 'center'},
