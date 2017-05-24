@@ -303,7 +303,8 @@ class ajaxModule extends KizBaseModule{
         $begin_time_s = strtotime($begin_time);
         $end_time_s = strtotime($end_time);
 
-        $sqlstr="where a.gonghuoren is not null ";
+//        $sqlstr="where a.gonghuoren is not null ";
+        $sqlstr="where 1=1 ";
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
@@ -367,7 +368,7 @@ class ajaxModule extends KizBaseModule{
                 $v['gonghuo_show']	='收货人';
             }
 
-            $v['ywsort']=$this->ywsort[$v['ywsort']];
+//            $v['ywsort']=$this->ywsort[$v['ywsort']];
             $v['gonghuo']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gonghuoren']);
             $v['gys']=parent::get_gonghuoren_name($supplier_id,$location_id,$v['gys']);
             $list[$k]=$v;
@@ -391,6 +392,7 @@ class ajaxModule extends KizBaseModule{
                 $goods_detail[$num]['skuName'] = $v2['name'];
                 $goods_detail[$num]['uom'] = $v2['unit'];
                 $goods_detail[$num]['price'] = $v2['price'];
+                $goods_detail[$num]['ywsort'] = $v['ywsort'];
                 $num ++;
                 array_push($mid,$v2['mid']);
             }
@@ -418,13 +420,13 @@ class ajaxModule extends KizBaseModule{
                     $goods[$mnum]['skuName'] = $v2['skuName'];
                     $goods[$mnum]['uom'] = $v2['uom'];
                     $goods[$mnum]['type'] = $v2['type'];
-                    if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == 15){//直拨
+                    if($v2['type'] == 1 && $item['ywsort'] == 15){//直拨
                         $zhinum += $v2['num'];
                         $zhiprice += $v2['num']*$v2['price'];
-                    }else if($v2['type'] == 1 && !empty($item['gonghuoren']) && $item['ywsort'] == -5){//退料
+                    }else if($v2['type'] == 1 && $item['ywsort'] == -5){//退料
                         $tuinum += $v2['num'];
                         $tuiprice += $v2['num']*$v2['price'];
-                    }else if($v2['type'] == 2 && !empty($item['gonghuoren']) && $item['ywsort'] == 10){//仓拨
+                    }else if($v2['type'] == 2 && $item['ywsort'] == 10){//仓拨
                         $cangnum += $v2['num'];
                         $cangprice += $v2['num']*$v2['price'];
                     }
@@ -649,7 +651,6 @@ class ajaxModule extends KizBaseModule{
         if($bumen){
             $datain['gonghuoren'] = $bumen;
         }
-
 
         $return['flag'] = null;
         $return['exception'] = null;
