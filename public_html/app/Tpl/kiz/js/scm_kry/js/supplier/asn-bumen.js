@@ -280,13 +280,13 @@ var asnSi = {
                 }
 
                 if(footerData['zhiprice'] != undefined && footerData['zhiprice'] != null){
-                    footerData['zhiprice'] = parseFloat(parseFloat(footerData['zhiprice']) + parseFloat(e.zhiprice));
+                    footerData['zhiprice'] = (parseFloat(parseFloat(footerData['zhiprice']) + parseFloat(e.zhiprice))).toFixed(2);
                 } else{
                     footerData['zhiprice'] = e.zhiprice;
                 }
 
                 if(footerData['tuiprice'] != undefined && footerData['tuiprice'] != null){
-                    footerData['tuiprice'] = parseFloat(parseFloat(footerData['tuiprice']) + parseFloat(e.tuiprice));
+                    footerData['tuiprice'] = (parseFloat(parseFloat(footerData['tuiprice']) + parseFloat(e.tuiprice))).toFixed(2);
                 } else{
                     footerData['tuiprice'] = e.tuiprice;
                 }
@@ -298,7 +298,7 @@ var asnSi = {
                 }
 
                 if(footerData['sumprice'] != undefined && footerData['sumprice'] != null){
-                    footerData['sumprice'] = parseFloat(parseFloat(footerData['sumprice']) + parseFloat(e.sumprice));
+                    footerData['sumprice'] = (parseFloat(parseFloat(footerData['sumprice']) + parseFloat(e.sumprice)).toFixed(2));
                 } else{
                     footerData['sumprice'] = e.sumprice;
                 }
@@ -316,7 +316,7 @@ var asnSi = {
                 }
 
                 if(footerData['cangprice'] != undefined && footerData['cangprice'] != null){
-                    footerData['cangprice'] = parseInt(parseInt(footerData['cangprice']) + parseInt(e.cangprice));
+                    footerData['cangprice'] = (parseFloat(parseFloat(footerData['cangprice']) + parseFloat(e.cangprice))).toFixed(2);
                 } else{
                     footerData['cangprice'] = e.cangprice;
                 }

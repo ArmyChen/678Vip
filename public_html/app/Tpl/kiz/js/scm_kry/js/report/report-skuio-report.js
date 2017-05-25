@@ -7,8 +7,8 @@ var reportSkuIOReport = {
     //默认参数
     opts : {
         urlRoot : "",
-        queryUrl : "&act=report_stock_detail_ajax",
-        exportUrl : "/export/new?",
+        queryUrl : "&act=report_stock_detail_skuio_ajax",
+        exportUrl : "&",
         queryData : "",
         footerData : {},
         oldCommercialId : "",
@@ -89,8 +89,8 @@ var reportSkuIOReport = {
         var _this = this;
 
         _this.opts = $.extend(true, this.opts, args || {});
-        refreshWms($('select[name=commercialId]').val());
-        delegateSelect('#commercialId');
+        // refreshWms($('select[name=commercialId]').val());
+        // delegateSelect('#commercialId');
 
         delegateCheckbox('wmTypeIds', '#wm-type-all', false);
         delegateCheckbox('skuTypeIds', '#sku-type-all', false);
@@ -103,10 +103,10 @@ var reportSkuIOReport = {
 
         _this.delegateUndoAll();
 
-        var commercialArray = $("#commercialId").parent().find("li");
-        if(commercialArray.length>1){
-            $(commercialArray[1]).click();
-        }
+        // var commercialArray = $("#commercialId").parent().find("li");
+        // if(commercialArray.length>1){
+        //     $(commercialArray[1]).click();
+        // }
 
         $('#search').click();
 
@@ -146,7 +146,7 @@ var reportSkuIOReport = {
             queryCondition["wmTypeName"] = $("#wmTypeId-all-em").text();
             queryCondition["wherehouseName"] = $("#wmId-all-em").text();
             queryCondition["skuTypeName"] = $("#skuTypeId-all-em").text();
-            queryCondition["commercialIdName"] = $("#commercialId").parent().find("em").text();
+            // queryCondition["commercialIdName"] = $("#commercialId").parent().find("em").text();
 
             queryCondition = $.param(queryCondition, true);
             window.open(_this.opts.urlRoot + _this.opts.exportUrl + queryCondition, '_self');
@@ -172,7 +172,7 @@ var reportSkuIOReport = {
             wmIds:$("#warehouseIds").val(),
             skuTypeIds:$("#skuTypeIds").val(),
             wmTypeIds:$("#wmTypeIds").val(),
-            commercialId:$("#commercialId").val(),
+            // commercialId:$("#commercialId").val(),
             skuNameOrCode:$("#skuNameOrCode").val(),
             confirmDateStart:queryType=="1"?$("#confirmDateStart").val():$("#dateStart").val(),
             confirmDateEnd:queryType=="1"?$("#confirmDateEnd").val():$("#dateEnd").val(),
@@ -197,7 +197,7 @@ var reportSkuIOReport = {
             $("#fiscalPeriodColumn").find("li").first().click();
             $('#fiscalPeriodColumn').hide();
 
-            var commercialArray = $("#commercialId").parent().find("li");
+            // var commercialArray = $("#commercialId").parent().find("li");
             if(commercialArray.length>1){
                 $(commercialArray[1]).click();
             }else{
@@ -212,10 +212,10 @@ var reportSkuIOReport = {
         var queryCondition = _this.queryCondition();
         _this.opts.cachedQueryConditions = JSON.stringify(queryCondition);//缓存查询条件
 
-        if(queryCondition.commercialId==""){
-            $.layerMsg('请选择品牌/商户！');
-            return false;
-        }
+        // if(queryCondition.commercialId==""){
+        //     $.layerMsg('请选择品牌/商户！');
+        //     return false;
+        // }
 
         $("#load_grid").show();
         $.ajax({
@@ -401,14 +401,14 @@ var reportSkuIOReport = {
     }
 };
 
-/**
- * 监听下拉选框
- * @param name
- * @param id
- */
-function delegateSelect(id){
-    //业务类型 条件选择
-    $(document).delegate(id, "change", function(){
-        refreshWms($('select[name=commercialId]').val());
-    });
-};
+// /**
+//  * 监听下拉选框
+//  * @param name
+//  * @param id
+//  */
+// function delegateSelect(id){
+//     //业务类型 条件选择
+//     $(document).delegate(id, "change", function(){
+//         refreshWms($('select[name=commercialId]').val());
+//     });
+// };
