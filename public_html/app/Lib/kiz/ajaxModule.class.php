@@ -5632,9 +5632,27 @@ class ajaxModule extends KizBaseModule{
                 $mmnum++;
                 if($v == $v2['mid']){
                     $goods[$mnum]['skuTypeId'] = $v2['skuTypeId'];
+                    $goods[$mnum]['wmTypeName'] = $this->ywsort[$v2['ywsort']];
+                    $goods[$mnum]['skuTypeName'] = $v2['skuTypeName'];
+                    $goods[$mnum]['skuCode'] = $v2['skuCode'];
+                    $goods[$mnum]['skuName'] = $v2['skuName'];
+                    $goods[$mnum]['uom'] = $v2['uom'];
 
                     $item = parent::get_cangku_log_list($v2['id']);
-                    $goods[$mnum]['skuIoDetailVOs']['amount'] += $v2['price'];
+                    $dc_menu = parent::getDcMenuInfoByMid($v2['mid']);
+                    $parentIndex = "";
+                    if($dc_menu['type'] == 1){
+                        $parentIndex="总入库";
+                    }else{
+                        $parentIndex="总出库";
+                    }
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $v2['price'];
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] += $v2['num'];
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $dc_menu['type'];
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentIndex;
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $v2['num'];
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $v2['ywsort'];
+                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $this->ywsort[$v2['ywsort']];
                 }
             }
 

@@ -223,7 +223,8 @@ var reportSkuIOReport = {
             async: true,
             data : queryCondition,
             url : _this.opts.urlRoot + _this.opts.queryUrl,
-            success: function (data) {
+            success: function (e) {
+                var data = eval(e);
                 if (data) {
                     _this.buildTable(data);
                 } else {
@@ -236,7 +237,6 @@ var reportSkuIOReport = {
 
     //构建表格
     buildTable : function (skuVOs) {
-
         var _this = this;
 
         if (skuVOs) {
