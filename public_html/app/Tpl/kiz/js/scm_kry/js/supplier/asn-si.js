@@ -211,7 +211,14 @@ var asnSi = {
                 {name: 'gys', index: 'gys', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
                 {name: 'znum', index: 'znum', align: "right", width: 70},
-                {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
+                {name: 'zmoney', index: 'zmoney', align: "right", width: 70,
+                    formatter:function(v,m,r){
+                        if(r.znum == "" || r.znum == null){
+                            r.znum = 0;
+                        }
+                        return (parseFloat(v) * parseInt(r.znum)).toFixed(2);
+                    }
+                },
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
                 {name: 'isdisable', index: 'isdisable', align: "center", width: 120,

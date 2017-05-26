@@ -355,7 +355,14 @@ var asnProduct = {
                 // {name: '', index: '', align: "center", width: 120},
                 {name: 'ywsort', index: 'ywsort', width: 120, align: "center"},
                 {name: 'cname', index: 'cname', width: 120, align: "center"},
-                {name: 'zmoney', index: 'zmoney', align: "right", width: 70},
+                {name: 'zmoney', index: 'zmoney', align: "right", width: 70,
+                    formatter:function(v,m,r){
+                        if(r.znum == "" || r.znum == null){
+                            r.znum = 0;
+                        }
+                        return (parseFloat(v) * parseInt(r.znum)).toFixed(2);
+                    }
+                },
                 {name: 'lihuo_user', index: 'lihuo_user', align: "center", width: 120},
                 // {name: 'gonghuo', index: 'gonghuo', align: "center", width: 120},
                 {name: 'ctime', index: 'ctime', align: "center", width: 120},
