@@ -5617,6 +5617,7 @@ class ajaxModule extends KizBaseModule{
                 $goods_detail[$num]['uom'] = $v2['unit'];
                 $goods_detail[$num]['price'] = $v2['price'];
                 $goods_detail[$num]['ywsort'] = $v['ywsort'];
+                $goods_detail[$num]['type'] = $v['type'];
                 $num ++;
                 array_push($mid,$v2['mid']);
             }
@@ -5624,36 +5625,280 @@ class ajaxModule extends KizBaseModule{
         $mids = array_unique($mid);
         $goods=[];
         $mnum = -1;
-        $mmnum = -1;
+
         foreach ($mids as $k => $v) {
             $mnum++;
 
             foreach ($goods_detail as $k2 => $v2) {
-                $mmnum++;
+
+
+                $mmnum = -1;
+                $price = 0;
+                $modelNumber = 0;
+                $qty = 0;
+                $thisIndex = 0;
+                $thisLabel = "";
                 if($v == $v2['mid']){
-                    $goods[$mnum]['skuTypeId'] = $v2['skuTypeId'];
+                    $mmnum++;
+                    $item = parent::get_cangku_log_list($v2['id']);
+                    $dc_menu = parent::getDcMenuInfoByMid($v2['mid']);
+                    $goods[$mnum]['skuTypeId'] = $dc_menu['cate_id'];
                     $goods[$mnum]['wmTypeName'] = $this->ywsort[$v2['ywsort']];
-                    $goods[$mnum]['skuTypeName'] = $v2['skuTypeName'];
+                    $goods[$mnum]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($dc_menu['cate_id']))?'':parent::get_dc_current_supplier_cate($dc_menu['cate_id'])['name'];
                     $goods[$mnum]['skuCode'] = $v2['skuCode'];
                     $goods[$mnum]['skuName'] = $v2['skuName'];
                     $goods[$mnum]['uom'] = $v2['uom'];
 
                     $item = parent::get_cangku_log_list($v2['id']);
-                    $dc_menu = parent::getDcMenuInfoByMid($v2['mid']);
+//                    $item = parent::get_baifei_log($v2['id']);
                     $parentIndex = "";
-                    if($dc_menu['type'] == 1){
-                        $parentIndex="总入库";
-                    }else{
-                        $parentIndex="总出库";
+                    $parentLabel = "";
+
+                    //验收入库
+                    if($item['type'] == 1 && !empty($item['gonghuoren'])){
+                        $parentIndex=1;
+                        $parentLabel="总入库";
+                        $price += $v2['price'];
+                        $modelNumber = 1;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="验收入库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $v2['price'];
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] += $v2['num'];
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $dc_menu['type'];
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentIndex;
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $v2['num'];
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $v2['ywsort'];
-                    $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $this->ywsort[$v2['ywsort']];
+
+                    //其他入库
+                    if($item['type'] == 1 && $item['ywsort'] != -6 ){
+                        $parentIndex=1;
+                        $parentLabel="总入库";
+                        $price += $v2['price'];
+                        $modelNumber = 2;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="其他入库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+                    //生产入库
+                    if($item['type'] == 1 && $item['ywsort'] == -6){
+                        $parentIndex=1;
+                        $parentLabel="总入库";
+                        $price += $v2['price'];
+                        $modelNumber = 3;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="生产入库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+                    //移库
+                    if($item['type'] == 1 && $item['ywsort'] == 5){
+                        $parentIndex=1;
+                        $parentLabel="总入库";
+                        $price += $v2['price'];
+                        $modelNumber = 4;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="移库入库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+                    //采购退货
+                    if($item['type'] == 2 && !empty($item['gonghuoren'])){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 5;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="采购退货";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+                    //出库（配送）
+                    if($item['type'] == 2 && $item['ywsort'] == -6){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 6;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="出库（配送）";
+
+                    }
+                    //销售出库
+                    if($item['type'] == 2 && $item['ywsort'] == -6){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 7;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="销售出库";
+
+                    }
+                    //生产出库
+                    if($item['type'] == 2 && $item['ywsort'] == -6){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 8;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="生产出库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+                    //其他出库
+                    if($item['type'] == 2 && $item['ywsort'] != -6){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 9;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="生产出库";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+                    //报废
+                    if($item['type'] == 2 && $item['ywsort'] == 5){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 10;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="报废";
+
+                        $outSql = $GLOBALS['db']->getAll("select * from fanwe_cangku_outbound_stat where mid=".$item['mid']);
+                        foreach ($outSql as $item) {
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $item['price'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = 2;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $item['num'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                        }
+                    }
+
+                    //移库（出）
+                    if($item['type'] == 2 && $item['ywsort'] == 5){
+                        $parentIndex=2;
+                        $parentLabel="总出库";
+                        $price += $v2['price'];
+                        $modelNumber = 11;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="移库（出）";
+
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+                    //盘盈
+                    if($item['type'] == 2 && $item['ywsort'] == 1){
+                        $parentIndex=3;
+                        $parentLabel="盘点";
+                        $price += $v2['price'];
+                        $modelNumber = 12;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="盘盈";
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+                    //盘亏
+                    if($item['type'] == 2 && $item['ywsort'] == 6){
+                        $parentIndex=3;
+                        $parentLabel="盘点";
+                        $price += $v2['price'];
+                        $modelNumber = 13;
+                        $qty +=$v2['num'];
+                        $thisIndex = $item['ywsort'];
+                        $thisLabel="盘亏";
+
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                    }
+
+//                    if(empty($item['ywsort'])){
+//                       continue;
+//                    }
+
                 }
+
             }
 
         }
@@ -5671,6 +5916,5 @@ class ajaxModule extends KizBaseModule{
         echo json_encode($goods);exit;
 
 
-//        echo "[{'skuId':null,'skuName':'半成品测试','skuCode':'SKU0001','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':11.00000,'amount':11.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'22111','skuCode':'SKU0002','uom':'盘','wmType':4,'wmTypeName':'原物料','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':15.12500,'amount':181.50000},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'西瓜(中杯)','skuCode':'SKU0003','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':222.00000,'amount':222.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'西瓜2(中杯)','skuCode':'SKU0004','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'西瓜3(中杯)','skuCode':'SKU0005','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'芒果(中杯)','skuCode':'SKU0006','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':22.00000,'amount':22.00000},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'芒果2(中杯)','skuCode':'SKU0007','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':44.00000,'amount':44.00000},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'杨梅(中杯)','skuCode':'SKU0008','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':44.00000,'amount':44.00000},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'老干妈(中杯)','skuCode':'SKU0009','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':22.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'芒果牛奶(中杯)','skuCode':'mg','uom':'杯','wmType':5,'wmTypeName':'半成品','skuTypeName':'uuu','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':22.00000,'amount':82.50000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':330.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'金酒','skuCode':'SKU0020','uom':'瓶','wmType':4,'wmTypeName':'原物料','skuTypeName':'基酒','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':133.00000,'amount':11704.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'汤尼水','skuCode':'SKU0021','uom':'瓶','wmType':4,'wmTypeName':'原物料','skuTypeName':'基酒','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':122.00000,'amount':12078.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'西凤酒(大杯)','skuCode':'19999','uom':'杯','wmType':3,'wmTypeName':'外购商品','skuTypeName':'奶慕奉奶','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':1.00000,'amount':999.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':1.00000,'amount':999.00000},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':1.00000,'amount':999.00000},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'肉触宝','skuCode':'SKU0016','uom':'份','wmType':3,'wmTypeName':'外购商品','skuTypeName':'李记菜品','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':500.00000,'amount':10000.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'采购商品112','skuCode':'1232','uom':'位','wmType':3,'wmTypeName':'外购商品','skuTypeName':'醇香奶茶','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':11.00000,'amount':88.00000},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':14.00000,'amount':70.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'预制商品123','skuCode':'2121212','uom':'杯','wmType':1,'wmTypeName':'预制商品','skuTypeName':'醇香奶茶','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':null,'amount':null},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':22.00000,'amount':242.00000},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'难难难(中杯)','skuCode':'213131312','uom':'杯','wmType':3,'wmTypeName':'外购商品','skuTypeName':'醇香奶茶','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':11.00000,'amount':88.00000},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':22.00000,'amount':264.00000},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]},{'skuId':null,'skuName':'外购商品123','skuCode':'667575','uom':'瓶','wmType':3,'wmTypeName':'外购商品','skuTypeName':'醇香奶茶','isEnable':null,'isDisable':0,'isDelete':0,'skuIoDetailVOs':[{'modelNumber':11,'parentIndex':1,'parentLabel':'总入库','thisIndex':10,'thisLabel':'采购入库','qty':11.00000,'amount':90.00000},{'modelNumber':92,'parentIndex':1,'parentLabel':'总入库','thisIndex':30,'thisLabel':'其他入库','qty':null,'amount':null},{'modelNumber':61,'parentIndex':1,'parentLabel':'总入库','thisIndex':70,'thisLabel':'自产入库','qty':null,'amount':null},{'modelNumber':42,'parentIndex':1,'parentLabel':'总入库','thisIndex':80,'thisLabel':'移库（入）','qty':null,'amount':null},{'modelNumber':12,'parentIndex':2,'parentLabel':'总出库','thisIndex':10,'thisLabel':'采购退货','qty':null,'amount':null},{'modelNumber':81,'parentIndex':2,'parentLabel':'总出库','thisIndex':11,'thisLabel':'出库（配送）','qty':null,'amount':null},{'modelNumber':23,'parentIndex':2,'parentLabel':'总出库','thisIndex':31,'thisLabel':'品牌销售','qty':null,'amount':null},{'modelNumber':62,'parentIndex':2,'parentLabel':'总出库','thisIndex':40,'thisLabel':'自产出库','qty':null,'amount':null},{'modelNumber':91,'parentIndex':2,'parentLabel':'总出库','thisIndex':50,'thisLabel':'其他出库','qty':null,'amount':null},{'modelNumber':72,'parentIndex':2,'parentLabel':'总出库','thisIndex':60,'thisLabel':'报废','qty':null,'amount':null},{'modelNumber':41,'parentIndex':2,'parentLabel':'总出库','thisIndex':80,'thisLabel':'移库（出）','qty':null,'amount':null},{'modelNumber':31,'parentIndex':3,'parentLabel':'盘点','thisIndex':10,'thisLabel':'盘盈','qty':null,'amount':null},{'modelNumber':32,'parentIndex':3,'parentLabel':'盘点','thisIndex':20,'thisLabel':'盘亏','qty':null,'amount':null}]}]";exit;
     }
 }

@@ -644,6 +644,7 @@ class KizBaseModule{
         $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_cangku_log where slid=".$slid);
         return $pandianlist;
     }
+
 }
 
 ?>
