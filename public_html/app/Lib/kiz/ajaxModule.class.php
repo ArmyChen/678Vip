@@ -179,7 +179,7 @@ class ajaxModule extends KizBaseModule{
                     $v['ywsort']='直拨入库';
 
                 }else{
-                    $v['ywsort']='直拨出库';
+                    $v['ywsort']='退货出库';
 
                 }
             }
@@ -4821,7 +4821,7 @@ class ajaxModule extends KizBaseModule{
                     $v['ywsort']='直拨入库';
 
                 }else{
-                    $v['ywsort']='直拨出库';
+                    $v['ywsort']='退货出库';
 
                 }
             }
