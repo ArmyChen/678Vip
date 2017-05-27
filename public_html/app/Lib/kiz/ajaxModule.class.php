@@ -305,7 +305,7 @@ class ajaxModule extends KizBaseModule{
         $end_time_s = strtotime($end_time);
 
 //        $sqlstr="where a.gonghuoren is not null ";
-        $sqlstr="where 1=1 ";
+        $sqlstr="where a.isdisable = 2";
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
