@@ -70,6 +70,7 @@ class reportModule extends KizBaseModule
         init_app_page();
 
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("cangkulist", parent::get_cangku_list());
         $GLOBALS['tmpl']->assign("listsort", parent::goods_category_tree_ajax());
         $GLOBALS['tmpl']->assign("page_title", "商品月出入库汇总明细表");

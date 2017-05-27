@@ -2193,9 +2193,6 @@ class ajaxModule extends KizBaseModule{
         if($skuTypeIds){
             $sqlstr.=' and ( fc.cate_id='.$skuTypeIds.')';
         }
-        if($wmIds){
-            $sqlstr.=' and ( fc.cid='.$wmIds.')';
-        }
 //        $sql = 'select * from fanwe_cangku_menu';
 //        $row = $GLOBALS['db']->query($sql);
 //        var_dump($row);
@@ -5547,14 +5544,17 @@ class ajaxModule extends KizBaseModule{
         $location_id = $account_info['slid'];
         $type = $_REQUEST['isdisable']?intval($_REQUEST['isdisable']):'99';
         $ywsortid = $_REQUEST['ywsortid']?intval($_REQUEST['ywsortid']):'99';
-        $warehouseId = $_REQUEST['warehouseId']?intval($_REQUEST['warehouseId']):'99';
+        $warehouseId = $_REQUEST['wmIds']?intval($_REQUEST['wmIds']):'99';
+        $skuTypeIds = $_REQUEST['skuTypeIds'];
+        $wmTypeIds = $_REQUEST['wmTypeIds'];
+
         $bumen = $_REQUEST['gonghuoren'];
         $skuNameOrCode = $_REQUEST['skuNameOrCode'];
         $gys = $_REQUEST['gys'];
         $status = $_REQUEST['status'];
-        if (($_REQUEST['begin_time'])|| ($_REQUEST['end_time'])){
-            $begin_time = strim($_REQUEST['begin_time']);
-            $end_time = strim($_REQUEST['end_time']);
+        if (($_REQUEST['confirmDateStart'])|| ($_REQUEST['confirmDateEnd'])){
+            $begin_time = strim($_REQUEST['confirmDateStart']);
+            $end_time = strim($_REQUEST['confirmDateEnd']);
         }else{	 //默认为当月的
             $begin_time=date('Y-m-01', strtotime(date("Y-m-d")))." 0:00:00";
             $end_time=date('Y-m-d', strtotime("$begin_time +1 month -1 day")).' 23:59:59';
@@ -5572,26 +5572,8 @@ class ajaxModule extends KizBaseModule{
         if($end_time_s){
             $sqlstr .=" and a.ctime < ".$end_time_s." ";
         }
-//        if ($type !=99 ){
-//            $sqlstr .=" and a.type = ".$type." ";
-//        }
         if ($warehouseId !=99 ){
             $sqlstr .=" and a.cid = ".$warehouseId." ";
-        }
-        if ($ywsortid !=99 ){
-            $sqlstr .=" and a.ywsort = ".$ywsortid." ";
-        }
-        if ($bumen){
-            $sqlstr .=" and a.gonghuoren = '".$bumen."' ";
-        }
-        if ($gys){
-            $sqlstr .=" and a.gys = '".$gys."' ";
-        }
-//        if ($status!=99){
-//            $sqlstr .=" and a.type = ".$status." ";
-//        }
-        if($_REQUEST['danjuhao'] !=""){
-            $sqlstr .=" and a.danjuhao like '%".$_REQUEST['danjuhao']."%' ";
         }
 
         $sql="select a.*,c.name as cname from ".DB_PREFIX."cangku_log a left join ".DB_PREFIX."cangku c on a.cid=c.id ".$sqlstr." order by a.id desc ";
@@ -5614,6 +5596,17 @@ class ajaxModule extends KizBaseModule{
                         if(strtolower($dc_menu['pinyin']) != strtolower($skuNameOrCode)){
                             continue;
                         }
+                    }
+                }
+                if($skuTypeIds>-1){
+                    $parentids = parent::get_dc_supplier_cate($skuTypeIds);
+                    if($parentids  != $v2['cate_id']){
+                        continue;
+                    }
+                }
+                if($wmTypeIds>-1){
+                    if($wmTypeIds != $v['ywsort']){
+                        continue;
                     }
                 }
 

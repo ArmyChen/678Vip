@@ -33,8 +33,8 @@
             <div class="aside-column multi-select">
                 <h2>库存类型</h2>
                 <div class="f_select">
-                    <select class="medium" name="print">
-                        <option>==请选择分类==</option>
+                    <select class="medium" name="wmTypeIds" id="wmTypeIds">
+                        <option value="-1">请选择分类</option>
 
 
 
@@ -42,7 +42,7 @@
 
                         {foreach from=$kcnx item=item key=key}
                         {if $key gt 0}
-                        <option value="{$key}" {if $key eq 3}selected{/if}>{$item}</option>
+                        <option value="{$key}">{$item}</option>
                         {/if}
                         {/foreach}
 
@@ -63,7 +63,7 @@
             <div class="aside-column multi-select">
                 <h2>商品分类</h2>
                 <select id="skuTypeIds" name="skuTypeIds">
-                    <option value="-1" selected="selected">请选择</option>
+                    <option value="-1" selected="selected">请选择分类</option>
                     {foreach from=$listsort item=item}
                     <option value="{$item.id}">{$item.title_show}</option>
                     {/foreach}
@@ -102,18 +102,18 @@
             <!-- 功能切換 start -->
             <div class="aside-column">
                 <h2>查询条件</h2>
-                <div>
-                    <label class="radio radio-check">
-                        <span></span>
-                        <input type="radio" name="queryType" checked value="1">
-                        日期
-                    </label>
-                    <label style="margin-left: 30px;" class="radio">
-                        <span></span>
-                        <input type="radio" name="queryType" value="2">
-                        会计日期
-                    </label>
-                </div>
+                <!--<div>-->
+                    <!--<label class="radio radio-check">-->
+                        <!--<span></span>-->
+                        <!--<input type="radio" name="queryType" checked value="1">-->
+                        <!--日期-->
+                    <!--</label>-->
+                    <!--<label style="margin-left: 30px;" class="radio">-->
+                        <!--<span></span>-->
+                        <!--<input type="radio" name="queryType" value="2">-->
+                        <!--会计日期-->
+                    <!--</label>-->
+                <!--</div>-->
             </div>
             <!-- 功能切換  end -->
 
@@ -125,12 +125,12 @@
                 <div class="search-box">
                     <input type="text" name="confirmDateStart" id="confirmDateStart"
                            class="form-control datepicker-start" data-for-element="confirmDateEnd" placeholder="请选择开始日期"
-                           readonly value="2017-05-01">
+                           readonly value="">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
                 <div class="search-box mt10">
                     <input type="text" name="confirmDateEnd" id="confirmDateEnd" class="form-control datepicker-end"
-                           data-for-element="confirmDateStart" placeholder="请选择结束日期" readonly value="2017-05-24">
+                           data-for-element="confirmDateStart" placeholder="请选择结束日期" readonly value="">
                     <button type="button" class="close" aria-hidden="true">&times;</button>
                 </div>
             </div>
@@ -169,8 +169,8 @@
 
                     </ul>
                 </div>
-                <input id="dateStart" style="display: none" name="dateStart" type="text" value="2017-05-01" />
-                <input id="dateEnd" style="display: none" hidden name="dateEnd" type="text" value="2017-05-31"/>
+                <input id="dateStart" style="display: none" name="dateStart" type="text" value="" />
+                <input id="dateEnd" style="display: none" hidden name="dateEnd" type="text" value=""/>
             </div>
 
             <!-- 会计期 end -->
@@ -228,14 +228,16 @@
 
     //查询类型切换
     $("input[name='queryType']").on("change",function(){
-        var type = $(this).val();
-        if(type=="1"){//查询日期
-            $('#confirmDateColumn').show();
-            $('#fiscalPeriodColumn').hide();
-        }else{//会计日期
-            $('#confirmDateColumn').hide();
-            $('#fiscalPeriodColumn').show();
-        }
+//        var type = $(this).val();
+//        if(type=="1"){//查询日期
+//            $('#confirmDateColumn').show();
+//            $('#fiscalPeriodColumn').hide();
+//        }else{//会计日期
+//            $('#confirmDateColumn').hide();
+//            $('#fiscalPeriodColumn').show();
+//        }
+        $('#confirmDateColumn').show();
+        $('#fiscalPeriodColumn').hide();
     });
 
 

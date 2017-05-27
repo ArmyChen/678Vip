@@ -169,13 +169,15 @@ var reportSkuIOReport = {
             sidx:"sku_id",
             sord:"ASC",
             queryType:queryType,
-            wmIds:$("#warehouseIds").val(),
+            wmIds:$("#wmIds").val(),
             skuTypeIds:$("#skuTypeIds").val(),
             wmTypeIds:$("#wmTypeIds").val(),
             // commercialId:$("#commercialId").val(),
             skuNameOrCode:$("#skuNameOrCode").val(),
-            confirmDateStart:queryType=="1"?$("#confirmDateStart").val():$("#dateStart").val(),
-            confirmDateEnd:queryType=="1"?$("#confirmDateEnd").val():$("#dateEnd").val(),
+            // confirmDateStart:queryType=="1"?$("#confirmDateStart").val():$("#dateStart").val(),
+            // confirmDateEnd:queryType=="1"?$("#confirmDateEnd").val():$("#dateEnd").val(),
+            confirmDateStart:$("#confirmDateStart").val(),
+            confirmDateEnd:$("#confirmDateEnd").val(),
             isEnable:isEnable?1:0,
             isDisable:isDisable?1:0,
             isDelete:isDelete?1:0,
@@ -224,6 +226,7 @@ var reportSkuIOReport = {
             data : queryCondition,
             url : _this.opts.urlRoot + _this.opts.queryUrl,
             success: function (e) {
+                $("#load_grid").show();
                 var data = eval(e);
                 if (data) {
                     _this.buildTable(data);
