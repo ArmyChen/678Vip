@@ -58,16 +58,20 @@
 
 
                                         <!--<option value="">请选择出库原因</option>-->
-                                        {foreach from=$ywsort item=ywitem key=ywkey}
+                                        <!--{foreach from=$ywsort item=ywitem key=ywkey}-->
 
-                                        {if $ywkey gt '5'}
+                                        <!--{if $ywkey gt '5'}-->
 
-                                        <option value="{$ywkey}" {if $result.ywsort eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+                                        <!--<option value="{$ywkey}" {if $result.ywsort eq $ywkey} selected="selected" {/if}>{$ywitem}</option>-->
 
-                                        {/if}
+                                        <!--{/if}-->
 
-                                        {/foreach}
+                                        <!--{/foreach}-->
 
+                                        <option value="10"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>生产领料</option>
+                                        <option value="11"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>借用出库</option>
+                                        <option value="12"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>其他出库</option>
+                                        <option value="13"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>配送领料</option>
 
 
                                     </select>

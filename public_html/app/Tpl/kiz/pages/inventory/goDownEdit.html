@@ -58,17 +58,19 @@
 
 
                                         <!--<option value="">请选择入库原因</option>-->
-                                        {foreach from=$ywsort item=ywitem key=ywkey}
+                                        <!--{foreach from=$ywsort item=ywitem key=ywkey}-->
 
-                                        {if $ywkey lt '5' && $ywkey neq '-6'}
+                                        <!--{if $ywkey lt '5' && $ywkey neq '-6'}-->
 
-                                        <option value="{$ywkey}" {if $result.ywsort eq $ywkey} selected="selected" {/if}>{$ywitem}</option>
+                                        <!--<option value="{$ywkey}" {if $result.ywsort eq $ywkey} selected="selected" {/if}>{$ywitem}</option>-->
 
-                                        {/if}
+                                        <!--{/if}-->
 
-                                        {/foreach}
+                                        <!--{/foreach}-->
 
-
+                                        <option value="-5"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>生产退料</option>
+                                        <option value="-4"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>退还入库</option>
+                                        <option value="-2"  {if $result.ywsort eq $ywkey} selected="selected" {/if}>其他入库</option>
 
 
                                     </select>
