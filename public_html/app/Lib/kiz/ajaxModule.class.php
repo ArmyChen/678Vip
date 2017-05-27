@@ -305,7 +305,7 @@ class ajaxModule extends KizBaseModule{
         $end_time_s = strtotime($end_time);
 
 //        $sqlstr="where a.gonghuoren is not null ";
-        $sqlstr="where a.isdisable = 2 ";
+        $sqlstr="where 1=1 ";
         $sqlstr.=' and ( a.slid='.$location_id.')';
 
         if($begin_time_s){
@@ -619,10 +619,10 @@ class ajaxModule extends KizBaseModule{
             $datailinfo[$k]['price'] = $v['price'];
             $datailinfo[$k]['num'] = $v['actualQty'];
             $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
-            $datailinfo[$k]['zmoney'] = $v['amount'];
+            $datailinfo[$k]['zmoney'] = $v['actualQty']*$v['price'];
             $datailinfo[$k]['memo'] = $v['memo'];
             $znum += $v['actualQty'];
-            $zmoney += $v['price'];
+            $zmoney +=  $v['actualQty']*$v['price'];
         }
 
         $dd_detail=serialize($datailinfo);
@@ -670,10 +670,14 @@ class ajaxModule extends KizBaseModule{
         $detail2 = $_REQUEST['details'];
         $amount = 0;//总金额
         foreach($detail2 as $k=>$v){
-            $order_num=floatval($v['planMoveQty']);
+            if(empty(floatval($v['planMoveQty']))){
+                $order_num=floatval($v['actualQty']);
+            }else{
+                $order_num=floatval($v['planMoveQty']);
+            }
             $amount += $order_num*$v['price'];
         }
-        if(!empty($bumen)){
+        if(!empty($bumen)&&$_REQUEST['senderId']==15){
             if ($_REQUEST['type']==1){ //入库
                 $return['data']['url'] = url("kiz","supplier#go_down_index&id=$slid");
             }else{
@@ -686,6 +690,8 @@ class ajaxModule extends KizBaseModule{
             //新增出库记录
             $datailinfo = array();
             $oDetail = empty($_REQUEST['details'])?$_REQUEST['detail']:$_REQUEST['details'];
+            $znum = 0;
+            $zprice = 0;
             foreach($oDetail as $k=>$v){
                 $datailinfo[$k]['mid'] = $v['skuId'];
                 $datailinfo[$k]['unit'] = $v['uom'];
@@ -695,13 +701,15 @@ class ajaxModule extends KizBaseModule{
                 $datailinfo[$k]['yuan_price'] = $v['price'];
                 $datailinfo[$k]['name'] = $v['skuName'];
                 $datailinfo[$k]['barcode'] = $v['skuCode'];
-                $datailinfo[$k]['type'] = 2;
+                $datailinfo[$k]['type'] =$_REQUEST['type'];
                 $datailinfo[$k]['unit_type'] = $v['unit_type'];
                 $datailinfo[$k]['price'] = $v['price'];
                 $datailinfo[$k]['num'] = $v['actualQty'];
                 $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
-                $datailinfo[$k]['zmoney'] = $v['uom'];
+                $datailinfo[$k]['zmoney'] = $v['actualQty']*$v['price'];
                 $datailinfo[$k]['memo'] = $v['memo'];
+                $znum += $v['actualQty'];
+                $zprice += $v['actualQty']*$v['price'];
             }
 
             $dd_detail=serialize($datailinfo);
@@ -721,16 +729,18 @@ class ajaxModule extends KizBaseModule{
 
             $datainGys['dd_detail']=$dd_detail;
             $datainGys['slid']=$slid;
-            $datainGys['type'] = 2;
+            $datainGys['type'] = $_REQUEST['type'];
             $datainGys['danjuhao'] = empty($_REQUEST['asnNoView'])?time():$_REQUEST['asnNoView'];
             $datainGys['ywsort'] = $_REQUEST['senderId'];
             $datainGys['cid'] = $_REQUEST['warehouseId'];
             $datainGys['lihuo_user'] = $account_info['account_name'];
             $datainGys['gonghuoren'] = $bumen;
-            $datainGys['zmoney'] = $amount;
+            $datainGys['zmoney'] = $zprice;
+            $datainGys['znum'] = $znum;
+            $datainGys['isdisable'] = 1;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"INSERT");
+            echo json_encode($return);exit;
         }
-
 //        $datain['zmoney'] = $amount;
         $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datain ,"INSERT");
         echo json_encode($return);exit;
@@ -882,6 +892,7 @@ class ajaxModule extends KizBaseModule{
             $datainGys['gonghuoren'] = $bumen;
             $datainGys['zmoney'] = $amount;
             $res = $GLOBALS['db']->autoExecute(DB_PREFIX."cangku_log", $datainGys ,"update","id=".$id);
+            echo json_encode($return);exit;
         }
 //        var_dump($datain);die;
 
