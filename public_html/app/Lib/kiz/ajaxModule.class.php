@@ -5663,7 +5663,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=1;
                         $parentLabel="总入库";
                         $price += $v2['price'];
-                        $modelNumber = 1;
+                        $modelNumber = 11;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="验收入库";
@@ -5683,7 +5683,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=1;
                         $parentLabel="总入库";
                         $price += $v2['price'];
-                        $modelNumber = 2;
+                        $modelNumber = 92;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="其他入库";
@@ -5703,7 +5703,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=1;
                         $parentLabel="总入库";
                         $price += $v2['price'];
-                        $modelNumber = 3;
+                        $modelNumber = 61;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="生产入库";
@@ -5723,7 +5723,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=1;
                         $parentLabel="总入库";
                         $price += $v2['price'];
-                        $modelNumber = 4;
+                        $modelNumber = 42;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="移库入库";
@@ -5743,7 +5743,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 5;
+                        $modelNumber = 12;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="采购退货";
@@ -5762,7 +5762,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 6;
+                        $modelNumber = 81;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="出库（配送）";
@@ -5773,7 +5773,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 7;
+                        $modelNumber = 23;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="销售出库";
@@ -5784,7 +5784,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 8;
+                        $modelNumber = 62;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="生产出库";
@@ -5803,7 +5803,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 9;
+                        $modelNumber = 91;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="生产出库";
@@ -5823,7 +5823,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 10;
+                        $modelNumber = 72;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="报废";
@@ -5845,7 +5845,7 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=2;
                         $parentLabel="总出库";
                         $price += $v2['price'];
-                        $modelNumber = 11;
+                        $modelNumber = 41;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="移库（出）";
@@ -5865,36 +5865,47 @@ class ajaxModule extends KizBaseModule{
                         $parentIndex=3;
                         $parentLabel="盘点";
                         $price += $v2['price'];
-                        $modelNumber = 12;
+                        $modelNumber = 31;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="盘盈";
+                        $mid = $v2['mid'];
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                        $sql = "select * from fanwe_cangku_pandian_stat fcps INNER join fanwe_cangku_pandian_danju fcpd on fcps.djid=fcpd.id  where fcpd.panying > 0 and  mid=".$mid;
+                        $rows = $GLOBALS['db']->getAll($sql);
+                        foreach ($rows as $row) {
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $row['price'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $row['num'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                        }
+
+
                     }
                     //盘亏
                     if($item['type'] == 2 && $item['ywsort'] == 6){
                         $parentIndex=3;
                         $parentLabel="盘点";
                         $price += $v2['price'];
-                        $modelNumber = 13;
+                        $modelNumber = 32;
                         $qty +=$v2['num'];
                         $thisIndex = $item['ywsort'];
                         $thisLabel="盘亏";
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                        $sql = "select * from fanwe_cangku_pandian_stat fcps INNER join fanwe_cangku_pandian_danju fcpd on fcps.djid=fcpd.id  where fcpd.pankui > 0 and  mid=".$mid;
+                        $rows = $GLOBALS['db']->getAll($sql);
+                        foreach ($rows as $row) {
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $row['price'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $row['num'];
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
+                            $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
+                        }
                     }
 
 //                    if(empty($item['ywsort'])){
