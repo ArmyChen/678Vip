@@ -340,6 +340,23 @@ class KizBaseModule{
     }
 
     /**
+     * 根据mid查询仓库信息
+     * @param $id
+     * @return mixed
+     */
+    public function getAllCangkuMenuInfoByMid($mid){
+        if($mid > 0){
+            $sql = "select * from fanwe_cangku_menu where mid=".$mid;
+            $result = $GLOBALS['db']->getAll($sql);
+            if(empty($result)){
+                return 0;
+            }
+            return $result;
+        }
+        return null;
+    }
+
+    /**
      * 根据mid查询商品信息
      * @param $id
      * @return mixed

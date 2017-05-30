@@ -5645,7 +5645,10 @@ class ajaxModule extends KizBaseModule{
                 if($v == $v2['mid']){
                     $mmnum++;
                     $item = parent::get_cangku_log_list($v2['id']);
+                    $dc_menu = parent::getAllCangkuMenuInfoByMid($v2['mid']);
                     $dc_menu = parent::getDcMenuInfoByMid($v2['mid']);
+//                    var_dump($dc_menu);die;
+
                     $goods[$mnum]['skuTypeId'] = $dc_menu['cate_id'];
                     $goods[$mnum]['wmTypeName'] = $this->ywsort[$v2['ywsort']];
                     $goods[$mnum]['skuTypeName'] = empty(parent::get_dc_current_supplier_cate($dc_menu['cate_id']))?'':parent::get_dc_current_supplier_cate($dc_menu['cate_id'])['name'];
@@ -5669,11 +5672,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="验收入库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5689,11 +5692,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="其他入库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5709,11 +5712,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="生产入库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5729,11 +5732,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="移库入库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5749,11 +5752,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="采购退货";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5790,11 +5793,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="生产出库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5809,11 +5812,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="生产出库";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
@@ -5851,11 +5854,11 @@ class ajaxModule extends KizBaseModule{
                         $thisLabel="移库（出）";
 
 
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] = $price;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['amount'] += $price;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['modelNumber'] = $modelNumber;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentIndex'] = $parentIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['parentLabel'] = $parentLabel;
-                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] = $qty;
+                        $goods[$mnum]['skuIoDetailVOs'][$mmnum]['qty'] += $qty;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisIndex'] = $thisIndex;
                         $goods[$mnum]['skuIoDetailVOs'][$mmnum]['thisLabel'] = $thisLabel;
                     }
