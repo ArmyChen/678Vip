@@ -27,7 +27,7 @@ var reportSkuIOReport = {
             scroll: 1, // virtual scroll
             colNames:['库存类型', '商品分类', '商品编码', '商品名称（规格）', '单位'],
             colModel:[
-                {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center',sortable: false},
+                {name: 'wmTypeName', index: 'wmTypeName', width: 80, align: 'center',sortable: false,hidden:true},
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, align: 'center',sortable: false},
                 {name: 'skuCode', index: 'skuCode', width: 100, align: 'left',sortable: false},
                 {name: 'skuName', index: 'skuName', width: 180, align: 'left',sortable: false},
@@ -270,13 +270,13 @@ var reportSkuIOReport = {
                     }
 
                     if(footerData['qty_' + detail.modelNumber] != undefined && footerData['qty_' + detail.modelNumber] != null){
-                        footerData['qty_' + detail.modelNumber] = $.toFixed(footerData['qty_' + detail.modelNumber] + detail.qty);
+                        footerData['qty_' + detail.modelNumber] = $.toFixed(parseInt(footerData['qty_' + detail.modelNumber]) + parseInt(detail.qty));
                     } else{
                         footerData['qty_' + detail.modelNumber] = detail.qty;
                     }
 
                     if(footerData['amount_' + detail.modelNumber] != undefined && footerData['amount_' + detail.modelNumber] != null){
-                        footerData['amount_' + detail.modelNumber] = $.toFixed(footerData['amount_' + detail.modelNumber] + detail.amount);
+                        footerData['amount_' + detail.modelNumber] = $.toFixed(parseFloat(footerData['amount_' + detail.modelNumber]) + parseFloat(detail.amount));
                     } else{
                         footerData['amount_' + detail.modelNumber] = detail.amount;
                     }
