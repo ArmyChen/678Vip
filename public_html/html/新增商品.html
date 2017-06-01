@@ -1,0 +1,1265 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+<base href="http://b.keruyun.com:80/merchandise/">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<link rel="icon" href="/merchandise/themes/style/img/favicon.ico" mce_href="/merchandise/themes/style/img/favicon.ico" type="image/x-icon">
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="/merchandise/js/bootstrap/css/bootstrap.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/bootstrap/css/bootstrap-switch.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/jquery.validate/cmxform.css?v1.0" />
+<!-- jgGrid start -->
+<link rel="stylesheet" href="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/css/ui.jqgrid.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/themes/style/css/plugins/jqGrid/jqGrid-4.4.3/resetJqGrid.css?v1.0" />
+<!-- jgGrid end -->
+<link rel="stylesheet" href="/merchandise/themes/style/css/base.css?v1.0" />
+<!--[if IE]>
+<link rel="stylesheet" href="/merchandise/themes/style/css/ie.css"/>
+<![endif]-->
+
+<script type='text/javascript'>window.BWEUM || (BWEUM = {});
+BWEUM.info = {
+    "stand": true,
+    "agentType": "browser",
+    "agent": "bi-collector.oneapm.com/static/js/bw-send-411.4.5.js",
+    "beaconUrl": "bi-collector.oneapm.com/beacon",
+    "licenseKey": "fA~3juMujFj27fyu",
+    "applicationID": 2270032
+};</script>
+<script type="text/javascript" src="//bi-collector.oneapm.com/static/js/bw-loader-411.4.5.js"></script>
+
+<script src="/merchandise/js/jquery-1.10.2.min.js?v1.0"></script>
+<script>
+    var _hmt = window._hmt || [];
+    var ctxPath = "/merchandise";
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?887cf26826dd888eebe2769131c9969d";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+    <link rel="stylesheet" href="/merchandise/themes/style/css/tree.css">
+    <link rel="stylesheet" href="/merchandise/themes/style/css/report.css">
+    <link rel="stylesheet" href="/merchandise/themes/style/css/tabScroll.css">
+    <link rel="stylesheet" href="/merchandise/themes/style/css/store-goods.css">
+    <link rel="stylesheet" href="/merchandise/js/jquery-extension/jcrop/css/jquery.Jcrop.min.css">
+    <link rel="stylesheet" href="/merchandise/themes/style/css/commons/scm-tooltip.css">
+    
+    
+
+    <!-- zww -->
+    <script type="text/javascript">
+        var UEDITOR_HOME_URL = "/merchandise/js/ueditor/";//从项目的根目录开始
+    </script>
+    <script type="text/javascript" charset="utf-8" src="/merchandise/js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/merchandise/js/ueditor/ueditor.all.js"></script>
+
+
+    <!--  -->
+
+    <title>新增商品</title>
+    <style>
+        #goodsAttributeTd .icon-plus {
+            left: 465px;
+            position: relative;
+        }
+
+        #goodsAttributeTd .close-1 {
+            margin-top: -3px;
+        }
+
+        #divPreview-2, #divPreview-2 img, #divPreviewImage, #divPreviewImage img {
+            width: 480px;
+            height: 360px;
+        }
+
+        .error-tip {
+            color: #f87a7a;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" id="dishId" value=""/>
+<input type="hidden" id="domain" value="http://img.keruyun.net/">
+<div id="header">
+    
+
+
+<div class="nav-tabs" id="nav-fixed">
+    <div class="center-block">
+        <!--面包屑设置 start-->
+        <input id="canLoginBrand" type="hidden" value="true">
+        <input id="headIsBrand" type="hidden" value="true">
+        <input id="headBrandName" type="hidden" value="客如云  电商部">
+        <input id="headCommercialName" type="hidden" value="品牌">
+        <!--面包屑设置 end-->
+
+        <h1 id="logo"><a href="/mind/index" title="实时概况"></a></h1>
+        <ul class="nav head-new-nav"></ul>
+		<span style="background:white">
+        <div class="user-info">
+            <div class="user-info-view">
+                
+                    
+                
+                
+                    
+                        
+                    
+                    
+                
+                <div class="photo"
+                     style="display: inline;float:left;width:50px;height:50px;background:url('/merchandise/themes/style/img/icon-user.png') no-repeat;background-size:50px 50px;-webkit-background-size: 50px 50px "></div>
+                <div style="display: inline;float: left">
+                    <ul>
+                        <li title="客如云  电商部">&nbsp;客如云  电商部</li>
+                        <li title="admin">&nbsp;admin</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="list-group" style="display: none;">
+                <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
+                <a href="#" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
+                <a href="#" id="logout" class="list-group-item logout">退出登录</a>
+            </div>
+        </div>
+
+		<div id="changeCommercialModal" class="modal fade in mapModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">&times;</a>
+
+                        <h3>切换门店</h3>
+                    </div>
+                    <div class="modal-body modal-main">
+                        <div id="map_container" class="col-md-8 map-content">
+                        </div>
+                        <div class="col-md-4 search-content">
+                            <div class="clearfix">
+                                <div class="search-box" id="goodsTypeSearch">
+                                    <input type="text" id="searchCommercial" class="form-control"
+                                           placeholder="根据门店名称或地址搜索"
+                                           maxlength="48" value="">
+                                    <span id="js-type-search-button" class="icon-search" title="搜索">搜索</span>
+                                </div>
+                                <div class="shop-content" id="shop_list">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		</span>
+    </div>
+</div>
+<input type="hidden" id="cbk_" name="cbk_" value="953a72cfb7dfe6a70892e2ea5e51eb28"/>
+<link rel="stylesheet" href="/merchandise/themes/style/css/commons/baidu.css?v1.0"/>
+<link rel="stylesheet" href="/merchandise/themes/style/css/login-info.css?v1.0"/>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=D8fde80e0d8f96000b89da6da12e410f"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js?v1.0"></script>
+<script type="text/javascript" src="/merchandise/js/common/header/layer/layer.js?v1.0"></script>
+<script type="text/javascript" src="/merchandise/js/common/header/login-info.js?v1.0"></script>
+<script type="text/javascript">
+    var loginSessionId = 'f22d9b9daa5e4730969c6bb6b042bd7d';
+
+    var ctxPath = "http://b.keruyun.com:80/merchandise";
+    
+    
+    var data = [{"code":"mind:dingdan","id":100,"levelId":"001","name":"订单","parentId":0,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:dingdan:yudingjilu","id":101,"levelId":"001001","name":"预订记录","parentId":100,"platform":1,"sort":1,"type":1,"url":"/booking/list"},{"code":"mind:baobiao","id":106,"levelId":"001","name":"报表","parentId":0,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao","id":107,"levelId":"001001","name":"预订报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao:yudingliangbaobiao","id":108,"levelId":"001001001","name":"预订量报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingchart/charts"},{"code":"mind:baobiao:yudingbaobiao:dailirenyudingzhanbifenxi","id":109,"levelId":"001001001","name":"代理人预订占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/innerPerson"},{"code":"mind:baobiao:yudingbaobiao:yudingjujueliyouzhanbifenxi","id":110,"levelId":"001001001","name":"预订拒绝理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=-3"},{"code":"mind:baobiao:yudingbaobiao:yudingquxiaoliyouzhanbifenxi","id":111,"levelId":"001001001","name":"预订取消理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=9"},{"code":"mind:baobiao:yudingbaobiao:yudingpincibaobiao","id":112,"levelId":"001001001","name":"预订频次报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingFrequency/view"},{"code":"mind:baobiao:paiduibaobiao","id":113,"levelId":"001001","name":"排队报表","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:paiduibaobiao:paiduiliangbaobiao","id":114,"levelId":"001001001","name":"排队量报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queueReport/list"},{"code":"mind:baobiao:paiduibaobiao:paiduiliushilvbaobiao","id":115,"levelId":"001001001","name":"排队流失率报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/queueLoss"},{"code":"mind:baobiao:paiduibaobiao:pingjundengdaishichang","id":116,"levelId":"001001001","name":"平均等待时长","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/avgWaitTime"},{"code":"mind:baobiao:yingyebaobiao","id":117,"levelId":"001001","name":"营业报表","parentId":106,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:baobiao:yingyebaobiao:jiaojiebanbaobiao","id":119,"levelId":"001001001","name":"交接班报表","parentId":117,"platform":1,"sort":60,"type":1,"url":"/report/cashHandover"},{"code":"mind:baobiao:yingyebaobiao:dandianshoukuantongjibaobiao","id":120,"levelId":"001001001","name":"单店收款统计明细表","parentId":117,"platform":1,"sort":4,"type":1,"url":"/report/collection/list"},{"code":"mind:baobiao:yingyebaobiao:mendianshoukuantongjibaobiao","id":121,"levelId":"001001001","name":"门店收款统计报表","parentId":117,"platform":1,"sort":5,"type":1,"url":"/report/paymentShop/paymentShopList"},{"code":"mind:baobiao:xiaoshoubaobiao","id":122,"levelId":"001001","name":"销售报表","parentId":106,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:baobiao:xiaoshoubaobiao:shangpinxiaoshou","id":123,"levelId":"001001001","name":"销售统计表","parentId":122,"platform":1,"sort":1,"type":1,"url":"/report/dishSaleReport/index"},{"code":"mind:baobiao:xiaoshoubaobiao:mendianxiaoshoupaihang","id":125,"levelId":"001001001","name":"门店销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/dishShopSort"},{"code":"mind:baobiao:xiaoshoubaobiao:shijianduanxiaoshoumingxibiao","id":126,"levelId":"001001001","name":"时间段销售明细表","parentId":122,"platform":1,"sort":7,"type":1,"url":"/report/periodSale/list"},{"code":"mind:baobiao:huiyuanbaobiao:jifenmingxibaobiao","id":128,"levelId":"001001001","name":"积分明细表","parentId":1853,"platform":2,"sort":3,"type":1,"url":"#/report/point-detail"},{"code":"mind:baobiao:huiyuanbaobiao:jifenjiesuanbaobiao","id":129,"levelId":"001001001","name":"积分结算表","parentId":1853,"platform":2,"sort":4,"type":1,"url":"#/report/point-settlement"},{"code":"mind:shezhi","id":130,"levelId":"001","name":"设置","parentId":0,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi","id":143,"levelId":"001001","name":"商品设置","parentId":130,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi:zuofanguanli","id":144,"levelId":"001001001","name":"做法管理","parentId":143,"platform":1,"sort":1,"type":1,"url":"/dish/cookingway/list"},{"code":"mind:shezhi:shangpinshezhi:peiliaoguanli","id":145,"levelId":"001001001","name":"配料管理","parentId":143,"platform":1,"sort":2,"type":1,"url":"/dish/condiment/list"},{"code":"mind:shezhi:shangpinshezhi:biaoqianguanli","id":146,"levelId":"001001001","name":"标签管理","parentId":143,"platform":1,"sort":4,"type":1,"url":"/dish/label/list"},{"code":"mind:shezhi:shangpinshezhi:beizhuguanli","id":147,"levelId":"001001001","name":"备注管理","parentId":143,"platform":1,"sort":5,"type":1,"url":"/dish/memo/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshouguigeguanli","id":148,"levelId":"001001001","name":"销售规格管理","parentId":143,"platform":1,"sort":6,"type":1,"url":"/dish/attribute/list"},{"code":"mind:shezhi:shangpinshezhi:danweiguanli","id":149,"levelId":"001001001","name":"单位管理","parentId":143,"platform":1,"sort":7,"type":1,"url":"/dish/unit/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinleibie","id":150,"levelId":"001001001","name":"商品类别","parentId":143,"platform":1,"sort":8,"type":1,"url":"/dish/type/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinguanli","id":151,"levelId":"001001001","name":"商品管理","parentId":143,"platform":1,"sort":9,"type":1,"url":"/dish/manage/list"},{"code":"mind:shezhi:shangpinshezhi:taocanguanli","id":152,"levelId":"001001001","name":"套餐管理","parentId":143,"platform":1,"sort":10,"type":1,"url":"/dish/setMeal/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshoufanb","id":153,"levelId":"001001001","name":"销售范本","parentId":143,"platform":1,"sort":11,"type":1,"url":"/dish/saletemplet/list"},{"code":"mind:shezhi:shangpinshezhi:jiegecelue","id":154,"levelId":"001001001","name":"价格策略","parentId":143,"platform":1,"sort":12,"type":1,"url":"/dish/pricetemplet/list"},{"code":"mind:shezhi:zhifufangshishezhi","id":160,"levelId":"001001","name":"支付方式设置","parentId":130,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufangshiguanli","id":161,"levelId":"001001001","name":"支付方式管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/management/list"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufanbenguanli","id":162,"levelId":"001001001","name":"支付范本管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/templet/list"},{"code":"mind:shezhi:quanxianshezhi","id":163,"levelId":"001001","name":"权限设置","parentId":130,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:shezhi:quanxianshezhi:jiaoseshezhi","id":164,"levelId":"001001001","name":"角色设置","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/role/list"},{"code":"mind:shezhi:quanxianshezhi:zhanghaoguanli","id":165,"levelId":"001001001","name":"账号管理","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/userBrand/list"},{"code":"mind:bangzhu","id":208,"levelId":"001","name":"帮助","parentId":0,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:bangzhu:shipinzhongxin","id":209,"levelId":"001001","name":"视频中心","parentId":208,"platform":1,"sort":3,"type":1,"url":"/faq/video/list"},{"code":"mind:bangzhu:wentijieda","id":210,"levelId":"001001","name":"问题解答","parentId":208,"platform":1,"sort":2,"type":1,"url":"/faq/question/list"},{"code":"mind:dingdan:waimaidingdan","id":213,"levelId":"001001","name":"外卖订单","parentId":100,"platform":1,"sort":2,"type":1,"url":"/takeOutOrder/orderList"},{"code":"mind:baobiao:huiyuanbaobiao:dianbieshangpinbijiaobiao","id":216,"levelId":"001001001","name":"店别商品比较表","parentId":122,"platform":1,"sort":6,"type":1,"url":"/report/commercialCompareReport/list"},{"code":"mind:baobiao:yinxiaobaobiao:quanyingxiaobaobiao","id":217,"levelId":"001001001","name":"券营销报表","parentId":297,"platform":2,"sort":6,"type":1,"url":"#/report/coupon-marketing"},{"code":"mind:baobiao:yinxiaobaobiao:quanmingxibaobiao","id":218,"levelId":"001001001","name":"券明细报表","parentId":297,"platform":2,"sort":5,"type":1,"url":"#/report/coupon-detail"},{"code":"mind:baobiao:yingxiaobaobiao","id":297,"levelId":"001001","name":"营销报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:shouyinbaobiao:fantailv","id":321,"levelId":"001001001","name":"翻台率分析表","parentId":122,"platform":1,"sort":8,"type":1,"url":"/report/tableUseRate/list"},{"code":"mind:baobiao:shouyinbaobiao:pjxfsc","id":322,"levelId":"001001001","name":"订单平均消费时长分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/avgTime/list"},{"code":"mind:baobiao:shouyinbaobiao:laikefenxi","id":323,"levelId":"001001001","name":"来客分析","parentId":122,"platform":1,"sort":10,"type":1,"url":"/report/customerAnalysis/list"},{"code":"mind:baobiao:shouyinbaobiao:fanjiezhang","id":325,"levelId":"001001001","name":"反结账记录","parentId":117,"platform":1,"sort":90,"type":1,"url":"/report/reverseCheckout/reverseCheckout"},{"code":"mind:baobiao:shouyinbaobiao:xiaoshoufenxi","id":326,"levelId":"001001001","name":"销售分析","parentId":122,"platform":1,"sort":3,"type":1,"url":"/report/cash/saleAnalysis/index"},{"code":"mind:baobiao:yingxiaobaobiao:chushimingxi","id":327,"levelId":"001001001","name":"储值明细表","parentId":1852,"platform":2,"sort":1,"type":1,"url":"#/report/stored-value-detail"},{"code":"mind:baobiao:yingxiaobaobiao:chuzhixianjin","id":328,"levelId":"001001001","name":"储值结算报表","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/stored-value-settlement"},{"code":"loyalty:member:v5","id":1193,"levelId":"001001","name":"顾客","parentId":1848,"platform":2,"sort":1,"type":1,"url":"#/customer/customer-list"},{"code":"loyalty:marketPlan:coupon:v5","id":1196,"levelId":"001001001","name":"优惠券模板","parentId":1850,"platform":2,"sort":3,"type":1,"url":"#/marketing/coupon-template"},{"code":"loyalty:member:setting:v5","id":1198,"levelId":"001001","name":"会员设置","parentId":1848,"platform":2,"sort":6,"type":1,"url":"#"},{"code":"loyalty:member:degreeSetting:v5","id":1199,"levelId":"001001001","name":"会员等级","parentId":1198,"platform":2,"sort":2,"type":1,"url":"#/setting/member-level"},{"code":"loyalty:member:groupSetting:v5","id":1200,"levelId":"001001001","name":"顾客分组","parentId":1198,"platform":2,"sort":4,"type":1,"url":"#/setting/customer-group"},{"code":"scm:index","id":1255,"levelId":"001","name":"库存","parentId":0,"platform":3,"sort":4,"type":1,"url":"/index"},{"code":"scm:masterdata","id":1256,"levelId":"001001","name":"基础管理","parentId":1255,"platform":3,"sort":1,"type":1,"url":"#"},{"code":"scm:purchase","id":1257,"levelId":"001001","name":"采购管理","parentId":1255,"platform":3,"sort":2,"type":1,"url":"#"},{"code":"scm:delivery","id":1258,"levelId":"001001","name":"配送管理","parentId":1255,"platform":3,"sort":3,"type":1,"url":"#"},{"code":"scm:scrap","id":1259,"levelId":"001001","name":"报废管理","parentId":1255,"platform":3,"sort":5,"type":1,"url":"#"},{"code":"scm:production","id":1260,"levelId":"001001","name":"生产管理","parentId":1255,"platform":3,"sort":6,"type":1,"url":"#"},{"code":"scm:cc","id":1261,"levelId":"001001","name":"盘点管理","parentId":1255,"platform":3,"sort":7,"type":1,"url":"#"},{"code":"scm:inventory","id":1262,"levelId":"001001","name":"其他管理","parentId":1255,"platform":3,"sort":8,"type":1,"url":"#"},{"code":"scm:report","id":1263,"levelId":"001001","name":"报表","parentId":1255,"platform":3,"sort":9,"type":1,"url":"#"},{"code":"scm:masterdata:warehouse:query#","id":1264,"levelId":"001001001","name":"仓库设定","parentId":1256,"platform":3,"sort":10,"type":1,"url":"/scm/warehouse/index"},{"code":"scm:masterdata:inventoryImport:import#","id":1265,"levelId":"001001001","name":"期初库存","parentId":1256,"platform":3,"sort":20,"type":1,"url":"/openingInventory/index"},{"code":"scm:masterdata:skuType:query#","id":1266,"levelId":"001001001","name":"商品-原料类别设定","parentId":1256,"platform":3,"sort":30,"type":1,"url":"/scm/skutype/index"},{"code":"scm:masterdata:sku:query#","id":1267,"levelId":"001001001","name":"商品-原料设定","parentId":1256,"platform":3,"sort":40,"type":1,"url":"/sku/index"},{"code":"scm:masterdata:skuBom:query#","id":1268,"levelId":"001001001","name":"商品配方设定","parentId":1256,"platform":3,"sort":50,"type":1,"url":"/scm/skubom/index"},{"code":"scm:masterdata:reason:edit","id":1269,"levelId":"001001001","name":"退回、报废原因设定","parentId":1256,"platform":3,"sort":60,"type":1,"url":"/reason/index"},{"code":"scm:purchase:supplierType:query#","id":1270,"levelId":"001001001","name":"供应商类别设定","parentId":1257,"platform":3,"sort":10,"type":1,"url":"/scm/supplierCate/index"},{"code":"scm:purchase:supplier:query#","id":1271,"levelId":"001001001","name":"供应商设定","parentId":1257,"platform":3,"sort":20,"type":1,"url":"/scm/supplier/index"},{"code":"scm:purchase:asn:query#","id":1272,"levelId":"001001001","name":"采购入库单","parentId":1257,"platform":3,"sort":30,"type":1,"url":"/asn/purchase/index"},{"code":"scm:purchase:return:query#","id":1273,"levelId":"001001001","name":"采购退货单","parentId":1257,"platform":3,"sort":40,"type":1,"url":"/outbound/purchasereturn/index"},{"code":"scm:delivery:line:query#","id":1274,"levelId":"001001001","name":"配送线路","parentId":1258,"platform":3,"sort":10,"type":1,"url":"/delivery/line/index"},{"code":"scm:delivery:template:query#","id":1275,"levelId":"001001001","name":"配送模板","parentId":1258,"platform":3,"sort":20,"type":1,"url":"/scm/template/delivery/index"},{"code":"scm:delivery:prepare:query#","id":1276,"levelId":"001001001","name":"预配发货单","parentId":1258,"platform":3,"sort":30,"type":1,"url":"/delivery/prepare/index"},{"code":"scm:delivery:sign:query#","id":1277,"levelId":"001001001","name":"配送签收单","parentId":1258,"platform":3,"sort":40,"type":1,"url":"/delivery/sign/index"},{"code":"scm:scrap:scrap:query#","id":1278,"levelId":"001001001","name":"报废单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/outbound/scrap/index"},{"code":"scm:production:template:query#","id":1279,"levelId":"001001001","name":"自产模板","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/scm/template/product/index"},{"code":"scm:cc:cc:query#","id":1280,"levelId":"001001001","name":"盘点单","parentId":1261,"platform":3,"sort":10,"type":1,"url":"/cc/task/index"},{"code":"scm:inventory:si:query#","id":1281,"levelId":"001001001","name":"入库单","parentId":1262,"platform":3,"sort":1,"type":1,"url":"/asn/si/index"},{"code":"scm:inventory:so:query#","id":1282,"levelId":"001001001","name":"出库单","parentId":1262,"platform":3,"sort":2,"type":1,"url":"/outbound/so/index"},{"code":"scm:inventory:transfer:query#","id":1283,"levelId":"001001001","name":"移库单","parentId":1262,"platform":3,"sort":3,"type":1,"url":"/transferorder/index"},{"code":"scm:report:inventory:query","id":1284,"levelId":"001001001","name":"库存查询","parentId":1263,"platform":3,"sort":10,"type":1,"url":"/inventory/index"},{"code":"scm:report:inventoryTransaction:query","id":1285,"levelId":"001001001","name":"库存交易凭证","parentId":1263,"platform":3,"sort":20,"type":1,"url":"/inventoryTransaction/index"},{"code":"scm:report:ccReport:query","id":1286,"levelId":"001001001","name":"盘点盈亏表","parentId":1263,"platform":3,"sort":30,"type":1,"url":"/report/cc/index"},{"code":"scm:report:allocation:query","id":1287,"levelId":"001001001","name":"调拨差异分析表","parentId":1263,"platform":3,"sort":40,"type":1,"url":"/report/allocationDifference/index"},{"code":"scm:report:skuIO:query","id":1288,"levelId":"001001001","name":"商品月出入库汇总明细表","parentId":1263,"platform":3,"sort":50,"type":1,"url":"/report/skuIO/index"},{"code":"scm:report:scrap:query","id":1289,"levelId":"001001001","name":"退回报废分析表","parentId":1263,"platform":3,"sort":60,"type":1,"url":"/report/returnandscrap/index"},{"code":"scm:report:deliveryDifference:query","id":1290,"levelId":"001001001","name":"配送差异分析表","parentId":1263,"platform":3,"sort":70,"type":1,"url":"/report/deliveryDifference/index"},{"code":"scm:report:ioreason:query","id":1291,"levelId":"001001001","name":"出入库原因分析表","parentId":1263,"platform":3,"sort":80,"type":1,"url":"/report/ioreason/index"},{"code":"scm:production:si:query#","id":1296,"levelId":"001001001","name":"自产入库单","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/asn/product/index"},{"code":"loyalty:marketPlan:marketPlan:v5","id":1298,"levelId":"001001001","name":"营销方案","parentId":1850,"platform":2,"sort":2,"type":1,"url":"#/marketing/marketing-plan"},{"code":"loyalty:marketPlan:v5","id":1300,"levelId":"001","name":"营销","parentId":0,"platform":2,"sort":2,"type":1,"url":"#"},{"code":"wx:seting5","id":1302,"levelId":"001001","name":"移动门店设置","parentId":130,"platform":5,"sort":4,"type":1,"url":"#"},{"code":"scm:scrap:back:query#","id":1427,"levelId":"001001001","name":"退回入库单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/backstorage/index"},{"code":"mind:report:salesort:query","id":1428,"levelId":"001001001","name":"销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/salesort/index"},{"code":"wx:seting5:payConfig4BrandNew","id":1444,"levelId":"001001001","name":"品牌支付设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4BrandNew/getPayConfig"},{"code":"mind:baobiao:renxiaotongji","id":1446,"levelId":"001001","name":"人效统计","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:renxiaotongji:waimaiyuan","id":1455,"levelId":"001001001","name":"外卖员情况报表","parentId":1446,"platform":1,"sort":2,"type":1,"url":"/report/outSaler/view"},{"code":"mind:baobiao:yingyebaobiao:zhekouyouhui","id":1462,"levelId":"001001001","name":"优惠明细表","parentId":117,"platform":1,"sort":40,"type":1,"url":"/report/discount/view"},{"code":"mind:baobiao:yingyebaobiao:guanzhangjiaobanjilubiao","id":1466,"levelId":"001001001","name":"对账-关账交班记录表","parentId":117,"platform":1,"sort":10,"type":1,"url":"/report/closeBill/closeBillNew"},{"code":"mind:shezhi:liyoushezhi","id":1471,"levelId":"001001","name":"理由设置","parentId":130,"platform":1,"sort":7,"type":1,"url":"/brand/reason/list"},{"code":"mind:bangzhu:caozuorizhi","id":1479,"levelId":"001001","name":"操作日志","parentId":208,"platform":1,"sort":1,"type":1,"url":"/logger/list/business"},{"code":"mind:baobiao:renxiaotongji:fuwuyuanqingkuang","id":1480,"levelId":"001001001","name":"服务员情况报表","parentId":1446,"platform":1,"sort":1,"type":1,"url":"/report/waiter/list"},{"code":"scm:report:purchase:query","id":1485,"levelId":"001001001","name":"采购分析表","parentId":1263,"platform":3,"sort":90,"type":1,"url":"/report/purchaseanalysis/index"},{"code":"loyalty:report:member:memberCount","id":1486,"levelId":"001001001","name":"会员量分析","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/membership-analysis"},{"code":"loyalty:report:member:memberValue","id":1487,"levelId":"001001001","name":"会员储值分析","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/member-stored-value"},{"code":"loyalty:report:trade:tradeReport","id":1488,"levelId":"001001001","name":"会员消费分析","parentId":1851,"platform":2,"sort":3,"type":1,"url":"#/report/member-consumption"},{"code":"loyalty:member:memberpricesetting:v5","id":1489,"levelId":"001001001","name":"特价菜单","parentId":1198,"platform":2,"sort":3,"type":1,"url":"#/setting/special-menu"},{"code":"mind:baobiao:xiaoshoubaobiao:liyoufenxi","id":1490,"levelId":"001001001","name":"订单理由分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/tradeReason/list"},{"code":"mind:baobiao:yingyebaobiao:posdetails","id":1492,"levelId":"001001001","name":"银联POS账单明细","parentId":117,"platform":1,"sort":100,"type":1,"url":"/report/settlementController/pos"},{"code":"mind:shezhi:zhekouzhezhi","id":1493,"levelId":"001001","name":"折扣设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:zhekouzhezhi:zhekouguanli","id":1494,"levelId":"001001001","name":"折扣管理","parentId":1493,"platform":1,"sort":1,"type":1,"url":"/discountManage/discount/list"},{"code":"mind:shezhi:zhekouzhezhi:zhekoufanben","id":1495,"levelId":"001001001","name":"折扣范本","parentId":1493,"platform":1,"sort":2,"type":1,"url":"/discountManage/discountTemplate/list"},{"code":"loyalty:marketPlan:cardKind","id":1510,"levelId":"001001","name":"实体卡","parentId":1848,"platform":2,"sort":4,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance","id":1528,"levelId":"001001","name":"实体卡报表","parentId":106,"platform":2,"sort":8,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance:saleCardReport","id":1529,"levelId":"001001001","name":"权益卡","parentId":1528,"platform":2,"sort":1,"type":1,"url":"#/report/entity-member"},{"code":"loyalty:report:member:memberCoupon","id":1534,"levelId":"001001001","name":"券消费明细表","parentId":297,"platform":2,"sort":4,"type":1,"url":"#/report/coupon-view"},{"code":"scm:report:inventoryDistribution:query","id":1538,"levelId":"001001002","name":"库存分布明细表","parentId":1263,"platform":3,"sort":15,"type":1,"url":"/report/inventoryDistribution/index"},{"code":"mind:shezhi:logoSetting","id":1540,"levelId":"001111","name":"LOGO设置","parentId":130,"platform":1,"sort":20,"type":1,"url":"/logo/index"},{"code":"scm:stockcount:template:query#","id":1542,"levelId":"001001001","name":"盘点模板","parentId":1261,"platform":3,"sort":5,"type":1,"url":"/scm/template/stockcount/index"},{"code":"wx:seting5:brandCustom","id":1545,"levelId":"001001001","name":"品牌页面自定义","parentId":1302,"platform":5,"sort":6,"type":1,"url":"/customerContenteArea/brandCustom"},{"code":"wx:seting5:masterialNews","id":1546,"levelId":"001001001","name":"素材管理","parentId":1302,"platform":5,"sort":2,"type":1,"url":"/materialNew/list?type=materialNews"},{"code":"wx:seting5:event","id":1551,"levelId":"001001001","name":"事件中心","parentId":1302,"platform":5,"sort":5,"type":1,"url":"/event/view"},{"code":"wx:seting5:autoReply","id":1552,"levelId":"001001001","name":"自动回复","parentId":1302,"platform":5,"sort":4,"type":1,"url":"/autoReply/view"},{"code":"wx:seting5:menuCustom","id":1553,"levelId":"001001001","name":"自定义菜单","parentId":1302,"platform":5,"sort":3,"type":1,"url":"/menuCustom/page"},{"code":"loyalty:marketPlan:cardKind:v5","id":1556,"levelId":"001001001","name":"权益卡","parentId":1510,"platform":2,"sort":1,"type":1,"url":"#/customer/member-card"},{"code":"loyalty:tempCardKind:tempCardKindList","id":1557,"levelId":"001001001","name":"匿名卡","parentId":1510,"platform":2,"sort":2,"type":1,"url":"#/customer/anonymous-card"},{"code":"scm:masterdata:setting:edit","id":1577,"levelId":"001001002","name":"库存参数设定","parentId":1256,"platform":3,"sort":70,"type":1,"url":"/setting/index"},{"code":"mind:shezhi:shortMsgTemplateSetting","id":1579,"levelId":"001123","name":"通知模板设置","parentId":130,"platform":1,"sort":18,"type":1,"url":"/commercial/shortMsgTemplete/index"},{"code":"mind:shezhi:accountSubject","id":1580,"levelId":"001001","name":"收支管理","parentId":130,"platform":1,"sort":2,"type":1,"url":"/accountSubject/page"},{"code":"coupn:templet:view","id":1581,"levelId":"001001","name":"优惠券方案","parentId":1300,"platform":2,"sort":2,"type":1,"url":"#/marketing/coupon-plan"},{"code":"loyalty:baobiao:tempCard:consumeReport","id":1582,"levelId":"001001001","name":"匿名卡","parentId":1528,"platform":2,"sort":3,"type":1,"url":"#/report/entity-temp"},{"code":"mind:shezhi:depositSetting","id":1589,"levelId":"001011","name":"押金设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"/brand/deposit/index"},{"code":"mind:trade:tradeManage:listView","id":1591,"levelId":"001001","name":"订单管理","parentId":100,"platform":1,"sort":4,"type":1,"url":"/tradeManage/listView"},{"code":"mind:bangzhu:bangzhuzhongxin","id":1592,"levelId":"001001","name":"帮助中心","parentId":208,"platform":1,"sort":4,"type":1,"url":"/pos/help/centerIndexShow"},{"code":"mind:baobiao:yingyebaobiao:yajinbaobiao","id":1593,"levelId":"001001011","name":"押金报表","parentId":117,"platform":1,"sort":50,"type":1,"url":"/report/deposit/list"},{"code":"wx:payConfig4Brand:weixinConfig","id":1605,"levelId":"001001001","name":"公众号参数设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4Brand/weixinConfig"},{"code":"loyalty:report:customer:customerProfile","id":1606,"levelId":"001001001","name":"顾客画像","parentId":1851,"platform":2,"sort":5,"type":1,"url":"#/report/customer-profile"},{"code":"mind:baobiao:jingyingguanli","id":1607,"levelId":"001001","name":"经营管理","parentId":106,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:baobiao:jingyingguanli:mingancaozuobaobiao","id":1608,"levelId":"001001001","name":"敏感操作报表","parentId":1607,"platform":1,"sort":1,"type":1,"url":"/report/sensitiveOperation/list"},{"code":"scm:purchase:nav:index","id":1609,"levelId":"001001002","name":"采购流程导航","parentId":1257,"platform":3,"sort":5,"type":1,"url":"/asn/purchase/nav"},{"code":"scm:delivery:aggregate:query#","id":1610,"levelId":"001001002","name":"商品需求汇总单","parentId":1257,"platform":3,"sort":22,"type":1,"url":"/supply/aggregate/index"},{"code":"scm:purchase:apply:query#","id":1611,"levelId":"001001002","name":"采购申请单","parentId":1257,"platform":3,"sort":24,"type":1,"url":"/purchase/apply/index"},{"code":"scm:purchase:plan:query#","id":1612,"levelId":"001001002","name":"采购计划单","parentId":1257,"platform":3,"sort":26,"type":1,"url":"/purchase/plan/index"},{"code":"scm:purchase:order:query#","id":1613,"levelId":"001001002","name":"采购订单","parentId":1257,"platform":3,"sort":28,"type":1,"url":"/purchase/order/index"},{"code":"scm:masterdata:deliverysetting:edit","id":1614,"levelId":"001001002","name":"配送管理参数设定","parentId":1258,"platform":3,"sort":5,"type":1,"url":"/deliverySetting/index"},{"code":"scm:delivery:track:index#","id":1615,"levelId":"001001002","name":"配送调拨跟踪表","parentId":1258,"platform":3,"sort":25,"type":1,"url":"/delivery/track/index"},{"code":"scm:report:product:query","id":1616,"levelId":"001001002","name":"商品生产分析表","parentId":1263,"platform":3,"sort":55,"type":1,"url":"/report/productanalysis/index"},{"code":"loyalty:marketing:marketSetting","id":1622,"levelId":"001001","name":"营销设置","parentId":1300,"platform":2,"sort":16,"type":1,"url":"#/marketing/setting"},{"code":"scm:productSetting:edit","id":1623,"levelId":"001001001","name":"生产管理参数设定","parentId":1260,"platform":3,"sort":5,"type":1,"url":"/scm/cost/index"},{"code":"scm:cc:setting:edit","id":1625,"levelId":"001001001","name":"盘点参数设定","parentId":1261,"platform":3,"sort":2,"type":1,"url":"/cc/setting/index"},{"code":"scm:report:purchasedetail:query","id":1626,"levelId":"001001002","name":"采购明细表","parentId":1263,"platform":3,"sort":100,"type":1,"url":"/report/purchasedetail/index"},{"code":"scm:report:cost:bom","id":1627,"levelId":"001001003","name":"配方估算成本分析表","parentId":1263,"platform":3,"sort":110,"type":1,"url":"/report/cost/bom/index"},{"code":"scm:report:cost:selling","id":1628,"levelId":"001001004","name":"商品销售成本分析表","parentId":1263,"platform":3,"sort":120,"type":1,"url":"/report/cost/selling/index"},{"code":"scm:report:inventoryWarn:query","id":1629,"levelId":"001001002","name":"库存预警表","parentId":1263,"platform":3,"sort":16,"type":1,"url":"/report/inventoryWarn/index"},{"code":"scm:masterdata:inventoryWarning:query#","id":1630,"levelId":"001001002","name":"库存预警设定","parentId":1256,"platform":3,"sort":80,"type":1,"url":"/inventoryWarning/index"},{"code":"wx:seting5:wxTmpMsg","id":1639,"levelId":"001001001","name":"微信模板消息","parentId":1302,"platform":5,"sort":123,"type":1,"url":"/wxTmpMsg/view"},{"code":"mind:baobiao:shouyinbaobiao:tuihuofenxi","id":1816,"levelId":"001001001","name":"异常货品分析","parentId":122,"platform":1,"sort":4,"type":1,"url":"/report/returnInvalidDish/list"},{"code":"scm:sale","id":1822,"levelId":"001002","name":"销售管理","parentId":1255,"platform":3,"sort":4,"type":1,"url":"#"},{"code":"scm:account:deposit:query#","id":1823,"levelId":"001002002","name":"供货保证金","parentId":1822,"platform":3,"sort":1,"type":1,"url":"/account/deposit/index"},{"code":"scm:order:sale:query#","id":1825,"levelId":"001002002","name":"销售订单","parentId":1822,"platform":3,"sort":2,"type":1,"url":"/sale/order/index"},{"code":"scm:report:saledetail:query","id":1836,"levelId":"001001002","name":"销售明细表","parentId":1263,"platform":3,"sort":140,"type":1,"url":"/report/saledetail/index"},{"code":"mind:22222","id":1837,"levelId":"001001","name":"配送站管理","parentId":130,"platform":1,"sort":1,"type":1,"url":"/deliveryStation/stationList"},{"code":"mind:hailaosong","id":1838,"levelId":"001002","name":"海捞送订单管理","parentId":100,"platform":1,"sort":1,"type":1,"url":"/hailaosong/takeOutOrder/orderList"},{"code":"mind:baobiao:yingyebaobiao:disanfangduizhang","id":1847,"levelId":"001001003","name":"第三方对账报表","parentId":117,"platform":1,"sort":11,"type":1,"url":"/report/thirdPartyPeconciliation/index"},{"code":"loyalty:membertrunk:v5","id":1848,"levelId":"001","name":"顾客","parentId":0,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:member:levelRight:v5","id":1849,"levelId":"001001001","name":"会员权益","parentId":1198,"platform":2,"sort":1,"type":1,"url":"#/setting/member-right"},{"code":"loyalty:marketPlan:marketPlanTree:v5","id":1850,"levelId":"001001","name":"营销方案","parentId":1300,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:overview","id":1851,"levelId":"001001","name":"顾客概况","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:chuzhi","id":1852,"levelId":"001001","name":"储值报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:jifen","id":1853,"levelId":"001001","name":"积分报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:customerProfileType","id":1854,"levelId":"001001001","name":"顾客分类","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/customer-category"},{"code":"mind:baobiao:xiaoshoubaobiao:zengsongtongjibaobiao","id":1870,"levelId":"001001001","name":"赠品统计报表","parentId":122,"platform":1,"sort":3,"type":1,"url":"/report/freeDish/freeDishPage"},{"code":"mind:baobiao:yingyebaobiao:sunyimingxibiao","id":1876,"levelId":"001001001","name":"损溢明细表","parentId":117,"platform":1,"sort":5,"type":1,"url":"/report/lossOverFlow/toLossOverFlow"}];
+    
+    
+    
+
+
+    var ctxPath = "/merchandise";
+    var ctxFullPath = "http://b.keruyun.com:80/merchandise";
+    var _loginUrl = 'http://b.keruyun.com';
+
+    $(function () {
+        var win = window.bkeruyun || window;
+        data = win.convertMenuData(data);
+        win.createMenu(data, '');
+        win.currentLink();
+        win.showNav($(".nav > li,.dropdown-submenu"), ".dropdown-menu", "open");
+
+        loginInfo._init({
+            brandObj: {"id":12566,"name":"客如云  电商部","permission":"","portalVersion":4,"version":6},
+            loginBrand: true,
+            currentCommercialId: "",
+            commercialList: [{"address":"湖北省武汉市武昌区中南路","id":810019565,"latlong":"30.533823,114.349653","name":"客如云电商部1号演示门店","permission":"","portalVersion":0,"version":6}],
+            isBrandLogin: true
+        });
+        var SHOP_TOKEN = {'focus': false, 'click': true};
+        $(window).focus(function () {
+            SHOP_TOKEN.focus = true;
+        });
+        $(document).mouseover(function () {
+            if (SHOP_TOKEN.focus) {
+                $.get("/mind/authority/checkIsSwitched?cbk=" + $("#cbk_").val() + "&ts=" + new Date().getTime(), function (data) {
+                    if (data.isSwitched == true) {
+                        if (SHOP_TOKEN.click) {
+                            SHOP_TOKEN.click = false;
+                            alert('\u95e8\u5e97\u5df2\u5207\u6362,\u8bf7\u91cd\u65b0\u5237\u65b0\u9875\u9762');
+                            window.location.href = "/mind/index";
+                        }
+                    }
+                });
+                SHOP_TOKEN.focus = false;
+            }
+        });
+    });
+</script>
+    <div class="article-header">
+        <div class="center-block w1200">
+            <h1>新增商品</h1>
+            <div class="btn-wrap pull-right tar">
+                <a class="btn-link ml10" id="btnPrev" style="display:none;">上一步</a>
+                <a class="btn-link ml10 js-back" href="javascript:;" id="btncancle">取消</a>
+                <a class="btn-link ml10" id="btnNext">下一步</a>
+                <a class="btn-link ml10 js-save" id="btnSave" style="display:none;">保存</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="center-block text-center">
+    <ul class="breadCrumbs" id="scmBreadCrumbs">
+        <li class="current" data-show="baseInfo"><span>1</span>基本信息</li>
+        <li data-show="sampleCon"><span>2</span>范本授权</li>
+    </ul>
+</div>
+<form id="stepOneForm">
+    <div class="center-block panel-group mt20" id="baseInfo">
+        <div class="aside">
+            <div class="aside-column panel-search">
+                <div class="search-box" id="goodsTypeSearch">
+                    <input type="text" name="keyWord" id="keyWord" class="form-control" placeholder="请输入类别编码/名称"
+                           maxlength="48" value=""/>
+                    <span id="js-type-search-button" class="icon-search">搜索</span>
+                </div>
+            </div>
+            <div class="aside-column classificationAll" id="classificationAll">
+                <ul class="tree" id="tree">
+                </ul>
+            </div>
+        </div>
+        <div class="panel main">
+            <!-- 基础数据 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>基础数据</em></h3>
+            </div>
+            <div class="panel-body">
+                <table cellpadding="0" cellspacing="0" class="table-nobd table-fixed">
+                    <tbody>
+                    <tr>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td width="350" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">商品编码 <span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span></label>
+                        </th>
+                        <td valign="top">
+                            <input type="text" class="form-control w220" maxlength="16" name="dishCode"
+                                   id="dishCode"
+                                   value="" placeholder="若不填写，则系统自动生成"
+                                   >
+                        </td>
+                        <th valign="top"><label class="control-label">商品名称</label> <strong
+                                class="red">*</strong></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="name"
+                                                id="name"
+                                                placeholder="第一语言" value=""></td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">定价</label> <strong class="red">*</strong>
+                        </th>
+                        <td valign="top"><input type="text" class="form-control w220 number1" data-type="number1"
+                                                data-left-max="8" data-right-max="2" name="marketPrice" id="marketPrice"
+                                                value=""></td>
+
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="48" name="aliasName"
+                                                id="aliasName" placeholder="第二语言" value=""></td>
+                    </tr>
+                    <tr>
+
+                        <th valign="top"><label for="dishNameIndex" class="control-label">名称首字母</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" name="dishNameIndex"
+                                                id="dishNameIndex"
+                                                value=""></td>
+                        <th valign="top"><label for="shortName" class="control-label">短名称</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="shortName"
+                                                id="shortName"
+                                                placeholder="第一语言" value=""></td>
+                    </tr>
+
+                    <tr>
+                        <th valign="top"><label for="barcode" class="control-label">条形码</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" name="barcode" id="barcode"
+                                                maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value=""></td>
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="48"
+                                                name="aliasShortName"
+                                                id="aliasShortName" placeholder="第二语言" value="">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">库存类型</label><strong class="red">*</strong></th>
+                        <td valign="top">
+                            
+                            
+                                <div class="w220"><select name="wmType" id="wmType">
+                                    <option value=""></option>
+                                    
+                                        <option value="1">预制商品</option>
+                                    
+                                        <option value="2">现制商品</option>
+                                    
+                                        <option value="3">外购商品</option>
+                                    
+                                </select></div>
+                            
+                        </td>
+                        <th valign="top"><label class="control-label">销售类型</label></th>
+                        <td valign="top">
+                            <label id="saleTypeBox"
+                                   class="checkbox "><span></span>
+                                <input type="checkbox" name="saleType" id="saleType" data-value="1"
+                                       >称重商品</label></td>
+
+                    </tr>
+
+                    <tr>
+                        <th valign="top"><label class="control-label">销售单位</label> <strong class="red">*</strong></th>
+                        <td valign="top">
+                            
+                                <div class="w220">
+                                    <select name="unitId" id="unitId">
+                                        <option value=""></option>
+                                        
+                                            <option value="64497"
+                                                     >杯</option>
+                                        
+                                            <option value="67729"
+                                                     >份</option>
+                                        
+                                            <option value="74711"
+                                                     >瓶</option>
+                                        
+                                            <option value="74713"
+                                                     >盘</option>
+                                        
+                                            <option value="74714"
+                                                     >位</option>
+                                        
+                                            <option value="100139"
+                                                     >块</option>
+                                        
+                                            <option value="100357"
+                                                     >罐</option>
+                                        
+                                            <option value="105347"
+                                                     >kg</option>
+                                        
+                                    </select>
+                                </div>
+                            
+                            
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                                    
+                                
+                            
+
+                        </td>
+                        <td colspan="2">
+                            <!--add 称重兑换开始-->
+                            <div class="hidden" id="weightWrapper">
+                                等于<input type="text" class="form-control w110" id="weight" value="">克
+                                <label for="weight" class="error-tip" style="display: inline-block;"></label>
+                            </div>
+                            <!--add 称重兑换结束-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">规格类别</label></th>
+                        <td colspan="3" valign="top" id="goodsAttributeTd">
+                            <div class="additem-wrap" id="goodsAttribute">
+
+                            </div>
+                            <span class="icon-plus">添加</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">排序</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="sort"
+                                                id="sort"
+                                                placeholder="1000" value=""></td>
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>销售设置</em></h3>
+            </div>
+            <div class="panel-body">
+                <table cellpadding="0" cellspacing="0" class="table-nobd table-fixed">
+                    <tbody>
+                    <tr>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td width="350" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                        <td style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">起卖数</label></th>
+                        <td><input type="text" class="form-control w220 number1" data-type="number1"
+                                   data-left-max="3" data-right-max="2" placeholder="1"
+                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="">
+                        </td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isSingle" id="isSingle" data-value="1"
+                                       checked>允许单点</label>
+                            <label class="checkbox checkbox-check"><span></span>
+                                <input type="checkbox" name="isDiscountAll" id="isDiscountAll" data-value="1"
+                                       checked>允许手动折扣</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">增量设置</label></th>
+                        <td><input type="text" class="form-control w220 number1" data-type="number1"
+                                   data-left-max="3" data-right-max="2" placeholder="1"
+                                   name="stepNum" id="stepNum" value=""></td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isSendOutside" id="isSendOutside" data-value="1"
+                                       checked>允许外送</label>
+
+                            <label class="checkbox  mr30"><span></span>
+                                <input type="checkbox" name="isChangePrice" id="isChangePrice" data-value="1"
+                                       >允许变价</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">餐盒数</label></th>
+                        <td>
+                            <input type="text" style="width:60px;" class="form-control" data-type="digits"
+                                   data-left-max="3" data-right-max="3" min='0' placeholder="1" maxlength="7"
+                                   name="dishQty" id="dishQty" value="">个商品
+                            <input type="text" style="width:60px;" class="form-control" data-type="digits"
+                                   data-left-max="3" min='0' maxlength="3" placeholder="1"
+                                   name="boxQty" id="boxQty" value="">个餐盒
+                        </td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isOrder" id="isOrder" data-value="1"
+                                       checked>允许堂食</label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>关联设置</em></h3>
+            </div>
+            <div class="panel-body js-revelance-setting">
+                <ul class="tab-white-gray goodsConfig-tab">
+                    <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
+                    </li>
+                    <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
+                    <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+                    <li data-show="goodsPracticeCon"><em>做法</em></li>
+                </ul>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion"
+                    data-target="#collapseMore"><em>更多</em><span class="caret pull-right"></span></h3>
+            </div>
+            <div id="collapseMore" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <table cellpadding="0" cellspacing="0"
+                           class="table-nobd table-fixed">
+                        <tbody>
+                        <tr>
+                            <th width="40" valign="top"><label class="control-label">图片</label></th>
+                            <td>
+                                <div class="input-group-inset w402 pull-left mr15" id="imageUrlContainer">
+                                    <div id="bntImageUrl">
+                                        <input type="text" class="form-control" name="imageUrl" id="imageUrl"
+                                               data-imageSize="" data-imageSuffixes=""
+                                               data-imageName=""
+                                               value=""
+                                               readonly="readonly">
+                                        <button class="btn btn-default" type="button">浏览图片</button>
+                                    </div>
+                                </div>
+                                <span class="bnt-clear">清空</span>
+                                <span for="" class="red"
+                                      style="display: inline-block;font-size: small;line-height: 34px;">(建议上传大小为960*720的图片)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th valign="top"><label class="control-label">图片预览</label></th>
+                            <td>
+                                <div id="divPreviewImage">
+                                    
+                                        
+                                        <img src="/merchandise/themes/style/img/default.jpg"
+                                                          class="img-responsive">
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label class="control-label">视频</label></th>
+                            <td>
+                                <div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">
+                                    <div id="bntVideoUrl">
+                                        <input type="text" class="form-control" name="videoUrl" id="videoUrl"
+                                               value="" readonly="readonly">
+                                        <button class="btn btn-default" type="button">上传视频</button>
+                                    </div>
+                                </div>
+                                <span class="bnt-clear">清空</span>
+                                <span for="" class="red"
+                                      style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <th valign="top"><label class="control-label">描述</label></th>
+                            <td><textarea class="form-control w402" name="dishDesc"
+                                          id="dishDesc"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th valign="top">菜品详情</th>
+                            <td>
+                                <script id="dishEditor" type="text/plain" style="width:700px;height:500px;"></script>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<script src="/merchandise/js/jquery-1.10.2.min.js"></script>
+<div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
+	<div class="panel" min-hieght="">
+    <div class="panel-body">
+      <h3 class="goodsListAll"><label id="checkAllLable" class="checkbox"><span></span><input type="checkbox" name="sampleAll" id="sampleAll" data-all="sample">全部</label></h3>
+      <ul class="goodsList" id="templeteLaber">
+      
+        <li>
+       		
+       			<label class="checkbox checkbox-check">
+       			<span></span><input type="checkbox" name="sample" disabled="disabled" value="39817" data-checked-all="sampleAll" checked> &nbsp 默认模板 /MRMB </label>
+       			
+       		
+       		
+        </li>
+      
+        <li>
+       		
+       		
+        			<label class="checkbox " >
+        	          <span></span><input type="checkbox" name="sample" value="57573" data-checked-all="sampleAll" > &nbsp 111 /111</label>
+       		
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var checkFlag;
+(function (){
+	$("[name='sample']").each(function(i,val){
+		checkFlag=val.checked;
+		if(!checkFlag){
+			return checkFlag;
+		}
+	});
+	if(checkFlag){
+		$("#checkAllLable").attr('class','checkbox checkbox-check');
+	}
+})();
+</script>
+
+
+</form>
+<div class="panel-popover" id="popover-attribute"
+     style="width: 600px; margin-left: -300px; margin-top: -100px;display:none;">
+    <div class="panel-popover-heading">
+        <div class="panel-popover-title">请您选择要添加的规格类别</div>
+    </div>
+    <div class="panel-popover-body">
+        <ul class="attribute-list" id="attribute-list">
+            <li>颜色</li>
+            <li>大小</li>
+            <li>尺寸</li>
+        </ul>
+    </div>
+    <div class="panel-popover-footer">
+        <div class="btn-wrap text-center"><a class="btn-blue mr30" role="button" id="creatAttribute">确认</a><a
+                class="btn-blue btn-cancel" role="button">取消</a></div>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/merchandise/js/bootstrap/js/bootstrap.js"></script>
+<script src="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.config.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script src="/merchandise/js/jquery-json-2.4.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.validate.js"></script>
+<script src="/merchandise/js/jquery.validate/additional_methods.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.metadata.js"></script>
+<script src="/merchandise/js/jquery.validate/messages_cn.js"></script>
+<!--  <script src="/merchandise/js/jquery.validate/cmxform.css"></script>-->
+<!-- jqgrid start -->
+
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/i18n/grid.locale-cn.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/dataGrid.js"></script>
+
+
+<!-- jqgrid end -->
+<!--[if lt IE 10]>
+<script src="/merchandise/js/JPlaceholder.js"></script> 
+<![endif]-->
+<script src="/merchandise/js/bkeruyun.js?v4.981"></script>
+<script src="/merchandise/js/messageBox.js"></script>
+<script src="/merchandise/js/ajaxfileupload-2.1GD.js"></script>
+<script src="/merchandise/js/pageQuery.js"></script>
+<script src="/merchandise/js/netUtil.js"></script>
+<!--[if IE]>
+<script src="/merchandise/js/ie.js"></script>
+<![endif]-->
+<script type="text/javascript">
+<!-- 
+	var ctxPath="/merchandise";
+	var ctxFullPath="http://b.keruyun.com:80/merchandise";
+	var _loginUrl='http://b.keruyun.com';
+//-->
+</script>
+<script src="/merchandise/js/tree.js"></script>
+<script src="/merchandise/js/tabScroll.js"></script>
+<script src="/merchandise/js/goods.js"></script>
+<script src="/merchandise/js/dish/dish-manage.js?v=4.9.1"></script>
+<script src="/merchandise/js/dish/dishTypeTree.js"></script>
+<script src="/merchandise/js/jquery-extension/jcrop/jquery.Jcrop.min.js"></script>
+<script src="/merchandise/js/jquery-extension/jcrop/ImgClipperUitl.js"></script>
+
+<script type="text/javascript" src="/merchandise/js/qiniu/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/merchandise/js/qiniu/plupload/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/merchandise/js/qiniu/qiniu.js"></script>
+<script type="text/javascript" src="/merchandise/js/common/bkeruyun-qiniu-util.js"></script>
+<script type="text/javascript" src="/merchandise/js/common/scm-tooltip.js"></script>
+<script type="text/javascript">
+    function clearPreviewTemp() {
+        $('#previewTemp').empty();
+        $('#previewTemp').prev().show();
+        $('#fileImage').removeAttr('data-selectObj');
+
+    }
+    function openImgClipper() {
+        setTimeout(function () {
+            var $target = $('#fileImage');
+            if ($target.val()) {
+                var $targetPreview = $('#divPreview-2');
+                var $img = $targetPreview.find('img');
+                if ($img.length > 0) {
+                    var imgSrc = $img.attr('src');
+                    imgClipper.open(imgSrc, $target, function (theClipper) {
+                        var $temp = theClipper.$preview.clone();
+                        $targetPreview.hide();
+                        $('#previewTemp').empty().append($temp);
+                    });
+                }
+            }
+        }, 1000);
+
+    }
+    /**
+     * 校验称重兑换
+     * @returns {boolean}
+     */
+    function checkUnitWeight() {
+        var decimal = /^\d+(\.\d{1,2})?$/;
+        var value = $('#weight').val();
+        var $error = $('#weightWrapper .error-tip');
+        var valid = decimal.test(value);
+        if (value == '') {
+            valid = true;
+        }
+        if (valid) {
+            if (parseFloat(value) > 1000000) {
+                valid = false;
+                $error.text('最大值不能超过1000000');
+                return valid;
+            }
+            $error.text('');
+        } else {
+            $error.text('请正确输入字数,小数位数保留两位');
+        }
+        return valid;
+    }
+    $(document).ready(function () {
+        var jcropConfig = {};
+        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', ctxPath + '/themes/style/img/default.jpg');
+        var $imgClipperModalImg = $(imgClipperModalStr);
+        $imgClipperModalImg.appendTo($('body'));
+        var option = {image: {scalingRatio: 0.5}};
+        var imgClipper = new ImgClipper(
+                jcropConfig, option, $('#imgClipperModal')
+        );
+        window.imgClipper = imgClipper;
+
+
+        $('#weight').on('blur', function () {
+            checkUnitWeight();
+        });
+        if ($('#saleTypeBox').hasClass('checkbox-check')) {
+            $('#weightWrapper').removeClass('hidden');
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    var ue = UE.getEditor('dishEditor');
+    var rootPath = "/merchandise",
+            baseUrl = rootPath + "/dish/manage",
+            saveOrUpdateUrl = baseUrl + "/saveOrUpdateDishBrand",
+            listUrl = baseUrl + "/list",
+            queryDishTypesUrl = baseUrl + "/queryDishTypes",
+            queryDishAndAttributeUrl = baseUrl + "/queryDishAndAttribute",
+            queryRevelanceSettingUrl = baseUrl + "/queryRevelanceSetting",
+            checkDishBrandUrl = baseUrl + "/checkDishBrand",
+            checkDishBrandSkuKeyUrl = baseUrl + "/checkDishBrandSkuKey";
+    checkBarcodeUrl = baseUrl + "/checkBarcode";
+    $("input[name=name]").blur(function () {
+        var chineseName = $("input[name=name]").val().trim();
+        var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
+        $.ajax({
+            type: "POST",
+            url: getAllFirstLetterUrl + "?random=" + Math.random(),
+            data: {name: chineseName},
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                bkeruyun.hideLoading();
+                $("input[name=dishNameIndex]").focus();
+                $("input[name=dishNameIndex]").attr("value", data.firstName); //填充内容
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                Message.alert({title: "提示", describe: '网络异常'});
+            }
+        });
+
+
+    });
+    var validate;
+    $(function () {
+        ue.addListener("ready", function () {
+            $("#edui1").css("z-index", "1");
+            $('#ueditor_0').contents().find("body").html('');
+        });
+        $("#tree").tree({
+            'folding': true,
+            'foldingType': 'single',
+            'foldingSwitch': '.icon-folding',
+            'marquee': true,
+            'marqueeType': 'radio'
+        });
+        //关联设置
+        var tabObj = null;
+        bkeruyun.tab(".goodsConfig-tab > li", "click", '.goodsConfig-con', "data-show", "current", function () {
+            if (!tabObj) {
+                //初始化 关联设置 做法 多标签滚动
+                tabObj = $("#category-tab").tabScroll({
+                    'wrapObj': $('#category-tab'),
+                    'innerObj': $('#category-tab > ul'),
+                    'innerObjLeft': 20,
+                    'item': $('#category-tab > ul > li'),
+                    'itemN': 5,
+                    'itemMarginL': 0,
+                    'itemMarginR': 10,
+                    'itemPaddingL': 10,
+                    'itemPaddingR': 10,
+                    'moveItemN': 5,
+                    'speed': 1000
+                });
+            }
+        });
+        //关联设置 做法标签
+        bkeruyun.tab("#category-tab ul > li", "click", '.goodsPracticeCon', "data-show", "current");
+
+        $(document).delegate(".defaultGoodsList > li > .setDefaultBtn", "click", function () {
+            var checkboxObj = $(this).parent().find(":checkbox");
+            var $obj = $("#" + checkboxObj.attr("data-checked-all"));
+            var $parent = $(this).parent();
+
+            $parent.siblings().removeClass("default");
+            $parent.find('label').addClass("checkbox-check");
+            checkboxObj.attr("checked", "checked").parent().addClass("checkbox-check");
+            bkeruyun.associatedCheckAll(checkboxObj[0], $obj);
+            $parent.siblings().find('input').attr('data-is-default', '2');
+            $parent.find('input').attr("checked", true);
+            //再次点击的时候需要去掉默认
+            if ($parent.hasClass('default')) {
+                $parent.removeClass('default');
+                $parent.find('input').attr('data-is-default', '2');
+            } else {
+                $parent.addClass('default');
+                $parent.find('input').attr('data-is-default', '1');
+            }
+        });
+
+        $(".icon-plus").on("click", function () {
+            var newArray = attrDetection(attributeArray);
+            if (newArray.length === 0) {
+                Message.alert({'title': '提示', 'describe': '已经没有您可以添加的属性了'});
+            } else {
+                var liHtml = [];
+                for (var i = 0, len = newArray.length; i < len; i++) {
+                    liHtml.push('<li data-id="' + newArray[i].id + '">' + newArray[i].name + '</li>');
+                }
+                $("#attribute-list").html(liHtml.join(''));
+                $("#popover-attribute").show();
+                bkeruyun.showLayer();
+            }
+        });
+        $("#creatAttribute").on("click", function () {
+            if ($("#attribute-list > li.current").length > 0) {
+                var newTypeId = $("#attribute-list > li.current").attr("data-id");
+                var newType = new Object();
+                for (var i = 0, len = attributeArray.length; i < len; i++) {
+                    if (newTypeId == attributeArray[i].id) {
+                        newType = attributeArray[i];
+                        break;
+                    }
+                }
+                addAttribute(newType);
+                $("#popover-attribute").hide();
+                bkeruyun.hideLayer();
+                setGoodsAttributeHeight(true);
+            } else {
+                Message.alert({'title': '提示', 'describe': '请选择要添加的属性'});
+                return false;
+            }
+        });
+        $("#goodsAttribute").delegate(".additem .close-1", "click", function () {
+            var len = $("#goodsAttribute .additem").length;
+            if (len > 1) {
+                $(this).parent().remove();
+            } else {
+                Message.alert({'title': '提示', 'describe': '您至少要保留一条属性'});
+            }
+            setGoodsAttributeHeight(false);
+        });
+        $("#attribute-list").delegate("li", "click", function () {
+            $(this).addClass("current").siblings().removeClass("current");
+        });
+        $("#goodsTypeSearch").delegate("#js-type-search-button", "click", function () {
+            $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+        });
+        $("#keyWord").keypress(function (event) {
+            if (event.keyCode == 13) {
+                $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+            }
+        });
+        $(".js-save").on("click", function () {
+            if (window._isAlreadySaving) {
+            } else {
+                saveDishInfo();
+                window._isAlreadySaving = true;
+            }
+        });
+        $(".js-back").on("click", function () {
+            Message.confirm(
+                    {title: '提示', describe: '确认取消？'}, function () {
+                        location.href = listUrl;
+                    }
+            );
+        });
+        $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+        $.initDishAttribute();
+        $.initRelevanceCount();
+        $.initMedia();
+    });
+    $(function () {
+        validate = $("#stepOneForm").validate({
+            rules: {
+                dishCode: {
+                    required: false,
+                    strOrNumberStartMiddleIncludeUnderline: true,
+                    maxlength: 16,
+                    remote: {
+                        type: "POST",
+                        url: checkDishBrandUrl,
+                        dataType: "json",
+                        data: {
+                            id: function () {
+                                return $("#dishId").val();
+                            },
+                            dishCode: function () {
+                                return $.trim($("#dishCode").val());
+                            }
+                        }
+                    }
+                },
+                barcode: {
+                    checkBarcode: $("#barcode").val()
+                },
+                name: {required: true, isIllegalCharacter: true, maxlength: 64},
+                dishNameIndex: {isIllegalCharacter: true, maxlength: 48},
+                aliasName: {isIllegalCharacter: true, maxlength: 48},
+                shortName: {isIllegalCharacter: true, maxlength: 4},
+                aliasShortName: {isIllegalCharacter: true, maxlength: 4},
+                marketPrice: {required: true, number: true, min: 0},
+                sort: {digits: true},
+                wmType: {required: true},
+                unitId: {required: true},
+                dishIncreaseUnit: {number: true, min: 0.01, max: 999.99},
+                stepNum: {number: true, min: 0.01, max: 999.99},
+                dishQty: {number: true, min: 0.001, max: 999.999},
+                boxQty: {digits: true, min: 0, max: 999},
+                videoUrl: {url: true, maxlength: 280},
+                dishDesc: {maxlength: 250}
+            },
+            messages: {
+                dishCode: {remote: "商品编码不能重复，请检核"},
+                unitId: '销售单位不能为空'
+            },
+            submitHandler: function () {
+            },
+            onkeyup: false
+        });
+
+        $.validator.addMethod("checkBarcode", function (value, element) {
+            var reg = /^[a-zA-Z0-9]{1,39}-?[a-zA-Z0-9]{1,39}$/;
+            if ((reg.test(value) && value.length >=8 && value.length <= 40) || value == "") {
+                if(value) {
+                    var result = checkBarcodeExist();
+                    if (!result) {
+                        $.validator.messages.checkBarcode = '条形码已存在';
+                    }
+
+                    return result;
+                }
+
+                return true;
+            }
+            $.validator.messages.checkBarcode = '条形码格式有误';
+            return false;
+        }, "条形码格式有误");
+
+        $("#dishIncreaseUnit,#stepNum").blur(function () {
+            if ($(this).val().indexOf('.') > 0 && !$("#saleType").closest(".checkbox").hasClass("checkbox-check")) {
+                $(this).val('');
+                bkeruyun.promptMessage('不能设置为小数');
+                return false;
+            }
+        });
+
+        $("#saleTypeBox").on('click', function () {
+            $("#dishIncreaseUnit").val('');
+            $("#stepNum").val('');
+            var $dishQty = $('#dishQty');
+            var $this = $(this);
+            var isCheck = false;
+            if ($this.hasClass('checkbox-check')) {
+                $this.removeClass('checkbox-check');
+                $this.find('input').attr('checked', false);
+                $dishQty.attr('data-type', 'digits');
+                if ($dishQty.val()) {
+                    $dishQty.val(parseInt($dishQty.val()));
+                }
+            } else {
+                $this.addClass('checkbox-check');
+                $this.find('input').attr('checked', 'checked');
+                $dishQty.attr('data-type', 'number1');
+                isCheck = true;
+            }
+
+            if (isCheck) {
+                $('#weightWrapper').removeClass('hidden');
+            } else {
+                $('#weightWrapper').addClass('hidden');
+            }
+            return false;
+        });
+
+        //设置餐盒数属性
+        if ($('#saleTypeBox').hasClass('checkbox-check')) {
+            $('#dishQty').attr('data-type', 'number1');
+        }
+        qiniuUtil.setConfigItem('domain', $('#domain').val());
+        initImageUpload();
+        initVideoUpload();
+
+        /**
+         * 商品信息
+         * @param data
+         */
+        function getSkuInfo(barcode) {
+
+            $.ajax({
+                url: "/merchandise/dish/manage/skuInfo",
+                type: "get",
+                async: true,
+                data: {barcode: barcode},
+                success: function (result) {
+                    if (result.success == false) {
+                        validate.showErrors({
+                            "barcode": result.message
+                        });
+                    } else {
+                        showSkuInfo(result.data);
+                    }
+                },
+                error: function () {
+                    Message.alert({title: "提示", describe: '网络异常'});
+                }
+            });
+        }
+
+        $("input[name='barcode']").keypress(function (e) {
+            var value = $(this).val();
+            var key = e.charCode || e.keyCode || 0;
+            if (key == 13) {
+                if (!$("#barcode").valid() || !checkBarcodeExist(value,false)) {
+                    return;
+                }
+                if($('#dishId').val()){
+                    Message.alert({title: "提示", describe: '商品已进行【保存】，不再自动更新商品信息'});
+                    return false;
+                }
+                getSkuInfo(value);
+            }
+        })
+
+        /**
+         * 商品信息显示
+         * @param data
+         */
+        function showSkuInfo(data) {
+            if (data == null) {
+                validate.showErrors({
+                    "barcode": "未检索到该条形码信息"
+                });
+                return false;
+            }
+            setupFormElementVal($(".panel"), data);
+            $('#barcode').select();
+        }
+
+        /**
+         * 装载表单元素数据
+         * @param form 表单
+         * @param aData 表单数据，JSON格式
+         */
+        function setupFormElementVal(form, aData) {
+            var inputElements = form.find("input[name]");
+            inputElements.each(function (i, v) {
+                //是radio单选标签
+                if ($(v).attr('type') == 'radio' || $(v).attr('type') == 'checkbox') {
+                    //标签值等于要修改数据对应的值，将标签设置为选中状态
+                    if ($(v).val() == aData[$(v).attr("name")]) {
+                        $(v).click();
+                    }
+                } else {
+                    $(v).val(aData[$(v).attr("name")]);
+                }
+
+            });
+            var textareaElements = form.find("textarea[name]");
+            textareaElements.each(function (i, v) {
+                $(v).val(aData[$(v).attr("name")])
+            });
+            var selectElements = form.find("select[name]");
+            selectElements.each(function (i, v) {
+                $(v).find('option').each(function (j, value) {
+                    if($(value).val() == aData[$(v).attr("name")] || $(value).text() == aData[$(v).attr("name")]) {
+//                        $(v).val(aData[$(v).attr("name")]);
+                        // 由于获取商品信息时，返回的是text文本值而非select的value值，这里取值需注意
+                        $(v).val($(value).val());
+                        $(v).parent().find('em').text($(value).text());
+                    }
+                });
+            });
+
+            var imgElements = form.find("img[name]");
+            imgElements.each(function (i, v) {
+                $(v).attr('src', aData[$(v).attr("name")]);
+            });
+        }
+
+
+    });
+
+    var ajaxFlag = true;
+    function checkBarcodeExist() {
+
+        var flag = false;
+        $.ajax({
+            type: "POST",
+            url: checkBarcodeUrl + "?random=" + Math.random(),
+            data: {dishId: $("#dishId").val(), barcode: $("#barcode").val()},
+            dataType: "json",
+            // contentType: "application/json",
+            async: false,
+            success: function (data) {
+                if (!data) {
+                    validate.showErrors({
+                        "barcode": "条形码已存在"
+                    });
+                }
+                flag = data;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                Message.alert({title: "提示", describe: '网络异常'});
+            },
+            complete: function() {
+                ajaxFlag = true;
+            }
+        });
+        return flag;
+    }
+
+    function initVideoUpload() {
+        var option = {
+            max_file_size: '10mb',
+            filters: {
+                mime_types: [
+                    // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
+                    {title: "Video files", extensions: "mp4,mov,3gp"}
+                ]
+
+            }
+        };
+        var containerId = 'videoUrlContainer';
+        var browseButtonId = 'bntVideoUrl';
+        var localUpLoader = new qiniuUtil.LocalUpLoader(browseButtonId, containerId, option);
+        localUpLoader.handleFileUploaded = function (up, file, infoObj) {
+            var url = qiniuUtil.keyToQiniuUrl(infoObj.key);
+            $('#videoUrl').val(url);
+        };
+        $('#' + browseButtonId).closest('td').find('.bnt-clear').on('click', function () {
+            $('#videoUrl').val('');
+        });
+        localUpLoader.init();
+    }
+
+
+    function initImageUpload() {
+        var option = {
+            max_file_size: '10mb',
+            filters: {
+                mime_types: [
+                    {title: "Image files", extensions: "jpg,jpeg,png,gif,bmp"}
+                ]
+            }
+        };
+        var containerId = 'imageUrlContainer';
+        var browseButtonId = 'bntImageUrl';
+        var localUpLoader = new qiniuUtil.LocalUpLoader(browseButtonId, containerId, option);
+        localUpLoader.handleFileUploaded = function (up, file, infoObj) {
+            var url = qiniuUtil.keyToQiniuUrl(infoObj.key);
+            setImageVal(url, file.size, file.name);
+            var $target = $('#imageUrl');
+            $target.removeAttr('data-selectObj');
+            imgClipper.open(url, $target, function (theClipper) {
+                var cropObj = theClipper.selectObj;
+                var tempUrl = qiniuUtil.photoshop.clipImage(infoObj.key, cropObj, 960, 720);
+                setImageVal(tempUrl);
+            });
+
+        };
+        $('#' + browseButtonId).closest('td').find('.bnt-clear').on('click', function () {
+            setImageVal('');
+        });
+        localUpLoader.init();
+    }
+
+    function setImageVal(url, imageSize, imageName) {
+        $('#imageUrl').attr('data-uploaded', 'yes')
+        if (!url) {
+            $('#imageUrl').val(url);
+            url = ctxPath + '/themes/style/img/default.jpg';
+            $('#divPreviewImage img').attr('src', url);
+            $('#imageUrl').attr('data-imageSize', 0);
+            $('#imageUrl').attr('data-imageName', '');
+            $('#imageUrl').attr('data-imageSuffixes', '');
+        } else {
+            $('#imageUrl').val(url);
+            $('#divPreviewImage img').attr('src', url);
+        }
+        if (typeof imageSize === 'number') {
+            $('#imageUrl').attr('data-imageSize', imageSize);
+            $('#imageUrl').attr('data-imageName', imageName);
+            var imageSuffixes = '';
+            if (imageName.indexOf('.') > -1) {
+                var tempSet = imageName.split('.');
+                imageSuffixes = '.' + tempSet[tempSet.length - 1];
+            }
+            $('#imageUrl').attr('data-imageSuffixes', imageSuffixes);
+        }
+    }
+
+
+</script>
+</body>
+</html>

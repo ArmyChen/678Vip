@@ -1,0 +1,378 @@
+
+{include file="inc/header.html"}
+<link href="/app/Tpl/kiz/js/scm_kry/css/tabScroll.css" rel="stylesheet" />
+<link href="/app/Tpl/kiz/js/scm_kry/js/dish/report.css" rel="stylesheet"  />
+<div class="article-header">
+    <div class="center-block">
+        <h1>做法列表</h1>
+    </div>
+</div>
+</div>
+<div class="center-block panel-group mt20" id="accordion" >
+    <div class="tab">
+        <div id="category-tab" class="practice-class">
+            <ul class="tab-white-gray">
+
+                <li
+
+                        class="current"
+
+                        data-id="19547"
+                        data-status="available">
+                    <em title="珍珠奶茶">珍珠奶茶</em>
+                    &nbsp;<span>(<span class="count-num">5</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="30129"
+                        data-status="available">
+                    <em title="红烧">红烧</em>
+                    &nbsp;<span>(<span class="count-num">1</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="32773"
+                        data-status="available">
+                    <em title="盐分">盐分</em>
+                    &nbsp;<span>(<span class="count-num">3</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="32774"
+                        data-status="available">
+                    <em title="油量">油量</em>
+                    &nbsp;<span>(<span class="count-num">3</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="32775"
+                        data-status="available">
+                    <em title="软硬度">软硬度</em>
+                    &nbsp;<span>(<span class="count-num">3</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="32902"
+                        data-status="available">
+                    <em title="芝士绿茶">芝士绿茶</em>
+                    &nbsp;<span>(<span class="count-num">2</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="34508"
+                        data-status="available">
+                    <em title="佐料">佐料</em>
+                    &nbsp;<span>(<span class="count-num">3</span>)</span>
+                </li>
+
+                <li
+
+                        data-id="34526"
+                        data-status="available">
+                    <em title="龙虾">龙虾</em>
+                    &nbsp;<span>(<span class="count-num">1</span>)</span>
+                </li>
+
+            </ul>
+        </div>
+        <ul class="set-add" id="set-add">
+            <li><a href="#" class="icon-add">添加</a>
+                <ul>
+                    <li><a href="#" class="js-add-Type ">类别</a></li>
+                    <li><a href="#" class="js-add-way ">做法</a></li>
+                </ul>
+            </li>
+            <li><a href="#" class="icon-set">设置</a>
+                <ul>
+                    <li><a href="#" class="js-update-Type ">编辑</a></li>
+                    <li><a href="#" class="js-update-Type-status ">停用</a></li>
+                    <li><a href="#" class="js-delete-Type-status">删除</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="panel" style="margin-bottom:0;">
+        <div class="panel-body" style="padding:0 20px;">
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/app/Tpl/kiz/js/scm_kry/js/tabScroll.js" ></script>
+<script>
+    var	baseUrl = "/merchandise/dish/cookingway",
+        addCookingWayTypeUrl = baseUrl + "/addCookingWayType",
+        checkMoreThan10TypeUrl = baseUrl + "/checkMoreThan10Type",
+        queryUrl = baseUrl + "/queryCookingWays",
+        addCookingWayUrl = baseUrl +"/addCookingWay",
+        editorUrl = baseUrl + "/updateCookingWay",
+        lockUrl = baseUrl + "/lockCookingWay",
+        unlockUrl = baseUrl + "/unlockCookingWay",
+        lockOrUnlockCookingWayTypeUrl = baseUrl + "/lockOrUnlockCookingWayType",
+        updateCookingWayTypeUrl = baseUrl + "/updateCookingWayType";
+    // 定义函数
+    $(function(){
+        $.show = function(rowData) {
+            return rowData.enabledFlag == 1;
+        };
+        $.showUnlock = function(rowData) {
+            return rowData.enabledFlag == 2;
+        };
+        $.extraRender = function(rowData) {
+            var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
+            if (currentTypeStatus === "available") {
+                return "normal";
+            }
+            return "disabled";
+        };
+        $.checkMoreThan10Type = function(args) {
+            if (args.result) {
+                bkeruyun.promptMessage("最多只能建立10个类别！");
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            } else {
+                location.href = addCookingWayTypeUrl;
+            }
+        };
+        $.lockOrUnlockCookingWayType = function(args) {
+            var result = args.result;
+            if (result.success) {
+                bkeruyun.promptMessage(result.message);
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            } else {
+                bkeruyun.promptMessage(result.message);
+            }
+        };
+        $.setBtnDisabled = function(status){
+            var setBtn = $("#set-add > li:eq(1)").find("ul > li:eq(1)").find("a");
+            if(status === "available"){
+                setBtn.text("停用");
+            }else if(status === "disabled"){
+                setBtn.text("启用");
+            }
+        };
+    });
+    // 初始化组件和绑定事件
+    $(function(){
+        var $gridObj = $("#grid"),
+            currentTypeId = $("#category-tab > ul > li.current").attr("data-id"),
+            postData = {propertyTypeId:currentTypeId};
+        $gridObj.dataGrid({
+            url: baseUrl + "/queryCookingWays",
+            postData: postData,
+            colNames: ['id', '做法名称', '变价', '排序', '创建时间', '最后修改时间', '状态'],
+            colModel: [
+                {name: 'id', index: 'id', hidden: true},
+                {name: 'name', index: 'name', width: 200, align: 'center'},
+                {name: 'reprice', index: 'reprice', width: 200, align: 'center'},
+                {name: 'sort', index: 'sort', width: 100, align: 'center'},
+                {name: 'serverCreateTime', index: 'serverCreateTime', width: 230, align: 'center'},
+                {name: 'serverUpdateTime', index: 'serverUpdateTime', width: 230, align: 'center'},
+                {name: 'enabledFlag', index: 'enabledFlag', width: 50, align: 'center', formatter:"select", editoptions:{value:"1:启用;2:停用"}}
+            ],
+            rowNum : 10,
+            rowList : [10, 20],
+            pager: "#gridPager",
+            showOperate: true,
+            operateColName: "操作",
+            actionParam: {
+                editor: {
+                    url: editorUrl,
+                    render: 'disabled',
+                    showExpression: $.show
+                },
+                clock: {
+                    url: lockUrl,
+                    extraRender: $.extraRender,
+                    showExpression: $.show
+                },
+                unlock: {
+                    url: unlockUrl,
+                    extraRender: $.extraRender,
+                    showExpression: $.showUnlock
+                },delete: {
+                }
+            },
+            loadComplete: function(data){
+
+                var $gridObj = $(this);
+                //控制是否显示空表头
+                if ($gridObj.jqGrid('getGridParam', 'showEmptyGrid')) {
+                    return;
+                }
+                var rowData = $gridObj.getDataIDs();
+                var $gridDom = $('#gbox_' + $gridObj.jqGrid('getGridParam', 'id'));
+                var $gridDivDom = $gridDom.parent();
+                var $notSearch = $gridDom.parent().find(".notSearchContent");
+                if (rowData.length > 0) {
+                    //表格有数据，显示表格元素，并隐藏无数据提示元素
+                    $gridDivDom.show();
+                    $gridDom.show();
+                    if ($notSearch.length > 0) {
+                        $notSearch.hide();
+                    }
+                } else {
+                    //表格无数据，隐藏表格自身元素，显示无数据提示元素
+                    $gridDom.hide();
+                    $gridDivDom.show();
+                    if ($notSearch.length > 0) {
+                        $notSearch.show();
+                    } else {
+                        var notData = bkeruyun.notQueryData("没有查到数据，试试其他查询条件吧！");
+                        $gridDivDom.append(notData);
+                    }
+                }
+                $('#category-tab .current .count-num').text(data.records);
+            }
+        });
+
+
+        $.doDelete=function(arg){
+            Message.confirm({title: '提示', describe: '你确认删除当前做法吗? 删除后将不能恢复! '}, function () {
+                bkeruyun.showLoading();
+                //propertyKind  1：口味，做法 2：标签 3：备注 4：菜品属性
+                $.ajax({
+                    type: 'POST',
+                    url: ctxPath+'/dish/attribute/propertyDelete',
+                    data: {propertyId:arg.postData.id, propertyKind: 1},
+                    dataType: 'json',
+                    success: function(data){
+                        bkeruyun.hideLoading();
+                        if(1 == data.success){
+                            $gridObj.refresh();
+                        }else{
+                            Message.alert({title:'提示',describe:'当前做法使用中，请先取消相关的关联设置！'}, function(){
+                            });
+                        }
+                    }
+                });
+            });
+            // end Message
+
+        };
+        //删除按钮
+        $('.js-delete-Type-status').on('click',function(){
+            var propertyTypeId = $("#category-tab > ul > li.current").attr("data-id");
+            Message.confirm({title: '提示', describe: '你确认删除当前做法类别吗?<br/>删除后将不能恢复! '}, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: ctxPath+'/dish/attribute/propertyGroupDelete',
+                    data: {propertyTypeId:propertyTypeId, propertyKind: 1},
+                    dataType: 'json',
+                    success: function(data){
+                        if(1 == data.success){
+                            window.location.href = window.location.href;
+                        }else{
+                            Message.alert({title:'提示',describe:'当前做法类别使用中，请先删除该类别下包含的所有做法！'}, function(){
+                            });
+                        }
+                    }
+                });
+            });
+            // end Message
+        });
+
+        $("#category-tab").tabScroll({
+            'wrapObj': $('#category-tab'),
+            'innerObj': $('#category-tab > ul'),
+            'innerObjLeft':20,
+            'item':$('#category-tab > ul > li'),
+            'itemN': 10,
+            'itemMarginL':0,
+            'itemMarginR':10,
+            'itemPaddingL':10,
+            'itemPaddingR':10,
+            'moveItemN':10,
+            'speed':1000
+        });
+        $(document).delegate("#category-tab > ul > li","click",function(){
+            var cookingWayTypeId = $(this).attr("data-id");
+            $gridObj.jqGrid("setGridParam", {postData:{propertyTypeId:cookingWayTypeId}});
+            $gridObj.refresh();
+
+            var status = $(this).attr("data-status");
+            $(this).addClass("current").siblings().removeClass("current");
+            $.setBtnDisabled(status);
+        });
+        //添加鼠标移入移出的效果
+        bkeruyun.showMenu($('#set-add > li'),"ul");
+        /*
+         $('#set-add > li > a:not(".icon-add-disabled")').on("click",function(){
+         var thisMenu = $(this).parent().find("ul");
+         if(thisMenu.length < 1){return;}
+         if(thisMenu.is(":hidden")){
+         thisMenu.show();
+         }else{
+         thisMenu.hide();
+         }
+         $(this).parent().siblings().find("ul").hide();
+
+         });
+         */
+        $(".js-add-Type:not('.disabled')").on("click", function(){
+            var args = new Object();
+            args.url = checkMoreThan10TypeUrl;
+            args.postData = {};
+            args.callback = "$.checkMoreThan10Type";
+            $.submitWithAjax(args);
+        });
+        $(".js-add-way:not('.disabled')").on("click", function(){
+            var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
+            if(currentTypeStatus === "available"){
+                var typeId = $("#category-tab > ul > li.current").attr("data-id");
+                location.href = baseUrl +"/addCookingWay?propertyTypeId="+typeId;
+            }else if(currentTypeStatus === "disabled"){
+                bkeruyun.promptMessage("当前做法类别已停用，请先启用当前做法类别！");
+            }
+        });
+        $(".js-update-Type:not('.disabled')").on("click", function(){
+            var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
+            if(currentTypeStatus === "available"){
+                var typeId = $("#category-tab > ul > li.current").attr("data-id");
+                location.href = baseUrl + "/updateCookingWayType?id="+typeId;
+            }else if(currentTypeStatus === "disabled"){
+                bkeruyun.promptMessage("当前做法类别已停用，请先启用当前做法类别！");
+            }
+        });
+        $(".js-update-Type-status:not('.disabled')").on("click", function(){
+            var args = new Object(),
+                enabledFlag = 1,
+                describe = "确定启用当前做法类别？",
+                typeId = $("#category-tab > ul > li.current").attr("data-id");
+            args.url = baseUrl + "/lockOrUnlockCookingWayType";
+            args.callback = "$.lockOrUnlockCookingWayType";
+
+            if ($(this).html() === "停用") {
+                enabledFlag = 2;
+                describe = "确定停用当前做法类别？";
+            }
+            args.postData = {id: typeId, enabledFlag: enabledFlag};
+
+            Message.confirm({title: "提示", describe: describe}, function () {
+                $.submitWithAjax(args);
+            });
+        });
+    });
+    // 初始化数据
+    $(function(){
+        var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
+        if ($("#category-tab > ul > li").length >= 30) {
+            $('#set-add > li > a.icon-add').addClass('icon-add-disabled');
+        };
+        $.setBtnDisabled(currentTypeStatus);
+    });
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

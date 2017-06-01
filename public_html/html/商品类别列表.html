@@ -1,0 +1,643 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<base href="http://b.keruyun.com:80/merchandise/">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<base href="/">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<link rel="icon" href="/merchandise/themes/style/img/favicon.ico" mce_href="/merchandise/themes/style/img/favicon.ico" type="image/x-icon">
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="/merchandise/js/bootstrap/css/bootstrap.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/bootstrap/css/bootstrap-switch.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/js/jquery.validate/cmxform.css?v1.0" />
+<!-- jgGrid start -->
+<link rel="stylesheet" href="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/css/ui.jqgrid.css?v1.0" />
+<link rel="stylesheet" href="/merchandise/themes/style/css/plugins/jqGrid/jqGrid-4.4.3/resetJqGrid.css?v1.0" />
+<!-- jgGrid end -->
+<link rel="stylesheet" href="/merchandise/themes/style/css/base.css?v1.0" />
+<!--[if IE]>
+<link rel="stylesheet" href="/merchandise/themes/style/css/ie.css"/>
+<![endif]-->
+
+<script type='text/javascript'>window.BWEUM || (BWEUM = {});
+BWEUM.info = {
+    "stand": true,
+    "agentType": "browser",
+    "agent": "bi-collector.oneapm.com/static/js/bw-send-411.4.5.js",
+    "beaconUrl": "bi-collector.oneapm.com/beacon",
+    "licenseKey": "fA~3juMujFj27fyu",
+    "applicationID": 2270032
+};</script>
+<script type="text/javascript" src="//bi-collector.oneapm.com/static/js/bw-loader-411.4.5.js"></script>
+
+<script src="/merchandise/js/jquery-1.10.2.min.js?v1.0"></script>
+<script>
+    var _hmt = window._hmt || [];
+    var ctxPath = "/merchandise";
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?887cf26826dd888eebe2769131c9969d";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<!-- 添加通用css引入信息 -->
+<link rel="stylesheet" href="themes/style/css/report.css">
+<link rel="stylesheet" href="themes/style/css/tabScroll.css">
+<title>商品类别列表</title>
+</head>
+
+<body style="padding-bottom:40px;">
+<div id="header">
+
+
+
+<div class="nav-tabs" id="nav-fixed">
+    <div class="center-block">
+        <!--面包屑设置 start-->
+        <input id="canLoginBrand" type="hidden" value="true">
+        <input id="headIsBrand" type="hidden" value="true">
+        <input id="headBrandName" type="hidden" value="客如云  电商部">
+        <input id="headCommercialName" type="hidden" value="品牌">
+        <!--面包屑设置 end-->
+
+        <h1 id="logo"><a href="/mind/index" title="实时概况"></a></h1>
+        <ul class="nav head-new-nav"></ul>
+		<span style="background:white">
+        <div class="user-info">
+            <div class="user-info-view">
+                
+                    
+                
+                
+                    
+                        
+                    
+                    
+                
+                <div class="photo"
+                     style="display: inline;float:left;width:50px;height:50px;background:url('/merchandise/themes/style/img/icon-user.png') no-repeat;background-size:50px 50px;-webkit-background-size: 50px 50px "></div>
+                <div style="display: inline;float: left">
+                    <ul>
+                        <li title="客如云  电商部">&nbsp;客如云  电商部</li>
+                        <li title="admin">&nbsp;admin</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="list-group" style="display: none;">
+                <a href="#" id="changeCommercial" class="list-group-item change-commercial">切换门店</a>
+                <a href="#" id="modifyPassword" class="list-group-item modify-password">修改密码</a>
+                <a href="#" id="logout" class="list-group-item logout">退出登录</a>
+            </div>
+        </div>
+
+		<div id="changeCommercialModal" class="modal fade in mapModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">&times;</a>
+
+                        <h3>切换门店</h3>
+                    </div>
+                    <div class="modal-body modal-main">
+                        <div id="map_container" class="col-md-8 map-content">
+                        </div>
+                        <div class="col-md-4 search-content">
+                            <div class="clearfix">
+                                <div class="search-box" id="goodsTypeSearch">
+                                    <input type="text" id="searchCommercial" class="form-control"
+                                           placeholder="根据门店名称或地址搜索"
+                                           maxlength="48" value="">
+                                    <span id="js-type-search-button" class="icon-search" title="搜索">搜索</span>
+                                </div>
+                                <div class="shop-content" id="shop_list">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		</span>
+    </div>
+</div>
+<input type="hidden" id="cbk_" name="cbk_" value="953a72cfb7dfe6a70892e2ea5e51eb28"/>
+<link rel="stylesheet" href="/merchandise/themes/style/css/commons/baidu.css?v1.0"/>
+<link rel="stylesheet" href="/merchandise/themes/style/css/login-info.css?v1.0"/>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=D8fde80e0d8f96000b89da6da12e410f"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js?v1.0"></script>
+<script type="text/javascript" src="/merchandise/js/common/header/layer/layer.js?v1.0"></script>
+<script type="text/javascript" src="/merchandise/js/common/header/login-info.js?v1.0"></script>
+<script type="text/javascript">
+    var loginSessionId = 'f22d9b9daa5e4730969c6bb6b042bd7d';
+
+    var ctxPath = "http://b.keruyun.com:80/merchandise";
+    
+    
+    var data = [{"code":"mind:dingdan","id":100,"levelId":"001","name":"订单","parentId":0,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:dingdan:yudingjilu","id":101,"levelId":"001001","name":"预订记录","parentId":100,"platform":1,"sort":1,"type":1,"url":"/booking/list"},{"code":"mind:baobiao","id":106,"levelId":"001","name":"报表","parentId":0,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao","id":107,"levelId":"001001","name":"预订报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:yudingbaobiao:yudingliangbaobiao","id":108,"levelId":"001001001","name":"预订量报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingchart/charts"},{"code":"mind:baobiao:yudingbaobiao:dailirenyudingzhanbifenxi","id":109,"levelId":"001001001","name":"代理人预订占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/innerPerson"},{"code":"mind:baobiao:yudingbaobiao:yudingjujueliyouzhanbifenxi","id":110,"levelId":"001001001","name":"预订拒绝理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=-3"},{"code":"mind:baobiao:yudingbaobiao:yudingquxiaoliyouzhanbifenxi","id":111,"levelId":"001001001","name":"预订取消理由占比分析","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingReport/reason?reasonType=9"},{"code":"mind:baobiao:yudingbaobiao:yudingpincibaobiao","id":112,"levelId":"001001001","name":"预订频次报表","parentId":107,"platform":1,"sort":1,"type":1,"url":"/report/bookingFrequency/view"},{"code":"mind:baobiao:paiduibaobiao","id":113,"levelId":"001001","name":"排队报表","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:paiduibaobiao:paiduiliangbaobiao","id":114,"levelId":"001001001","name":"排队量报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queueReport/list"},{"code":"mind:baobiao:paiduibaobiao:paiduiliushilvbaobiao","id":115,"levelId":"001001001","name":"排队流失率报表","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/queueLoss"},{"code":"mind:baobiao:paiduibaobiao:pingjundengdaishichang","id":116,"levelId":"001001001","name":"平均等待时长","parentId":113,"platform":1,"sort":1,"type":1,"url":"/report/queue/avgWaitTime"},{"code":"mind:baobiao:yingyebaobiao","id":117,"levelId":"001001","name":"营业报表","parentId":106,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:baobiao:yingyebaobiao:jiaojiebanbaobiao","id":119,"levelId":"001001001","name":"交接班报表","parentId":117,"platform":1,"sort":60,"type":1,"url":"/report/cashHandover"},{"code":"mind:baobiao:yingyebaobiao:dandianshoukuantongjibaobiao","id":120,"levelId":"001001001","name":"单店收款统计明细表","parentId":117,"platform":1,"sort":4,"type":1,"url":"/report/collection/list"},{"code":"mind:baobiao:yingyebaobiao:mendianshoukuantongjibaobiao","id":121,"levelId":"001001001","name":"门店收款统计报表","parentId":117,"platform":1,"sort":5,"type":1,"url":"/report/paymentShop/paymentShopList"},{"code":"mind:baobiao:xiaoshoubaobiao","id":122,"levelId":"001001","name":"销售报表","parentId":106,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:baobiao:xiaoshoubaobiao:shangpinxiaoshou","id":123,"levelId":"001001001","name":"销售统计表","parentId":122,"platform":1,"sort":1,"type":1,"url":"/report/dishSaleReport/index"},{"code":"mind:baobiao:xiaoshoubaobiao:mendianxiaoshoupaihang","id":125,"levelId":"001001001","name":"门店销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/dishShopSort"},{"code":"mind:baobiao:xiaoshoubaobiao:shijianduanxiaoshoumingxibiao","id":126,"levelId":"001001001","name":"时间段销售明细表","parentId":122,"platform":1,"sort":7,"type":1,"url":"/report/periodSale/list"},{"code":"mind:baobiao:huiyuanbaobiao:jifenmingxibaobiao","id":128,"levelId":"001001001","name":"积分明细表","parentId":1853,"platform":2,"sort":3,"type":1,"url":"#/report/point-detail"},{"code":"mind:baobiao:huiyuanbaobiao:jifenjiesuanbaobiao","id":129,"levelId":"001001001","name":"积分结算表","parentId":1853,"platform":2,"sort":4,"type":1,"url":"#/report/point-settlement"},{"code":"mind:shezhi","id":130,"levelId":"001","name":"设置","parentId":0,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi","id":143,"levelId":"001001","name":"商品设置","parentId":130,"platform":1,"sort":1,"type":1,"url":"#"},{"code":"mind:shezhi:shangpinshezhi:zuofanguanli","id":144,"levelId":"001001001","name":"做法管理","parentId":143,"platform":1,"sort":1,"type":1,"url":"/dish/cookingway/list"},{"code":"mind:shezhi:shangpinshezhi:peiliaoguanli","id":145,"levelId":"001001001","name":"配料管理","parentId":143,"platform":1,"sort":2,"type":1,"url":"/dish/condiment/list"},{"code":"mind:shezhi:shangpinshezhi:biaoqianguanli","id":146,"levelId":"001001001","name":"标签管理","parentId":143,"platform":1,"sort":4,"type":1,"url":"/dish/label/list"},{"code":"mind:shezhi:shangpinshezhi:beizhuguanli","id":147,"levelId":"001001001","name":"备注管理","parentId":143,"platform":1,"sort":5,"type":1,"url":"/dish/memo/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshouguigeguanli","id":148,"levelId":"001001001","name":"销售规格管理","parentId":143,"platform":1,"sort":6,"type":1,"url":"/dish/attribute/list"},{"code":"mind:shezhi:shangpinshezhi:danweiguanli","id":149,"levelId":"001001001","name":"单位管理","parentId":143,"platform":1,"sort":7,"type":1,"url":"/dish/unit/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinleibie","id":150,"levelId":"001001001","name":"商品类别","parentId":143,"platform":1,"sort":8,"type":1,"url":"/dish/type/list"},{"code":"mind:shezhi:shangpinshezhi:shangpinguanli","id":151,"levelId":"001001001","name":"商品管理","parentId":143,"platform":1,"sort":9,"type":1,"url":"/dish/manage/list"},{"code":"mind:shezhi:shangpinshezhi:taocanguanli","id":152,"levelId":"001001001","name":"套餐管理","parentId":143,"platform":1,"sort":10,"type":1,"url":"/dish/setMeal/list"},{"code":"mind:shezhi:shangpinshezhi:xiaoshoufanb","id":153,"levelId":"001001001","name":"销售范本","parentId":143,"platform":1,"sort":11,"type":1,"url":"/dish/saletemplet/list"},{"code":"mind:shezhi:shangpinshezhi:jiegecelue","id":154,"levelId":"001001001","name":"价格策略","parentId":143,"platform":1,"sort":12,"type":1,"url":"/dish/pricetemplet/list"},{"code":"mind:shezhi:zhifufangshishezhi","id":160,"levelId":"001001","name":"支付方式设置","parentId":130,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufangshiguanli","id":161,"levelId":"001001001","name":"支付方式管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/management/list"},{"code":"mind:shezhi:zhifufangshishezhi:zhifufanbenguanli","id":162,"levelId":"001001001","name":"支付范本管理","parentId":160,"platform":1,"sort":1,"type":1,"url":"/payment/templet/list"},{"code":"mind:shezhi:quanxianshezhi","id":163,"levelId":"001001","name":"权限设置","parentId":130,"platform":1,"sort":3,"type":1,"url":"#"},{"code":"mind:shezhi:quanxianshezhi:jiaoseshezhi","id":164,"levelId":"001001001","name":"角色设置","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/role/list"},{"code":"mind:shezhi:quanxianshezhi:zhanghaoguanli","id":165,"levelId":"001001001","name":"账号管理","parentId":163,"platform":1,"sort":1,"type":1,"url":"/auth/userBrand/list"},{"code":"mind:bangzhu","id":208,"levelId":"001","name":"帮助","parentId":0,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:bangzhu:shipinzhongxin","id":209,"levelId":"001001","name":"视频中心","parentId":208,"platform":1,"sort":3,"type":1,"url":"/faq/video/list"},{"code":"mind:bangzhu:wentijieda","id":210,"levelId":"001001","name":"问题解答","parentId":208,"platform":1,"sort":2,"type":1,"url":"/faq/question/list"},{"code":"mind:dingdan:waimaidingdan","id":213,"levelId":"001001","name":"外卖订单","parentId":100,"platform":1,"sort":2,"type":1,"url":"/takeOutOrder/orderList"},{"code":"mind:baobiao:huiyuanbaobiao:dianbieshangpinbijiaobiao","id":216,"levelId":"001001001","name":"店别商品比较表","parentId":122,"platform":1,"sort":6,"type":1,"url":"/report/commercialCompareReport/list"},{"code":"mind:baobiao:yinxiaobaobiao:quanyingxiaobaobiao","id":217,"levelId":"001001001","name":"券营销报表","parentId":297,"platform":2,"sort":6,"type":1,"url":"#/report/coupon-marketing"},{"code":"mind:baobiao:yinxiaobaobiao:quanmingxibaobiao","id":218,"levelId":"001001001","name":"券明细报表","parentId":297,"platform":2,"sort":5,"type":1,"url":"#/report/coupon-detail"},{"code":"mind:baobiao:yingxiaobaobiao","id":297,"levelId":"001001","name":"营销报表","parentId":106,"platform":1,"sort":6,"type":1,"url":"#"},{"code":"mind:baobiao:shouyinbaobiao:fantailv","id":321,"levelId":"001001001","name":"翻台率分析表","parentId":122,"platform":1,"sort":8,"type":1,"url":"/report/tableUseRate/list"},{"code":"mind:baobiao:shouyinbaobiao:pjxfsc","id":322,"levelId":"001001001","name":"订单平均消费时长分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/avgTime/list"},{"code":"mind:baobiao:shouyinbaobiao:laikefenxi","id":323,"levelId":"001001001","name":"来客分析","parentId":122,"platform":1,"sort":10,"type":1,"url":"/report/customerAnalysis/list"},{"code":"mind:baobiao:shouyinbaobiao:fanjiezhang","id":325,"levelId":"001001001","name":"反结账记录","parentId":117,"platform":1,"sort":90,"type":1,"url":"/report/reverseCheckout/reverseCheckout"},{"code":"mind:baobiao:shouyinbaobiao:xiaoshoufenxi","id":326,"levelId":"001001001","name":"销售分析","parentId":122,"platform":1,"sort":3,"type":1,"url":"/report/cash/saleAnalysis/index"},{"code":"mind:baobiao:yingxiaobaobiao:chushimingxi","id":327,"levelId":"001001001","name":"储值明细表","parentId":1852,"platform":2,"sort":1,"type":1,"url":"#/report/stored-value-detail"},{"code":"mind:baobiao:yingxiaobaobiao:chuzhixianjin","id":328,"levelId":"001001001","name":"储值结算报表","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/stored-value-settlement"},{"code":"loyalty:member:v5","id":1193,"levelId":"001001","name":"顾客","parentId":1848,"platform":2,"sort":1,"type":1,"url":"#/customer/customer-list"},{"code":"loyalty:marketPlan:coupon:v5","id":1196,"levelId":"001001001","name":"优惠券模板","parentId":1850,"platform":2,"sort":3,"type":1,"url":"#/marketing/coupon-template"},{"code":"loyalty:member:setting:v5","id":1198,"levelId":"001001","name":"会员设置","parentId":1848,"platform":2,"sort":6,"type":1,"url":"#"},{"code":"loyalty:member:degreeSetting:v5","id":1199,"levelId":"001001001","name":"会员等级","parentId":1198,"platform":2,"sort":2,"type":1,"url":"#/setting/member-level"},{"code":"loyalty:member:groupSetting:v5","id":1200,"levelId":"001001001","name":"顾客分组","parentId":1198,"platform":2,"sort":4,"type":1,"url":"#/setting/customer-group"},{"code":"scm:index","id":1255,"levelId":"001","name":"库存","parentId":0,"platform":3,"sort":4,"type":1,"url":"/index"},{"code":"scm:masterdata","id":1256,"levelId":"001001","name":"基础管理","parentId":1255,"platform":3,"sort":1,"type":1,"url":"#"},{"code":"scm:purchase","id":1257,"levelId":"001001","name":"采购管理","parentId":1255,"platform":3,"sort":2,"type":1,"url":"#"},{"code":"scm:delivery","id":1258,"levelId":"001001","name":"配送管理","parentId":1255,"platform":3,"sort":3,"type":1,"url":"#"},{"code":"scm:scrap","id":1259,"levelId":"001001","name":"报废管理","parentId":1255,"platform":3,"sort":5,"type":1,"url":"#"},{"code":"scm:production","id":1260,"levelId":"001001","name":"生产管理","parentId":1255,"platform":3,"sort":6,"type":1,"url":"#"},{"code":"scm:cc","id":1261,"levelId":"001001","name":"盘点管理","parentId":1255,"platform":3,"sort":7,"type":1,"url":"#"},{"code":"scm:inventory","id":1262,"levelId":"001001","name":"其他管理","parentId":1255,"platform":3,"sort":8,"type":1,"url":"#"},{"code":"scm:report","id":1263,"levelId":"001001","name":"报表","parentId":1255,"platform":3,"sort":9,"type":1,"url":"#"},{"code":"scm:masterdata:warehouse:query#","id":1264,"levelId":"001001001","name":"仓库设定","parentId":1256,"platform":3,"sort":10,"type":1,"url":"/scm/warehouse/index"},{"code":"scm:masterdata:inventoryImport:import#","id":1265,"levelId":"001001001","name":"期初库存","parentId":1256,"platform":3,"sort":20,"type":1,"url":"/openingInventory/index"},{"code":"scm:masterdata:skuType:query#","id":1266,"levelId":"001001001","name":"商品-原料类别设定","parentId":1256,"platform":3,"sort":30,"type":1,"url":"/scm/skutype/index"},{"code":"scm:masterdata:sku:query#","id":1267,"levelId":"001001001","name":"商品-原料设定","parentId":1256,"platform":3,"sort":40,"type":1,"url":"/sku/index"},{"code":"scm:masterdata:skuBom:query#","id":1268,"levelId":"001001001","name":"商品配方设定","parentId":1256,"platform":3,"sort":50,"type":1,"url":"/scm/skubom/index"},{"code":"scm:masterdata:reason:edit","id":1269,"levelId":"001001001","name":"退回、报废原因设定","parentId":1256,"platform":3,"sort":60,"type":1,"url":"/reason/index"},{"code":"scm:purchase:supplierType:query#","id":1270,"levelId":"001001001","name":"供应商类别设定","parentId":1257,"platform":3,"sort":10,"type":1,"url":"/scm/supplierCate/index"},{"code":"scm:purchase:supplier:query#","id":1271,"levelId":"001001001","name":"供应商设定","parentId":1257,"platform":3,"sort":20,"type":1,"url":"/scm/supplier/index"},{"code":"scm:purchase:asn:query#","id":1272,"levelId":"001001001","name":"采购入库单","parentId":1257,"platform":3,"sort":30,"type":1,"url":"/asn/purchase/index"},{"code":"scm:purchase:return:query#","id":1273,"levelId":"001001001","name":"采购退货单","parentId":1257,"platform":3,"sort":40,"type":1,"url":"/outbound/purchasereturn/index"},{"code":"scm:delivery:line:query#","id":1274,"levelId":"001001001","name":"配送线路","parentId":1258,"platform":3,"sort":10,"type":1,"url":"/delivery/line/index"},{"code":"scm:delivery:template:query#","id":1275,"levelId":"001001001","name":"配送模板","parentId":1258,"platform":3,"sort":20,"type":1,"url":"/scm/template/delivery/index"},{"code":"scm:delivery:prepare:query#","id":1276,"levelId":"001001001","name":"预配发货单","parentId":1258,"platform":3,"sort":30,"type":1,"url":"/delivery/prepare/index"},{"code":"scm:delivery:sign:query#","id":1277,"levelId":"001001001","name":"配送签收单","parentId":1258,"platform":3,"sort":40,"type":1,"url":"/delivery/sign/index"},{"code":"scm:scrap:scrap:query#","id":1278,"levelId":"001001001","name":"报废单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/outbound/scrap/index"},{"code":"scm:production:template:query#","id":1279,"levelId":"001001001","name":"自产模板","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/scm/template/product/index"},{"code":"scm:cc:cc:query#","id":1280,"levelId":"001001001","name":"盘点单","parentId":1261,"platform":3,"sort":10,"type":1,"url":"/cc/task/index"},{"code":"scm:inventory:si:query#","id":1281,"levelId":"001001001","name":"入库单","parentId":1262,"platform":3,"sort":1,"type":1,"url":"/asn/si/index"},{"code":"scm:inventory:so:query#","id":1282,"levelId":"001001001","name":"出库单","parentId":1262,"platform":3,"sort":2,"type":1,"url":"/outbound/so/index"},{"code":"scm:inventory:transfer:query#","id":1283,"levelId":"001001001","name":"移库单","parentId":1262,"platform":3,"sort":3,"type":1,"url":"/transferorder/index"},{"code":"scm:report:inventory:query","id":1284,"levelId":"001001001","name":"库存查询","parentId":1263,"platform":3,"sort":10,"type":1,"url":"/inventory/index"},{"code":"scm:report:inventoryTransaction:query","id":1285,"levelId":"001001001","name":"库存交易凭证","parentId":1263,"platform":3,"sort":20,"type":1,"url":"/inventoryTransaction/index"},{"code":"scm:report:ccReport:query","id":1286,"levelId":"001001001","name":"盘点盈亏表","parentId":1263,"platform":3,"sort":30,"type":1,"url":"/report/cc/index"},{"code":"scm:report:allocation:query","id":1287,"levelId":"001001001","name":"调拨差异分析表","parentId":1263,"platform":3,"sort":40,"type":1,"url":"/report/allocationDifference/index"},{"code":"scm:report:skuIO:query","id":1288,"levelId":"001001001","name":"商品月出入库汇总明细表","parentId":1263,"platform":3,"sort":50,"type":1,"url":"/report/skuIO/index"},{"code":"scm:report:scrap:query","id":1289,"levelId":"001001001","name":"退回报废分析表","parentId":1263,"platform":3,"sort":60,"type":1,"url":"/report/returnandscrap/index"},{"code":"scm:report:deliveryDifference:query","id":1290,"levelId":"001001001","name":"配送差异分析表","parentId":1263,"platform":3,"sort":70,"type":1,"url":"/report/deliveryDifference/index"},{"code":"scm:report:ioreason:query","id":1291,"levelId":"001001001","name":"出入库原因分析表","parentId":1263,"platform":3,"sort":80,"type":1,"url":"/report/ioreason/index"},{"code":"scm:production:si:query#","id":1296,"levelId":"001001001","name":"自产入库单","parentId":1260,"platform":3,"sort":10,"type":1,"url":"/asn/product/index"},{"code":"loyalty:marketPlan:marketPlan:v5","id":1298,"levelId":"001001001","name":"营销方案","parentId":1850,"platform":2,"sort":2,"type":1,"url":"#/marketing/marketing-plan"},{"code":"loyalty:marketPlan:v5","id":1300,"levelId":"001","name":"营销","parentId":0,"platform":2,"sort":2,"type":1,"url":"#"},{"code":"wx:seting5","id":1302,"levelId":"001001","name":"移动门店设置","parentId":130,"platform":5,"sort":4,"type":1,"url":"#"},{"code":"scm:scrap:back:query#","id":1427,"levelId":"001001001","name":"退回入库单","parentId":1259,"platform":3,"sort":1,"type":1,"url":"/backstorage/index"},{"code":"mind:report:salesort:query","id":1428,"levelId":"001001001","name":"销售排行","parentId":122,"platform":1,"sort":5,"type":1,"url":"/report/salesort/index"},{"code":"wx:seting5:payConfig4BrandNew","id":1444,"levelId":"001001001","name":"品牌支付设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4BrandNew/getPayConfig"},{"code":"mind:baobiao:renxiaotongji","id":1446,"levelId":"001001","name":"人效统计","parentId":106,"platform":1,"sort":7,"type":1,"url":"#"},{"code":"mind:baobiao:renxiaotongji:waimaiyuan","id":1455,"levelId":"001001001","name":"外卖员情况报表","parentId":1446,"platform":1,"sort":2,"type":1,"url":"/report/outSaler/view"},{"code":"mind:baobiao:yingyebaobiao:zhekouyouhui","id":1462,"levelId":"001001001","name":"优惠明细表","parentId":117,"platform":1,"sort":40,"type":1,"url":"/report/discount/view"},{"code":"mind:baobiao:yingyebaobiao:guanzhangjiaobanjilubiao","id":1466,"levelId":"001001001","name":"对账-关账交班记录表","parentId":117,"platform":1,"sort":10,"type":1,"url":"/report/closeBill/closeBillNew"},{"code":"mind:shezhi:liyoushezhi","id":1471,"levelId":"001001","name":"理由设置","parentId":130,"platform":1,"sort":7,"type":1,"url":"/brand/reason/list"},{"code":"mind:bangzhu:caozuorizhi","id":1479,"levelId":"001001","name":"操作日志","parentId":208,"platform":1,"sort":1,"type":1,"url":"/logger/list/business"},{"code":"mind:baobiao:renxiaotongji:fuwuyuanqingkuang","id":1480,"levelId":"001001001","name":"服务员情况报表","parentId":1446,"platform":1,"sort":1,"type":1,"url":"/report/waiter/list"},{"code":"scm:report:purchase:query","id":1485,"levelId":"001001001","name":"采购分析表","parentId":1263,"platform":3,"sort":90,"type":1,"url":"/report/purchaseanalysis/index"},{"code":"loyalty:report:member:memberCount","id":1486,"levelId":"001001001","name":"会员量分析","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/membership-analysis"},{"code":"loyalty:report:member:memberValue","id":1487,"levelId":"001001001","name":"会员储值分析","parentId":1852,"platform":2,"sort":2,"type":1,"url":"#/report/member-stored-value"},{"code":"loyalty:report:trade:tradeReport","id":1488,"levelId":"001001001","name":"会员消费分析","parentId":1851,"platform":2,"sort":3,"type":1,"url":"#/report/member-consumption"},{"code":"loyalty:member:memberpricesetting:v5","id":1489,"levelId":"001001001","name":"特价菜单","parentId":1198,"platform":2,"sort":3,"type":1,"url":"#/setting/special-menu"},{"code":"mind:baobiao:xiaoshoubaobiao:liyoufenxi","id":1490,"levelId":"001001001","name":"订单理由分析表","parentId":122,"platform":1,"sort":9,"type":1,"url":"/report/tradeReason/list"},{"code":"mind:baobiao:yingyebaobiao:posdetails","id":1492,"levelId":"001001001","name":"银联POS账单明细","parentId":117,"platform":1,"sort":100,"type":1,"url":"/report/settlementController/pos"},{"code":"mind:shezhi:zhekouzhezhi","id":1493,"levelId":"001001","name":"折扣设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"#"},{"code":"mind:shezhi:zhekouzhezhi:zhekouguanli","id":1494,"levelId":"001001001","name":"折扣管理","parentId":1493,"platform":1,"sort":1,"type":1,"url":"/discountManage/discount/list"},{"code":"mind:shezhi:zhekouzhezhi:zhekoufanben","id":1495,"levelId":"001001001","name":"折扣范本","parentId":1493,"platform":1,"sort":2,"type":1,"url":"/discountManage/discountTemplate/list"},{"code":"loyalty:marketPlan:cardKind","id":1510,"levelId":"001001","name":"实体卡","parentId":1848,"platform":2,"sort":4,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance","id":1528,"levelId":"001001","name":"实体卡报表","parentId":106,"platform":2,"sort":8,"type":1,"url":"#"},{"code":"loyalty:baobiao:cardInstance:saleCardReport","id":1529,"levelId":"001001001","name":"权益卡","parentId":1528,"platform":2,"sort":1,"type":1,"url":"#/report/entity-member"},{"code":"loyalty:report:member:memberCoupon","id":1534,"levelId":"001001001","name":"券消费明细表","parentId":297,"platform":2,"sort":4,"type":1,"url":"#/report/coupon-view"},{"code":"scm:report:inventoryDistribution:query","id":1538,"levelId":"001001002","name":"库存分布明细表","parentId":1263,"platform":3,"sort":15,"type":1,"url":"/report/inventoryDistribution/index"},{"code":"mind:shezhi:logoSetting","id":1540,"levelId":"001111","name":"LOGO设置","parentId":130,"platform":1,"sort":20,"type":1,"url":"/logo/index"},{"code":"scm:stockcount:template:query#","id":1542,"levelId":"001001001","name":"盘点模板","parentId":1261,"platform":3,"sort":5,"type":1,"url":"/scm/template/stockcount/index"},{"code":"wx:seting5:brandCustom","id":1545,"levelId":"001001001","name":"品牌页面自定义","parentId":1302,"platform":5,"sort":6,"type":1,"url":"/customerContenteArea/brandCustom"},{"code":"wx:seting5:masterialNews","id":1546,"levelId":"001001001","name":"素材管理","parentId":1302,"platform":5,"sort":2,"type":1,"url":"/materialNew/list?type=materialNews"},{"code":"wx:seting5:event","id":1551,"levelId":"001001001","name":"事件中心","parentId":1302,"platform":5,"sort":5,"type":1,"url":"/event/view"},{"code":"wx:seting5:autoReply","id":1552,"levelId":"001001001","name":"自动回复","parentId":1302,"platform":5,"sort":4,"type":1,"url":"/autoReply/view"},{"code":"wx:seting5:menuCustom","id":1553,"levelId":"001001001","name":"自定义菜单","parentId":1302,"platform":5,"sort":3,"type":1,"url":"/menuCustom/page"},{"code":"loyalty:marketPlan:cardKind:v5","id":1556,"levelId":"001001001","name":"权益卡","parentId":1510,"platform":2,"sort":1,"type":1,"url":"#/customer/member-card"},{"code":"loyalty:tempCardKind:tempCardKindList","id":1557,"levelId":"001001001","name":"匿名卡","parentId":1510,"platform":2,"sort":2,"type":1,"url":"#/customer/anonymous-card"},{"code":"scm:masterdata:setting:edit","id":1577,"levelId":"001001002","name":"库存参数设定","parentId":1256,"platform":3,"sort":70,"type":1,"url":"/setting/index"},{"code":"mind:shezhi:shortMsgTemplateSetting","id":1579,"levelId":"001123","name":"通知模板设置","parentId":130,"platform":1,"sort":18,"type":1,"url":"/commercial/shortMsgTemplete/index"},{"code":"mind:shezhi:accountSubject","id":1580,"levelId":"001001","name":"收支管理","parentId":130,"platform":1,"sort":2,"type":1,"url":"/accountSubject/page"},{"code":"coupn:templet:view","id":1581,"levelId":"001001","name":"优惠券方案","parentId":1300,"platform":2,"sort":2,"type":1,"url":"#/marketing/coupon-plan"},{"code":"loyalty:baobiao:tempCard:consumeReport","id":1582,"levelId":"001001001","name":"匿名卡","parentId":1528,"platform":2,"sort":3,"type":1,"url":"#/report/entity-temp"},{"code":"mind:shezhi:depositSetting","id":1589,"levelId":"001011","name":"押金设置","parentId":130,"platform":1,"sort":5,"type":1,"url":"/brand/deposit/index"},{"code":"mind:trade:tradeManage:listView","id":1591,"levelId":"001001","name":"订单管理","parentId":100,"platform":1,"sort":4,"type":1,"url":"/tradeManage/listView"},{"code":"mind:bangzhu:bangzhuzhongxin","id":1592,"levelId":"001001","name":"帮助中心","parentId":208,"platform":1,"sort":4,"type":1,"url":"/pos/help/centerIndexShow"},{"code":"mind:baobiao:yingyebaobiao:yajinbaobiao","id":1593,"levelId":"001001011","name":"押金报表","parentId":117,"platform":1,"sort":50,"type":1,"url":"/report/deposit/list"},{"code":"wx:payConfig4Brand:weixinConfig","id":1605,"levelId":"001001001","name":"公众号参数设置","parentId":1302,"platform":5,"sort":1,"type":1,"url":"/payConfig4Brand/weixinConfig"},{"code":"loyalty:report:customer:customerProfile","id":1606,"levelId":"001001001","name":"顾客画像","parentId":1851,"platform":2,"sort":5,"type":1,"url":"#/report/customer-profile"},{"code":"mind:baobiao:jingyingguanli","id":1607,"levelId":"001001","name":"经营管理","parentId":106,"platform":1,"sort":2,"type":1,"url":"#"},{"code":"mind:baobiao:jingyingguanli:mingancaozuobaobiao","id":1608,"levelId":"001001001","name":"敏感操作报表","parentId":1607,"platform":1,"sort":1,"type":1,"url":"/report/sensitiveOperation/list"},{"code":"scm:purchase:nav:index","id":1609,"levelId":"001001002","name":"采购流程导航","parentId":1257,"platform":3,"sort":5,"type":1,"url":"/asn/purchase/nav"},{"code":"scm:delivery:aggregate:query#","id":1610,"levelId":"001001002","name":"商品需求汇总单","parentId":1257,"platform":3,"sort":22,"type":1,"url":"/supply/aggregate/index"},{"code":"scm:purchase:apply:query#","id":1611,"levelId":"001001002","name":"采购申请单","parentId":1257,"platform":3,"sort":24,"type":1,"url":"/purchase/apply/index"},{"code":"scm:purchase:plan:query#","id":1612,"levelId":"001001002","name":"采购计划单","parentId":1257,"platform":3,"sort":26,"type":1,"url":"/purchase/plan/index"},{"code":"scm:purchase:order:query#","id":1613,"levelId":"001001002","name":"采购订单","parentId":1257,"platform":3,"sort":28,"type":1,"url":"/purchase/order/index"},{"code":"scm:masterdata:deliverysetting:edit","id":1614,"levelId":"001001002","name":"配送管理参数设定","parentId":1258,"platform":3,"sort":5,"type":1,"url":"/deliverySetting/index"},{"code":"scm:delivery:track:index#","id":1615,"levelId":"001001002","name":"配送调拨跟踪表","parentId":1258,"platform":3,"sort":25,"type":1,"url":"/delivery/track/index"},{"code":"scm:report:product:query","id":1616,"levelId":"001001002","name":"商品生产分析表","parentId":1263,"platform":3,"sort":55,"type":1,"url":"/report/productanalysis/index"},{"code":"loyalty:marketing:marketSetting","id":1622,"levelId":"001001","name":"营销设置","parentId":1300,"platform":2,"sort":16,"type":1,"url":"#/marketing/setting"},{"code":"scm:productSetting:edit","id":1623,"levelId":"001001001","name":"生产管理参数设定","parentId":1260,"platform":3,"sort":5,"type":1,"url":"/scm/cost/index"},{"code":"scm:cc:setting:edit","id":1625,"levelId":"001001001","name":"盘点参数设定","parentId":1261,"platform":3,"sort":2,"type":1,"url":"/cc/setting/index"},{"code":"scm:report:purchasedetail:query","id":1626,"levelId":"001001002","name":"采购明细表","parentId":1263,"platform":3,"sort":100,"type":1,"url":"/report/purchasedetail/index"},{"code":"scm:report:cost:bom","id":1627,"levelId":"001001003","name":"配方估算成本分析表","parentId":1263,"platform":3,"sort":110,"type":1,"url":"/report/cost/bom/index"},{"code":"scm:report:cost:selling","id":1628,"levelId":"001001004","name":"商品销售成本分析表","parentId":1263,"platform":3,"sort":120,"type":1,"url":"/report/cost/selling/index"},{"code":"scm:report:inventoryWarn:query","id":1629,"levelId":"001001002","name":"库存预警表","parentId":1263,"platform":3,"sort":16,"type":1,"url":"/report/inventoryWarn/index"},{"code":"scm:masterdata:inventoryWarning:query#","id":1630,"levelId":"001001002","name":"库存预警设定","parentId":1256,"platform":3,"sort":80,"type":1,"url":"/inventoryWarning/index"},{"code":"wx:seting5:wxTmpMsg","id":1639,"levelId":"001001001","name":"微信模板消息","parentId":1302,"platform":5,"sort":123,"type":1,"url":"/wxTmpMsg/view"},{"code":"mind:baobiao:shouyinbaobiao:tuihuofenxi","id":1816,"levelId":"001001001","name":"异常货品分析","parentId":122,"platform":1,"sort":4,"type":1,"url":"/report/returnInvalidDish/list"},{"code":"scm:sale","id":1822,"levelId":"001002","name":"销售管理","parentId":1255,"platform":3,"sort":4,"type":1,"url":"#"},{"code":"scm:account:deposit:query#","id":1823,"levelId":"001002002","name":"供货保证金","parentId":1822,"platform":3,"sort":1,"type":1,"url":"/account/deposit/index"},{"code":"scm:order:sale:query#","id":1825,"levelId":"001002002","name":"销售订单","parentId":1822,"platform":3,"sort":2,"type":1,"url":"/sale/order/index"},{"code":"scm:report:saledetail:query","id":1836,"levelId":"001001002","name":"销售明细表","parentId":1263,"platform":3,"sort":140,"type":1,"url":"/report/saledetail/index"},{"code":"mind:22222","id":1837,"levelId":"001001","name":"配送站管理","parentId":130,"platform":1,"sort":1,"type":1,"url":"/deliveryStation/stationList"},{"code":"mind:hailaosong","id":1838,"levelId":"001002","name":"海捞送订单管理","parentId":100,"platform":1,"sort":1,"type":1,"url":"/hailaosong/takeOutOrder/orderList"},{"code":"mind:baobiao:yingyebaobiao:disanfangduizhang","id":1847,"levelId":"001001003","name":"第三方对账报表","parentId":117,"platform":1,"sort":11,"type":1,"url":"/report/thirdPartyPeconciliation/index"},{"code":"loyalty:membertrunk:v5","id":1848,"levelId":"001","name":"顾客","parentId":0,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:member:levelRight:v5","id":1849,"levelId":"001001001","name":"会员权益","parentId":1198,"platform":2,"sort":1,"type":1,"url":"#/setting/member-right"},{"code":"loyalty:marketPlan:marketPlanTree:v5","id":1850,"levelId":"001001","name":"营销方案","parentId":1300,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:overview","id":1851,"levelId":"001001","name":"顾客概况","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:chuzhi","id":1852,"levelId":"001001","name":"储值报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:baobiao:jifen","id":1853,"levelId":"001001","name":"积分报表","parentId":106,"platform":2,"sort":1,"type":1,"url":"#"},{"code":"loyalty:report:customer:customerProfileType","id":1854,"levelId":"001001001","name":"顾客分类","parentId":1851,"platform":2,"sort":1,"type":1,"url":"#/report/customer-category"},{"code":"mind:baobiao:xiaoshoubaobiao:zengsongtongjibaobiao","id":1870,"levelId":"001001001","name":"赠品统计报表","parentId":122,"platform":1,"sort":3,"type":1,"url":"/report/freeDish/freeDishPage"},{"code":"mind:baobiao:yingyebaobiao:sunyimingxibiao","id":1876,"levelId":"001001001","name":"损溢明细表","parentId":117,"platform":1,"sort":5,"type":1,"url":"/report/lossOverFlow/toLossOverFlow"}];
+    
+    
+    
+
+
+    var ctxPath = "/merchandise";
+    var ctxFullPath = "";
+    var _loginUrl = 'http://b.keruyun.com';
+
+    $(function () {
+        var win = window.bkeruyun || window;
+        data = win.convertMenuData(data);
+        win.createMenu(data, '');
+        win.currentLink();
+        win.showNav($(".nav > li,.dropdown-submenu"), ".dropdown-menu", "open");
+
+        loginInfo._init({
+            brandObj: {"id":12566,"name":"客如云  电商部","permission":"","portalVersion":4,"version":6},
+            loginBrand: true,
+            currentCommercialId: "",
+            commercialList: [{"address":"湖北省武汉市武昌区中南路","id":810019565,"latlong":"30.533823,114.349653","name":"客如云电商部1号演示门店","permission":"","portalVersion":0,"version":6}],
+            isBrandLogin: true
+        });
+        var SHOP_TOKEN = {'focus': false, 'click': true};
+        $(window).focus(function () {
+            SHOP_TOKEN.focus = true;
+        });
+        $(document).mouseover(function () {
+            if (SHOP_TOKEN.focus) {
+                $.get("/mind/authority/checkIsSwitched?cbk=" + $("#cbk_").val() + "&ts=" + new Date().getTime(), function (data) {
+                    if (data.isSwitched == true) {
+                        if (SHOP_TOKEN.click) {
+                            SHOP_TOKEN.click = false;
+                            alert('\u95e8\u5e97\u5df2\u5207\u6362,\u8bf7\u91cd\u65b0\u5237\u65b0\u9875\u9762');
+                            window.location.href = "/mind/index";
+                        }
+                    }
+                });
+                SHOP_TOKEN.focus = false;
+            }
+        });
+    });
+</script>
+   <!-- 标题 -->
+ <div class="article-header">
+        <div class="center-block">
+            <h1>商品类别列表</h1>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20" id="accordion" >
+    <!-- 右栏 start -->
+    <!-- <div class="main"> -->
+      <div class="tab">
+          <div id="category-tab" class="practice-class">
+              <!-- <span class="next"></span>
+              <span class="prev" data-status="disabled"></span> -->
+              <ul id="type-titel" class="tab-white-gray">
+                <!-- 类别标签状态 data-status="disabled"为不可用，操作时设置为启用，data-status="available"为可用，操作时设置为停用-->
+                 
+                 	
+                 		<li data-id="136633" data-status="available" data-flag="1"><em title="茶饮">茶饮</em>&nbsp;<span>(9)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="215623" data-status="available" data-flag="1"><em title="CC">CC</em>&nbsp;<span>(1)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="219441" data-status="available" data-flag="1"><em title="川菜">川菜</em>&nbsp;<span>(2)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="227277" data-status="available" data-flag="1"><em title="lycp">lycp</em>&nbsp;<span>(1)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="232776" data-status="available" data-flag="1"><em title="饮水">饮水</em>&nbsp;<span>(2)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="244512" data-status="available" data-flag="1"><em title="coat">coat</em>&nbsp;<span>(2)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="262423" data-status="available" data-flag="1"><em title="冰淇淋">冰淇淋</em>&nbsp;<span>(2)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="262424" data-status="available" data-flag="1"><em title="冰沙">冰沙</em>&nbsp;<span>(0)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="268193" data-status="available" data-flag="1"><em title="锅底">锅底</em>&nbsp;<span>(1)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="268194" data-status="available" data-flag="1"><em title="配菜">配菜</em>&nbsp;<span>(2)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="268208" data-status="available" data-flag="1"><em title="龙虾系列">龙虾系列</em>&nbsp;<span>(1)</span></li>
+                 	
+                
+                 	
+                 		<li data-id="269720" data-status="available" data-flag="1"><em title="酸奶类">酸奶类</em>&nbsp;<span>(3)</span></li>
+                 	
+                
+              </ul>
+          </div>
+          <ul class="set-add" id="set-add">
+            <li><a href="#" class="icon-add">添加</a>
+                <ul>
+                    <li><a id="addtype" href="#">类别</a></li>
+                    <li><a id="addinclass"  href="#">行</a></li>
+                </ul>
+            </li>
+            <li><a href="#" class="icon-set">设置</a>
+                <ul>
+                    <li><a id="edit-type" href="#">编辑</a></li>
+                    <li><a id="change-status" href="#">停用</a></li>
+                    <li><a id="deleteType" href="#">删除</a></li>
+                </ul>
+            </li>
+            
+          </ul>
+      </div>
+      <div class="panel" style="margin-bottom:0;">
+        <div class="panel-body" style="padding:0 20px;">
+            <table cellpadding="0" cellspacing="0" class="table table-hover text-center" id="customer-table"  style="table-layout:fixed;">
+                <thead>
+                    <tr>
+                        <th width="100">商品中类编码</th>
+                        <th width="200">商品中类名称</th>
+                        <th width="100">排序</th>
+                        <th width="150">创建时间</th>
+                        <th width="150">最后修改时间</th>
+                        <th width="100">状态</th>
+                        <th width="100">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-1">
+                </tbody>
+            </table>
+             <div class="paging" id="pageToolDiv"></div>
+        </div>
+      </div>
+    <!-- </div> -->
+    <!-- 右栏 end -->
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/merchandise/js/bootstrap/js/bootstrap.js"></script>
+<script src="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.config.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script src="/merchandise/js/jquery-json-2.4.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.validate.js"></script>
+<script src="/merchandise/js/jquery.validate/additional_methods.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.metadata.js"></script>
+<script src="/merchandise/js/jquery.validate/messages_cn.js"></script>
+<!--  <script src="/merchandise/js/jquery.validate/cmxform.css"></script>-->
+<!-- jqgrid start -->
+
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/i18n/grid.locale-cn.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/dataGrid.js"></script>
+
+
+<!-- jqgrid end -->
+<!--[if lt IE 10]>
+<script src="/merchandise/js/JPlaceholder.js"></script> 
+<![endif]-->
+<script src="/merchandise/js/bkeruyun.js?v4.981"></script>
+<script src="/merchandise/js/messageBox.js"></script>
+<script src="/merchandise/js/ajaxfileupload-2.1GD.js"></script>
+<script src="/merchandise/js/pageQuery.js"></script>
+<script src="/merchandise/js/netUtil.js"></script>
+<!--[if IE]>
+<script src="/merchandise/js/ie.js"></script>
+<![endif]-->
+<script type="text/javascript">
+<!-- 
+	var ctxPath="/merchandise";
+	var ctxFullPath="";
+	var _loginUrl='http://b.keruyun.com';
+//-->
+</script>
+<script src="/merchandise/js/tabScroll.js"></script>
+<script>
+var pageQuery = new PageQuery("pageQuery"); //构建分页查询对象
+pageQuery.pageQueryDataId = "tbody-1"; //设置数据表格的id
+pageQuery.pageQueryToolId = "pageToolDiv"; //设置分页工具栏的id
+pageQuery.showTotalPage = true;
+$(function(){
+	//点击行编辑触发事件
+	 $(document).delegate("#tbody-1 .icon-editor:not('.icon-editor-disable')","click",function(){
+	    	edit($(this).attr("data-id"));
+	    });
+	$(".tab-white-gray > li").eq(0).addClass("current");
+    // bkeruyun.showMenu(".set-add > li","ul");
+    //初始化
+    //if ($("#category-tab > ul > li").length >= 30) {$('#set-add > li > a.icon-add').addClass('icon-add-disabled')};
+    setBtnDisabled($("#category-tab > ul > li.current").attr("data-status"));
+    $("#category-tab").tabScroll({
+        'wrapObj': $('#category-tab'),
+        'innerObj': $('#category-tab > ul'),
+        'innerObjLeft':20,
+        'item':$('#category-tab > ul > li'),
+        'itemN': 10,
+        'itemMarginL':0,
+        'itemMarginR':10,
+        'itemPaddingL':10,
+        'itemPaddingR':10,
+        'moveItemN':10,
+        'speed':1000
+    });
+    //
+    $(document).delegate("#category-tab > ul > li","click",function(){
+        var status = $(this).attr("data-status");
+        $(this).addClass("current").siblings().removeClass("current");
+        setBtnDisabled(status);
+        queryList();
+    });
+    //类别设置
+    //添加鼠标移入移出的效果
+	bkeruyun.showMenu($('#set-add > li'),"ul");
+    $(document).delegate("#tbody-1 .icon-unlock:not('.icon-unlock-disable'),#tbody-1 .icon-clock:not('.icon-clock-disable')","click",function(){
+    	check($(this).attr("data-id"), $(this).attr("data-status"));
+    });
+
+    /* 点击增加行触发事件 */
+    //$(document).delegate("#addinclass .add-inclass:not('.add-inclass-disable')","click",function(){
+     $("#addinclass").on("click",function(){ 
+    	 
+    	 var flag=$("#type-titel > li.current").attr("data-flag"),
+    	 	id=$("#type-titel > li.current").attr("data-id");
+    	 if(id){
+    	 if (flag==2) {
+    		 bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
+		}else{
+    	location.href=ctxPath+"/dish/type/addinclass?parentId="+$("#type-titel > li.current").attr("data-id");
+		}
+    	 }else{
+    		 bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');
+    	 }
+    });
+    /* 点击增加类触发事件 */
+    $("#addtype").on("click",function(){
+    	location.href=ctxPath+"/dish/type/addtype";
+    });
+    /* 点击编辑触发事件 */
+    $("#edit-type").on("click",function(){
+    	var flag=$("#type-titel > li.current").attr("data-flag"),
+	 	id=$("#type-titel > li.current").attr("data-id");
+    	if(id){
+    	if(flag==2){
+    		bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
+    	}else{
+    	location.href=ctxPath+"/dish/type/edit?id="+$("#type-titel > li.current").attr("data-id");
+    	}
+    	}else{bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');}
+    });
+    /* 点击启用or停用触发事件 */
+    $("#change-status").on("click",function(){
+    	 var id=$("#type-titel > li.current").attr("data-id");
+    	 if(id){
+    	check($("#type-titel > li.current").attr("data-id"), $("#type-titel > li.current").attr("data-flag"));
+    	 }else{bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');}
+    });
+    /**点击删除大类 */
+    $("#deleteType").on("click",function(){
+		var id = $("#type-titel > li.current").attr("data-id");
+		//验证能否删除
+		if(id){
+			checkForDel(id);
+		}
+		
+    });
+    /**点击删除中类 */
+    $("#tbody-1").on("click",".icon-delete",function(){
+		var id = $(this).attr("data-id");
+		//验证能否删除
+		if(id){
+			checkForDel(id);
+		}
+    });
+    queryList();
+});
+//设置启用/停用
+function setBtnDisabled(status){//alert(status);
+    var setBtn = $("#set-add > li:eq(1)").find("ul > li:eq(1)").find("a");
+        // $(this).addClass("current").siblings().removeClass("current");
+        if(status === "available"){
+            setBtn.text("停用");
+        }else if(status === "disabled"){
+            setBtn.text("启用");
+        }
+}
+function queryList(){
+	pageQuery.queryPage(1, loadData);
+}
+function loadData(){
+	var flag=$("#type-titel > li.current").attr("data-flag");
+	var parentId=$("#type-titel > li.current").attr("data-id");
+	var parm='';
+	if (parentId) {
+		parm+="parentId="+parentId;
+	}
+	$.ajax({
+		type: "POST",
+		url: ctxPath+ "/dish/type/query",
+		data:parm+"&"+pageQuery.getPageParameter(true),
+		dataType: "json",
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		cache: false,
+		beforeSend:bkeruyun.showLoading,
+		success: function(data){
+			bkeruyun.hideLoading();
+			if (data.totalRows>0) {
+				pageQuery.totalRows = data.totalRows;
+				pageQuery.lastPage = (pageQuery.lastPage == null ? 1 : pageQuery.currentPage);
+				var items=data.items;
+				var html='';
+				for (var int = 0; int < items.length; int++) {
+					var inclass = items[int];
+					var status='';
+					var img='';
+					var show='',edit='';
+					if (inclass.enabledFlag==1) {
+						status='启用';
+						img='icon-clock';
+						show='停用';
+					}else if(inclass.enabledFlag==2){
+						status='停用';
+						img='icon-unlock';
+						show='启用';
+						edit=' icon-editor-disable';
+						if(flag==2){
+							img+=" icon-unlock-disable";
+						}
+					}
+					html+='<tr><td  style="word-wrap:break-word;">'+inclass.typeCode+'</td><td style="word-wrap:break-word;">'+inclass.name+'</td><td style="word-wrap:break-word;">'+inclass.sort+'</td>'
+                    +'<td style="word-wrap:break-word;">'+inclass.serverCreateTime+'</td><td style="word-wrap:break-word;">'+inclass.serverUpdateTime+'</td><td style="word-wrap:break-word;">'+status+'</td>'
+                    +'<td  style="word-wrap:break-word;"><a href="javascript:void(0)" title="编辑"  class="icon-editor'+edit+'" data-id="'+inclass.id+'">编辑</a>'
+                    +'<a href="javascript:void(0)" title="'+show+'" data-status="'+inclass.enabledFlag+'" data-id="'+inclass.id+'" class="'+img+'">'+show+'</a>'
+                    +'<a href="javascript:void(0)" title="删除" data-id="'+inclass.id+'" class="icon-delete">删除</a>'
+                    +'</td></tr>';
+				}
+				$("#tbody-1").html(html);
+				pageQuery.afterQuery();
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			hideLoading();
+	        alert("网络异常，请检查网络连接状态！");
+	    }
+	})
+}
+
+/**
+ * 删除前验证
+ */
+function checkForDel(id){
+	$.ajax({
+		type : "POST",
+		url : "dish/type/checkBeforeDelete",
+		data : "id="+id+ "&random=" + Math.random(),
+		dataType : "json",
+		success : function(data) {
+			if (data.success==true) {
+				if (data.type=="type") {
+					Message.confirm({title:'提示标题',describe:'确定删除当前商品大类？删除后将不可恢复!'},function(){delType(id)},function(){});
+				}else if(data.type=="inclass"){
+					Message.confirm({title:'提示标题',describe:'确定删除当前商品中类？删除后将不可恢复!'},function(){delType(id)},function(){});
+				}
+			}else{
+				if (data.type=="type") {
+					Message.alert({title:'提示',describe:'当前商品大类使用中，请先取消相关关联设置!'}, function(){});
+				}else if(data.type=="inclass"){
+					Message.alert({title:'提示',describe:'当前商品中类使用中，请先取消相关关联设置!'}, function(){});
+				}
+			}
+		}
+	})
+}
+
+/** 删除大类/中类方法 */
+function delType(id){
+	$.ajax({
+		type : "POST",
+		url : "dish/type/delete",
+		data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
+		dataType : "json",
+		success : function(data) {
+			if (data == true) {
+				bkeruyun.promptMessage("删除成功!",{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+				setTimeout(function(){location.href=ctxPath+"/dish/type/list"; }, 3000);
+			}else{
+				bkeruyun.promptMessage(data.errorMessage||"删除失败，请刷新后重试！");
+			}
+			//隐藏列表 
+			$("#change-status").parents("ul").hide();
+			
+		}
+	})
+}
+/* 改变前检测 */
+function check(id,status){
+	if(status==1){
+	$.ajax({
+		type : "POST",
+		url : "dish/type/changebeforeoff",
+		data : "id="+id+ "&random=" + Math.random(),
+		dataType : "json",
+		success : function(data) {
+			if (data.success==true) {
+				if (data.type=="type") {
+					Message.confirm({title:'提示标题',describe:'确定停用当前商品大类？'},function(){change(id, status)},function(){});
+				}else if(data.type=="inclass"){
+					Message.confirm({title:'提示标题',describe:'确定停用当前商品中类？'},function(){change(id, status)},function(){});
+				}
+			}else{
+				if (data.type=="type") {
+					bkeruyun.promptMessage('当前类别存在下属中类，请先停用相关的商品中类',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+//				Message.confirm({title:'提示标题',describe:'当前类别存在下属中类，请先停用相关的商品中类'},function(){},function(){});
+				}else if(data.type=="inclass"){
+					bkeruyun.promptMessage('当前商品中类使用中，请先取消相关关联设置',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+//					Message.confirm({title:'提示标题',describe:'当前商品中类使用中，请先取消相关关联设置'},function(){},function(){});
+				}
+			}
+		}
+	})
+	}else{
+		$.ajax({
+			type : "POST",
+			url : "dish/type/get",
+			data : "id="+id+ "&random=" + Math.random(),
+			dataType : "json",
+			success : function(data) {
+				if (data.parentId) {
+					Message.confirm({title:'提示标题',describe:'确定启用当前商品中类？'},function(){change(id, status)},function(){});
+				}else{
+					Message.confirm({title:'提示标题',describe:'确定启用当前商品大类？'},function(){change(id,status)},function(){});
+				}
+			}
+		})
+	}
+}
+
+function change(id,status){
+	$.ajax({
+		type : "POST",
+		url : "dish/type/change",
+		data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
+		dataType : "json",
+		success : function(data) {
+			if (data==true) {
+				var str='';
+				if (status==1) {
+					str='停用成功';
+				}else {
+					str='启用成功';
+				}
+				bkeruyun.promptMessage(str,{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+				
+				setTimeout(function(){location.href=ctxPath+"/dish/type/list"; }, 3000);
+			}else{
+				bkeruyun.promptMessage(data.errorMessage||"更新失败，请刷新后重试！");
+//				Message.alert({title: "提示",describe: data.errorMessage||"更新失败，请刷新后重试！"});
+			}
+			//隐藏启用列表 
+			$("#change-status").parents("ul").hide();
+			
+		}
+	})
+	
+}
+function edit(id){
+	location.href=ctxPath+"/dish/type/edit?id="+id;
+}
+</script>
+</body>
+</html>
