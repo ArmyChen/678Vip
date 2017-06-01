@@ -13,71 +13,18 @@
         <div id="category-tab" class="practice-class">
             <ul class="tab-white-gray">
 
+                {foreach from=$taste item=item}
                 <li
 
                         class="current"
 
-                        data-id="19547"
+                        data-id="{$item.id}"
                         data-status="available">
-                    <em title="珍珠奶茶">珍珠奶茶</em>
-                    &nbsp;<span>(<span class="count-num">5</span>)</span>
+                    <em title="{$item.name}">{$item.name}</em>
+                    &nbsp;<span>(<span class="count-num">{$item.flavorCount}</span>)</span>
                 </li>
+                {/foreach}
 
-                <li
-
-                        data-id="30129"
-                        data-status="available">
-                    <em title="红烧">红烧</em>
-                    &nbsp;<span>(<span class="count-num">1</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="32773"
-                        data-status="available">
-                    <em title="盐分">盐分</em>
-                    &nbsp;<span>(<span class="count-num">3</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="32774"
-                        data-status="available">
-                    <em title="油量">油量</em>
-                    &nbsp;<span>(<span class="count-num">3</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="32775"
-                        data-status="available">
-                    <em title="软硬度">软硬度</em>
-                    &nbsp;<span>(<span class="count-num">3</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="32902"
-                        data-status="available">
-                    <em title="芝士绿茶">芝士绿茶</em>
-                    &nbsp;<span>(<span class="count-num">2</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="34508"
-                        data-status="available">
-                    <em title="佐料">佐料</em>
-                    &nbsp;<span>(<span class="count-num">3</span>)</span>
-                </li>
-
-                <li
-
-                        data-id="34526"
-                        data-status="available">
-                    <em title="龙虾">龙虾</em>
-                    &nbsp;<span>(<span class="count-num">1</span>)</span>
-                </li>
 
             </ul>
         </div>
@@ -107,16 +54,18 @@
 
 <script src="/app/Tpl/kiz/js/scm_kry/js/tabScroll.js" ></script>
 <script>
-    var	baseUrl = "/merchandise/dish/cookingway",
-        addCookingWayTypeUrl = baseUrl + "/addCookingWayType",
-        checkMoreThan10TypeUrl = baseUrl + "/checkMoreThan10Type",
-        queryUrl = baseUrl + "/queryCookingWays",
-        addCookingWayUrl = baseUrl +"/addCookingWay",
-        editorUrl = baseUrl + "/updateCookingWay",
-        lockUrl = baseUrl + "/lockCookingWay",
-        unlockUrl = baseUrl + "/unlockCookingWay",
-        lockOrUnlockCookingWayTypeUrl = baseUrl + "/lockOrUnlockCookingWayType",
-        updateCookingWayTypeUrl = baseUrl + "/updateCookingWayType";
+    var	baseUrl = ctx2Path,
+        addCookingWayTypeUrl = dishPath + "&act=addCookingWayType",
+        checkMoreThan10TypeUrl = baseUrl + "&act=checkMoreThan10Type",
+        queryUrl = baseUrl + "&act=dish_cookingway_ajax",
+        addCookingWayUrl = dishPath +"&act=addCookingWay",
+        editorUrl = dishPath + "&act=updateCookingWay",
+        lockUrl = baseUrl + "&act=lockCookingWay",
+        unlockUrl = baseUrl + "&act=unlockCookingWay",
+        lockOrUnlockCookingWayTypeUrl = baseUrl + "&act=lockOrUnlockCookingWayType",
+        deleteUrl = baseUrl + "&act=dish_cookingway_ajax_del",
+        updateCookingWayTypeUrl = baseUrl + "&act=updateCookingWayType";
+    var rs = 0;
     // 定义函数
     $(function(){
         $.show = function(rowData) {
@@ -133,14 +82,16 @@
             return "disabled";
         };
         $.checkMoreThan10Type = function(args) {
-            if (args.result) {
-                bkeruyun.promptMessage("最多只能建立10个类别！");
-                setTimeout(function () {
-                    location.reload();
-                }, 2000);
-            } else {
-                location.href = addCookingWayTypeUrl;
-            }
+            location.href = addCookingWayTypeUrl;
+            /*暂时无需限制*/
+//            if (args.result) {
+//                bkeruyun.promptMessage("最多只能建立10个类别！");
+//                setTimeout(function () {
+//                    location.reload();
+//                }, 2000);
+//            } else {
+//                location.href = addCookingWayTypeUrl;
+//            }
         };
         $.lockOrUnlockCookingWayType = function(args) {
             var result = args.result;
@@ -164,22 +115,24 @@
     });
     // 初始化组件和绑定事件
     $(function(){
+
         var $gridObj = $("#grid"),
             currentTypeId = $("#category-tab > ul > li.current").attr("data-id"),
             postData = {propertyTypeId:currentTypeId};
         $gridObj.dataGrid({
-            url: baseUrl + "/queryCookingWays",
+            url: queryUrl,
             postData: postData,
-            colNames: ['id', '做法名称', '变价', '排序', '创建时间', '最后修改时间', '状态'],
+            colNames: ['id','mainId', '做法名称', '价格'],
             colModel: [
                 {name: 'id', index: 'id', hidden: true},
+                {name: 'mainId', index: 'mainId', hidden: true},
                 {name: 'name', index: 'name', width: 200, align: 'center'},
-                {name: 'reprice', index: 'reprice', width: 200, align: 'center'},
-                {name: 'sort', index: 'sort', width: 100, align: 'center'},
+                {name: 'price', index: 'price', width: 200, align: 'center'}
+               /* {name: 'sort', index: 'sort', width: 100, align: 'center'},
                 {name: 'serverCreateTime', index: 'serverCreateTime', width: 230, align: 'center'},
                 {name: 'serverUpdateTime', index: 'serverUpdateTime', width: 230, align: 'center'},
                 {name: 'enabledFlag', index: 'enabledFlag', width: 50, align: 'center', formatter:"select", editoptions:{value:"1:启用;2:停用"}}
-            ],
+           */ ],
             rowNum : 10,
             rowList : [10, 20],
             pager: "#gridPager",
@@ -188,20 +141,14 @@
             actionParam: {
                 editor: {
                     url: editorUrl,
-                    render: 'disabled',
-                    showExpression: $.show
+                    render: $.showEdit
                 },
-                clock: {
-                    url: lockUrl,
-                    extraRender: $.extraRender,
-                    showExpression: $.show
-                },
-                unlock: {
-                    url: unlockUrl,
-                    extraRender: $.extraRender,
-                    showExpression: $.showUnlock
-                },delete: {
+                delete: {
                 }
+
+            },
+            showEdit:function(data){
+                return renderEnum.hidden ;
             },
             loadComplete: function(data){
 
@@ -232,23 +179,24 @@
                         $gridDivDom.append(notData);
                     }
                 }
-                $('#category-tab .current .count-num').text(data.records);
             }
         });
 
 
         $.doDelete=function(arg){
-            Message.confirm({title: '提示', describe: '你确认删除当前做法吗? 删除后将不能恢复! '}, function () {
+            Message.confirm({title: '提示', describe: '你确认删除当前做法吗? 删除后将不能恢复! '}, function (e) {
                 bkeruyun.showLoading();
+                var mainId = $("#delete_1").parent().parent().find("[aria-describedby=grid_mainId]").text()
                 //propertyKind  1：口味，做法 2：标签 3：备注 4：菜品属性
                 $.ajax({
                     type: 'POST',
-                    url: ctxPath+'/dish/attribute/propertyDelete',
-                    data: {propertyId:arg.postData.id, propertyKind: 1},
+                    url: deleteUrl,
+                    data: {propertyId:mainId, key:arg.postData.id},
                     dataType: 'json',
                     success: function(data){
                         bkeruyun.hideLoading();
                         if(1 == data.success){
+                            $('#category-tab .current .count-num').text(data.records);
                             $gridObj.refresh();
                         }else{
                             Message.alert({title:'提示',describe:'当前做法使用中，请先取消相关的关联设置！'}, function(){
