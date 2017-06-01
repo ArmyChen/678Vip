@@ -49,6 +49,16 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "新增做法分类");
         $GLOBALS['tmpl']->display("pages/dish/cookingwayAdd.html");
     }
+    public function updateCookingWay()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "修改做法分类");
+        $GLOBALS['tmpl']->display("pages/dish/cookingwayEdit.html");
+    }
     public function dish_unit()
     {
         init_app_page();

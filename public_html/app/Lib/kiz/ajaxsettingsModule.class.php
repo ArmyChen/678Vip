@@ -109,4 +109,104 @@ class ajaxSettingsModule extends KizBaseModule
         echo json_encode($return);
         exit;
     }
+
+    /**
+     * 新增保存做法分类
+     */
+    public function cookingWayTypeSaveOrUpdate(){
+        init_app_page();
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $location_id = $account_info['slid'];
+
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $switchbox = intval($_REQUEST['way']);
+        $id = intval($_REQUEST['id']);
+
+        /*业务逻辑部分*/
+        $root['status'] = 0;
+        $root['info'] = "";
+
+
+        if(empty($id)&&$GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."dc_supplier_taste where name='".$name."' and location_id = ".$location_id)){
+            $return['success'] = false;
+            $return['message'] = "做法分类名称重复";
+        }
+
+
+        $data = array();
+        $data['name'] = $name;
+        $data['sort'] = $sort;
+        $data['switchbox'] = $switchbox;
+
+        $data['is_effect'] = 1;
+        $data['location_id'] = $location_id;
+
+        if($id>0){
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }else{
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data)){
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+
+            }else{
+                $return['success'] = false;
+                $return['message'] = "添加失败";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 禁用做法分类
+     */
+    public function lockCookingWay(){
+        init_app_page();
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $location_id = $account_info['slid'];
+        $id = intval($_REQUEST['id']);
+        $data = array();
+        $data['is_effect'] = 0;
+        $data['id'] = $id;
+
+        if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
+            $return['success'] = true;
+            $return['message'] = "修改成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "修改失败";
+        }
+    }
+
+    /**
+     * 启用做法分类
+     */
+    public function unlockCookingWay(){
+        init_app_page();
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $location_id = $account_info['slid'];
+        $id = intval($_REQUEST['id']);
+        $data = array();
+        $data['is_effect'] = 1;
+        $data['id'] = $id;
+
+        if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
+            $return['success'] = true;
+            $return['message'] = "修改成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "修改失败";
+        }
+    }
 }
