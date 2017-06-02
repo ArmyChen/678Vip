@@ -53,12 +53,12 @@
     $.saveCallback = function (args) {
         var rs = args.result;
         if (rs.success) {
-            $.layerMsg("操作成功！", true, {
+            $.layerMsg(rs.message, true, {
                 end:function(){
                     window.location.href = dishPath + "&act=dish_cookingway";
                 },shade: 0.3});
         } else {
-            $.layerMsg("操作失败！", true,{shade: 0.3});
+            $.layerMsg(rs.message, true,{shade: 0.3});
         }
     };
 </script>

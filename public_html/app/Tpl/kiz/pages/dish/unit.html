@@ -1,0 +1,125 @@
+
+{include file="inc/header.html"}
+<div class="article-header">
+    <div class="center-block">
+        <h1>单位列表</h1>
+        <div class="btn-wrap pull-right tar">
+            <a class="js-add-memo btn-link ml10" id="btn-create-new" href="#">创建</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="center-block panel-group mt20" id="accordion" >
+    <div class="panel" style="margin-bottom:0;">
+        <input id="msg" type="hidden" value=""/>
+        <div class="panel-body" style="padding:0 20px;">
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $gridObj = $("#grid"),
+        baseUrl = ctx2Path,
+        queryUrl = baseUrl + "&act=dish_unit_query_ajax",
+        editorUrl = dishPath + "&act=dish_unit_edit",
+        lockUrl = baseUrl + "&act=dish_unit_lock",
+        checkUrl=baseUrl+"&act=dish_unit_checkUsed";
+
+    $(function(){
+        //编辑返回到列表页面显示提示信息
+        if($("#msg").val()){
+            bkeruyun.promptMessage($("#msg").val());
+        }
+        $.show = function(rowData) {
+            return rowData.useCount == 0;
+        };
+
+        $gridObj.dataGrid({
+            url: queryUrl,
+            postData: {},
+            colNames: ['id','useCount', '名称','排序','状态'],
+            colModel: [
+                {name: 'id', index: 'id', hidden: true},
+                {name: 'useCount', index: 'useCount', hidden: true},
+                {name: 'name', index: 'name', width: 160, align: 'center'},
+                {name: 'sort', index: 'sort', width: 160, align: 'center'},
+                {name: 'is_effect', index: 'is_effect', align: 'center', formatter: function (cellvalue, options, rowObject) {
+                   if(cellvalue == 1){
+                       return "启用"
+                   }else{
+                       return "<span style='color:red'>禁用</span>"
+                   }
+                }}
+            ],
+            rowNum : 20,
+            pager: "#gridPager",
+            showOperate: true,
+            operateColName: "操作",
+            actionParam: {
+                editor: {
+                    url: editorUrl,
+                },
+                delete: {
+                    url: checkUrl,
+                },
+                clock: {
+                    render :function (rowData) {
+                        var flag = renderEnum.hidden;
+                        if(rowData.is_effect == 1) flag = renderEnum.normal; //如果是ture则正常显示
+                        return flag;
+                    },
+                    url: lockUrl
+
+                },
+                unlock: {
+                    render :   function (rowData) {
+                        var flag = renderEnum.hidden;
+                        if(rowData.is_effect == 0) flag = renderEnum.normal; //如果是ture则正常显示
+                        return flag;
+                    },
+                    url: lockUrl
+                },
+            }
+        });
+
+        $(".js-add-memo").on("click", function(){
+            location.href = dishPath +"&act=dish_unit_add";
+        });
+    });
+    $.deleteCallback=function(args){
+        if (!args.result) {
+            return '';
+        }
+        var data=args.result,success=data.success,disable=data.disable,msg=data.msg,id=args.postData.id;
+        if(success){
+            if(disable){
+                $.ajax({
+                    type : "POST",
+                    url : lockUrl,
+                    data : "id="+id+ "&random=" + Math.random(),
+                    dataType : "json",
+                    success : function(data) {
+                        ref(data.message);
+                    }
+                })
+            }else{
+                bkeruyun.promptMessage(msg+',不允许删除！');
+            }
+        }else{
+            bkeruyun.promptMessage(msg);
+        }
+    }
+    //删除提示
+    ref=function(msg){
+        bkeruyun.promptMessage(msg);
+        var pagesize=$(".ui-pg-input").val();
+        $("#grid").refresh(pagesize);
+        setTimeout(2000);
+    }
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

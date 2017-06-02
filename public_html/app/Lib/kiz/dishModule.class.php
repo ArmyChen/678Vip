@@ -97,6 +97,28 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "单位管理");
         $GLOBALS['tmpl']->display("pages/dish/unit.html");
     }
+    public function dish_unit_add()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增单位管理");
+        $GLOBALS['tmpl']->display("pages/dish/unitAdd.html");
+    }
+    public function dish_unit_edit()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("r", parent::get_supplier_cate_unit_row($id));
+        $GLOBALS['tmpl']->assign("page_title", "编辑单位管理");
+        $GLOBALS['tmpl']->display("pages/dish/unitEdit.html");
+    }
 
     public function dish_category()
     {

@@ -283,5 +283,161 @@ class ajaxSettingsModule extends KizBaseModule
         exit;
     }
 
+    /**
+     * 单位查询列表
+     */
+    public function dish_unit_query_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
 
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where location_id=$slid";
+
+        $sql = "select * from fanwe_dc_supplier_unit_cate $where limit $limit";
+        $sql2 = "select id from fanwe_dc_supplier_unit_cate $where";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+//    public function dish_unit_checkUsed(){
+//        init_app_page();
+//        $return['status'] = true;
+//        $return['resMsg'] = "操作成功";
+//        echo json_encode($return);
+//        exit;
+//
+//    }
+
+    /**
+     * 单位删除功能
+     */
+    public function dish_unit_checkUsed(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_dc_supplier_unit_cate where id=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            if ($GLOBALS['db']->query("delete from fanwe_dc_supplier_unit_cate where id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "删除成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "删除失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "单位不存在";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 单位锁定功能
+     */
+    public function dish_unit_lock(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_dc_supplier_unit_cate where id=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+
+        if(!empty($row)){
+            if($row['is_effect']){
+                $row['is_effect'] = 0;
+            }else{
+                $row['is_effect'] = 1;
+            }
+            if ($GLOBALS['db']->autoExecute("fanwe_dc_supplier_unit_cate",$row,"update","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "操作成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "操作失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "单位不存在";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+    public function do_save_unit_cate_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*活出参数*/
+        $location_id = $account_info['slid'];
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $is_effect = intval($_REQUEST['is_effect']);
+        $id = intval($_REQUEST['id']);
+
+
+
+
+        $data = array();
+        $data['name'] = $name;
+        $data['sort'] = $sort;
+        $data['is_effect'] = $is_effect;
+        $data['supplier_id'] = $supplier_id;
+        $data['location_id'] = $location_id;
+        if($id > 0){
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_unit_cate",$data,"update","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }else{
+            /*业务逻辑部分*/
+
+            if($GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."dc_supplier_unit_cate where name='".$name."' and location_id = ".$location_id)){
+                $return['success'] = false;
+                $return['message'] = "单位名称重复";
+                echo json_encode($return);
+                exit;
+            }
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_unit_cate",$data)){
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "添加失败";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+
+    }
 }
