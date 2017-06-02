@@ -386,7 +386,7 @@
 }
 
 .tab-white-gray > li[data-status="disabled"] {
-    background-image: url(../img/disabled.png);
+    background-image: url(../../img/disabled.png);
     background-repeat: no-repeat;
     background-position: center;
 }

@@ -71,7 +71,7 @@ class ajaxSettingsModule extends KizBaseModule
         if ($id > 0) {
             $sql = "select * from fanwe_dc_supplier_taste where id=".$id;
             $row = $GLOBALS['db']->getRow($sql);
-            if ($row['shops'] != 'null') {
+            if ($row['shops'] != 'null' && !empty($row['shops'])) {
                 $return['success'] = false;
                 $return['message'] = "操作失败，该分类已经关联商品";
             } else {
@@ -104,6 +104,15 @@ class ajaxSettingsModule extends KizBaseModule
      * 新增做法校验
      */
     public function checkMoreThan10Type(){
+        $return['success'] = true;
+        $return['message'] = "操作成功";
+        echo json_encode($return);
+        exit;
+    }
+    /**
+     * 做法名称校验
+     */
+    public function checkCookingWayName(){
         $return['success'] = true;
         $return['message'] = "操作成功";
         echo json_encode($return);
@@ -169,16 +178,38 @@ class ajaxSettingsModule extends KizBaseModule
     /**
      * 禁用做法分类
      */
-    public function lockCookingWay(){
+//    public function lockCookingWay(){
+//        init_app_page();
+//        /*初始化*/
+//        $account_info = $GLOBALS['account_info'];
+//        $location_id = $account_info['slid'];
+//        $id = intval($_REQUEST['id']);
+//        $data = array();
+//        $data['is_effect'] = 0;
+//        $data['id'] = $id;
+//
+//        if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
+//            $return['success'] = true;
+//            $return['message'] = "修改成功";
+//        }else{
+//            $return['success'] = false;
+//            $return['message'] = "修改失败";
+//        }
+//    }
+
+    /**
+     * 启用禁用做法分类
+     */
+    public function lockOrUnlockCookingWayType(){
         init_app_page();
         /*初始化*/
         $account_info = $GLOBALS['account_info'];
         $location_id = $account_info['slid'];
         $id = intval($_REQUEST['id']);
+        $isEffect = intval($_REQUEST['enabledFlag']);
         $data = array();
-        $data['is_effect'] = 0;
+        $data['is_effect'] = $isEffect;
         $data['id'] = $id;
-
         if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
             $return['success'] = true;
             $return['message'] = "修改成功";
@@ -186,27 +217,71 @@ class ajaxSettingsModule extends KizBaseModule
             $return['success'] = false;
             $return['message'] = "修改失败";
         }
+        echo json_encode($return);
+        exit;
     }
 
     /**
-     * 启用做法分类
+     * 删除做法分类
      */
-    public function unlockCookingWay(){
+    public function propertyGroupDelete(){
         init_app_page();
         /*初始化*/
         $account_info = $GLOBALS['account_info'];
         $location_id = $account_info['slid'];
-        $id = intval($_REQUEST['id']);
-        $data = array();
-        $data['is_effect'] = 1;
-        $data['id'] = $id;
+        $id = intval($_REQUEST['propertyTypeId']);
+        $sql = "select * from fanwe_dc_supplier_taste where id=".$id;
+        $r = $GLOBALS['db']->getRow($sql);
+        if($r['flavor'] != 'null' || $r['shops'] != 'null' || $r['flavor'] != '' ||  $r['shops'] != '' ){
+            $return['success'] = false;
+            $return['message'] = "做法分类下有做法，删除失败";
+        }else{
+            if ($GLOBALS['db']->query("delete from  fanwe_dc_supplier_taste where id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }
+        echo json_encode($return);
+        exit;
+    }
 
-        if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$data,"UPDATE","id=".$id)){
-            $return['success'] = true;
-            $return['message'] = "修改成功";
+    public function cookingWaySaveOrUpdate(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $location_id = $account_info['slid'];
+        $id = intval($_REQUEST['id']);
+        $name = trim($_REQUEST['name']);
+        $price = floatval($_REQUEST['reprice']);
+        $sql = "select * from fanwe_dc_supplier_taste where id=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            $flavor = json_decode($row['flavor']);
+            $arr = [];
+            $strs=array("name"=>$name,"price"=>$price);
+            foreach ($flavor as $k=>$item) {
+                    $arr[]=array("name"=>$item->name,"price"=>$item->price);
+            }
+            array_push($arr,$strs);
+            $row['flavor'] = json_encode($arr);
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_taste",$row,"UPDATE","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+
         }else{
             $return['success'] = false;
-            $return['message'] = "修改失败";
+            $return['message'] = "分类不存在";
         }
+        echo json_encode($return);
+        exit;
     }
+
+
 }

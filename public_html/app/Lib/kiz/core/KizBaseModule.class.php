@@ -662,6 +662,20 @@ class KizBaseModule{
         return $pandianlist;
     }
 
+    /**
+     * 查询做法分类
+     */
+    public function get_supplier_cate_row($id=0){
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select * from fanwe_dc_supplier_taste where id=".$id);
+            return $pandian;
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_taste where slid=".$slid);
+        return $pandianlist;
+    }
 }
 
 ?>

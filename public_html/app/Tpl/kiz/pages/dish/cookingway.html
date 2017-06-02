@@ -19,7 +19,7 @@
                         class="current"
 
                         data-id="{$item.id}"
-                        data-status="available">
+                        data-status="{if $item.is_effect eq 1}available{else}disabled{/if}">
                     <em title="{$item.name}">{$item.name}</em>
                     &nbsp;<span>(<span class="count-num">{$item.flavorCount}</span>)</span>
                 </li>
@@ -214,7 +214,7 @@
             Message.confirm({title: '提示', describe: '你确认删除当前做法类别吗?<br/>删除后将不能恢复! '}, function () {
                 $.ajax({
                     type: 'POST',
-                    url: ctxPath+'/dish/attribute/propertyGroupDelete',
+                    url: ctx2Path+'&act=propertyGroupDelete',
                     data: {propertyTypeId:propertyTypeId, propertyKind: 1},
                     dataType: 'json',
                     success: function(data){
@@ -278,7 +278,7 @@
             var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
             if(currentTypeStatus === "available"){
                 var typeId = $("#category-tab > ul > li.current").attr("data-id");
-                location.href = baseUrl +"/addCookingWay?propertyTypeId="+typeId;
+                location.href = dishPath +"&act=addCookingWay&propertyTypeId="+typeId;
             }else if(currentTypeStatus === "disabled"){
                 bkeruyun.promptMessage("当前做法类别已停用，请先启用当前做法类别！");
             }
@@ -287,7 +287,7 @@
             var currentTypeStatus = $("#category-tab > ul > li.current").attr("data-status");
             if(currentTypeStatus === "available"){
                 var typeId = $("#category-tab > ul > li.current").attr("data-id");
-                location.href = baseUrl + "/updateCookingWayType?id="+typeId;
+                location.href = dishPath + "&act=updateCookingWayType&id="+typeId;
             }else if(currentTypeStatus === "disabled"){
                 bkeruyun.promptMessage("当前做法类别已停用，请先启用当前做法类别！");
             }
@@ -297,11 +297,11 @@
                 enabledFlag = 1,
                 describe = "确定启用当前做法类别？",
                 typeId = $("#category-tab > ul > li.current").attr("data-id");
-            args.url = baseUrl + "/lockOrUnlockCookingWayType";
+            args.url = baseUrl + "&act=lockOrUnlockCookingWayType";
             args.callback = "$.lockOrUnlockCookingWayType";
 
             if ($(this).html() === "停用") {
-                enabledFlag = 2;
+                enabledFlag = 0;
                 describe = "确定停用当前做法类别？";
             }
             args.postData = {id: typeId, enabledFlag: enabledFlag};

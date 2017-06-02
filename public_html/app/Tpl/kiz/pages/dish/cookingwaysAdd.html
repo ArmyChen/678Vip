@@ -1,0 +1,59 @@
+
+{include file="inc/header.html"}
+<div class="article-header">
+    <div class="center-block">
+        <h1>新增做法</h1>
+
+        <div class="btn-wrap pull-right tar">
+
+            <a class="btn-link ml10" id="btnSave" function="$.doSave"
+               args="{formId:'cookingWayForm',gridId:'grid',url:'/kiz.php?ctl=ajaxSettings&act=cookingWaySaveOrUpdate',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback',type:'post'}">保存</a>
+            <a class="js-back btn-link ml10" id="btnCancel" href="javascript:history.back();">取消</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel" style="margin-bottom:0;">
+        <div class="panel-body" style="padding-top:30px;">
+            <form id="cookingWayForm">
+                <input type="hidden" id="id" name="id" value="{$r.id}"/>
+                <input type="hidden" id="propertyTypeId" name="propertyTypeId" value="19547"/>
+
+                <div class="currentType">当前类别: <strong class="red vam">{$r.name}</strong></div>
+                <dl class="panel-item">
+                    <dt><label for="code">做法名称</label><strong class="red vam" style="margin-left:10px;">*</strong></dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w402 required" id="name" name="name" value=""
+                               placeholder="第一语言" maxlength="48">
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt><label for="code">变价</label><strong class="red vam" style="margin-left:10px;">*</strong></dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w402 required" id="reprice" name="reprice" value="" placeholder="加价(N);减价(-N)" maxlength="10">
+                    </dd>
+                </dl>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    //保存回调
+    $.saveCallback = function (args) {
+        var rs = args.result;
+        if (rs.success) {
+            $.layerMsg("操作成功！", true, {
+                end:function(){
+                    window.location.href = dishPath + "&act=dish_cookingway";
+                },shade: 0.3});
+        } else {
+            $.layerMsg("操作失败！", true,{shade: 0.3});
+        }
+    };
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
