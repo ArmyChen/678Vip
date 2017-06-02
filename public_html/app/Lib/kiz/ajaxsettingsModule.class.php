@@ -232,17 +232,18 @@ class ajaxSettingsModule extends KizBaseModule
         $id = intval($_REQUEST['propertyTypeId']);
         $sql = "select * from fanwe_dc_supplier_taste where id=".$id;
         $r = $GLOBALS['db']->getRow($sql);
-        if($r['flavor'] != 'null' || $r['shops'] != 'null' || $r['flavor'] != '' ||  $r['shops'] != '' ){
-            $return['success'] = false;
-            $return['message'] = "做法分类下有做法，删除失败";
-        }else{
+        if(empty($r['flavor']) || $r['flavor'] == 'null' && empty($r['shops']) || $r['shops'] == 'null'){
             if ($GLOBALS['db']->query("delete from  fanwe_dc_supplier_taste where id=".$id)){
                 $return['success'] = true;
-                $return['message'] = "修改成功";
+                $return['message'] = "删除成功";
             }else{
                 $return['success'] = false;
-                $return['message'] = "修改失败";
+                $return['message'] = "删除失败";
             }
+        }else
+        {
+            $return['success'] = false;
+            $return['message'] = "做法分类下有做法，删除失败";
         }
         echo json_encode($return);
         exit;
