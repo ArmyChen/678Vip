@@ -47,7 +47,7 @@
             _this.options.item.each(function(){
                 var emObj = $(this).find("em");
                 var txt = emObj.text();
-                emObj.text(_this._ellipsis(txt,3));
+                // emObj.text(_this._ellipsis(txt,3)); 将3个字的分类隐藏功能去掉
             });
             // console.log("wrapW=="+wrapW+" wrapH=="+wrapH + " itemW=="+itemW +"=="+_this.options.innerObjLeft);
             if(_this.options.item.length > _this.options.itemN){
