@@ -43,7 +43,7 @@
             <li><a href="#" class="icon-set">设置</a>
                 <ul>
                     <li><a id="edit-type" href="#">编辑</a></li>
-                    <li><a id="change-status" href="#">停用</a></li>
+                    <!--<li><a id="change-status" href="#">停用</a></li>-->
                     <li><a id="deleteType" href="#">删除</a></li>
                 </ul>
             </li>
@@ -60,7 +60,7 @@
                     <th width="100">排序</th>
                     <!--<th width="150">创建时间</th>-->
                     <!--<th width="150">最后修改时间</th>-->
-                    <th width="100">状态</th>
+                    <!--<th width="100">状态</th>-->
                     <th width="100">操作</th>
                 </tr>
                 </thead>
@@ -90,7 +90,7 @@
 //        if ($("#category-tab > ul > li").length >= 30) {
 //            $('#set-add > li > a.icon-add').addClass('icon-add-disabled')
 //        }
-        setBtnDisabled($("#category-tab > ul > li.current").attr("data-status"));
+//        setBtnDisabled($("#category-tab > ul > li.current").attr("data-status"));
         $("#category-tab").tabScroll({
             'wrapObj': $('#category-tab'),
             'innerObj': $('#category-tab > ul'),
@@ -108,7 +108,7 @@
         $(document).delegate("#category-tab > ul > li","click",function(){
             var status = $(this).attr("data-status");
             $(this).addClass("current").siblings().removeClass("current");
-            setBtnDisabled(status);
+//            setBtnDisabled(status);
             queryList();
         });
         //类别设置
@@ -128,7 +128,7 @@
                 if (flag==2) {
                     bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
                 }else{
-                    location.href=ctx2Path+"/dish/type/addinclass？parentId="+$("#type-titel > li.current").attr("data-id");
+                    location.href=dishPath+"&act=dish_category_add&parentId="+$("#type-titel > li.current").attr("data-id");
                 }
             }else{
                 bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');
@@ -146,7 +146,7 @@
                 if(flag==2){
                     bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
                 }else{
-                    location.href=ctx2Path+"/dish/type/edit?id="+$("#type-titel > li.current").attr("data-id");
+                    location.href=dishPath+"&act=dish_category_type_edit&id="+$("#type-titel > li.current").attr("data-id");
                 }
             }else{bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');}
         });
@@ -216,25 +216,25 @@
                         var status='';
                         var img='';
                         var show='',edit='';
-                        if (inclass.enabledFlag==1) {
-                            status='启用';
-                            img='icon-clock';
-                            show='停用';
-                        }else if(inclass.enabledFlag==2){
-                            status='停用';
-                            img='icon-unlock';
-                            show='启用';
-                            edit=' icon-editor-disable';
-                            if(flag==2){
-                                img+=" icon-unlock-disable";
-                            }
-                        }
+//                        if (inclass.enabledFlag==1) {
+//                            status='启用';
+//                            img='icon-clock';
+//                            show='停用';
+//                        }else if(inclass.enabledFlag==2){
+//                            status='停用';
+//                            img='icon-unlock';
+//                            show='启用';
+//                            edit=' icon-editor-disable';
+//                            if(flag==2){
+//                                img+=" icon-unlock-disable";
+//                            }
+//                        }
                         html += '<tr><td  style="word-wrap:break-word;">' + inclass.typeCode + '</td>' +
                             '<td style="word-wrap:break-word;">' + inclass.name + '</td>' +
-                            '<td style="word-wrap:break-word;">' + inclass.sort + '</td>'+
+                            '<td style="word-wrap:break-word;">' + inclass.sort + '</td>'
 //                            + '<td style="word-wrap:break-word;">' + inclass.serverCreateTime + '</td>' +
 //                            '<td style="word-wrap:break-word;">' + inclass.serverUpdateTime + '</td>' +
-                            '<td style="word-wrap:break-word;">' + status + '</td>'
+//                            '<td style="word-wrap:break-word;">' + status + '</td>'
                             + '<td  style="word-wrap:break-word;">' +
                             '<a href="javascript:void(0)" title="编辑"  class="icon-editor' + edit + '" data-id="' + inclass.id + '">编辑</a>'
                             + '<a href="javascript:void(0)" title="' + show + '" data-status="' + inclass.enabledFlag + '" data-id="' + inclass.id + '" class="' + img + '">' + show + '</a>'
@@ -266,7 +266,7 @@
                     if (data.type=="type") {
                         Message.confirm({title:'提示标题',describe:'确定删除当前商品大类？删除后将不可恢复!'},function(){delType(id)},function(){});
                     }else if(data.type=="inclass"){
-                        Message.confirm({title:'提示标题',describe:'确定删除当前商品中类？删除后将不可恢复!'},function(){delType(id)},function(){});
+                        Message.confirm({title:'提示标题',describe:'确定删除当前商品中类？删除后将不可恢复!'},function(){del(id)},function(){});
                     }
                 }else{
                     if (data.type=="type") {
@@ -287,9 +287,9 @@
             data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
             dataType : "json",
             success : function(data) {
-                if (data == true) {
+                if (data.success == true) {
                     bkeruyun.promptMessage("删除成功!",{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
-                    setTimeout(function(){location.href=ctx2Path+"/dish/type/list"; }, 3000);
+                    setTimeout(function(){location.href=dishPath+"&act=dish_category"; }, 100);
                 }else{
                     bkeruyun.promptMessage(data.errorMessage||"删除失败，请刷新后重试！");
                 }
@@ -299,47 +299,70 @@
             }
         })
     }
+
+    /** 删除大类/中类方法 */
+    function del(id){
+        $.ajax({
+            type : "POST",
+            url :  ctx2Path + "&act=dish_category_delete",
+            data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
+            dataType : "json",
+            success : function(data) {
+                if (data.success == true) {
+                    bkeruyun.promptMessage("删除成功!",{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+                    setTimeout(function(){location.href=dishPath+"&act=dish_category"; }, 100);
+                }else{
+                    bkeruyun.promptMessage(data.errorMessage||"删除失败，请刷新后重试！");
+                }
+                //隐藏列表
+                $("#change-status").parents("ul").hide();
+
+            }
+        })
+    }
+
     /* 改变前检测 */
     function check(id,status){
-        if(status==1){
-            $.ajax({
-                type : "POST",
-                url : ctx2Path + "&act=dish_category_changebeforeoff",
-                data : "id="+id+ "&random=" + Math.random(),
-                dataType : "json",
-                success : function(data) {
-                    if (data.success==true) {
-                        if (data.type=="type") {
-                            Message.confirm({title:'提示标题',describe:'确定停用当前商品大类？'},function(){change(id, status)},function(){});
-                        }else if(data.type=="inclass"){
-                            Message.confirm({title:'提示标题',describe:'确定停用当前商品中类？'},function(){change(id, status)},function(){});
-                        }
-                    }else{
-                        if (data.type=="type") {
-                            bkeruyun.promptMessage('当前类别存在下属中类，请先停用相关的商品中类',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
-//				Message.confirm({title:'提示标题',describe:'当前类别存在下属中类，请先停用相关的商品中类'},function(){},function(){});
-                        }else if(data.type=="inclass"){
-                            bkeruyun.promptMessage('当前商品中类使用中，请先取消相关关联设置',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
-//					Message.confirm({title:'提示标题',describe:'当前商品中类使用中，请先取消相关关联设置'},function(){},function(){});
-                        }
-                    }
-                }
-            })
-        }else{
-            $.ajax({
-                type : "POST",
-                url :  ctx2Path + "&act=dish_category_get",
-                data : "id="+id+ "&random=" + Math.random(),
-                dataType : "json",
-                success : function(data) {
-                    if (data.parentId) {
-                        Message.confirm({title:'提示标题',describe:'确定启用当前商品中类？'},function(){change(id, status)},function(){});
-                    }else{
-                        Message.confirm({title:'提示标题',describe:'确定启用当前商品大类？'},function(){change(id,status)},function(){});
-                    }
-                }
-            })
-        }
+        Message.confirm({title:'提示标题',describe:'确定更改当前商品大类状态？'},function(){change(id, status)},function(){});
+//        if(status==1){
+//            $.ajax({
+//                type : "POST",
+//                url : ctx2Path + "&act=dish_category_changebeforeoff",
+//                data : "id="+id+ "&random=" + Math.random(),
+//                dataType : "json",
+//                success : function(data) {
+//                    if (data.success==true) {
+//                        if (data.type=="type") {
+//                            Message.confirm({title:'提示标题',describe:'确定停用当前商品大类？'},function(){change(id, status)},function(){});
+//                        }else if(data.type=="inclass"){
+//                            Message.confirm({title:'提示标题',describe:'确定停用当前商品中类？'},function(){change(id, status)},function(){});
+//                        }
+//                    }else{
+//                        if (data.type=="type") {
+//                            bkeruyun.promptMessage('当前类别存在下属中类，请先停用相关的商品中类',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+////				Message.confirm({title:'提示标题',describe:'当前类别存在下属中类，请先停用相关的商品中类'},function(){},function(){});
+//                        }else if(data.type=="inclass"){
+//                            bkeruyun.promptMessage('当前商品中类使用中，请先取消相关关联设置',{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
+////					Message.confirm({title:'提示标题',describe:'当前商品中类使用中，请先取消相关关联设置'},function(){},function(){});
+//                        }
+//                    }
+//                }
+//            })
+//        }else{
+//            $.ajax({
+//                type : "POST",
+//                url :  ctx2Path + "&act=dish_category_get",
+//                data : "id="+id+ "&random=" + Math.random(),
+//                dataType : "json",
+//                success : function(data) {
+//                    if (data.parentId) {
+//                        Message.confirm({title:'提示标题',describe:'确定启用当前商品中类？'},function(){change(id, status)},function(){});
+//                    }else{
+//                        Message.confirm({title:'提示标题',describe:'确定启用当前商品大类？'},function(){change(id,status)},function(){});
+//                    }
+//                }
+//            })
+//        }
     }
 
     function change(id,status){
@@ -371,7 +394,7 @@
 
     }
     function edit(id){
-        location.href=dishPath+"&act=dish&id="+id;
+        location.href=dishPath+"&act=dish_category_edit&id="+id;
     }
 </script>
 {include file="inc/footer.html"}

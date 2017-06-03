@@ -152,6 +152,54 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "新增商品大类");
         $GLOBALS['tmpl']->display("pages/dish/categoryAdd.html");
     }
+    /**
+     * 商品分类编辑
+     */
+    public function dish_category_type_edit(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        /* 系统默认 */
+
+        $GLOBALS['tmpl']->assign("r", parent::goods_category_one_ajax($id));
+        $GLOBALS['tmpl']->assign("page_title", "编辑商品大类");
+        $GLOBALS['tmpl']->display("pages/dish/categoryEdit.html");
+    }
+    /**
+     * 商品中类新增
+     */
+    public function dish_category_add(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['parentId'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("r", parent::goods_category_one_ajax($id));
+        $GLOBALS['tmpl']->assign("page_title", "新增中类");
+        $GLOBALS['tmpl']->display("pages/dish/categorysAdd.html");
+    }
+    /**
+     * 商品中类编辑
+     */
+    public function dish_category_edit(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];//中类id
+        $main = parent::goods_category_one_ajax($id);
+        $sub = parent::goods_category_one_ajax($main['pid']);
+        /* 系统默认 */
+
+        $GLOBALS['tmpl']->assign("r", $main);
+        $GLOBALS['tmpl']->assign("r2", $sub);
+        $GLOBALS['tmpl']->assign("page_title", "编辑中类");
+        $GLOBALS['tmpl']->display("pages/dish/categorysEdit.html");
+    }
+
     public function dish_list()
     {
         init_app_page();

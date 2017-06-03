@@ -8,7 +8,7 @@
         <div class="btn-wrap pull-right tar">
 
             <a class="btn-link ml10" id="btnSave" function="$.doSave"
-               args="{formId:'panelForm',gridId:'grid',url:'/kiz.php?ctl=ajaxSettings&act=dish_category_type_add_ajax',
+               args="{formId:'panelForm',gridId:'grid',url:'/kiz.php?ctl=ajaxSettings&act=dish_category_add_ajax',
                    customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback',type:'post'}">保存</a>
             <a class="js-back btn-link ml10" id="btnCancel" href="javascript:history.back()">取消</a>
         </div>
@@ -19,35 +19,13 @@
     <div class="panel" style="margin-bottom:0;">
         <div class="panel-body" style="padding-top:30px;">
             <form action="#" method="post" id="panelForm">
-                <input type="hidden" name="parentId" id="parentId" value="136633"/>
-                <input type="hidden" id="id" name="id" value=""/>
-                <input type="hidden" name="serverUpdateTime"id="serverUpdateTime" value=''/>
-                <div class="currentType">当前大类: <strong class="red vam" >茶饮</strong></div>
-                <dl class="panel-item">
-                    <dt><label for="code1">中类编码</label><strong class="red vam" style="margin-left:10px;margin-right:20px;">*</strong></dt>
-                    <dd class="positionRelative">
-                        <input type="text" class="form-control w402 required" id="typeCode" name="typeCode"  value="" placeholder="第一语言" maxlength="16">
-
-                        <!-- <div class="wrong"></div> -->
-                    </dd>
-                </dl>
+                <input type="hidden" name="parentId" id="parentId" value="{$r.pid}"/>
+                <input type="hidden" id="id" name="id" value="{$r.id}"/>
+                <div class="currentType">当前大类: <strong class="red vam" >{$r2.name}</strong></div>
                 <dl class="panel-item">
                     <dt><label for="code">中类名称</label><strong class="red vam" style="margin-left:10px;margin-right:20px;">*</strong></dt>
                     <dd class="positionRelative">
-                        <input type="text" class="form-control w402 required" id="name" name="name" value="" placeholder="第一语言" maxlength="48">
-
-                        <!-- <div class="wrong"></div> -->
-                    </dd>
-                    <dd class="positionRelative mt10">
-                        <input type="text" class="form-control w402" id="aliasName" name="aliasName" value="" placeholder="第二语言" maxlength="48">
-
-                        <!-- <div class="wrong"></div> -->
-                    </dd>
-                </dl>
-                <dl class="panel-item">
-                    <dt><label for="code">描述</label></dt>
-                    <dd class="positionRelative">
-                        <input type="text" class="form-control w402" id="dishTypeDesc" name="dishTypeDesc" value="" placeholder="" maxlength="48">
+                        <input type="text" class="form-control w402 required" id="name" name="name" value="{$r.name}" placeholder="第一语言" maxlength="48">
 
                         <!-- <div class="wrong"></div> -->
                     </dd>
@@ -55,7 +33,7 @@
                 <dl class="panel-item">
                     <dt><label for="code">排序</label></dt>
                     <dd class="positionRelative">
-                        <input type="text" class="form-control w402" id="sort" name="sort" value="" placeholder="1000" data-type="digits" maxlength="4">
+                        <input type="text" class="form-control w402" id="sort" name="sort" value="{$r.sort}" placeholder="1000" data-type="digits" maxlength="4">
 
                         <!-- <div class="wrong"></div> -->
                     </dd>
@@ -71,7 +49,7 @@
         if (rs.success) {
             $.layerMsg(rs.message, true, {
                 end:function(){
-                    window.location.href = dishPath + "&act=dish_cookingway";
+                    window.location.href = dishPath + "&act=dish_category";
                 },shade: 0.3});
         } else {
             $.layerMsg(rs.message, true,{shade: 0.3});

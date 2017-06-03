@@ -700,8 +700,9 @@ class KizBaseModule{
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
         if($id > 0){
-            $sortconditions = " where $id = ".$id; // 查询条件
+            $sortconditions = " where id = ".$id; // 查询条件
             $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+            $sqlsort.=$sortconditions. " order by sort desc";
             $wmenulist = $GLOBALS['db']->getRow($sqlsort);
         }else{
             //分类
