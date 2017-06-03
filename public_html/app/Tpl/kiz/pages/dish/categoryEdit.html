@@ -1,0 +1,135 @@
+
+{include file="inc/header.html"}
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block">
+        <h1>新增商品大类</h1>
+        <!--<p><span>这是一个测试用的营销方案</span>（2014-3-1 至 2014-5-30） - 满300减20优惠券 - 当前 <span>178</span> 人可以参加此营销</p>-->
+        <div class="btn-wrap pull-right tar">
+
+            <a class="js-go-on btn-link ml10" id="btn-create-new">继续创建</a>
+
+            <a class="js-save btn-link ml10" id="btnSave">保存</a>
+            <a class="js-back btn-link ml10" id="btnCancel">取消</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel" style="margin-bottom:0;">
+        <div class="panel-body" style="padding-top:30px;">
+            <form action="#" method="post" id="panelForm">
+                <input type="hidden" name="id" id="id" value=""/>
+                <input type="hidden" name="serverUpdateTime" id="serverUpdateTime"
+                       value=''/>
+                <dl class="panel-item">
+                    <dt><label>大类编码</label><strong class="red vam"
+                                                   style="margin-left:10px;margin-right:20px;">*</strong>
+                    </dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w402 required" id="typeCode" name="typeCode"
+                               value=""
+                               placeholder="例：01" maxlength="16">
+
+                        <!-- <div class="wrong"></div> -->
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt><label for="code">大类名称</label><strong class="red vam"
+                                                              style="margin-left:10px;margin-right:20px;">*</strong>
+                    </dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w402 required" id="name" name="name"
+                               value="" placeholder="第一语言" maxlength="48">
+                    </dd>
+                    <dd class="positionRelative mt10">
+                        <input type="text" class="form-control w402" id="aliasName" name="aliasName"
+                               value="" placeholder="第二语言" maxlength="48">
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt><label>排序</label></dt>
+                    <dd class="positionRelative">
+                        <input type="text" class="form-control w402" id="sort" name="sort" value=""
+                               placeholder="1000" data-type="digits" maxlength="4">
+
+                        <!-- <div class="wrong"></div> -->
+                    </dd>
+                </dl>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var baseUrl = "/merchandise/dish/type",
+        saveOrUpdateUrl = baseUrl + "/save",
+        listUrl = baseUrl + "/list",
+        checkUrl = baseUrl + "/check",
+        formId = "panelForm",
+        args;
+    $(function () {
+        $("#" + formId).validate({
+            rules: {
+                typeCode: {
+                    required: true,
+                    dishCodeRule: true,
+                    remote: {
+                        type: "POST",
+                        url: checkUrl, /* 动态比较地址  */
+                        dataType: "json",
+                        data: {
+                            id: function () {
+                                return $("#id").val();
+                            },
+                            typeCode: function () {
+                                return $.trim($("#typeCode").val());
+                            }
+                        }
+                    }
+                },
+                name: {
+                    required: true,
+                    isIllegalCharacter: true,
+                    remote: {
+                        type: "POST",
+                        url: ctxPath +'/dish/type/checkTypeName', /* 动态比较地址  */
+                        dataType: "json",
+                        data: {
+                            id: function () {
+                                return $("#id").val();
+                            },
+                            name: function () {
+                                return $.trim($("#name").val());
+                            }
+                        }
+                    }
+                },
+                aliasName: {
+                    isIllegalCharacter: true
+                }
+            },
+            messages: {
+                typeCode: {
+                    required: "编码不能为空",
+                    remote: "此编码已存在，请检核！"
+                },
+                name: {
+                    required: "类别名称不能为空",
+                    remote: "此类别名称已存在，请检核！"
+                }
+            },
+            submitHandler: function () {
+                $('#btnSave').addClass('btn-disabled');
+                bkeruyun.showLayer();
+                args.btn.addClass('btn-disabled');
+                $.submitWithAjax(args);
+            }
+        });
+    });
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
