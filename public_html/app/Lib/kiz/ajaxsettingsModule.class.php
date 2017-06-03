@@ -486,4 +486,114 @@ class ajaxSettingsModule extends KizBaseModule
         echo json_encode($return);
         exit;
     }
+
+    /**
+     * 新增大类
+     */
+    public function dish_category_type_add_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*活出参数*/
+        $location_id = $account_info['slid'];
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $is_effect = 1;
+        $id = intval($_REQUEST['id']);
+
+
+        $data = array();
+        $data['name'] = $name;
+        $data['sort'] = $sort;
+        $data['wcategory'] = 0;
+        $data['pid'] = 0;
+        $data['wlevel'] = 0;
+        $data['is_effect'] = $is_effect;
+        $data['supplier_id'] = $supplier_id;
+        $data['location_id'] = $location_id;
+        if($id > 0){
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$data,"update","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }else{
+            /*业务逻辑部分*/
+//var_dump($data);die;
+            if($GLOBALS['db']->getOne("select count(*) from ".DB_PREFIX."dc_supplier_menu_cate where name='".$name."' and location_id = ".$location_id)){
+                $return['success'] = false;
+                $return['message'] = "大类名称重复";
+                echo json_encode($return);
+                exit;
+            }
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_supplier_menu_cate",$data)){
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "添加失败";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 删除大类
+     */
+    public function dish_category_deleteType(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*活出参数*/
+        $location_id = $account_info['slid'];
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $is_effect = 1;
+        $id = intval($_REQUEST['id']);
+
+
+        $data = array();
+        $data['name'] = $name;
+        $data['sort'] = $sort;
+        $data['wcategory'] = 0;
+        $data['pid'] = 0;
+        $data['wlevel'] = 0;
+        $data['is_effect'] = $is_effect;
+        $data['supplier_id'] = $supplier_id;
+        $data['location_id'] = $location_id;
+        if($id > 0){
+            $row = parent::goods_category_two_ajax($id);
+            if(count($row) > 0){
+                $return['success'] = false;
+                $return['message'] = "大类下有中类，删除失败";
+
+            }else{
+
+                if ($GLOBALS['db']->query("delete from  fanwe_dc_supplier_menu_cate where id=".$id)){
+                    $return['success'] = true;
+                    $return['message'] = "删除成功";
+                }else{
+                    $return['success'] = false;
+                    $return['message'] = "删除失败";
+                }
+            }
+
+
+        }else{
+
+            $return['success'] = false;
+            $return['message'] = "删除失败";
+        }
+
+        echo json_encode($return);
+        exit;
+
+    }
 }

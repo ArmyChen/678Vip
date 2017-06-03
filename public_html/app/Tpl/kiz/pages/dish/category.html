@@ -136,7 +136,7 @@
         });
         /* 点击增加类触发事件 */
         $("#addtype").on("click",function(){
-            location.href=ctx2Path+"/dish/type/addtype";
+            location.href=dishPath+"&act=dish_category_type_add";
         });
         /* 点击编辑触发事件 */
         $("#edit-type").on("click",function(){
@@ -258,7 +258,7 @@
     function checkForDel(id){
         $.ajax({
             type : "POST",
-            url : "dish/type/checkBeforeDelete",
+            url : ctx2Path + "&act=dish_category_checkBeforeDelete",
             data : "id="+id+ "&random=" + Math.random(),
             dataType : "json",
             success : function(data) {
@@ -283,7 +283,7 @@
     function delType(id){
         $.ajax({
             type : "POST",
-            url : "dish/type/delete",
+            url :  ctx2Path + "&act=dish_category_deleteType",
             data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
             dataType : "json",
             success : function(data) {
@@ -304,7 +304,7 @@
         if(status==1){
             $.ajax({
                 type : "POST",
-                url : "dish/type/changebeforeoff",
+                url : ctx2Path + "&act=dish_category_changebeforeoff",
                 data : "id="+id+ "&random=" + Math.random(),
                 dataType : "json",
                 success : function(data) {
@@ -328,7 +328,7 @@
         }else{
             $.ajax({
                 type : "POST",
-                url : "dish/type/get",
+                url :  ctx2Path + "&act=dish_category_get",
                 data : "id="+id+ "&random=" + Math.random(),
                 dataType : "json",
                 success : function(data) {
@@ -345,7 +345,7 @@
     function change(id,status){
         $.ajax({
             type : "POST",
-            url : "dish/type/change",
+            url :  ctx2Path + "&act=dish_category_change",
             data : "id="+id+"&enabledFlag="+status+"&random=" + Math.random(),
             dataType : "json",
             success : function(data) {
@@ -358,7 +358,7 @@
                     }
                     bkeruyun.promptMessage(str,{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
 
-                    setTimeout(function(){location.href=ctx2Path+"/dish/type/list"; }, 3000);
+                    setTimeout(function(){location.href=ctx2Path+"&act=dish_category"; }, 3000);
                 }else{
                     bkeruyun.promptMessage(data.errorMessage||"更新失败，请刷新后重试！");
 //				Message.alert({title: "提示",describe: data.errorMessage||"更新失败，请刷新后重试！"});
@@ -371,7 +371,7 @@
 
     }
     function edit(id){
-        location.href=ctx2Path+"/dish/type/edit?id="+id;
+        location.href=dishPath+"&act=dish&id="+id;
     }
 </script>
 {include file="inc/footer.html"}

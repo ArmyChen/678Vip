@@ -6,11 +6,10 @@
         <h1>新增商品大类</h1>
         <!--<p><span>这是一个测试用的营销方案</span>（2014-3-1 至 2014-5-30） - 满300减20优惠券 - 当前 <span>178</span> 人可以参加此营销</p>-->
         <div class="btn-wrap pull-right tar">
-
-            <a class="js-go-on btn-link ml10" id="btn-create-new">继续创建</a>
-
-            <a class="js-save btn-link ml10" id="btnSave">保存</a>
-            <a class="js-back btn-link ml10" id="btnCancel">取消</a>
+            <a class="btn-link ml10" id="btnSave" function="$.doSave"
+               args="{formId:'panelForm',gridId:'grid',url:'/kiz.php?ctl=ajaxSettings&act=dish_category_type_add_ajax',
+                   customValidator:'$.saveOrUpdateValidator',submitCallback:'$.saveCallback',type:'post'}">保存</a>
+            <a class="js-back btn-link ml10" id="btnCancel" href="javascript:history.back()">取消</a>
         </div>
     </div>
 </div>
@@ -60,74 +59,19 @@
         </div>
     </div>
 </div>
-
 <script>
-    var baseUrl = "/merchandise/dish/type",
-        saveOrUpdateUrl = baseUrl + "/save",
-        listUrl = baseUrl + "/list",
-        checkUrl = baseUrl + "/check",
-        formId = "panelForm",
-        args;
-    $(function () {
-        $("#" + formId).validate({
-            rules: {
-                typeCode: {
-                    required: true,
-                    dishCodeRule: true,
-                    remote: {
-                        type: "POST",
-                        url: checkUrl, /* 动态比较地址  */
-                        dataType: "json",
-                        data: {
-                            id: function () {
-                                return $("#id").val();
-                            },
-                            typeCode: function () {
-                                return $.trim($("#typeCode").val());
-                            }
-                        }
-                    }
-                },
-                name: {
-                    required: true,
-                    isIllegalCharacter: true,
-                    remote: {
-                        type: "POST",
-                        url: ctxPath +'/dish/type/checkTypeName', /* 动态比较地址  */
-                        dataType: "json",
-                        data: {
-                            id: function () {
-                                return $("#id").val();
-                            },
-                            name: function () {
-                                return $.trim($("#name").val());
-                            }
-                        }
-                    }
-                },
-                aliasName: {
-                    isIllegalCharacter: true
-                }
-            },
-            messages: {
-                typeCode: {
-                    required: "编码不能为空",
-                    remote: "此编码已存在，请检核！"
-                },
-                name: {
-                    required: "类别名称不能为空",
-                    remote: "此类别名称已存在，请检核！"
-                }
-            },
-            submitHandler: function () {
-                $('#btnSave').addClass('btn-disabled');
-                bkeruyun.showLayer();
-                args.btn.addClass('btn-disabled');
-                $.submitWithAjax(args);
-            }
-        });
-    });
-
+    //保存回调
+    $.saveCallback = function (args) {
+        var rs = args.result;
+        if (rs.success) {
+            $.layerMsg(rs.message, true, {
+                end:function(){
+                    window.location.href = dishPath + "&act=dish_cookingway";
+                },shade: 0.3});
+        } else {
+            $.layerMsg(rs.message, true,{shade: 0.3});
+        }
+    };
 </script>
 {include file="inc/footer.html"}
 

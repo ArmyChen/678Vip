@@ -140,7 +140,18 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "商品类别");
         $GLOBALS['tmpl']->display("pages/dish/category.html");
     }
-
+    /**
+     * 商品分类新增
+     */
+    public function dish_category_type_add(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增商品大类");
+        $GLOBALS['tmpl']->display("pages/dish/categoryAdd.html");
+    }
     public function dish_list()
     {
         init_app_page();
@@ -151,6 +162,8 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "商品管理");
         $GLOBALS['tmpl']->display("pages/dish/list.html");
     }
+
+
 }
 
 ?>
