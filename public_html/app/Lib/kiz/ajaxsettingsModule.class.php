@@ -441,4 +441,49 @@ class ajaxSettingsModule extends KizBaseModule
         exit;
 
     }
+
+    public function dish_category_list_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['page_pageSize'] ? $_REQUEST['page_pageSize'] : 20;
+        $page = intval($_REQUEST['page_currentPage']);
+        $parentId = intval($_REQUEST['parentId']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $rows = parent::goods_category_two_ajax($parentId,$limit);
+        $rows2 = parent::goods_category_two_ajax($parentId);
+
+        $records = count($rows2);
+        $data = [];
+        foreach ($rows as $k=>$row) {
+            $data[$k]['typeCode'] = $row['id'];
+            $data[$k]['brandIdenty'] = $row['id'];
+            $data[$k]['name'] = $row['name'];
+            $data[$k]['parentId'] = $row['wcategory'];
+            $data[$k]['sort'] = $row['sort'];
+            $data[$k]['statusFlag'] = $row['is_effect'];
+            $data[$k]['enabledFlag'] = $row['is_effect'];
+
+        }
+//var_dump($rows)
+        $return['brandId'] = $parentId;
+        $return['currentPage'] = $page;
+        $return['pageSize'] = $page_size;
+        $return['startRow'] = 0;
+        $return['subRows'] = 0;
+        $return['totalPage'] = ceil($records / $page_size);
+        $return['totalRows'] = $records;
+        if ($records > 0) {
+//            $return['items'] = $rows;
+            $return['items'] = $data;
+        } else {
+            $return['items'] = [];
+        }
+        echo json_encode($return);
+        exit;
+    }
 }

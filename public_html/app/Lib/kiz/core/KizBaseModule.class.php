@@ -691,6 +691,52 @@ class KizBaseModule{
         $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_unit_cate where slid=".$slid);
         return $pandianlist;
     }
+
+    /**
+     * 商品大类ajax
+     */
+    public function goods_category_one_ajax($id){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $_REQUEST['id']?intval($_REQUEST['id']):$account_info['slid'];
+        if($id > 0){
+            $sortconditions = " where $id = ".$id; // 查询条件
+            $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+            $wmenulist = $GLOBALS['db']->getRow($sqlsort);
+        }else{
+            //分类
+            $sortconditions = " where is_effect = 1 and  wlevel=0 and supplier_id = ".$supplier_id; // 查询条件
+            $sortconditions .= " and location_id=".$slid;
+            $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+            $sqlsort.=$sortconditions. " order by sort desc";
+            $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+        }
+
+
+        return $wmenulist;
+    }
+
+    /**
+     * 商品中类ajax
+     */
+    public function goods_category_two_ajax($parent_id,$limit = ''){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid =$account_info['slid'];
+        //分类
+        $sortconditions = " where is_effect = 1 and  wlevel=1 and wcategory=$parent_id and supplier_id = ".$supplier_id; // 查询条件
+        $sortconditions .= " and location_id=".$slid;
+        $sqlsort = " select *,id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate ";
+
+        $sqlsort.=$sortconditions. " order by sort desc";
+        if($limit){
+            $sqlsort .= " limit $limit";
+        }
+//echo $sqlsort;
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+//var_dump($wmenulist);
+        return $wmenulist;
+    }
 }
 
 ?>

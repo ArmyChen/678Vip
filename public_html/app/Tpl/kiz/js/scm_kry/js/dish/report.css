@@ -365,7 +365,7 @@
 .tab-white-gray > li {
     display: inline-block;
     float: left;
-    /*width: 116px;*/
+    width: auto !important;
     height: 41px;
     line-height: 41px;
     text-align: center;

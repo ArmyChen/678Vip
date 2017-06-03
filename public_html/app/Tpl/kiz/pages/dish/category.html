@@ -19,53 +19,17 @@
             <ul id="type-titel" class="tab-white-gray">
                 <!-- 类别标签状态 data-status="disabled"为不可用，操作时设置为启用，data-status="available"为可用，操作时设置为停用-->
 
+                {foreach from=$r item=item}
+                <li
 
-                <li data-id="136633" data-status="available" data-flag="1"><em title="茶饮">茶饮</em>&nbsp;<span>(9)</span></li>
+                        class="current"
 
-
-
-                <li data-id="215623" data-status="available" data-flag="1"><em title="CC">CC</em>&nbsp;<span>(1)</span></li>
-
-
-
-                <li data-id="219441" data-status="available" data-flag="1"><em title="川菜">川菜</em>&nbsp;<span>(2)</span></li>
-
-
-
-                <li data-id="227277" data-status="available" data-flag="1"><em title="lycp">lycp</em>&nbsp;<span>(1)</span></li>
-
-
-
-                <li data-id="232776" data-status="available" data-flag="1"><em title="饮水">饮水</em>&nbsp;<span>(2)</span></li>
-
-
-
-                <li data-id="244512" data-status="available" data-flag="1"><em title="coat">coat</em>&nbsp;<span>(2)</span></li>
-
-
-
-                <li data-id="262423" data-status="available" data-flag="1"><em title="冰淇淋">冰淇淋</em>&nbsp;<span>(2)</span></li>
-
-
-
-                <li data-id="262424" data-status="available" data-flag="1"><em title="冰沙">冰沙</em>&nbsp;<span>(0)</span></li>
-
-
-
-                <li data-id="268193" data-status="available" data-flag="1"><em title="锅底">锅底</em>&nbsp;<span>(1)</span></li>
-
-
-
-                <li data-id="268194" data-status="available" data-flag="1"><em title="配菜">配菜</em>&nbsp;<span>(2)</span></li>
-
-
-
-                <li data-id="268208" data-status="available" data-flag="1"><em title="龙虾系列">龙虾系列</em>&nbsp;<span>(1)</span></li>
-
-
-
-                <li data-id="269720" data-status="available" data-flag="1"><em title="酸奶类">酸奶类</em>&nbsp;<span>(3)</span></li>
-
+                        data-id="{$item.id}"
+                        data-status="{if $item.is_effect eq 1}available{else}disabled{/if}">
+                    <em title="{$item.name}">{$item.name}</em>
+                    &nbsp;<span>(<span class="count-num">{$item.flavorCount}</span>)</span>
+                </li>
+                {/foreach}
 
             </ul>
         </div>
@@ -94,8 +58,8 @@
                     <th width="100">商品中类编码</th>
                     <th width="200">商品中类名称</th>
                     <th width="100">排序</th>
-                    <th width="150">创建时间</th>
-                    <th width="150">最后修改时间</th>
+                    <!--<th width="150">创建时间</th>-->
+                    <!--<th width="150">最后修改时间</th>-->
                     <th width="100">状态</th>
                     <th width="100">操作</th>
                 </tr>
@@ -164,7 +128,7 @@
                 if (flag==2) {
                     bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
                 }else{
-                    location.href=ctxPath+"/dish/type/addinclass？parentId="+$("#type-titel > li.current").attr("data-id");
+                    location.href=ctx2Path+"/dish/type/addinclass？parentId="+$("#type-titel > li.current").attr("data-id");
                 }
             }else{
                 bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');
@@ -172,7 +136,7 @@
         });
         /* 点击增加类触发事件 */
         $("#addtype").on("click",function(){
-            location.href=ctxPath+"/dish/type/addtype";
+            location.href=ctx2Path+"/dish/type/addtype";
         });
         /* 点击编辑触发事件 */
         $("#edit-type").on("click",function(){
@@ -182,7 +146,7 @@
                 if(flag==2){
                     bkeruyun.promptMessage('当前商品大类停用状态，请先启用在操作!');
                 }else{
-                    location.href=ctxPath+"/dish/type/edit?id="+$("#type-titel > li.current").attr("data-id");
+                    location.href=ctx2Path+"/dish/type/edit?id="+$("#type-titel > li.current").attr("data-id");
                 }
             }else{bkeruyun.promptMessage('当前没有任何商品大类，请先创建大类!');}
         });
@@ -234,12 +198,12 @@
         }
         $.ajax({
             type: "POST",
-            url: ctxPath+ "/dish/type/query",
+            url: ctx2Path+ "&act=dish_category_list_ajax",
             data:parm+"&"+pageQuery.getPageParameter(true),
             dataType: "json",
             contentType: "application/x-www-form-urlencoded;charset=UTF-8",
             cache: false,
-//            beforeSend:bkeruyun.showLoading,
+            beforeSend:bkeruyun.showLoading,
             success: function(data){
                 bkeruyun.hideLoading();
                 if (data.totalRows>0) {
@@ -265,12 +229,17 @@
                                 img+=" icon-unlock-disable";
                             }
                         }
-                        html+='<tr><td  style="word-wrap:break-word;">'+inclass.typeCode+'</td><td style="word-wrap:break-word;">'+inclass.name+'</td><td style="word-wrap:break-word;">'+inclass.sort+'</td>'
-                            +'<td style="word-wrap:break-word;">'+inclass.serverCreateTime+'</td><td style="word-wrap:break-word;">'+inclass.serverUpdateTime+'</td><td style="word-wrap:break-word;">'+status+'</td>'
-                            +'<td  style="word-wrap:break-word;"><a href="javascript:void(0)" title="编辑"  class="icon-editor'+edit+'" data-id="'+inclass.id+'">编辑</a>'
-                            +'<a href="javascript:void(0)" title="'+show+'" data-status="'+inclass.enabledFlag+'" data-id="'+inclass.id+'" class="'+img+'">'+show+'</a>'
-                            +'<a href="javascript:void(0)" title="删除" data-id="'+inclass.id+'" class="icon-delete">删除</a>'
-                            +'</td></tr>';
+                        html += '<tr><td  style="word-wrap:break-word;">' + inclass.typeCode + '</td>' +
+                            '<td style="word-wrap:break-word;">' + inclass.name + '</td>' +
+                            '<td style="word-wrap:break-word;">' + inclass.sort + '</td>'+
+//                            + '<td style="word-wrap:break-word;">' + inclass.serverCreateTime + '</td>' +
+//                            '<td style="word-wrap:break-word;">' + inclass.serverUpdateTime + '</td>' +
+                            '<td style="word-wrap:break-word;">' + status + '</td>'
+                            + '<td  style="word-wrap:break-word;">' +
+                            '<a href="javascript:void(0)" title="编辑"  class="icon-editor' + edit + '" data-id="' + inclass.id + '">编辑</a>'
+                            + '<a href="javascript:void(0)" title="' + show + '" data-status="' + inclass.enabledFlag + '" data-id="' + inclass.id + '" class="' + img + '">' + show + '</a>'
+                            + '<a href="javascript:void(0)" title="删除" data-id="' + inclass.id + '" class="icon-delete">删除</a>'
+                            + '</td></tr>';
                     }
                     $("#tbody-1").html(html);
                     pageQuery.afterQuery();
@@ -320,7 +289,7 @@
             success : function(data) {
                 if (data == true) {
                     bkeruyun.promptMessage("删除成功!",{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
-                    setTimeout(function(){location.href=ctxPath+"/dish/type/list"; }, 3000);
+                    setTimeout(function(){location.href=ctx2Path+"/dish/type/list"; }, 3000);
                 }else{
                     bkeruyun.promptMessage(data.errorMessage||"删除失败，请刷新后重试！");
                 }
@@ -389,7 +358,7 @@
                     }
                     bkeruyun.promptMessage(str,{left:'55%',marginLeft:'-200px',top:'20%',marginTop:'0px'});
 
-                    setTimeout(function(){location.href=ctxPath+"/dish/type/list"; }, 3000);
+                    setTimeout(function(){location.href=ctx2Path+"/dish/type/list"; }, 3000);
                 }else{
                     bkeruyun.promptMessage(data.errorMessage||"更新失败，请刷新后重试！");
 //				Message.alert({title: "提示",describe: data.errorMessage||"更新失败，请刷新后重试！"});
@@ -402,7 +371,7 @@
 
     }
     function edit(id){
-        location.href=ctxPath+"/dish/type/edit?id="+id;
+        location.href=ctx2Path+"/dish/type/edit?id="+id;
     }
 </script>
 {include file="inc/footer.html"}

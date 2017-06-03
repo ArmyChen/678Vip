@@ -126,7 +126,17 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $r =  parent::goods_category_one_ajax($id);
+        $taste = [];
+        foreach ($r as $k=>$v) {
+            $taste[$k]['id'] = $v['id'];
+            $taste[$k]['name'] = $v['name'];
+            $taste[$k]['is_effect'] = $v['is_effect'];
+            $taste[$k]['flavorCount'] = count(parent::goods_category_two_ajax($v['id']));
+        }
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("r",$taste);
         $GLOBALS['tmpl']->assign("page_title", "商品类别");
         $GLOBALS['tmpl']->display("pages/dish/category.html");
     }
