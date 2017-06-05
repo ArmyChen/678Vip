@@ -12,6 +12,25 @@ class dishModule extends KizBaseModule
         global_run();
 
         parent::init();
+        $kcnx=array(
+//            "0"=>"默认",
+            "1"=>"现制商品",
+            "2"=>"预制商品",
+            "3"=>"外购商品",
+//            "4"=>"原物料",
+//            "6"=>"半成品",
+
+        );
+        $index_kcnx=array(
+            "0"=>"暂无",
+            "1"=>"现制商品",
+            "2"=>"预制商品",
+            "3"=>"外购商品",
+            "4"=>"原物料",
+            "6"=>"半成品",
+        );
+        $this->kcnx=$kcnx;
+        $this->index_kcnx=$index_kcnx;
 //        $this->check_auth();
     }
     #供应商列表
@@ -206,7 +225,14 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $sqlsort = " select id,name,is_effect,sort,wcategory,wcategory as pid,wlevel from " . DB_PREFIX . "dc_supplier_menu_cate where wlevel<4 and is_effect=0 and location_id =".$slid ;
+
+        $wmenulist = $GLOBALS['db']->getAll($sqlsort);
+
+        $listsort = toFormatTree($wmenulist,"name");
         /* 系统默认 */
+        $GLOBALS['tmpl']->assign("listsort", $listsort);
+        $GLOBALS['tmpl']->assign('kcnx',$this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "商品管理");
         $GLOBALS['tmpl']->display("pages/dish/list.html");
     }

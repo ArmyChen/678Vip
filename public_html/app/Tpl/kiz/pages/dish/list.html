@@ -1,0 +1,1348 @@
+
+{include file="inc/header.html"}
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block">
+        <h1>商品列表</h1>
+        <div class="btn-wrap pull-right tar">
+            <!--<a class="btn-link ml10" href="#" onfocus="this.blur()" id="btn-export">批量导出商品</a>-->
+            <!--<a class="btn-link" onclick="javascript:batchImportDish()">批量导入商品</a>-->
+            <!--<a class="btn-link" onclick="javascript:batchMediaDish()">批量导入图片</a>-->
+            <!--<a href="#" class="btn-link ml10" id="btnUpdate">批量修改</a>-->
+
+            <!--<a class="btn-link ml10" id="btnDelete">批量删除</a>-->
+
+            <a class="btn-link ml10" href="/kiz.php?ctl=dish&act=addDish">创建</a>
+        </div>
+    </div>
+
+</div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form id="queryForm" action="#" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column drop-down-search multi-select">
+                <h2>模糊查询</h2>
+                <div class="search-box">
+                    <input type="text" name="skuCodeOrName" id="skuCodeOrName" class="form-control" data-format="skuName" placeholder="商品条码/名称/简码" maxlength="64">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <input type="text" class="hidden" />
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+            <!-- 商品分类start -->
+            <div class="aside-column multi-select">
+                <h2>商品分类</h2>
+
+                <!--<div class="select-control"><em></em></div>-->
+                <div>
+                    <select id="skuTypeId" name="skuTypeId">
+                        <option value="0" selected="selected">请选择</option>
+                        {foreach from=$listsort item=item}
+                        <option value="{$item.id}">{$item.title_show}</option>
+                        {/foreach}
+                    </select>
+                    <!--<ul class="multi-select-items">-->
+                    <!--<li>-->
+                    <!--<label class="checkbox" for="sku-type-all">-->
+                    <!--<span></span>-->
+                    <!--<input type="checkbox" id="sku-type-all">全部-->
+                    <!--</label>-->
+                    <!--</li>-->
+
+
+                    <!--{foreach from=$listsort item=item}-->
+                    <!--<li>-->
+                    <!--<label class="checkbox" for="sku-type-1">-->
+                    <!--<span></span>-->
+                    <!--<input type="checkbox" name="skuTypes" id="sku-type-1"-->
+                    <!--value="{$item.id}" data-text="{$item.title_show}">{$item.title_show}-->
+                    <!--</label></li>-->
+
+                    <!--{/foreach}-->
+
+                    <!--</ul>-->
+                </div>
+                <input type="hidden" value="" />
+            </div>
+            <!-- 商品分类end -->
+
+            <!-- 库存类型start -->
+            <div class="aside-column multi-select">
+                <h2>库存类型</h2>
+                <select id="wmType" name="wmType">
+                    <option value="-1" selected="selected">请选择</option>
+                    {foreach from=$kcnx item=item key=key}
+                    {if $key gt -1}
+                    <option value="{$key}">{$item}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+                <input type="hidden" value="" />
+            </div>
+            <a class="link undo-all" id="undo-all">重置所有选择</a> <a
+                class="btn-blue btn-search" role="button" id="goods-upload">查 询</a>
+        </form>
+    </div>
+    <!-- 左栏 end -->
+    <!-- 右栏 start -->
+    <div class="main">
+        <div class="panel" style="margin-bottom: 0;">
+            <div class="panel-body" style="padding: 0 20px;">
+                <table id="grid"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+<!-- 停用提示 start -->
+<div class="panel-popover" id="popover-clock"
+     style="width: 610px; min-height: 246px; margin-left: -305px; margin-top: -123px;display:none;">
+    <div class="panel-popover-heading">
+        <div class="panel-popover-title">提示</div>
+        <!-- <button name="btnclose" type="button" class="close" aria-hidden="true">×</button> -->
+    </div>
+    <div class="panel-popover-body">
+        <p class="text-center" id="clockMsg"></p>
+        <div class="btn-wrap text-center"><a class="btn-white btn-cancel mr30" role="button" id="btn">确 认</a><a
+                class="btn-white btn-cancel mr30" role="button" id="Cancel" hidden="false">取消</a></div>
+        <div class="text-right"><a href="#" id="viewDtlBtn" hidden="true">查看详情 ></a></div>
+        <div id="viewDetail" style="display:none;">
+            <h2></h2>
+            <table width="100%">
+                <tbody id="detail"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- 停用提示 end -->
+
+<!-- update-Modal start -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close cancelDelete" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    批量修改
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-item">
+                    <h3 class="panel-title">基础数据</h3>
+                    <div class="clearfix">
+                        <div class="pull-left" style="padding-left: 10px;line-height: 34px;">
+                            商品分类
+                        </div>
+
+                        <div class="drop-down-search multi-select w220 pull-left" id="dishTypeContainer">
+                            <div class="select-control">
+                                <em data-save-input="dishTypeId">商品分类</em>
+                                <input type="hidden" name="dishTypeId" id="dishTypeId">
+                            </div>
+                            <div class="multi-select-con" style="display: none;top:31px;">
+                                <div class="search-box">
+                                    <input type="text" class="form-control"
+                                           placeholder="请输入类别编码/名称"> <span class="icon-search">搜索</span>
+                                </div>
+                                <ul class="highlighted-list">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="pull-left" id="dishTypeTip" style="color: red;line-height: 34px;"></div>
+                    </div>
+                </div>
+                <div class="modal-item">
+                    <h3 class="panel-title">销售设置</h3>
+                    <div>
+                        <div class="operation">
+                            <label id="single" class="checkbox checkbox-check">
+                                <span></span>
+                                <input type="checkbox" checked="checked">
+                                允许单点
+                            </label>
+                            <label id="manual" class="checkbox checkbox-check">
+                                <span></span>
+                                <input type="checkbox" checked="checked">
+                                允许手动折扣
+                            </label>
+                            <label id="isOrder" class="checkbox checkbox-check">
+                                <span></span>
+                                <input type="checkbox" checked="checked">
+                                允许堂食
+                            </label>
+                        </div>
+                        <div class="operation">
+                            <label id="sent" class="checkbox checkbox-check">
+                                <span></span>
+                                <input type="checkbox" checked="checked">
+                                允许外送
+                            </label>
+                            <label id="change" class="checkbox checkbox-check">
+                                <span></span>
+                                <input type="checkbox" checked="checked">
+                                允许变价
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-item">
+                    <h3 class="panel-title">关联设置</h3>
+                    <div id="revelanceSettingTabsWrapper"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="update" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- update-Modal start -->
+
+
+<!-- delete-Modal start -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close cancelDelete" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    温馨提示
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h3 id="deleteTip" class="text-center">请至少选择一个商品!</h3>
+                <input id="deleteIds" type="hidden">
+            </div>
+            <div class="modal-footer">
+                <button id="delete" type="button" class="btn btn-primary hidden" data-dismiss="modal">确定</button>
+                <button id="deleteSure" type="button" class="btn btn-primary hidden">确定</button>
+                <button id="cancelDelete" type="button" class="btn btn-default hidden cancelDelete"
+                        data-dismiss="modal">取消
+                </button>
+                <a id="showDeleteTable" href="#" class="show-delete-table">隐藏详情 ></a>
+            </div>
+            <div id="deleteTable" class="hidden delete-table">
+                <table class="table table-fixed text-center">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete-Modal end -->
+<div class="fixed-ad" style="position: fixed; bottom: 50px;right: 5px;">
+    <button onclick="$(this).parent().hide();" type="button" class="close" aria-hidden="true">×</button>
+    <img src="/merchandise/themes/style/img/ad/on-mobile-code-dish.png">
+</div>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/template.min.js"></script>
+<style>
+    #collapseDetail{
+        padding:10px;
+        border-top: 1px solid #ddd;
+    }
+    .delete-list-wrapper table tbody{
+        color: #ff0000;
+        width: 100%;
+    }
+    .delete-list-wrapper table {
+        width: 100%;
+    }
+</style>
+
+<script type="text/html" id="tmp-revelanceSettingTabs">
+    <div class="js-revelance-setting">
+        <ul class="tab-white-gray goodsConfig-tab">
+            <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
+            </li>
+            <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
+            <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+            <li data-show="goodsPracticeCon"><em>做法</em></li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/dishmanageexport.js"></script>
+<script type="text/javascript">
+    var baseUrl = ctx2Path,
+        queryUrl = baseUrl + "&act=dish_queryDishes",
+        editorUrl = baseUrl + "/updateDish",
+        lockUrl = baseUrl + "/lockDish",
+        unlockUrl = baseUrl + "/unlockDish";
+    var batchImportBaseUrl = "/merchandise/dish/importDish",
+        batchImportDishUrl = batchImportBaseUrl + "/importDishView",
+        batchMediaDishUrl = batchImportBaseUrl + "/importDishMediaView",
+        itemsOfSelectedRows = [];
+
+    function batchImportDish() {
+        location.href = batchImportDishUrl;
+    };
+
+    function batchMediaDish() {
+        //1、判断是否选中菜品，如若没有选择给予有好提示，选中后提交选中的菜品
+        if (itemsOfSelectedRows == null || itemsOfSelectedRows.length == 0) {
+            Message.alert({
+                title: "温馨提示",
+                describe: "请选择至少一个菜品!"
+            }, Message.display);
+        } else if (itemsOfSelectedRows.length > 20) {
+            Message.alert({
+                title: "温馨提示",
+                describe: "对不起，一次最多批量上传20张图片"
+            }, Message.display);
+        } else {
+            params = [];
+            for (var i = 0; i < itemsOfSelectedRows.length; i++) {
+                var selectedRow = itemsOfSelectedRows[i];
+                var id = selectedRow.substring(0, selectedRow.indexOf(','));
+                var name = selectedRow.substring(selectedRow.indexOf(',') + 1);
+                if (name.indexOf('>') > 0) {
+                    name = name.split('>')[1];
+                }
+                params.push({
+                    "id": id,
+                    "name": name
+                })
+            }
+            var form = $("<form action = '" + batchMediaDishUrl + "' method ='post'></form>");
+            form.appendTo("body");
+            var input = $("<input type='text' name='params'/>");
+            input.attr('value', JSON.stringify(params));
+            form.append(input);
+            form.submit();
+        }
+    };
+
+    $(function() {
+        var opts = {
+            urlRoot : "/merchandise/dish/manage",
+            commandType :0
+        };
+        dishmanageexport._init(opts);
+        $.show = function(rowData) {
+            return rowData.status == 1;
+        };
+        $.showUnlock = function(rowData) {
+            return rowData.status == 2 ;
+        };
+        $.extraRender = function(rowData) {
+            var hasRight = true;
+            if(3 == rowData.type){
+                hasRight = false;
+            }
+            if (hasRight) {
+                return "normal";
+            }
+            return "disabled";
+        };
+        $.setBtnDisabled = function(status) {
+            var setBtn = $("#set-add > li:eq(1)").find("ul > li:eq(1)")
+                .find("a");
+            if (status === "available") {
+                setBtn.text("停用");
+            } else if (status === "disabled") {
+                setBtn.text("启用");
+            }
+        };
+        //停用 查看详情
+        $("#viewDtlBtn").on("click", function() {
+            if ($("#viewDetail").is(":hidden")) {
+                $("#viewDetail").show();
+                $(this).text('隐藏详情 >');
+            } else {
+                $("#viewDetail").hide();
+                $(this).text('查看详情 >');
+            }
+        });
+
+        $("#pagesize").val($(".ui-pg-input").val());
+
+        //批量修改
+        $('#btnUpdate').on('click', function() {
+            var ids = $('#grid').jqGrid('getGridParam', 'selarrrow');
+            if (ids.length < 1) {
+                bkeruyun.promptMessage('请至少选择一个商品!');
+                return;
+            }
+            //批量修改时,checkbox默认选项为勾选
+            $('#updateModal').find('.modal-body .operation .checkbox').addClass('checkbox-check');
+            $('#updateModal').find('.modal-body .operation .checkbox input').attr('checked','checked');
+
+            extra.rendModifySelectedDishes(function(){
+                $('#updateModal').find('.modal-body .switch-holder input[type=checkbox]:checked').each(function(){
+                    $(this).removeAttr('checked');
+                    var target = $(this).attr('data-target');
+                    $(target).removeClass('hidden');
+                });
+
+                $('#dishTypeId').text('');
+                $('#dishTabs').find('input[type=checkbox]:checked').each(function(){
+                    $(this).removeAttr('checked');
+                    $(this).parent().removeClass('checkbox-check');
+                });
+                $('#updateModal').modal('show');
+            });
+        });
+
+        //修改
+        $('#update').on('click', function() {
+            var dishTypeId = $('#dishTypeId').val();
+            if(''==dishTypeId){
+                $('#dishTypeTip').text('请选择 商品分类');
+                return;
+            }
+            bkeruyun.showLoading();
+            var ids = $('#grid').jqGrid('getGridParam', 'selarrrow');
+            var single = 2,
+                manual = 2,
+                sent = 2,
+                change = 2,
+                order=2;
+            if ($('#single').hasClass('checkbox-check')) {
+                single = 1;
+            }
+            if ($('#manual').hasClass('checkbox-check')) {
+                manual = 1;
+            }
+            if ($('#sent').hasClass('checkbox-check')) {
+                sent = 1;
+            }
+            if ($('#change').hasClass('checkbox-check')) {
+                change = 1;
+            }
+            if ($('#isOrder').hasClass('checkbox-check')) {
+                order = 1;
+            }
+            var $container =  $('#updateModal');
+            var condition = {
+                single: single,
+                discount: manual,
+                outside: sent,
+                change: change,
+                isOrder: order,
+                ids: ids,
+                dishTypeId:dishTypeId,
+                labelIds:extra.getCheckedBoxObj($container,'label'),
+                memoIds:extra.getCheckedBoxObj($container,'memo'),
+                condimentIds:extra.getCheckedBoxObj($container,'condiment'),
+                dishBrandProperties:[],
+                isCleanLabel: $('#labelSwitch').attr('checked') ? true:false,//是否清除标签
+                isCleanMemo:  $('#memoSwitch').attr('checked') ? true:false,//是否清除备注
+                isCleanCondiment:  $('#condimentSwitch').attr('checked') ? true:false,//是否清除配料
+                isCleanCookingWay:  $('#cookingWayTabsSwitch').attr('checked') ? true:false//是否清除做法
+            };
+            var cookingWayIds = [];
+            $container.find('#cookingWayTabs .goodsList input[type=checkbox]:checked').each(function(){
+                var obj = {
+                    id:this.value,
+                    propertyKind:$(this).attr('data-propertyKind'),
+                    propertyTypeId:$(this).attr('data-propertyTypeId')
+                }
+                cookingWayIds.push(obj);
+            });
+            condition.cookingWayIds = cookingWayIds;
+
+            var result = extra.checkUpdateRevelanceSettingCondition(condition);
+            for(var i=0; i<ids.length; i++){
+                var dishName = $("#grid").jqGrid('getRowData', ids[i]).dishName;
+                condition.dishBrandProperties.push({dishId:ids[i],dishName:dishName});
+            }
+            $('#updateModal').modal('hide');
+            bkeruyun.showLoading();
+            $.ajax({
+                type:'POST',
+                url:'/merchandise/dish/shop/manage/bu_db',
+                data:JSON.stringify(condition),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data) {
+                    bkeruyun.hideLoading();
+                    if (data) {
+                        bkeruyun.promptMessage('修改成功！');
+                        $('#grid').refresh();
+                    }else{
+                        bkeruyun.promptMessage('修改失败！');
+                    }
+                }
+            })
+            /*
+             $.post('/merchandise/dish/shop/manage/bu_db', condition, function(data) {
+             if (data) {
+             bkeruyun.promptMessage('修改成功！');
+             }
+             bkeruyun.hideLoading();
+             });*/
+        });
+
+        //批量删除
+        $('#btnDelete').on('click', function() {
+            var ids = $('#grid').jqGrid('getGridParam', 'selarrrow');
+            var $deleteTip = $('#deleteTip');
+            var $deleteModal = $('#deleteModal');
+            var $delete = $('#delete');
+            var $deleteSure = $('#deleteSure');
+
+            var $cancelDelete = $('#cancelDelete');
+            var length = ids.length;
+            //弹出提示层
+            if (length < 1) {
+                Message.alert({
+                    title: '提示',
+                    describe: '请至少选择一个商品!'
+                }, function() {});
+            } else {
+                var condition = {
+                    dishIds: ids.join(','),
+                    isSetmeal: 0
+                };
+                bkeruyun.showLoading();
+                $.post('/merchandise/dish/manage/checkSCMTemplateRel', condition, function(returnData) {
+                    bkeruyun.hideLoading();
+                    var confirmHtmlSet = ['你确认要删除选中的' + length + '个商品吗？删除后将不能恢复！ '];
+                    confirmHtmlSet.push('<br/>')
+                    confirmHtmlSet.push('<div style="color:red;font-size: smaller; padding:0 10px;">')
+                    confirmHtmlSet.push('（重要提示：如果商品存在引用，删除商品将影响模板使用！商品可能存在的引用如下：套餐、销售模板、价格策略模板、配方、自产模板、配送模板、营销活动、特价菜单等）');
+                    confirmHtmlSet.push('</div>')
+                    Message.confirm({
+                        title: '提示',
+                        describe: confirmHtmlSet.join('')
+                    }, function() {
+                        //直接删除
+                        bkeruyun.showLoading();
+                        $.post('/merchandise/dish/manage/deleteDishs', condition, function(data) {
+                            bkeruyun.hideLoading();
+                            if (1 == data.success) {
+                                Message.alert({
+                                    title: '提示',
+                                    describe: data.message
+                                }, function() {
+                                    $('#grid').refresh();
+                                });
+                            } else {
+                                Message.alert({
+                                    title: '提示',
+                                    describe: '存在不能删除的商品，请重新选择需删除的商品！'
+                                }, function() {
+                                    $('#grid').refresh();
+                                });
+                                //dishName planName
+                                var divStr = template('tmp-after-delete-error-info', data);
+                                $('#msgbox').append(divStr);
+
+                                $('#msgbox').css({
+                                    width: 650
+                                });
+                            }
+                        });
+                    });
+                    var str = template('tmp-check-delete-info', returnData);
+                    $('#msgbox').append(str);
+                    $('#msgbox').css({
+                        width: 450
+                    });
+
+                });
+
+
+            }
+        });
+
+        //删除
+        $('#deleteSure').on('click', function() {
+            var dishIds = $('#deleteIds').val();
+            var condition = {
+                dishIds: dishIds,
+                flag: 2
+            };
+            $('#deleteModal').modal('hide');
+            bkeruyun.showLoading();
+            $.post('/merchandise/dish/manage/deleteDishs', condition, function(data) {
+                bkeruyun.hideLoading();
+                if (data) {
+                    Message.alert({
+                        title: '提示',
+                        describe: data.message
+                    });
+                    setTimeout(function() {
+                        window.location.reload(true);
+                    }, 300);
+                } else {
+                    Message.alert({
+                        title: '提示',
+                        describe: '后台没有返回值'
+                    });
+                }
+            });
+        });
+
+        //model隐藏事件
+        $('#deleteModal').on('hidden.bs.modal', function(e) {
+            $('#deleteIds').val('');
+            $('#deleteTable').addClass('hidden');
+            $('#deleteTable tbody').html('');
+            $('#showDeleteTable').hide();
+        });
+
+        $('#showDeleteTable').on('click', function() {
+            var $this = $(this);
+            var $deleteTable = $('#deleteTable');
+            if ($deleteTable.hasClass('hidden')) {
+                $deleteTable.removeClass('hidden');
+                $this.text('隐藏详情 >');
+            } else {
+                $deleteTable.addClass('hidden');
+                $this.text('查看详情 >');
+            }
+        });
+
+        //点击查询触发事件
+        load();
+    });
+
+    //选择下拉菜单标签触发事件
+    $(".highlighted-list > li").on("click", function() {
+        var //s=$(this).attr("data-value"),
+            id = $(this).attr("data-id"),
+            type = $(this).attr("data-type");
+        // $(".select-control > em").text(s);
+        $("#input").attr("data-id", id);
+        $("#input").attr("data-type", type);
+    })
+
+    function removePreview() {
+        if ($("#grid").data("imgPre")) {
+            $("#grid").data("imgPre").remove();
+        }
+    }
+    //加载列表
+    function load() {
+        var query = sessionStorage.getItem('DISH_QUERY');
+        if (query != null && query != "null") {
+            try{
+                eval(query);
+            } catch (e){
+            }
+            if (!query) return;
+            $("#input").attr("data-id", query.dishTypeId);
+            $("#input").attr("data-type", query.typeOrInClass);
+            $("#dishCodeOrName").val(query.dishCodeOrName || "");
+//            document.getElementById('orderStatus-1').checked = document.getElementById('orderStatus-2').checked = false;
+//            $("label[for='orderStatus-2']").removeClass("checkbox-check");
+//            $("label[for='orderStatus-1']").removeClass("checkbox-check");
+//            $(query.enabledFlag.split(",")).each(function() {
+//                var node = document.getElementById('orderStatus-' + this);
+//                node.checked = true;
+//                $(node).parent().addClass("checkbox-check")
+//            });
+            //$(".select-control > em").text(query.select);
+        };
+
+        var $gridObj = $("#grid"),
+            enabledFlag,
+            dishTypeId = $("#input").attr("data-id"),
+            typeOrInClass = $("#input").attr("data-type"),
+            dishCodeOrName = $("#dishCodeOrName").val();
+//            enabledFlag1 = document.getElementById('orderStatus-1').checked,
+//            enabledFlag2 = document.getElementById('orderStatus-2').checked;
+        if (dishTypeId == undefined) {
+            dishTypeId = null;
+        }
+        if (typeOrInClass == undefined) {
+            typeOrInClass = null;
+        }
+//        if (enabledFlag1 && enabledFlag2) {
+//            enabledFlag = '1,2';
+//        } else if (enabledFlag1 && !enabledFlag2) {
+//            enabledFlag = '1';
+//        } else if (!enabledFlag1 && enabledFlag2) {
+//            enabledFlag = '2';
+//        }
+
+        function updateItemsOfSelectedRows(id, isSelected) {
+            var name = $("#grid").jqGrid('getRowData', id).name;
+            //在数组idsOfSelectedRows查找id,没有找到匹配返回-1
+            var index = $.inArray(id + "," + name, itemsOfSelectedRows);
+            if (!isSelected && index >= 0) {
+                itemsOfSelectedRows.splice(index, 1);
+            } else if (index < 0) {
+                itemsOfSelectedRows.push(id + "," + name);
+            }
+        };
+
+        var postData = {
+            dishTypeId: dishTypeId,
+            typeOrInClass: typeOrInClass,
+            dishCodeOrName: dishCodeOrName,
+            enabledFlag: enabledFlag
+        };
+        var dataGridConfig = {
+            url: queryUrl,
+            gridview: true,
+            "postData": postData,
+            colNames: ['id','商品名称', '商品中类', '商品编号', '商品名称', '库存类型', '单位', '定价', '排序', '状态', '',''],
+            colModel: [
+                {name : 'id',hidden : true},
+                {name : 'dishName',hidden : true},
+                {name : 'inClassName',width : 160,align : 'center'},
+                {name : 'dishCode',width : 160,align : 'center'},
+                {name : 'name',index : 'name',width : 180,align : 'center',cellattr:function (rowId, val, rawObject) {
+                    if (rawObject.logo == null) {
+                        return "title='未上传图片' style='color:red'";
+                    }
+                },formatter:function(cellvalue, options, rowdata){
+                    if (rowdata.logo != null) {
+                        return "<img src=\"http://b.keruyun.com:80/merchandise//themes/style/img/show.png?v1.0\"/>"+cellvalue;
+                    }else{
+                        return cellvalue;
+                    }
+                }},
+                {name : 'wmType',index : 'wmType',width : 130,align : 'center',formatter:function(cellvalue, options, rowdata){
+                    if (rowdata.wmType == 1) {
+                        return "预制商品";
+                    }else if(rowdata.wmType == 2){
+                        return "现制商品";
+                    }else if(rowdata.wmType == 3){
+                        return "外购商品";
+                    }else if(rowdata.wmType == 4){
+                        return "原物料";
+                    }else if(rowdata.wmType == 5){
+                        return "半成品";
+                    }else{
+                        return "";
+                    }
+
+                }},
+                {name : 'unit',index : 'unit',width : 80,align : 'center'},
+                {name : 'price',index : 'price',width : 100,align : 'center'},
+                {name : 'sort',index : 'sort',width : 100,align : 'center',hidden:true},
+                {name : 'status',index : 'status',width : 100,align : 'center',formatter : "select",editoptions : {value : "1:启用;2:停用"},hidden:true},
+                {name : 'logo',hidden : true},
+                {name : 'type',hidden : true}
+            ],
+            multiselect: true,
+            rowNum: 10,
+            rowList: [10, 20],
+            pager: "#gridPager",
+            sortname: 'dishCode',
+            sortorder: "asc",
+            showOperate: true,
+            operateColName: "操作",
+            /*onSelectRow: updateItemsOfSelectedRows,
+             onSelectAll: function(aRowids, isSelected) {
+             var i, count, id;
+             for (i = 0, count = aRowids.length; i < count; i++) {
+             id = aRowids[i];
+             updateItemsOfSelectedRows(id, isSelected);
+             }
+             },*/
+            loadComplete: function() {
+                removePreview();
+                var $this = $(this),
+                    i, count;
+                for (i = 0, count = itemsOfSelectedRows.length; i < count; i++) {
+                    $this.jqGrid('setSelection', itemsOfSelectedRows[i].split(",")[0], false);
+                };
+                var data;
+                $("#grid tr").mouseenter(function(e) {
+                    data = $("#grid").jqGrid('getRowData', $(this).attr("id"));
+                    if ($(this).attr("id") && data.logo) {
+                        var node = $("<div style=\"position:absolute;width:250px;height:250px;border:2px dotted  #6DD2FD;z-index:9999\"><div style=\"font-size:14px; font-weight:bold;color:#E1F0FE;text-align:center;background:#668CB3 repeat\">菜品名称:" + $("<div>" + data.name + "</div>").text() + "</div><img style=\"width:230px;height:222px;border:none;margin:3px\" src=\"" + $("#grid").jqGrid('getRowData', $(this).attr("id")).logo + "\" /><div>");
+                        var cssTop =  (this.rowIndex - 1) * 60 - 10;
+                        var  gbox_grid_height = $("#grid").closest('.ui-jqgrid').height();
+                        if(cssTop>gbox_grid_height-250-10){
+                            cssTop = gbox_grid_height-250-10;
+                        }
+                        node.css({
+                            "left": -250,
+                            "top": cssTop
+                        });
+                        $("#grid").parent().parent().parent().parent().append(node);
+                    }
+                    $("#grid").data("imgPre", node);
+                }).mouseleave(function() {
+                    removePreview();
+                });
+            },
+            gridComplete: function(){
+                //sessionStorage
+                console.info('gridComplete');
+                var pageObj = {
+                    page: $(this).jqGrid('getGridParam','page'),
+                    rowNum: $(this).jqGrid('getGridParam','rowNum'),
+                    rowList: $(this).jqGrid('getGridParam','rowList')
+                };
+                sessionStorage.setItem('DISH_QUERY_PAGER',JSON.stringify(pageObj));
+            },
+            onSelectAll: function(aRowids,stauts){
+                var i, count, id;
+                for (i = 0, count = aRowids.length; i < count; i++) {
+                    id = aRowids[i];
+                    updateItemsOfSelectedRows(id, stauts);
+                }
+                //当为全选
+                if(stauts){
+                    var rows = $(this).getRowData();
+                    for(var i=0;i<rows.length;i++){
+                        if(3== rows[i].type){
+                            //console.log('取消选择的id '+rows[i].id);
+                            $('#grid').jqGrid('setSelection',rows[i].id,false);
+                            updateItemsOfSelectedRows(rows[i].id, false);
+                        }
+                    }
+                }
+            },
+            onSelectRow: function(rowid,stauts,e){
+                updateItemsOfSelectedRows(rowid,stauts);
+                if(stauts){
+                    var row = $(this).getRowData(rowid);
+                    if(3==row.type) {
+                        bkeruyun.promptMessage(row.name + ' 该行不能操作!');
+                        $(this).jqGrid('setSelection', rowid, false);
+                        updateItemsOfSelectedRows(rowid, false);
+                    }
+                }
+            },
+            actionParam: {
+                editor: {
+                    url: editorUrl,
+                    extraRender: $.extraRender,
+                    showExpression: $.show
+                },
+//                clock: {
+//                    url: baseUrl + '/isUsed',
+//                    extraRender: $.extraRender,
+//                    showExpression: $.show,
+//                    callback: '$.lockCallback'
+//                },
+//                unlock: {
+//                    url: unlockUrl,
+//                    extraRender: $.extraRender,
+//                    showExpression: $.showUnlock
+//                }
+            }
+        };
+        if(!window.isInitGrid){
+            window.isInitGrid = true;
+            console.log('exec one time');
+            var pagerStr = sessionStorage.getItem('DISH_QUERY_PAGER');
+            if(pagerStr){
+                var pageObj = JSON.parse(pagerStr);
+                var currentPageObj = {
+                    page: dataGridConfig.page,
+                    rowNum: dataGridConfig.rowNum
+                };
+                if(currentPageObj.page!= pageObj.page || currentPageObj.rowNum != pageObj.rowNum){
+                    dataGridConfig.page = pageObj.page;
+                    dataGridConfig.rowNum = pageObj.rowNum;
+                }
+            }
+        }
+        $gridObj.dataGrid(dataGridConfig);
+        $(document).delegate("#goods-upload", "click", function() {
+            dishmanageexport.opts.cachedQueryConditions = serializeFormById(dishmanageexport.opts.queryConditionsId);
+            dishmanageexport.opts.cachedDishTypeId = $("#input").attr("data-id");
+            var dishTypeId = $("#input").attr("data-id"),
+                typeOrInClass = $("#input").attr("data-type"),
+                dishCodeOrName = $("#dishCodeOrName").val(),
+                enabledFlag;
+//                enabledFlag1 = document.getElementById('orderStatus-1').checked,
+//                enabledFlag2 = document.getElementById('orderStatus-2').checked;
+//            if (enabledFlag1 && enabledFlag2) {
+//                enabledFlag = '1,2';
+//            } else if (enabledFlag1 && !enabledFlag2) {
+//                enabledFlag = '1';
+//            } else if (!enabledFlag1 && enabledFlag2) {
+//                enabledFlag = '2';
+//            } else {
+//                enabledFlag = '1,2';
+//            }
+            if(dishTypeId === ""){
+                dishTypeId = null;
+            }
+            $gridObj.jqGrid("setGridParam", {
+                postData: {
+                    "dishTypeId": dishTypeId,
+                    "typeOrInClass": typeOrInClass,
+                    "dishCodeOrName": dishCodeOrName,
+                    "skuCodeOrName":$("#skuCodeOrName").val(),
+                    "wmType":$("#wmType").val(),
+                    "skuTypeId":$("#skuTypeId").val(),
+                    "enabledFlag": enabledFlag,
+                    "condiment": $.trim($('#condiment').val()),
+                    "memo": $.trim($('#memo').val()),
+                }
+            });
+            $gridObj.refresh();
+
+            sessionStorage.setItem('DISH_QUERY', 'query ={"dishTypeId" : ' + dishTypeId + ',"typeOrInClass":"' + typeOrInClass + '","dishCodeOrName":"' + dishCodeOrName + '","enabledFlag":"' + enabledFlag + '","select":"' + $(".select-control > em").text() + '"}');
+
+        });
+        dishmanageexport.opts.cachedQueryConditions = serializeFormById(dishmanageexport.opts.queryConditionsId);
+        dishmanageexport.opts.cachedDishTypeId = $("#input").attr("data-id");
+        //添加鼠标移入移出的效果
+    }
+
+    function batchMediaDish() {
+        //1、判断是否选中菜品，如若没有选择给予有好提示，选中后提交选中的菜品
+        if (itemsOfSelectedRows == null || itemsOfSelectedRows.length == 0) {
+            Message.alert({
+                title: "温馨提示",
+                describe: "请选择至少一个菜品!"
+            }, Message.display);
+        } else if (itemsOfSelectedRows.length > 5) {
+            Message.alert({
+                title: "温馨提示",
+                describe: "对不起，一次最多批量上传5张图片"
+            }, Message.display);
+        } else {
+            params = [];
+            for (var i = 0; i < itemsOfSelectedRows.length; i++) {
+                var selectedRow = itemsOfSelectedRows[i];
+                var id = selectedRow.substring(0, selectedRow.indexOf(','));
+                var name = selectedRow.substring(selectedRow.indexOf(',') + 1);
+                if (name.indexOf('>') > 0) {
+                    name = name.split('>')[1];
+                }
+                params.push({
+                    "id": id,
+                    "name": name
+                })
+            }
+            form = $("<form action = '" + batchMediaDishUrl + "' method ='post'></form>");
+            form.appendTo("body");
+            input = $("<input type='text' name='params'/>");
+            input.attr('value', JSON.stringify(params));
+            form.append(input);
+            form.submit();
+        }
+    }
+    $.lockCallback = function(args) {
+        if (!args.result) {
+            return '';
+        }
+        $("#viewDetail").hide();
+        var data = args.result,
+            success = data.success,
+            msg = data.msg,
+            info = data.info;
+        if (success) {
+            $("#clockMsg").text(msg);
+            $("#btn").attr("data-value", true);
+            $("#btn").attr("data-id", args.postData.id);
+            if (info) {
+
+                if ($("#viewDtlBtn").attr("hidden")) {
+                    $("#viewDtlBtn").attr("hidden", false);
+                }
+                var html = '',
+                    len = info.data.length,
+                    datas = info.data;
+                if (info.type === 'bills') {
+                    $("#viewDetail > h2").text('引用单据列表');
+                    $("#btn").attr("data-value", false);
+                    $("#cancel").attr("hidden", true);
+                    if (len % 2 === 0) {
+                        for (var i = 0; i < len; i++) {
+                            if (i % 2 === 0) {
+                                html += '<tr><td>' + datas[i].commercialName + '</td><td>' + datas[i].billTypeName + '</td><td>' + datas[i].billNo + '</td>';
+                            } else {
+                                html += '<td>' + datas[i].commercialName + '</td><td>' + datas[i].billTypeName + '</td><td>' + datas[i].billNo + '</td></tr>';
+                            }
+                        }
+                    } else {
+                        for (var i = 0; i < len; i++) {
+                            if (i === (len - 1)) {
+                                html += '<tr><td>' + datas[i].commercialName + '</td><td>' + datas[i].billTypeName + '</td><td>' + datas[i].billNo + '</td></tr>';
+                            } else if (i % 2 === 0) {
+                                html += '<tr><td>' + datas[i].commercialName + '</td><td>' + datas[i].billTypeName + '</td><td>' + datas[i].billNo + '</td>';
+                            } else {
+                                html += '<td>' + datas[i].commercialName + '</td><td>' + datas[i].billTypeName + '</td><td>' + datas[i].billNo + '</td></tr>';
+                            }
+                        }
+                    }
+                } else if (info.type === 'templates') {
+                    $("#viewDetail > h2").text('引用模版列表');
+                    if (len % 2 === 0) {
+                        for (var i = 0; i < len; i++) {
+                            if (i % 2 === 0) {
+                                html += '<tr><td>' + datas[i].templateTypeName + '</td><td>' + datas[i].templateName + '/' + datas[i].templateNo + '</td>';
+                            } else {
+                                html += '<td>' + datas[i].templateTypeName + '</td><td>' + datas[i].templateName + '/' + datas[i].templateNo + '</td></tr>';
+                            }
+                        }
+                    } else {
+                        for (var i = 0; i < len; i++) {
+                            if (i === (len - 1)) {
+                                html += '<tr><td>' + datas[i].templateTypeName + '</td><td>' + datas[i].templateName + '/' + datas[i].templateNo + '</td></tr>';
+                            } else if (i % 2 === 0) {
+                                html += '<tr><td>' + datas[i].templateTypeName + '</td><td>' + datas[i].templateName + '/' + datas[i].templateNo + '</td>';
+                            } else {
+                                html += '<td>' + datas[i].templateTypeName + '</td><td>' + datas[i].templateName + '/' + datas[i].templateNo + '</td></tr>';
+                            }
+                        }
+                    }
+                }
+                $("#detail").html(html);
+            } else {
+                if (!$("#viewDtlBtn").attr("hidden")) {
+                    $("#viewDtlBtn").attr("hidden", true);
+                }
+            }
+            $("#popover-clock").show();
+            bkeruyun.showLayer();
+        } else {
+            Message.confirm({
+                title: '提示标题',
+                describe: msg
+            }, function() {});
+        }
+    };
+    //提示刷新
+    function ref(msg) {
+        removePreview();
+        bkeruyun.promptMessage(msg);
+        var pagesize = $(".ui-pg-input").val();
+        $("#grid").refresh(pagesize);
+        setTimeout(2000);
+    }
+    $("#btn").on("click", function() {
+        if ($("#btn").attr("data-value") == "true") {
+            lock($("#btn").attr("data-id"));
+            //ref('停用成功！');
+        } else {
+            var pagesize = $(".ui-pg-input").val();
+            $("#grid").refresh(pagesize);
+        }
+    })
+
+    function lock(id) {
+        $.ajax({
+            type: "POST",
+            url: lockUrl,
+            data: "id=" + id + "&random=" + Math.random(),
+            dataType: "json",
+            success: function(data) {
+                ref(data.message);
+            }
+        })
+    }
+    $("#refresh_grid").on("click", function() {
+        var pagesize = $(".ui-pg-input").val();
+        $("#grid").refresh(pagesize);
+    })
+    //重置
+    $("#undo-all").on("click", function() {
+        $("#orderStatus-1").attr("checked", true);
+        $("#orderStatus-2").attr("checked", false);
+        $("#dishCodeOrName").val('');
+        $(".select-control > em").text('商品分类');
+        $("#input").attr("data-id", '');
+        $("#input").attr("data-type", '');
+        sessionStorage.setItem('DISH_QUERY', null);
+    })
+    var extra = {
+        _init: function(){
+            var _this = this;
+            var $dishTypeContainer = $('#dishTypeContainer');
+            var html = template('tmp-dishType',{list:this.cacheData.middleDishBrandTypes})
+            $dishTypeContainer.find('ul.highlighted-list').append(html);
+            this.tab.bindEvent($('#updateModal'));
+            this.createAllTabs();
+
+            $('#revelanceSettingTabsWrapper .switch-holder input').on('change',function(){
+                _this.syncSwitchWiew($(this));
+            });
+        },
+        syncSwitchWiew:function($dom){
+            var $target = $($dom.attr('data-target'));
+            if($dom.attr('checked')){
+                $target.addClass('hidden');
+                $target.find('input[type=checkbox]:checked').each(function(){
+                    $(this).removeAttr('checked');
+                    $(this).parent().removeClass('checkbox-check');
+                });
+            }else{
+                $target.removeClass('hidden');
+            }
+        },
+        checkUpdateRevelanceSettingCondition: function(conditon){
+            var result = {checked:true,msg:''};
+            var msgSet = [];
+            var obj = {
+                'labelIds':'标签',
+                'memoIds':'备注',
+                'condimentIds':'配料',
+                'cookingWayIds':'做法'
+            }
+            for(var item in obj){
+                if(conditon.hasOwnProperty(item)){
+                    if(conditon[item].length ==0){
+                        msgSet.push(obj[item]);
+                        result.checked = false;
+                    }
+                }
+            }
+            if(!result.checked){
+                result.msg = msgSet.join(', ');
+            }
+            result.checked = true;
+            return result;
+        },
+        rendModifySelectedDishes:function(callback){
+            var _this = this;
+            if(this.cacheData){
+                callback();
+            }else{
+                bkeruyun.showLoading();
+                this.loadBatchPropertyData(function(){
+                    _this._init();
+                    bkeruyun.hideLoading();
+                    callback();
+                });
+            }
+        },
+        createAllTabs:function(){
+            var $container = $('#revelanceSettingTabsWrapper');
+            var  tabsOption = {
+                isLeftTab:false,
+                tabsId:'dishTabs'
+            };
+            var $tabs = this.tab.createTabs($container,tabsOption);
+            var html = '';
+            html = template('tmp-revelanceSetting-item',{
+                checkboxName:'label',
+                isShowClearSwitch:true,clearSwitchInfo:'是否清空商品已有标签',
+                list:this.cacheData.labelCount.dishProperties
+            });
+            this.tab.addOneTab($tabs,-1,{
+                tabTitleName:'标签',
+                tabConent:html
+            });
+
+            html = template('tmp-revelanceSetting-item',{
+                checkboxName:'memo',
+                isShowClearSwitch:true,clearSwitchInfo:'是否清空商品已有备注',
+                list:this.cacheData.memoCount.dishProperties
+            });
+            this.tab.addOneTab($tabs,-1,{
+                tabTitleName:'备注',
+                tabConent:html
+            });
+
+            html = template('tmp-revelanceSetting-item',{
+                checkboxName:'condiment',
+                isShowClearSwitch:true,clearSwitchInfo:'是否清空商品已有配料',
+                list:this.cacheData.condimentCount.condiments
+            });
+            this.tab.addOneTab($tabs,-1,{
+                tabTitleName:'配料',
+                tabConent:html
+            });
+            var cookingWayHtmlSet = [];
+            html = template('tmp-clearSwitch',{
+                checkboxName:'cookingWayTabs',
+                isShowClearSwitch:true,clearSwitchInfo:'是否清空商品已有做法'
+            });
+            cookingWayHtmlSet.push(html);
+            cookingWayHtmlSet.push('<div id="cookingWayTabsContainer">');
+            cookingWayHtmlSet.push('</div>');
+            this.tab.addOneTab($tabs,-1,{
+                tabTitleName:'做法',
+                tabConent:cookingWayHtmlSet.join('')
+            });
+            this.tab.swichTab($tabs,0);
+
+            this.createCookingWayTabs();
+
+        },
+        createCookingWayTabs: function(){
+            var $container = $('#cookingWayTabsContainer');
+            var cookingWayTypesAndCount = this.cacheData.cookingWayTypesAndCount;
+            var  tabsOption = {
+                isLeftTab:false,
+                tabsId:'cookingWayTabs'
+            };
+            var $tabs = this.tab.createTabs($container,tabsOption);
+            var html = '';
+            for(var i=0;i<cookingWayTypesAndCount.length;i++){
+                html = template('tmp-revelanceSetting-item',{
+                    checkboxName:'cookingWay'+i,
+                    list:cookingWayTypesAndCount[i].dishProperties
+                });
+                this.tab.addOneTab($tabs,-1,{
+                    tabTitleName:cookingWayTypesAndCount[i].name,
+                    tabConent:html
+                });
+            }
+            this.tab.swichTab($tabs,0);
+            var $tabScroll = $tabs.find('.tab-title');
+            $tabScroll.tabScroll({
+                'wrapObj': $tabScroll,
+                'innerObj': $tabScroll.find('>ul'),
+                'innerObjLeft': 20,
+                'item': $tabScroll.find('>ul>li'),
+                'itemN':4,
+                'itemMarginL': 0,
+                'itemMarginR': 10,
+                'itemPaddingL': 10,
+                'itemPaddingR': 10,
+                'moveItemN': 4,
+                'speed': 1000
+            });
+
+        },
+        getCheckedBoxObj : function($container,name){
+            var checkedSet = [];
+            $container.find('input[type=checkbox][name='+name+']:checked').each(function(){
+                var obj = {
+                    id:this.value,
+                    propertyKind:$(this).attr('data-propertyKind'),
+                    propertyTypeId:$(this).attr('data-propertyTypeId')
+                }
+                checkedSet.push(obj);
+            });
+            return checkedSet;
+        },
+        loadBatchPropertyData: function(callback){
+            var _this = this;
+            $.ajax({
+                type: "POST",
+                url: ctxPath+'/dish/manage/initBatchProperty',
+                data: {brandId:loginInfo.opts.brandObj.id},
+                success: function(data) {
+                    _this.cacheData = data;
+                    callback();
+                }
+            })
+        },
+        tab: {
+            bindEvent: function($container,callback){
+                $container.on('shown.bs.tab', 'a[data-toggle="tab"]',function (e) {
+                    e.target // newly activated tab
+                    e.relatedTarget // previous active tab
+                    var current = this;
+                    var index = 0;
+                    var $tabTitle = $(this).closest('.tab-title');
+                    var $tabContainer = $(this).closest('.tab-container');
+                    $tabTitle.find('li a').each(function(item){
+                        if(current === this){
+                            index = item;
+                        }
+                    });
+                    var $tabContent = $tabTitle.nextAll('.tab-content');
+                    $tabContent.find('>.tab-pane').removeClass('active');
+                    $tabContent.find('>.tab-pane:eq('+index+')').addClass('active');
+
+                    if('function' == typeof callback){
+                        callback($(this));
+                    }
+
+                });
+            },
+            createTabs: function($container,tabsOption){
+                var html = template('tmp-tab', {isLeftTab: tabsOption.isLeftTab,tabsId:tabsOption.tabsId});
+                $container.append(html);
+                return $('#'+tabsOption.tabsId);
+            },
+            addOneTab: function($tabContainer,preTabIndex,tabOption){
+                var titleHtml = template('tmp-tab-title-item', {tabTitleName: tabOption.tabTitleName,data:tabOption.data});
+                var contentHtml = template('tmp-tab-content-item', {tabConent: tabOption.tabConent,data:tabOption.data});
+                if(preTabIndex>-1){
+                    $tabContainer.find('>.tab-title>ul>li:eq('+preTabIndex+')').after(titleHtml);
+                    $tabContainer.find('>.tab-content>.tab-pane:eq('+preTabIndex+')').after(contentHtml);
+                }else{
+                    $tabContainer.find('>.tab-title>ul').append(titleHtml);
+                    $tabContainer.find('>.tab-content').append(contentHtml);
+                }
+            },
+            delOneTab:function($tabContainer,tabIndex){
+                var $titleIem = $tabContainer.find('>.tab-title>ul>li:eq('+tabIndex+')');
+
+
+                if($titleIem.hasClass('active')){
+                    var newActiveTab = $titleIem.next();
+                    if(newActiveTab.get(0)){
+
+                    }else{
+                        newActiveTab= $titleIem.prev();
+                    }
+
+                    newActiveTab.find('a').trigger('click');
+                }
+
+                $titleIem.remove();
+                $tabContainer.find('>.tab-content>.tab-pane:eq('+tabIndex+')').remove();
+
+            },
+            swichTab:function($tabContainer,tabIndex){
+                if('undefined' === typeof tabIndex){
+                    tabIndex = $tabContainer.find('>.tab-title>ul>li').length-1;
+                }
+                $tabContainer.find('>.tab-title>ul>li:eq('+tabIndex+')').find('a').trigger('click');
+            },
+            //获取标签页个数
+            getTabNumber:function($tabContainer){
+                return $tabContainer.find('>.tab-title>ul>li').size();
+            },
+            sortTab: function($tabContainer,options){
+                if('undefined'=== typeof options){
+                    options = {
+                        reversed: false,
+                        by: function(dom){
+                            return $(dom).text();
+                        }
+
+                    }
+                }
+                var sort = function($Set){
+                    if($Set.length==0){
+                        return $Set;
+                    }
+                    var arr = [];
+                    $Set.each(function(){
+                        arr.push(this);
+                    });
+                    arr.sort(function(a, b) {
+                        var valA = options.by($(a));
+                        var valB = options.by($(b));
+                        if (options.reversed) {
+                            return (valA < valB) ? 1 : (valA > valB) ? -1 : 0;
+                        } else {
+                            return (valA < valB) ? -1 : (valA > valB) ? 1 : 0;
+                        }
+                    });
+                    return $(arr);
+
+                }
+                var $dataTitle = sort($tabContainer.find('>.tab-title>ul>li'));
+                $tabContainer.find('>.tab-title').empty();
+                $tabContainer.find('>.tab-title').append($dataTitle);
+
+                var $dataContent = sort($tabContainer.find('>.tab-content>.tab-pane'));
+                $tabContainer.find('>.tab-content').empty();
+                $tabContainer.find('>.tab-content').append($dataContent);
+            }
+        },
+        //将对象转化为 html dom data-xx 属性
+        calDivData: function(data){
+            var html= [];
+            for(var item in data){
+                html.push(' data-'+item+'="'+data[item]+'"' );
+            }
+            return html.join('');
+        }
+    };
+    template.helper('calDivData', extra.calDivData);
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>

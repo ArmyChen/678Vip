@@ -1,0 +1,1055 @@
+
+{include file="inc/header.html"}
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>新增商品</h1>
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btnPrev" style="display:none;">上一步</a>
+            <a class="btn-link ml10 js-back" href="javascript:history.back();" id="btncancle">取消</a>
+            <a class="btn-link ml10" id="btnNext">下一步</a>
+            <a class="btn-link ml10 js-save" id="btnSave" style="display:none;">保存</a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="center-block text-center">
+    <ul class="breadCrumbs" id="scmBreadCrumbs">
+        <li class="current" data-show="baseInfo"><span>1</span>基本信息</li>
+        <li data-show="sampleCon"><span>2</span>范本授权</li>
+    </ul>
+</div>
+<form id="stepOneForm">
+    <div class="center-block panel-group mt20" id="baseInfo">
+        <div class="aside">
+            <div class="aside-column panel-search">
+                <div class="search-box" id="goodsTypeSearch">
+                    <input type="text" name="keyWord" id="keyWord" class="form-control" placeholder="请输入类别编码/名称"
+                           maxlength="48" value=""/>
+                    <span id="js-type-search-button" class="icon-search">搜索</span>
+                </div>
+            </div>
+            <div class="aside-column classificationAll" id="classificationAll">
+                <ul class="tree" id="tree">
+                </ul>
+            </div>
+        </div>
+        <div class="panel main">
+            <!-- 基础数据 start -->
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>基础数据</em></h3>
+            </div>
+            <div class="panel-body">
+                <table cellpadding="0" cellspacing="0" class="table-nobd table-fixed">
+                    <tbody>
+                    <tr>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td width="350" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">商品编码 <span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>SKU+流水号</span>"></span></label>
+                        </th>
+                        <td valign="top">
+                            <input type="text" class="form-control w220" maxlength="16" name="dishCode"
+                                   id="dishCode"
+                                   value="" placeholder="若不填写，则系统自动生成"
+                            >
+                        </td>
+                        <th valign="top"><label class="control-label">商品名称</label> <strong
+                                class="red">*</strong></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="name"
+                                                id="name"
+                                                placeholder="第一语言" value=""></td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">定价</label> <strong class="red">*</strong>
+                        </th>
+                        <td valign="top"><input type="text" class="form-control w220 number1" data-type="number1"
+                                                data-left-max="8" data-right-max="2" name="marketPrice" id="marketPrice"
+                                                value=""></td>
+
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="48" name="aliasName"
+                                                id="aliasName" placeholder="第二语言" value=""></td>
+                    </tr>
+                    <tr>
+
+                        <th valign="top"><label for="dishNameIndex" class="control-label">名称首字母</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" name="dishNameIndex"
+                                                id="dishNameIndex"
+                                                value=""></td>
+                        <th valign="top"><label for="shortName" class="control-label">短名称</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="shortName"
+                                                id="shortName"
+                                                placeholder="第一语言" value=""></td>
+                    </tr>
+
+                    <tr>
+                        <th valign="top"><label for="barcode" class="control-label">条形码</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" name="barcode" id="barcode"
+                                                maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value=""></td>
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="48"
+                                                name="aliasShortName"
+                                                id="aliasShortName" placeholder="第二语言" value="">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">库存类型</label><strong class="red">*</strong></th>
+                        <td valign="top">
+
+
+                            <div class="w220"><select name="wmType" id="wmType">
+                                <option value=""></option>
+
+                                <option value="1">预制商品</option>
+
+                                <option value="2">现制商品</option>
+
+                                <option value="3">外购商品</option>
+
+                            </select></div>
+
+                        </td>
+                        <th valign="top"><label class="control-label">销售类型</label></th>
+                        <td valign="top">
+                            <label id="saleTypeBox"
+                                   class="checkbox "><span></span>
+                                <input type="checkbox" name="saleType" id="saleType" data-value="1"
+                                >称重商品</label></td>
+
+                    </tr>
+
+                    <tr>
+                        <th valign="top"><label class="control-label">销售单位</label> <strong class="red">*</strong></th>
+                        <td valign="top">
+
+                            <div class="w220">
+                                <select name="unitId" id="unitId">
+                                    <option value=""></option>
+
+                                    <option value="64497"
+                                    >杯</option>
+
+                                    <option value="67729"
+                                    >份</option>
+
+                                    <option value="74711"
+                                    >瓶</option>
+
+                                    <option value="74713"
+                                    >盘</option>
+
+                                    <option value="74714"
+                                    >位</option>
+
+                                    <option value="100139"
+                                    >块</option>
+
+                                    <option value="100357"
+                                    >罐</option>
+
+                                    <option value="105347"
+                                    >kg</option>
+
+                                </select>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </td>
+                        <td colspan="2">
+                            <!--add 称重兑换开始-->
+                            <div class="hidden" id="weightWrapper">
+                                等于<input type="text" class="form-control w110" id="weight" value="">克
+                                <label for="weight" class="error-tip" style="display: inline-block;"></label>
+                            </div>
+                            <!--add 称重兑换结束-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">规格类别</label></th>
+                        <td colspan="3" valign="top" id="goodsAttributeTd">
+                            <div class="additem-wrap" id="goodsAttribute">
+
+                            </div>
+                            <span class="icon-plus">添加</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top"><label class="control-label">排序</label></th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="sort"
+                                                id="sort"
+                                                placeholder="1000" value=""></td>
+                        <th valign="top">&nbsp;</th>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>销售设置</em></h3>
+            </div>
+            <div class="panel-body">
+                <table cellpadding="0" cellspacing="0" class="table-nobd table-fixed">
+                    <tbody>
+                    <tr>
+                        <th width="95" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</th>
+                        <td width="350" style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                        <td style="height:0px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">起卖数</label></th>
+                        <td><input type="text" class="form-control w220 number1" data-type="number1"
+                                   data-left-max="3" data-right-max="2" placeholder="1"
+                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="">
+                        </td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isSingle" id="isSingle" data-value="1"
+                                       checked>允许单点</label>
+                            <label class="checkbox checkbox-check"><span></span>
+                                <input type="checkbox" name="isDiscountAll" id="isDiscountAll" data-value="1"
+                                       checked>允许手动折扣</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">增量设置</label></th>
+                        <td><input type="text" class="form-control w220 number1" data-type="number1"
+                                   data-left-max="3" data-right-max="2" placeholder="1"
+                                   name="stepNum" id="stepNum" value=""></td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isSendOutside" id="isSendOutside" data-value="1"
+                                       checked>允许外送</label>
+
+                            <label class="checkbox  mr30"><span></span>
+                                <input type="checkbox" name="isChangePrice" id="isChangePrice" data-value="1"
+                                >允许变价</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label class="control-label">餐盒数</label></th>
+                        <td>
+                            <input type="text" style="width:60px;" class="form-control" data-type="digits"
+                                   data-left-max="3" data-right-max="3" min='0' placeholder="1" maxlength="7"
+                                   name="dishQty" id="dishQty" value="">个商品
+                            <input type="text" style="width:60px;" class="form-control" data-type="digits"
+                                   data-left-max="3" min='0' maxlength="3" placeholder="1"
+                                   name="boxQty" id="boxQty" value="">个餐盒
+                        </td>
+                        <td>
+                            <label class="checkbox checkbox-check mr30"><span></span>
+                                <input type="checkbox" name="isOrder" id="isOrder" data-value="1"
+                                       checked>允许堂食</label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title"><em>关联设置</em></h3>
+            </div>
+            <div class="panel-body js-revelance-setting">
+                <ul class="tab-white-gray goodsConfig-tab">
+                    <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
+                    </li>
+                    <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
+                    <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+                    <li data-show="goodsPracticeCon"><em>做法</em></li>
+                </ul>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion"
+                    data-target="#collapseMore"><em>更多</em><span class="caret pull-right"></span></h3>
+            </div>
+            <div id="collapseMore" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <table cellpadding="0" cellspacing="0"
+                           class="table-nobd table-fixed">
+                        <tbody>
+                        <tr>
+                            <th width="40" valign="top"><label class="control-label">图片</label></th>
+                            <td>
+                                <div class="input-group-inset w402 pull-left mr15" id="imageUrlContainer">
+                                    <div id="bntImageUrl">
+                                        <input type="text" class="form-control" name="imageUrl" id="imageUrl"
+                                               data-imageSize="" data-imageSuffixes=""
+                                               data-imageName=""
+                                               value=""
+                                               readonly="readonly">
+                                        <button class="btn btn-default" type="button">浏览图片</button>
+                                    </div>
+                                </div>
+                                <span class="bnt-clear">清空</span>
+                                <span for="" class="red"
+                                      style="display: inline-block;font-size: small;line-height: 34px;">(建议上传大小为960*720的图片)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th valign="top"><label class="control-label">图片预览</label></th>
+                            <td>
+                                <div id="divPreviewImage">
+
+
+                                    <img src="/merchandise/themes/style/img/default.jpg"
+                                         class="img-responsive">
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label class="control-label">视频</label></th>
+                            <td>
+                                <div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">
+                                    <div id="bntVideoUrl">
+                                        <input type="text" class="form-control" name="videoUrl" id="videoUrl"
+                                               value="" readonly="readonly">
+                                        <button class="btn btn-default" type="button">上传视频</button>
+                                    </div>
+                                </div>
+                                <span class="bnt-clear">清空</span>
+                                <span for="" class="red"
+                                      style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th valign="top"><label class="control-label">描述</label></th>
+                            <td><textarea class="form-control w402" name="dishDesc"
+                                          id="dishDesc"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th valign="top">菜品详情</th>
+                            <td>
+                                <script id="dishEditor" type="text/plain" style="width:700px;height:500px;"></script>
+                                </td>
+                                </tr>
+                                </tbody>
+                                </table>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+
+
+                                <script src="/merchandise/js/jquery-1.10.2.min.js"></script>
+                                <div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
+                                    <div class="panel" min-hieght="">
+                                        <div class="panel-body">
+                                            <h3 class="goodsListAll"><label id="checkAllLable" class="checkbox"><span></span><input type="checkbox" name="sampleAll" id="sampleAll" data-all="sample">全部</label></h3>
+                                            <ul class="goodsList" id="templeteLaber">
+
+                                                <li>
+
+                                                    <label class="checkbox checkbox-check">
+                                                        <span></span><input type="checkbox" name="sample" disabled="disabled" value="39817" data-checked-all="sampleAll" checked> &nbsp 默认模板 /MRMB </label>
+
+
+
+                                                </li>
+
+                                                <li>
+
+
+                                                    <label class="checkbox " >
+                                                        <span></span><input type="checkbox" name="sample" value="57573" data-checked-all="sampleAll" > &nbsp 111 /111</label>
+
+                                                </li>
+
+                                                <li>
+
+
+                                                    <label class="checkbox " >
+                                                        <span></span><input type="checkbox" name="sample" value="58238" data-checked-all="sampleAll" > &nbsp 121 /www</label>
+
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script type="text/javascript">
+                                    var checkFlag;
+                                    (function (){
+                                        $("[name='sample']").each(function(i,val){
+                                            checkFlag=val.checked;
+                                            if(!checkFlag){
+                                                return checkFlag;
+                                            }
+                                        });
+                                        if(checkFlag){
+                                            $("#checkAllLable").attr('class','checkbox checkbox-check');
+                                        }
+                                    })();
+                                </script>
+
+
+</form>
+<div class="panel-popover" id="popover-attribute"
+     style="width: 600px; margin-left: -300px; margin-top: -100px;display:none;">
+    <div class="panel-popover-heading">
+        <div class="panel-popover-title">请您选择要添加的规格类别</div>
+    </div>
+    <div class="panel-popover-body">
+        <ul class="attribute-list" id="attribute-list">
+            <li>颜色</li>
+            <li>大小</li>
+            <li>尺寸</li>
+        </ul>
+    </div>
+    <div class="panel-popover-footer">
+        <div class="btn-wrap text-center"><a class="btn-blue mr30" role="button" id="creatAttribute">确认</a><a
+                class="btn-blue btn-cancel" role="button">取消</a></div>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/merchandise/js/bootstrap/js/bootstrap.js"></script>
+<script src="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.config.js"></script>
+<script src="/merchandise/js/umeditor/umeditor.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/merchandise/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script src="/merchandise/js/jquery-json-2.4.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.validate.js"></script>
+<script src="/merchandise/js/jquery.validate/additional_methods.js"></script>
+<script src="/merchandise/js/jquery.validate/jquery.metadata.js"></script>
+<script src="/merchandise/js/jquery.validate/messages_cn.js"></script>
+<!--  <script src="/merchandise/js/jquery.validate/cmxform.css"></script>-->
+<!-- jqgrid start -->
+
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/i18n/grid.locale-cn.js"></script>
+<script src="/merchandise/js/plugins/jqGrid/dataGrid.js"></script>
+
+
+<!-- jqgrid end -->
+<!--[if lt IE 10]>
+<script src="/merchandise/js/JPlaceholder.js"></script>
+<![endif]-->
+<script src="/merchandise/js/bkeruyun.js?v4.981"></script>
+<script src="/merchandise/js/messageBox.js"></script>
+<script src="/merchandise/js/ajaxfileupload-2.1GD.js"></script>
+<script src="/merchandise/js/pageQuery.js"></script>
+<script src="/merchandise/js/netUtil.js"></script>
+<!--[if IE]>
+<script src="/merchandise/js/ie.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    <!--
+    var ctxPath="/merchandise";
+    var ctxFullPath="http://b.keruyun.com:80/merchandise";
+    var _loginUrl='http://b.keruyun.com';
+    //-->
+</script>
+<script src="/merchandise/js/tree.js"></script>
+<script src="/merchandise/js/tabScroll.js"></script>
+<script src="/merchandise/js/goods.js"></script>
+<script src="/merchandise/js/dish/dish-manage.js?v=4.9.1"></script>
+<script src="/merchandise/js/dish/dishTypeTree.js"></script>
+<script src="/merchandise/js/jquery-extension/jcrop/jquery.Jcrop.min.js"></script>
+<script src="/merchandise/js/jquery-extension/jcrop/ImgClipperUitl.js"></script>
+
+<script type="text/javascript" src="/merchandise/js/qiniu/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/merchandise/js/qiniu/plupload/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/merchandise/js/qiniu/qiniu.js"></script>
+<script type="text/javascript" src="/merchandise/js/common/bkeruyun-qiniu-util.js"></script>
+<script type="text/javascript" src="/merchandise/js/common/scm-tooltip.js"></script>
+<script type="text/javascript">
+    function clearPreviewTemp() {
+        $('#previewTemp').empty();
+        $('#previewTemp').prev().show();
+        $('#fileImage').removeAttr('data-selectObj');
+
+    }
+    function openImgClipper() {
+        setTimeout(function () {
+            var $target = $('#fileImage');
+            if ($target.val()) {
+                var $targetPreview = $('#divPreview-2');
+                var $img = $targetPreview.find('img');
+                if ($img.length > 0) {
+                    var imgSrc = $img.attr('src');
+                    imgClipper.open(imgSrc, $target, function (theClipper) {
+                        var $temp = theClipper.$preview.clone();
+                        $targetPreview.hide();
+                        $('#previewTemp').empty().append($temp);
+                    });
+                }
+            }
+        }, 1000);
+
+    }
+    /**
+     * 校验称重兑换
+     * @returns {boolean}
+     */
+    function checkUnitWeight() {
+        var decimal = /^\d+(\.\d{1,2})?$/;
+        var value = $('#weight').val();
+        var $error = $('#weightWrapper .error-tip');
+        var valid = decimal.test(value);
+        if (value == '') {
+            valid = true;
+        }
+        if (valid) {
+            if (parseFloat(value) > 1000000) {
+                valid = false;
+                $error.text('最大值不能超过1000000');
+                return valid;
+            }
+            $error.text('');
+        } else {
+            $error.text('请正确输入字数,小数位数保留两位');
+        }
+        return valid;
+    }
+    $(document).ready(function () {
+        var jcropConfig = {};
+        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', ctxPath + '/themes/style/img/default.jpg');
+        var $imgClipperModalImg = $(imgClipperModalStr);
+        $imgClipperModalImg.appendTo($('body'));
+        var option = {image: {scalingRatio: 0.5}};
+        var imgClipper = new ImgClipper(
+            jcropConfig, option, $('#imgClipperModal')
+        );
+        window.imgClipper = imgClipper;
+
+
+        $('#weight').on('blur', function () {
+            checkUnitWeight();
+        });
+        if ($('#saleTypeBox').hasClass('checkbox-check')) {
+            $('#weightWrapper').removeClass('hidden');
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    var ue = UE.getEditor('dishEditor');
+    var rootPath = "/merchandise",
+        baseUrl = rootPath + "/dish/manage",
+        saveOrUpdateUrl = baseUrl + "/saveOrUpdateDishBrand",
+        listUrl = baseUrl + "/list",
+        queryDishTypesUrl = baseUrl + "/queryDishTypes",
+        queryDishAndAttributeUrl = baseUrl + "/queryDishAndAttribute",
+        queryRevelanceSettingUrl = baseUrl + "/queryRevelanceSetting",
+        checkDishBrandUrl = baseUrl + "/checkDishBrand",
+        checkDishBrandSkuKeyUrl = baseUrl + "/checkDishBrandSkuKey";
+    checkBarcodeUrl = baseUrl + "/checkBarcode";
+    $("input[name=name]").blur(function () {
+        var chineseName = $("input[name=name]").val().trim();
+        var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
+        $.ajax({
+            type: "POST",
+            url: getAllFirstLetterUrl + "?random=" + Math.random(),
+            data: {name: chineseName},
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                bkeruyun.hideLoading();
+                $("input[name=dishNameIndex]").focus();
+                $("input[name=dishNameIndex]").attr("value", data.firstName); //填充内容
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                Message.alert({title: "提示", describe: '网络异常'});
+            }
+        });
+
+
+    });
+    var validate;
+    $(function () {
+        ue.addListener("ready", function () {
+            $("#edui1").css("z-index", "1");
+            $('#ueditor_0').contents().find("body").html('');
+        });
+        $("#tree").tree({
+            'folding': true,
+            'foldingType': 'single',
+            'foldingSwitch': '.icon-folding',
+            'marquee': true,
+            'marqueeType': 'radio'
+        });
+        //关联设置
+        var tabObj = null;
+        bkeruyun.tab(".goodsConfig-tab > li", "click", '.goodsConfig-con', "data-show", "current", function () {
+            if (!tabObj) {
+                //初始化 关联设置 做法 多标签滚动
+                tabObj = $("#category-tab").tabScroll({
+                    'wrapObj': $('#category-tab'),
+                    'innerObj': $('#category-tab > ul'),
+                    'innerObjLeft': 20,
+                    'item': $('#category-tab > ul > li'),
+                    'itemN': 5,
+                    'itemMarginL': 0,
+                    'itemMarginR': 10,
+                    'itemPaddingL': 10,
+                    'itemPaddingR': 10,
+                    'moveItemN': 5,
+                    'speed': 1000
+                });
+            }
+        });
+        //关联设置 做法标签
+        bkeruyun.tab("#category-tab ul > li", "click", '.goodsPracticeCon', "data-show", "current");
+
+        $(document).delegate(".defaultGoodsList > li > .setDefaultBtn", "click", function () {
+            var checkboxObj = $(this).parent().find(":checkbox");
+            var $obj = $("#" + checkboxObj.attr("data-checked-all"));
+            var $parent = $(this).parent();
+
+            $parent.siblings().removeClass("default");
+            $parent.find('label').addClass("checkbox-check");
+            checkboxObj.attr("checked", "checked").parent().addClass("checkbox-check");
+            bkeruyun.associatedCheckAll(checkboxObj[0], $obj);
+            $parent.siblings().find('input').attr('data-is-default', '2');
+            $parent.find('input').attr("checked", true);
+            //再次点击的时候需要去掉默认
+            if ($parent.hasClass('default')) {
+                $parent.removeClass('default');
+                $parent.find('input').attr('data-is-default', '2');
+            } else {
+                $parent.addClass('default');
+                $parent.find('input').attr('data-is-default', '1');
+            }
+        });
+
+        $(".icon-plus").on("click", function () {
+            var newArray = attrDetection(attributeArray);
+            if (newArray.length === 0) {
+                Message.alert({'title': '提示', 'describe': '已经没有您可以添加的属性了'});
+            } else {
+                var liHtml = [];
+                for (var i = 0, len = newArray.length; i < len; i++) {
+                    liHtml.push('<li data-id="' + newArray[i].id + '">' + newArray[i].name + '</li>');
+                }
+                $("#attribute-list").html(liHtml.join(''));
+                $("#popover-attribute").show();
+                bkeruyun.showLayer();
+            }
+        });
+        $("#creatAttribute").on("click", function () {
+            if ($("#attribute-list > li.current").length > 0) {
+                var newTypeId = $("#attribute-list > li.current").attr("data-id");
+                var newType = new Object();
+                for (var i = 0, len = attributeArray.length; i < len; i++) {
+                    if (newTypeId == attributeArray[i].id) {
+                        newType = attributeArray[i];
+                        break;
+                    }
+                }
+                addAttribute(newType);
+                $("#popover-attribute").hide();
+                bkeruyun.hideLayer();
+                setGoodsAttributeHeight(true);
+            } else {
+                Message.alert({'title': '提示', 'describe': '请选择要添加的属性'});
+                return false;
+            }
+        });
+        $("#goodsAttribute").delegate(".additem .close-1", "click", function () {
+            var len = $("#goodsAttribute .additem").length;
+            if (len > 1) {
+                $(this).parent().remove();
+            } else {
+                Message.alert({'title': '提示', 'describe': '您至少要保留一条属性'});
+            }
+            setGoodsAttributeHeight(false);
+        });
+        $("#attribute-list").delegate("li", "click", function () {
+            $(this).addClass("current").siblings().removeClass("current");
+        });
+        $("#goodsTypeSearch").delegate("#js-type-search-button", "click", function () {
+            $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+        });
+        $("#keyWord").keypress(function (event) {
+            if (event.keyCode == 13) {
+                $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+            }
+        });
+        $(".js-save").on("click", function () {
+            if (window._isAlreadySaving) {
+            } else {
+                saveDishInfo();
+                window._isAlreadySaving = true;
+            }
+        });
+        $(".js-back").on("click", function () {
+            Message.confirm(
+                {title: '提示', describe: '确认取消？'}, function () {
+                    location.href = listUrl;
+                }
+            );
+        });
+        $.refreshDishType(ctxPath, $("#keyWord").val(), $("#dishId").val());
+        $.initDishAttribute();
+        $.initRelevanceCount();
+        $.initMedia();
+
+
+    });
+    $(function () {
+        validate = $("#stepOneForm").validate({
+            rules: {
+                dishCode: {
+                    required: false,
+                    strOrNumberStartMiddleIncludeUnderline: true,
+                    maxlength: 16,
+                    remote: {
+                        type: "POST",
+                        url: checkDishBrandUrl,
+                        dataType: "json",
+                        data: {
+                            id: function () {
+                                return $("#dishId").val();
+                            },
+                            dishCode: function () {
+                                return $.trim($("#dishCode").val());
+                            }
+                        }
+                    }
+                },
+                barcode: {
+                    checkBarcode: $("#barcode").val()
+                },
+                name: {required: true, isIllegalCharacter: true, maxlength: 64},
+                dishNameIndex: {isIllegalCharacter: true, maxlength: 48},
+                aliasName: {isIllegalCharacter: true, maxlength: 48},
+                shortName: {isIllegalCharacter: true, maxlength: 4},
+                aliasShortName: {isIllegalCharacter: true, maxlength: 4},
+                marketPrice: {required: true, number: true, min: 0},
+                sort: {digits: true},
+                wmType: {required: true},
+                unitId: {required: true},
+                dishIncreaseUnit: {number: true, min: 0.01, max: 999.99},
+                stepNum: {number: true, min: 0.01, max: 999.99},
+                dishQty: {number: true, min: 0.001, max: 999.999},
+                boxQty: {digits: true, min: 0, max: 999},
+                videoUrl: {url: true, maxlength: 280},
+                dishDesc: {maxlength: 250}
+            },
+            messages: {
+                dishCode: {remote: "商品编码不能重复，请检核"},
+                unitId: '销售单位不能为空'
+            },
+            submitHandler: function () {
+            },
+            onkeyup: false
+        });
+
+        $.validator.addMethod("checkBarcode", function (value, element) {
+            var reg = /^[a-zA-Z0-9]{1,39}-?[a-zA-Z0-9]{1,39}$/;
+            if ((reg.test(value) && value.length >=1 && value.length <= 40) || value == "") {
+                if(value) {
+                    var result = checkBarcodeExist();
+                    if (!result) {
+                        $.validator.messages.checkBarcode = '条形码已存在';
+                    }
+
+                    return result;
+                }
+
+                return true;
+            }
+            $.validator.messages.checkBarcode = '条形码格式有误';
+            return false;
+        }, "条形码格式有误");
+
+        $("#dishIncreaseUnit,#stepNum").blur(function () {
+            var val = $(this).val();
+            var index = val.indexOf('.');
+            if (index > 0 && !$("#saleType").closest(".checkbox").hasClass("checkbox-check")) {
+                bkeruyun.promptMessage('不能设置为小数');
+                $(this).val(val.split('.')[0]);
+                return false;
+            }
+        });
+
+        $("#saleTypeBox").on('click', function () {
+            $("#dishIncreaseUnit").val('');
+            $("#stepNum").val('');
+            var $dishQty = $('#dishQty');
+            var $this = $(this);
+            var isCheck = false;
+            if ($this.hasClass('checkbox-check')) {
+                $this.removeClass('checkbox-check');
+                $this.find('input').attr('checked', false);
+                $dishQty.attr('data-type', 'digits');
+                if ($dishQty.val()) {
+                    $dishQty.val(parseInt($dishQty.val()));
+                }
+            } else {
+                $this.addClass('checkbox-check');
+                $this.find('input').attr('checked', 'checked');
+                $dishQty.attr('data-type', 'number1');
+                isCheck = true;
+            }
+
+            if (isCheck) {
+                $('#weightWrapper').removeClass('hidden');
+            } else {
+                $('#weightWrapper').addClass('hidden');
+            }
+            return false;
+        });
+
+        //设置餐盒数属性
+        if ($('#saleTypeBox').hasClass('checkbox-check')) {
+            $('#dishQty').attr('data-type', 'number1');
+        }
+        qiniuUtil.setConfigItem('domain', $('#domain').val());
+        initImageUpload();
+        initVideoUpload();
+
+        /**
+         * 商品信息
+         * @param data
+         */
+        function getSkuInfo(barcode) {
+
+            $.ajax({
+                url: "/merchandise/dish/manage/skuInfo",
+                type: "get",
+                async: true,
+                data: {barcode: barcode},
+                success: function (result) {
+                    if (result.success == false) {
+                        validate.showErrors({
+                            "barcode": result.message
+                        });
+                    } else {
+                        showSkuInfo(result.data);
+                    }
+                },
+                error: function () {
+                    Message.alert({title: "提示", describe: '网络异常'});
+                }
+            });
+        }
+
+        $("input[name='barcode']").keypress(function (e) {
+            var value = $(this).val();
+            var key = e.charCode || e.keyCode || 0;
+            if (key == 13) {
+                if (!$("#barcode").valid() || !checkBarcodeExist(value,false)) {
+                    return;
+                }
+                if($('#dishId').val()){
+                    Message.alert({title: "提示", describe: '商品已进行【保存】，不再自动更新商品信息'});
+                    return false;
+                }
+                getSkuInfo(value);
+            }
+        })
+
+        /**
+         * 商品信息显示
+         * @param data
+         */
+        function showSkuInfo(data) {
+            if (data == null) {
+                validate.showErrors({
+                    "barcode": "未检索到该条形码信息"
+                });
+                return false;
+            }
+            setupFormElementVal($(".panel"), data);
+            $('#barcode').select();
+        }
+
+        /**
+         * 装载表单元素数据
+         * @param form 表单
+         * @param aData 表单数据，JSON格式
+         */
+        function setupFormElementVal(form, aData) {
+            var inputElements = form.find("input[name]");
+            inputElements.each(function (i, v) {
+                //是radio单选标签
+                if ($(v).attr('type') == 'radio' || $(v).attr('type') == 'checkbox') {
+                    //标签值等于要修改数据对应的值，将标签设置为选中状态
+                    if ($(v).val() == aData[$(v).attr("name")]) {
+                        $(v).click();
+                    }
+                } else {
+                    $(v).val(aData[$(v).attr("name")]);
+                }
+
+            });
+            var textareaElements = form.find("textarea[name]");
+            textareaElements.each(function (i, v) {
+                $(v).val(aData[$(v).attr("name")])
+            });
+            var selectElements = form.find("select[name]");
+            selectElements.each(function (i, v) {
+                $(v).find('option').each(function (j, value) {
+                    if($(value).val() == aData[$(v).attr("name")] || $(value).text() == aData[$(v).attr("name")]) {
+//                        $(v).val(aData[$(v).attr("name")]);
+                        // 由于获取商品信息时，返回的是text文本值而非select的value值，这里取值需注意
+                        $(v).val($(value).val());
+                        $(v).parent().find('em').text($(value).text());
+                    }
+                });
+            });
+
+            var imgElements = form.find("img[name]");
+            imgElements.each(function (i, v) {
+                $(v).attr('src', aData[$(v).attr("name")]);
+            });
+        }
+
+
+        var val = $('#dishIncreaseUnit').val();
+        var index = val.indexOf('.');
+        if (index > 0 && !$("#saleType").closest(".checkbox").hasClass("checkbox-check")) {
+            $('#dishIncreaseUnit').val(val.split('.')[0]);
+        }
+        var val = $('#stepNum').val();
+        var index = val.indexOf('.');
+        if (index > 0 && !$("#saleType").closest(".checkbox").hasClass("checkbox-check")) {
+            $('#stepNum').val(val.split('.')[0]);
+        }
+    });
+
+    var ajaxFlag = true;
+    function checkBarcodeExist() {
+
+        var flag = false;
+        $.ajax({
+            type: "POST",
+            url: checkBarcodeUrl + "?random=" + Math.random(),
+            data: {dishId: $("#dishId").val(), barcode: $("#barcode").val()},
+            dataType: "json",
+            // contentType: "application/json",
+            async: false,
+            success: function (data) {
+                if (!data) {
+                    validate.showErrors({
+                        "barcode": "条形码已存在"
+                    });
+                }
+                flag = data;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                Message.alert({title: "提示", describe: '网络异常'});
+            },
+            complete: function() {
+                ajaxFlag = true;
+            }
+        });
+        return flag;
+    }
+
+    function initVideoUpload() {
+        var option = {
+            max_file_size: '10mb',
+            filters: {
+                mime_types: [
+                    // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
+                    {title: "Video files", extensions: "mp4,mov,3gp"}
+                ]
+
+            }
+        };
+        var containerId = 'videoUrlContainer';
+        var browseButtonId = 'bntVideoUrl';
+        var localUpLoader = new qiniuUtil.LocalUpLoader(browseButtonId, containerId, option);
+        localUpLoader.handleFileUploaded = function (up, file, infoObj) {
+            var url = qiniuUtil.keyToQiniuUrl(infoObj.key);
+            $('#videoUrl').val(url);
+        };
+        $('#' + browseButtonId).closest('td').find('.bnt-clear').on('click', function () {
+            $('#videoUrl').val('');
+        });
+        localUpLoader.init();
+    }
+
+
+    function initImageUpload() {
+        var option = {
+            max_file_size: '10mb',
+            filters: {
+                mime_types: [
+                    {title: "Image files", extensions: "jpg,jpeg,png,gif,bmp"}
+                ]
+            }
+        };
+        var containerId = 'imageUrlContainer';
+        var browseButtonId = 'bntImageUrl';
+        var localUpLoader = new qiniuUtil.LocalUpLoader(browseButtonId, containerId, option);
+        localUpLoader.handleFileUploaded = function (up, file, infoObj) {
+            var url = qiniuUtil.keyToQiniuUrl(infoObj.key);
+            setImageVal(url, file.size, file.name);
+            var $target = $('#imageUrl');
+            $target.removeAttr('data-selectObj');
+            imgClipper.open(url, $target, function (theClipper) {
+                var cropObj = theClipper.selectObj;
+                var tempUrl = qiniuUtil.photoshop.clipImage(infoObj.key, cropObj, 960, 720);
+                setImageVal(tempUrl);
+            });
+
+        };
+        $('#' + browseButtonId).closest('td').find('.bnt-clear').on('click', function () {
+            setImageVal('');
+        });
+        localUpLoader.init();
+    }
+
+    function setImageVal(url, imageSize, imageName) {
+        $('#imageUrl').attr('data-uploaded', 'yes')
+        if (!url) {
+            $('#imageUrl').val(url);
+            url = ctxPath + '/themes/style/img/default.jpg';
+            $('#divPreviewImage img').attr('src', url);
+            $('#imageUrl').attr('data-imageSize', 0);
+            $('#imageUrl').attr('data-imageName', '');
+            $('#imageUrl').attr('data-imageSuffixes', '');
+        } else {
+            $('#imageUrl').val(url);
+            $('#divPreviewImage img').attr('src', url);
+        }
+        if (typeof imageSize === 'number') {
+            $('#imageUrl').attr('data-imageSize', imageSize);
+            $('#imageUrl').attr('data-imageName', imageName);
+            var imageSuffixes = '';
+            if (imageName.indexOf('.') > -1) {
+                var tempSet = imageName.split('.');
+                imageSuffixes = '.' + tempSet[tempSet.length - 1];
+            }
+            $('#imageUrl').attr('data-imageSuffixes', imageSuffixes);
+        }
+    }
+
+
+</script>
+{include file="inc/footer.html"}
+
+</body>
+</html>
