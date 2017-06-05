@@ -236,6 +236,16 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->assign("page_title", "商品管理");
         $GLOBALS['tmpl']->display("pages/dish/list.html");
     }
+    public function addDish()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "商品管理");
+        $GLOBALS['tmpl']->display("pages/dish/addDish.html");
+    }
 
 
 }
