@@ -1,0 +1,1262 @@
+/** 
+ + -------------------------- +
+ + report.css v3.0
+ + Web: http://www.keruyun.com
+ + -------------------------- +
+ + Author: Tian Xiao Yun
+ + QQ: 358926040
+ + Mail: misstian2008@163.com
+ + -------------------------- +
+ + Date: 2014-11
+ + -------------------------- +
+**/
+/*-----css layout-----*/
+/*预订量报表*/
+.report-items {
+    width: 100%;
+    overflow: hidden;
+    zoom: 1;
+    border: 1px solid #c8c8c8;
+    border-left: 0 none;
+}
+
+.report-items + .report-items {
+
+}
+
+.report-items li {
+    float: left;
+    display: inline-block;
+    height: 68px;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border-left: 1px solid #c8c8c8;
+}
+
+.report-items-level1 li {
+    width: 429px;
+    line-height: 68px;
+}
+
+.report-items-level1 li:only-child {
+    width: 100%;
+}
+
+.report-items-level1 + .report-items-level2 {
+    border-top: 0 none;
+}
+
+/*.report-items-level2{
+	border-bottom:0 none;
+}*/
+.report-items-level2 li {
+    width: 143px;
+}
+
+.report-items-level2 li:nth-child(6n) {
+    width: 144px;
+}
+
+.report-items-level2 li span {
+    display: block;
+}
+
+.report-items li span.number {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #555;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.report-items-level1 li span {
+    vertical-align: middle;
+}
+
+.report-items-level1 li span.number {
+    margin-left: 20px;
+}
+
+.report-items-level2 li span.number {
+    line-height: 22px;
+    margin-top: 8px;
+}
+
+.report-items-level2 li span.sub-number {
+    color: #888;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.formula-tip {
+    margin-top: 15px;
+    margin-bottom: 50px;
+    position: relative;
+    text-align: right;
+}
+
+.formula-tip span {
+    background: url("../img/nextprev.png") no-repeat;
+    background-position: 64px -72px;
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.formula-tip span:hover {
+    background-position: 64px -112px;
+}
+
+.formula-tip > p {
+    background-color: #737373;
+    color: #fff;
+    display: none;
+    line-height: 24px;
+    padding: 5px 10px;
+    position: absolute;
+    top: 24px;
+    right: 0;
+}
+
+/*table*/
+.report-table-row {
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.report-table-row > li {
+    color: #737373;
+    display: inline-block;
+    float: left;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    width: 30%;
+}
+
+.report-table-title {
+    background-color: #f7f7f7;
+}
+
+.report-table-title .report-table-row > li {
+    font-size: 15px;
+    font-weight: bold;
+    height: 38px;
+    line-height: 38px;
+}
+
+.report-table > .report-table-row {
+    background: url("../img/nextprev.png") no-repeat;
+    background-position: 810px -58px;
+}
+
+.report-table > .report-table-down {
+    background-position: 810px -98px;
+}
+
+.report-table-details {
+    background-color: #f9faf1;
+    border-bottom: 1px solid #ddd;
+    display: none;
+}
+
+.report-table-details > dl {
+    margin: 0;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.report-table-details > dl > dt,
+.report-table-details > dl > dd {
+    float: left;
+    height: 38px;
+    line-height: 38px;
+}
+
+.report-table-details > dl > dt {
+    text-align: right;
+    width: 120px;
+}
+
+.report-table-details > dl > dd {
+    padding-left: 30px;
+    width: 150px;
+}
+
+.report-column-level {
+    width: 50%;
+    float: left;
+    overflow: hidden;
+}
+
+.sub-title {
+    margin-bottom: 20px;
+}
+
+.highest {
+    color: rgb(0, 158, 213);
+}
+
+.minimum {
+    color: rgb(204, 102, 102);
+}
+
+/*横向滚动表格*/
+.transverse-table {
+
+}
+
+.transverse-table .transverse-thead {
+    overflow: hidden;
+    height: 38px;
+}
+
+.transverse-table .transverse-thead:after,
+.transverse-table .transverse-tbody:after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+.transverse-table .transverse-thead > li {
+    display: inline-block;
+    float: left;
+    height: 38px;
+    line-height: 38px;
+    /*padding:0 20px;*/
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e5e5e5;
+    color: #737373;
+    font-weight: bold;
+    text-align: center;
+}
+
+.transverse-table .transverse-tbody > ul > li,
+.transverse-tfoot > li {
+    display: inline-block;
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/*单号详情弹框*/
+.popover {
+    background-color: transparent;
+    box-shadow: none;
+    border: 0 none;
+}
+
+.popover .popover-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+    border-radius: 5px;
+}
+
+.popover.right .arrow:after {
+    border-right-color: #000;
+    filter: alpha(opacity=30);
+    opacity: 0.3;
+}
+
+.orderList {
+    padding: 30px 10px;
+    color: #fff;
+}
+
+.orderList > li {
+    line-height: 25px;
+}
+
+.popover .close {
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    z-index: 1;
+}
+
+.report-header {
+    position: relative;
+    padding: 0 10px;
+    background-color: #f7f7f7;
+}
+
+.report-header > h2 {
+    color: #666;
+    line-height: 40px;
+    font-size: 16px;
+}
+
+.report-header > ul {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.report-header > ul > li {
+    display: inline-block;
+    height: 30px;
+    float: left;
+    line-height: 30px;
+    width: 80px;
+    text-align: center;
+    background-color: #c9c9c9;
+    cursor: pointer;
+}
+
+.report-header > ul > li.current {
+    background-color: #4084ca;
+    color: #fff;
+}
+
+.report-header > ul > li:first-child {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.report-header > ul > li:last-child {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/*配料*/
+.panel-item > dt {
+    width: auto;
+    padding-left: 70px;
+    text-align: left;
+}
+
+/*做法*/
+.tab {
+    position: relative;
+
+}
+
+.tab:after, .tab-white-gray:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.practice-class {
+    margin-right: 84px;
+    /*width: 1056px;*/
+    height: 41px;
+}
+
+.tab-white-gray {
+
+}
+
+.tab-white-gray > li {
+    display: inline-block;
+    float: left;
+    /*width: 116px;*/
+    height: 41px;
+    line-height: 41px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    background-color: #e5e5e5;
+    color: #555;
+    cursor: pointer;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.tab-white-gray > li.current {
+    background-color: #fff;
+}
+
+.tab-white-gray > li[data-status="disabled"] {
+    background-image: url(../img/disabled.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.set-add {
+    position: absolute;
+    right: 0;
+    top: 20px;
+
+}
+
+.set-add > li {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.set-add > li > a {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-left: 20px;
+    background: url("../img/icon.png") no-repeat;
+    text-indent: -9999px;
+}
+
+.set-add > li > a.icon-set {
+    background-position: 0 -171px;
+}
+
+.set-add > li > a.icon-add {
+    background-position: 0 -221px;
+}
+
+.set-add > li > a.icon-add-disabled {
+    background-position: 0 -538px;
+}
+
+.set-add > li ul {
+    position: absolute;
+    width: 42px;
+    top: 23px;
+    left: 5px;
+    z-index: 1;
+    border: 1px solid #e5e5e5;
+    border-bottom: 0 none;
+    display: none;
+}
+
+.set-add > li ul > li {
+    background-color: #fff;
+    line-height: 40px;
+    width: 40px;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.set-add > li ul > li a {
+    display: block;
+    color: #555;
+    text-decoration: none;
+}
+
+.set-add > li ul > li a.disabled {
+    background-color: #e5e5e5;
+}
+
+.currentType {
+    /*当前类别*/
+    height: 44px;
+    line-height: 44px;
+    margin: 20px;
+    padding-left: 70px;
+    background-color: #f3f3f3;
+}
+
+/*订单列表*/
+.orderSource {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 3px 0;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.orderSource > li {
+    float: left;
+    width: 16.6666%;
+    min-width: 149px;
+    padding: 0 5px;
+    /*height: 120px;*/
+    color: #737373;
+    box-sizing: border-box;
+    border-left: 1px solid #e5e5e5;
+    overflow: hidden;
+}
+
+.orderSource > li:first-child {
+    border-left: 0 none;
+}
+
+.orderSource > li > h3 {
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    /*margin-left:20px;*/
+    padding-left: 25px;
+    padding-top: 3px;
+    background: url(../img/icon.png) no-repeat;
+}
+
+.orderSource > li.shop > h3 {
+    background-position: 0 -373px;
+}
+
+.orderSource > li.tell > h3 {
+    background-position: 0 -299px;
+}
+
+.orderSource > li.bdMap > h3 {
+    background-position: 0 -569px;
+}
+
+.orderSource > li.self-help > h3 {
+    background-position: 0 -448px;
+}
+
+.orderSource > li.wx > h3 {
+    background-position: 0 -411px;
+}
+
+.orderSource > li.bdDirect > h3 {
+    background-position: 0 -689px;
+}
+
+.orderSource > li.call-center > h3 {
+    background-position: 0 -338px;
+}
+
+.orderSource > li > p {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.orderSource > li > p + p {
+    font-size: 14px;
+}
+
+.orderSource > li > p + p > em {
+    font-size: 16px;
+}
+
+/*订单详情*/
+.orderDtl {
+    padding-top: 30px;
+    position: relative;
+}
+
+.orderDtl .total {
+    text-align: right;
+    margin-top: -35px;
+}
+
+.sourceStatus {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.status {
+    display: inline-block;
+    width: 90px;
+    height: 32px;
+    line-height: 32px;
+    color: #fff;
+    background-color: #f87a7a;
+    font-size: 16px;
+    text-align: center;
+}
+
+.sourceStatus .status {
+    margin-left: 10px;
+}
+
+.goods-items {
+    padding: 0 20px;
+}
+
+.goods-items li {
+    padding-left: 2em;
+    text-align: left;
+}
+
+.goods-items li > em {
+    display: inline-block;
+    width: 100%;
+    word-break: break-all;
+}
+
+/*商品设置*/
+.breadCrumbs {
+    margin: 20px auto;
+}
+
+.breadCrumbs > li {
+    display: inline-block;
+    padding-left: 70px;
+    padding-right: 10px;
+    font-size: 12px;
+    background: url('../img/inventory_icon.png') no-repeat 0 -110px;
+}
+
+.breadCrumbs > li:first-child {
+    padding-left: 0;
+    background-image: none;
+}
+
+.breadCrumbs > li > span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    background: url('../img/inventory_icon.png') no-repeat 0 -40px;
+}
+
+.breadCrumbs > li.current {
+    color: #4f95dc;
+}
+
+.breadCrumbs > li.current > span {
+    background-position: 0 0;
+}
+
+.breadCrumbs > li.notScope {
+    /*不在搜索范围内*/
+    display: none;
+}
+
+#goodsAttribute .select-group {
+    margin-right: 20px;
+    width: 220px;
+    float: left;
+}
+
+#goodsAttributeTd {
+    position: relative;
+    /*overflow: hidden;*/
+}
+
+.additem-wrap-wp::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.additem-wrap-wp::after {
+    box-sizing: border-box;
+}
+
+.additem-wrap {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 10px;
+}
+
+#goodsAttribute .additem {
+    margin-bottom: 20px;
+    /*overflow:hidden;*/
+}
+
+#goodsAttribute .additem:last-child {
+    margin-bottom: 0;
+}
+
+#goodsAttribute .additem:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+#goodsAttribute .additem .close-1 {
+    line-height: 34px;
+    background-position: 0 -70px;
+}
+
+#goodsAttribute .additem .close-1:hover {
+    background-position: 0 -113px;
+}
+
+#goodsAttribute .icon-plus {
+    position: absolute;
+    left: 470px;
+    bottom: 23px;
+}
+
+.attribute-list {
+    padding-left: 10px;
+    margin: 20px auto;
+}
+
+.attribute-list > li {
+    display: inline-block;
+    margin: 0 20px 20px;
+    width: 100px;
+    line-height: 32px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 3px;
+    color: #9f9f9f;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.attribute-list > li.current {
+    color: #fff;
+    background-color: #3887d7;
+}
+
+/*关联设置*/
+.goodsConfig-tab {
+
+}
+
+.goodsConfig-tab > li {
+    width: 200px;
+    margin: 0 10px;
+}
+
+.goodsConfig-tab > li:first-child {
+    margin-left: 0;
+}
+
+.goodsConfig-tab > li:last-child {
+    margin-right: 0;
+}
+
+.goodsConfig-tab > li.current {
+    border: 1px solid #e5e5e5;
+    border-bottom: 0 none;
+}
+
+.goodsConfig-con {
+    margin-top: -1px;
+    padding: 20px 10px;
+    border: 1px solid #e5e5e5;
+}
+
+.goodsListAll,
+.goodsList {
+    /*padding-left:10px;*/
+}
+
+.goodsList > li {
+    display: inline-block;
+    width: 30%;
+    margin-right: 3%;
+}
+
+.goodsList > li > label {
+    width: 98%;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 35px;
+    vertical-align: middle;
+}
+
+.goodsList > li > label > i {
+    display: inline-block;
+    max-width: 135px;
+    height: 18px;
+    line-height: 18px;
+    margin-left: 5px;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#goodsPracticeCon .tab-white-gray > li {
+    width: 130px;
+    height: 35px;
+    line-height: 35px;
+    background-color: transparent;
+}
+
+#goodsPracticeCon .tab-white-gray > li.current {
+    border-bottom: 4px solid #4f95dc;
+}
+
+.goodsPracticeCon {
+    border-top: 1px solid #e5e5e5;
+    margin-top: -2px;
+    padding: 20px 0;
+}
+
+/*做法默认选中样式*/
+.defaultGoodsList > li {
+    position: relative;
+}
+
+.defaultGoodsList > li.default,
+.defaultGoodsList > li .setDefaultBtn {
+    color: #f30;
+}
+
+.defaultGoodsList > li .setDefaultBtn,
+.defaultGoodsList > li .red {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    cursor: pointer;
+}
+
+.defaultGoodsList > li .setDefaultBtn {
+    display: none;
+}
+
+/*关联设置 左右滚动按钮样式*/
+#goodsPracticeCon .next, #goodsPracticeCon .prev {
+    /*border:0 none;
+    background-color:transparent;*/
+    height: 32px;
+
+}
+
+/*范本授权*/
+#sampleCon .panel-body, #setShop .panel-body {
+    padding: 20px;
+}
+
+#sampleCon .goodsList > li {
+    width: 24%;
+}
+
+/*树结构文字显示不下的时候显示...
+.classificationAll .highlighted-list > li{
+	position:relative;
+	padding-right:70px;
+}
+.classificationAll .highlighted-list > li .red{
+	position:absolute;
+	right:0;
+	top:0;
+	padding: 3px 0;
+	width: auto;
+	border: none;
+	height: auto;
+}
+.classificationAll .highlighted-list > li em{
+	display:inline-block;
+	width:124px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	vertical-align: middle;
+}*/
+/*套餐明细*/
+.packageDetail {
+    margin: 60px 20px 20px 20px;
+    position: relative;
+    border: 1px solid #e5e5e5;
+    min-height: 370px;
+}
+
+.packageDetail .tab {
+    margin-top: -41px;
+    margin-left: -1px;
+}
+
+#detailCon .currentType {
+    padding-left: 15px;
+}
+
+.packageDetail-tab > li {
+    line-height: normal;
+}
+
+.packageDetail-tab > li {
+    width: 120px;
+}
+
+.packageDetail-tab > li:first-child {
+    margin-left: 0;
+}
+
+.packageDetail-tab > li:last-child {
+    margin-right: 0;
+}
+
+.packageDetail-tab > li.current {
+    border: 1px solid #e5e5e5;
+    border-bottom: 0 none;
+}
+
+.packageDetail-con {
+    margin-top: -1px;
+    padding: 65px 15px 20px;
+}
+
+#chooseGoodsBtn {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+}
+
+#form-addGoodsGroup > .table-nobd {
+    margin-left: 75px;
+    margin-top: 30px;
+}
+
+#popover-addGoods .multi-select-con {
+    top: 31px;
+}
+
+/*商品列表 停用提示框*/
+#clockMsg {
+    padding: 30px;
+    font-weight: bold;
+}
+
+#viewDtlBtn {
+    margin-right: 30px;
+}
+
+#viewDetail {
+    margin-top: 10px;
+    padding: 0 10px;
+    border-top: 1px solid #e5e5e5;
+}
+
+#viewDetail > h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #999;
+}
+
+#viewDetail > table > tbody > tr > td {
+    height: 30px;
+}
+
+/*价格策略 选择商品*/
+#chooseGoods-tab .tab-white-gray > li {
+    width: 120px;
+}
+
+/*商品排行报表*/
+.report-ranking {
+    position: relative;
+    min-height: 450px;
+    border: 1px solid #e5e5e5;
+}
+
+.report-ranking-tab {
+    position: relative;
+    background-color: #e5e5e5;
+}
+
+.report-ranking-tab h2 {
+    line-height: 40px;
+    padding-left: 10px;
+}
+
+.report-ranking-tab ul {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.report-ranking-tab ul li {
+    display: inline-block;
+    float: left;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #c9c9c9;
+    cursor: pointer;
+}
+
+.report-ranking-tab ul li.current {
+    background-color: #4084ca;
+    color: #fff;
+}
+
+.report-ranking-tab ul li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.report-ranking-tab ul li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.report-ranking .ranking-col {
+    position: absolute;
+    top: 40px;
+    right: 1px;
+    bottom: 0px;
+    left: 1px;
+    z-index: 1;
+    background-color: #fff;
+}
+
+/*新增商品*/
+.authorization > ul {
+    float: left;
+}
+
+.authorization > ul > li {
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    margin-right: 10px;
+    padding: 0 10px;
+    background-color: #f8f8f8;
+}
+
+.authorization > ul > li .close {
+    margin-top: 4px;
+}
+
+.authorization .icon-plus {
+    width: 32px;
+    height: 32px;
+    background-color: #f8f8f8;
+}
+
+.authorizationShops-list {
+    margin: 20px;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.authorizationShops-list li {
+    float: left;
+    width: 25%;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.head-portrait {
+    position: absolute;
+    left: 570px;
+    top: 30px;
+}
+
+.head-portrait h2 {
+    font-size: 16px;
+    float: left;
+    padding: 5px 30px 0 0;
+}
+
+.headImg {
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+}
+
+.green {
+    color: #10d57f;
+}
+
+.orange {
+    color: #FFA700
+}
+
+div.coupons-body {
+    margin: 0 20px;
+    max-height: 883px;
+    min-height: 883px;
+}
+
+.coupons-title {
+    padding: 10px 0;
+    background-color: #f7f7f7;
+    margin: 20px 0;
+}
+
+.coupons-title li {
+    width: 32%;
+    border-right: 1px solid #ddd;
+}
+
+.coupons-title li:last-child {
+    border-right: none;
+}
+
+.coupons-title .green, .coupons-title .orange {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.coupons-body table .gray > th {
+    color: #999;
+}
+
+.pointReward {
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+.pointReward input {
+    width: 15px;
+    height: 15px;
+}
+.panel-list-type{
+    font-size: 14px;
+}
+.type-background{
+    background-color:#DEDEDE!important;
+}
+.panel-list-type li>label{
+    margin-bottom: 0;
+}
+.panel-list-type .checkbox input{
+    display: none;
+}
+.panel-list-type .checkbox label{
+    padding-left: 10px;
+    margin: 0 0 0 -5px;
+}
+.form-control[readonly] {
+    cursor: pointer;
+}
+
+/* 新增样式 begin*/
+.commercial-content .content {
+    width: 790px;
+    height: 500px;
+    top: 20px;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 40;
+    position: relative;
+}
+
+.commercial-content .content-head {
+    width: 790px;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 50;
+    background-color: #fff;
+}
+
+.commercial-content .frozenTable {
+    position: absolute;
+    z-index: 30;
+    background-color: #fff;
+    width: 240px;
+}
+
+.commercial-content .frozenTable > thead > tr > th {
+    width: 80px;
+}
+
+.commercial-content .frozenTable .table-body tr td {
+    height: 168px;
+    border-bottom: none;
+}
+
+.commercial-content .table-content {
+    width: 550px;
+    overflow-x: auto;
+    position: absolute;
+    z-index: 20;
+    background-color: #fff;
+    left: 240px;
+    top: 0;
+}
+
+.commercial-content .colHeader {
+    height: 500px;
+    overflow-y: hidden;
+}
+
+.commercial-content .thead-highlighted > thead > tr > th {
+    height: 56px;
+}
+
+.coupons-content {
+    width: 820px;
+    overflow-x: auto;
+    word-wrap: break-word;
+    word-break: normal;
+}
+
+/* 新增样式 begin*/
+/* 销售分析 start
+ * created by zhulf
+ */
+.article-header h1 a {
+    color: #fff;
+}
+.tab-nav {
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.tab-nav .btn {
+    width: 150px;
+    color: #333;
+    margin-top: 3px;
+}
+
+.tab-nav .btn-active {
+    color: #fff;
+    background-color: #4084CA;
+}
+
+.tab-box {
+    width: 100%;
+}
+.chart-head{
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid black;
+}
+.chart-head b{
+    color: black;
+    font-weight: normal;
+    font-size: 16px;
+}
+.chart-body{
+    width: 100%;
+    display: inline-block;
+    margin-top: 20px;
+}
+.chart-body .chart-bar{
+    width: 60%;
+}
+.chart-body .chart-bar .bar{
+    height: 250px;
+}
+.chart-body .chart-pie{
+    width: 40%;
+}
+.chart-body .chart-pie .pie{
+    height: 250px;
+}
+.chart-body .chart-scatter{
+    width: 100%;
+}
+.chart-body .chart-scatter .scatter{
+    height: 300px;
+}
+
+.description{
+    width: 300px;
+    position: absolute;
+    z-index: 10;
+}
+/* 销售分析 end*/

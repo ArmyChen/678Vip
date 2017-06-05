@@ -1,0 +1,126 @@
+/*门店商品->编辑商品css*/
+.form-container {
+    width: 65%;
+}
+.form-container .form-item
+{
+	width: 50%;
+}
+.form-container-code
+{
+	padding-right: 80px;
+	width: 35%;
+}
+.down-code
+{
+	position: relative;
+	display: inline-block;
+	float: right;
+	width: 215px;
+	height: 36px;
+	line-height: 36px;
+	margin-top: 20px;
+	background: #00ff00;
+	text-align: center;
+	color: #000;
+}
+.down-code:hover
+{
+	text-decoration: none;
+	color: #000;
+}
+.down-code i
+{
+	position: absolute;
+	top: 50%;
+	right: auto;
+	width: 20px;
+	height: 20px;
+	margin-top: -10px;
+	background: url(../img/iconfont-down.png) no-repeat;
+	-webkit-background-size: 20px 20px;
+	background-size: 20px 20px;
+}
+.form-container-more,
+.form-container-more .form-item-more
+{
+	width: 100%;
+}
+.form-container-more .form-item-more .control-label
+{
+	text-align: left;
+	text-indent: 20px;
+}
+.form-container-more .form-item-more .control-label-con
+{
+	margin-left: 60px;
+}
+/*商品管理->商品管理基本设置*/
+.add-goods-img
+{
+	width: 75px;
+	height: 67px;
+	color: #b2b2b2;
+	border: solid 1px #b2b2b2;
+	background: url(../img/iconfont-plus.png) 50% 50% no-repeat;
+	-webkit-background-size: 36px auto;
+	background-size: 36px auto;
+}
+/*富文本编辑器*/
+#editor,
+#editor #edui1
+{
+	z-index: 0 !important;
+}
+
+
+
+/*百度外卖菜品匹配*/
+.grayBg{
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+}
+.ppxz{
+	padding-top: 40px;
+	width: 580px;
+	font-size: 24px;
+	text-align: center;
+	margin: 0 auto;
+}
+.ppxz h2{
+	line-height: 60px;
+	color: red;
+	font-weight: bold;
+}
+.ppxz ul{
+	text-align: left;
+	line-height: 60px;
+}
+
+.panel .status{
+	font-size: 20px;
+	padding: 40px;
+	margin-bottom: 50px;
+}
+.panel .status span{
+	float: left;
+	margin-right: 50px;
+}
+#gbox_grid{
+	margin: 0 auto;
+}
+
+.panel_main .panel_title{
+	width: 1000px;
+	margin: 0 auto;
+	font-size: 30px;
+	color: darkgray;
+	text-align: center;
+}
+
+.panel_main .panel_title span{
+	margin-left: 150px;
+	margin-right: 200px;
+}
+/*百度外卖菜品匹配 结束*/

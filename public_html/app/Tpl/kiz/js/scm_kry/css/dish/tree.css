@@ -1,0 +1,65 @@
+﻿.tree{
+	overflow:auto;
+}
+.tree li{
+	padding:3px 0;
+	position:relative;
+}
+.tree li > .red{
+	position:absolute;
+	right:0;
+	top:0;
+	padding: 3px 0;
+	width: auto;
+	border: none;
+	height: auto;
+}
+.tree li > em,
+.tree li > label{
+	margin-left:20px;
+}
+.tree li > label
+{
+	width:150px;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.tree li > label>.red
+{
+	border: none;
+}
+.tree li label > em{
+	display:inline-block;
+	width: 124px;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size:16px;
+	vertical-align:middle;
+}
+.tree li.shutDown{
+	height:25px;
+	overflow:hidden;
+}
+.tree li.open{
+	height:auto;
+}
+.icon-folding {
+	position: absolute;
+	left: 0;
+	top: 8px;
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background: url("../img/inventory-arrow.png") no-repeat 0 -26px;
+	cursor: pointer;
+}
+.tree li.shutDown > .icon-folding{
+	background-position:0 -26px;
+}
+.tree li.open > .icon-folding{
+	background-position:0 0;
+}

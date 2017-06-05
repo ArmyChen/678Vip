@@ -1,5 +1,5 @@
 
-{include file="inc/header.html"}
+{include file="inc/header2.html"}
 <!-- 标题 -->
 <div class="article-header">
     <div class="center-block">
@@ -284,8 +284,7 @@
 
     function batchImportDish() {
         location.href = batchImportDishUrl;
-    };
-
+    }
     function batchMediaDish() {
         //1、判断是否选中菜品，如若没有选择给予有好提示，选中后提交选中的菜品
         if (itemsOfSelectedRows == null || itemsOfSelectedRows.length == 0) {
@@ -319,8 +318,7 @@
             form.append(input);
             form.submit();
         }
-    };
-
+    }
     $(function() {
         var opts = {
             urlRoot : "/merchandise/dish/manage",
@@ -445,7 +443,7 @@
                     id:this.value,
                     propertyKind:$(this).attr('data-propertyKind'),
                     propertyTypeId:$(this).attr('data-propertyTypeId')
-                }
+                };
                 cookingWayIds.push(obj);
             });
             condition.cookingWayIds = cookingWayIds;
@@ -507,10 +505,10 @@
                 $.post('/merchandise/dish/manage/checkSCMTemplateRel', condition, function(returnData) {
                     bkeruyun.hideLoading();
                     var confirmHtmlSet = ['你确认要删除选中的' + length + '个商品吗？删除后将不能恢复！ '];
-                    confirmHtmlSet.push('<br/>')
-                    confirmHtmlSet.push('<div style="color:red;font-size: smaller; padding:0 10px;">')
+                    confirmHtmlSet.push('<br/>');
+                    confirmHtmlSet.push('<div style="color:red;font-size: smaller; padding:0 10px;">');
                     confirmHtmlSet.push('（重要提示：如果商品存在引用，删除商品将影响模板使用！商品可能存在的引用如下：套餐、销售模板、价格策略模板、配方、自产模板、配送模板、营销活动、特价菜单等）');
-                    confirmHtmlSet.push('</div>')
+                    confirmHtmlSet.push('</div>');
                     Message.confirm({
                         title: '提示',
                         describe: confirmHtmlSet.join('')
@@ -615,7 +613,7 @@
         // $(".select-control > em").text(s);
         $("#input").attr("data-id", id);
         $("#input").attr("data-type", type);
-    })
+    });
 
     function removePreview() {
         if ($("#grid").data("imgPre")) {
@@ -643,8 +641,7 @@
 //                $(node).parent().addClass("checkbox-check")
 //            });
             //$(".select-control > em").text(query.select);
-        };
-
+        }
         var $gridObj = $("#grid"),
             enabledFlag,
             dishTypeId = $("#input").attr("data-id"),
@@ -675,8 +672,7 @@
             } else if (index < 0) {
                 itemsOfSelectedRows.push(id + "," + name);
             }
-        };
-
+        }
         var postData = {
             dishTypeId: dishTypeId,
             typeOrInClass: typeOrInClass,
@@ -749,7 +745,7 @@
                     i, count;
                 for (i = 0, count = itemsOfSelectedRows.length; i < count; i++) {
                     $this.jqGrid('setSelection', itemsOfSelectedRows[i].split(",")[0], false);
-                };
+                }
                 var data;
                 $("#grid tr").mouseenter(function(e) {
                     data = $("#grid").jqGrid('getRowData', $(this).attr("id"));
@@ -1021,7 +1017,7 @@
             var pagesize = $(".ui-pg-input").val();
             $("#grid").refresh(pagesize);
         }
-    })
+    });
 
     function lock(id) {
         $.ajax({
@@ -1037,7 +1033,7 @@
     $("#refresh_grid").on("click", function() {
         var pagesize = $(".ui-pg-input").val();
         $("#grid").refresh(pagesize);
-    })
+    });
     //重置
     $("#undo-all").on("click", function() {
         $("#orderStatus-1").attr("checked", true);
@@ -1047,12 +1043,12 @@
         $("#input").attr("data-id", '');
         $("#input").attr("data-type", '');
         sessionStorage.setItem('DISH_QUERY', null);
-    })
+    });
     var extra = {
         _init: function(){
             var _this = this;
             var $dishTypeContainer = $('#dishTypeContainer');
-            var html = template('tmp-dishType',{list:this.cacheData.middleDishBrandTypes})
+            var html = template('tmp-dishType',{list:this.cacheData.middleDishBrandTypes});
             $dishTypeContainer.find('ul.highlighted-list').append(html);
             this.tab.bindEvent($('#updateModal'));
             this.createAllTabs();
@@ -1081,7 +1077,7 @@
                 'memoIds':'备注',
                 'condimentIds':'配料',
                 'cookingWayIds':'做法'
-            }
+            };
             for(var item in obj){
                 if(conditon.hasOwnProperty(item)){
                     if(conditon[item].length ==0){
@@ -1206,7 +1202,7 @@
                     id:this.value,
                     propertyKind:$(this).attr('data-propertyKind'),
                     propertyTypeId:$(this).attr('data-propertyTypeId')
-                }
+                };
                 checkedSet.push(obj);
             });
             return checkedSet;
@@ -1226,8 +1222,8 @@
         tab: {
             bindEvent: function($container,callback){
                 $container.on('shown.bs.tab', 'a[data-toggle="tab"]',function (e) {
-                    e.target // newly activated tab
-                    e.relatedTarget // previous active tab
+                    e.target; // newly activated tab
+                    e.relatedTarget; // previous active tab
                     var current = this;
                     var index = 0;
                     var $tabTitle = $(this).closest('.tab-title');
@@ -1321,7 +1317,7 @@
                     });
                     return $(arr);
 
-                }
+                };
                 var $dataTitle = sort($tabContainer.find('>.tab-title>ul>li'));
                 $tabContainer.find('>.tab-title').empty();
                 $tabContainer.find('>.tab-title').append($dataTitle);
