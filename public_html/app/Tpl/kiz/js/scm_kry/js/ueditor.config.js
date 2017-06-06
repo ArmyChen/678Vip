@@ -30,7 +30,7 @@
         UEDITOR_HOME_URL : URL
 
         //图片上传配置区
-        ,imageUrl:"http://up.qiniu.com/"            //图片上传提交地址
+        ,imageUrl:"http://www.678sh.com/ueditor/uploads"            //图片上传提交地址
         ,imagePath:""                     //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
         //七牛结合需要改成file
         ,imageFieldName:"file"                   //图片数据的key,若此处修改，需要在后台对应文件修改对应参数

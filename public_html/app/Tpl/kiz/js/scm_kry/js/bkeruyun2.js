@@ -366,6 +366,8 @@ var bkeruyun = {
                 return "/kiz.php?ctl=customer&"+ u;
             }else if(p == 12){
                 return "/kiz.php?ctl=role&"+ u;
+            }else if(p == 13){
+                return "/kiz.php?ctl=dish&"+ u;
             }else{
                 //return "/ww"
                 throw new Error("菜单未知参数p="+p);

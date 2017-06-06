@@ -2,9 +2,9 @@
   var bkeruyun = window.bkeruyun || window;
   var qiniuUtil = {
     _config: {
-      'uptoken_url': ctxPath + '/ueditor/uptokenStr',
+      'uptoken_url': ctx2Path + '&act=uptokenStr',
       // domain 必须设置
-      'domain': null
+      'domain': $("#domain").val()
     },
     //提供修改config 方法
     setConfigItem: function (key, value) {

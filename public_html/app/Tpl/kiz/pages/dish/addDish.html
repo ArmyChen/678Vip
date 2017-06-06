@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/tabScroll.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/store-goods.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/jquery.Jcrop.min.css">
+<input type="hidden" id="domain" value="http://or4dwzium.bkt.clouddn.com/">
 <div class="article-header">
     <div class="center-block w1200">
         <h1>新增商品</h1>
@@ -35,6 +36,7 @@
             </div>
             <div class="aside-column classificationAll" id="classificationAll">
                 <ul class="tree" id="tree">
+
                 </ul>
             </div>
         </div>
@@ -75,19 +77,13 @@
                                                 value=""></td>
 
                         <th valign="top">&nbsp;</th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="48" name="aliasName"
-                                                id="aliasName" placeholder="第二语言" value=""></td>
                     </tr>
                     <tr>
 
-                        <th valign="top"><label for="dishNameIndex" class="control-label">名称首字母</label></th>
+                        <th valign="top"><label for="dishNameIndex" class="control-label">简码</label></th>
                         <td valign="top"><input type="text" class="form-control w220" name="dishNameIndex"
                                                 id="dishNameIndex"
                                                 value=""></td>
-                        <th valign="top"><label for="shortName" class="control-label">短名称</label></th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="shortName"
-                                                id="shortName"
-                                                placeholder="第一语言" value=""></td>
                     </tr>
 
                     <tr>
@@ -95,10 +91,6 @@
                         <td valign="top"><input type="text" class="form-control w220" name="barcode" id="barcode"
                                                 maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value=""></td>
                         <th valign="top">&nbsp;</th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="48"
-                                                name="aliasShortName"
-                                                id="aliasShortName" placeholder="第二语言" value="">
-                        </td>
 
                     </tr>
                     <tr>
@@ -118,12 +110,12 @@
                             </select></div>
 
                         </td>
-                        <th valign="top"><label class="control-label">销售类型</label></th>
-                        <td valign="top">
-                            <label id="saleTypeBox"
-                                   class="checkbox "><span></span>
-                                <input type="checkbox" name="saleType" id="saleType" data-value="1"
-                                >称重商品</label></td>
+                        <!--<th valign="top"><label class="control-label">销售类型</label></th>-->
+                        <!--<td valign="top">-->
+                            <!--<label id="saleTypeBox"-->
+                                   <!--class="checkbox "><span></span>-->
+                                <!--<input type="checkbox" name="saleType" id="saleType" data-value="1"-->
+                                <!--&gt;称重商品</label></td>-->
 
                     </tr>
 
@@ -193,13 +185,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <th valign="top"><label class="control-label">规格类别</label></th>
+                        <th valign="top"><label class="control-label"> 规格类别</label></th>
                         <td colspan="3" valign="top" id="goodsAttributeTd">
+
                             <div class="additem-wrap" id="goodsAttribute">
 
                             </div>
-                            <span class="icon-plus">添加</span>
+                            <span class="icon-plus" style="    left: 465px;position: relative;">添加</span>
                         </td>
+
                     </tr>
                     <tr>
                         <th valign="top"><label class="control-label">排序</label></th>
@@ -288,7 +282,7 @@
                 <h3 class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion"
                     data-target="#collapseMore"><em>更多</em><span class="caret pull-right"></span></h3>
             </div>
-            <div id="collapseMore" class="panel-collapse collapse">
+            <div id="collapseMore" >
                 <div class="panel-body">
                     <table cellpadding="0" cellspacing="0"
                            class="table-nobd table-fixed">
@@ -317,28 +311,28 @@
                                 <div id="divPreviewImage">
 
 
-                                    <img src="/app/Tpl/kiz/js/scm_kry/js/dish/img/default.jpg"
+                                    <img src="/app/Tpl/kiz/js/scm_kry/img/default.jpg"
                                          class="img-responsive">
 
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th><label class="control-label">视频</label></th>
-                            <td>
-                                <div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">
-                                    <div id="bntVideoUrl">
-                                        <input type="text" class="form-control" name="videoUrl" id="videoUrl"
-                                               value="" readonly="readonly">
-                                        <button class="btn btn-default" type="button">上传视频</button>
-                                    </div>
-                                </div>
-                                <span class="bnt-clear">清空</span>
-                                <span for="" class="red"
-                                      style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>
-                            </td>
+                        <!--<tr>-->
+                            <!--<th><label class="control-label">视频</label></th>-->
+                            <!--<td>-->
+                                <!--<div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">-->
+                                    <!--<div id="bntVideoUrl">-->
+                                        <!--<input type="text" class="form-control" name="videoUrl" id="videoUrl"-->
+                                               <!--value="" readonly="readonly">-->
+                                        <!--<button class="btn btn-default" type="button">上传视频</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<span class="bnt-clear">清空</span>-->
+                                <!--<span for="" class="red"-->
+                                      <!--style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>-->
+                            <!--</td>-->
 
-                        </tr>
+                        <!--</tr>-->
                         <tr>
                             <th valign="top"><label class="control-label">描述</label></th>
                             <td><textarea class="form-control w402" name="dishDesc"
@@ -348,27 +342,28 @@
                         <tr>
                             <th valign="top">菜品详情</th>
                             <td>
-                                <script id="dishEditor" type="text/plain" style="width:700px;height:500px;"></script>
-                                </td>
-                                </tr>
-                                </tbody>
-                                </table>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
+                                <textarea name="后台取值的key" id="myEditor" style="width: 600px;height: 800px;"></textarea>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-                                <div; class="center-block panel-group mt20"; id="sampleCon"; style="display:none;">
-                                    <div; class="panel"; min-hieght="">
-                                        <div; class="panel-body">
-                                            <h3; class="goodsListAll"><label; id="checkAllLable"; class="checkbox"><span></span><input; type="checkbox"; name="sampleAll"; id="sampleAll"; data-all="sample">全部</label></h3>
-                                            <ul; class="goodsList"; id="templeteLaber">
+    <div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
+                                    <div class="panel" min-hieght="">
+                                        <div class="panel-body">
+                                            <h3 class="goodsListAll"><label id="checkAllLable" class="checkbox"><span></span><input type="checkbox" name="sampleAll" id="sampleAll" data-all="sample">全部</label></h3>
+                                            <ul class="goodsList" id="templeteLaber">
 
                                                 <li>
 
-                                                    <label; class="checkbox checkbox-check">
-                                                        <span></span><input; type="checkbox"; name="sample"; disabled="disabled"; value="39817"; data-checked-all="sampleAll"; checked> &nbsp; 默认模板 /MRMB </label>
+                                                    <label class="checkbox checkbox-check">
+                                                        <span></span><input type="checkbox" name="sample" disabled="disabled" value="39817" data-checked-all="sampleAll" checked> &nbsp 默认模板 /MRMB </label>
 
 
 
@@ -377,16 +372,16 @@
                                                 <li>
 
 
-                                                    <label; class="checkbox " >
-                                                        <span></span><input; type="checkbox"; name="sample"; value="57573"; data-checked-all="sampleAll" > &nbsp; 111 /111</label>
+                                                    <label class="checkbox " >
+                                                        <span></span><input type="checkbox" name="sample" value="57573" data-checked-all="sampleAll" > &nbsp 111 /111</label>
 
                                                 </li>
 
                                                 <li>
 
 
-                                                    <label; class="checkbox " >
-                                                        <span></span><input; type="checkbox"; name="sample"; value="58238"; data-checked-all="sampleAll" > &nbsp; 121 /www</label>
+                                                    <label class="checkbox " >
+                                                        <span></span><input type="checkbox" name="sample" value="58238" data-checked-all="sampleAll" > &nbsp 121 /www</label>
 
                                                 </li>
 
@@ -395,7 +390,7 @@
                                     </div>
                                 </div>
 
-                                <script; type="text/javascript">;
+                                <script type="text/javascript">
                                     var checkFlag;
                                     (function (){
                                         $("[name='sample']").each(function(i,val){
@@ -443,9 +438,9 @@
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/zh_CN.js"></script>
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/qiniu.js"></script>
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish//bkeruyun-qiniu-util.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/scm-tooltip.js"></script>
-<!--<script type="text/javascript" charset="utf-8" src="/app/Tpl/kiz/js/scm_kry/js/ueditor.config.js"></script>-->
-<!--<script type="text/javascript" charset="utf-8" src="/app/Tpl/kiz/js/scm_kry/js/ueditor.all.js"></script>-->
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.js"></script>
 <script type="text/javascript">
     function clearPreviewTemp() {
         $('#previewTemp').empty();
@@ -518,16 +513,16 @@
 
 <script type="text/javascript">
 //    var ue = UE.getEditor('dishEditor');
-    var rootPath = "/merchandise",
-        baseUrl = rootPath + "/dish/manage",
-        saveOrUpdateUrl = baseUrl + "/saveOrUpdateDishBrand",
-        listUrl = baseUrl + "/list",
-        queryDishTypesUrl = baseUrl + "/queryDishTypes",
-        queryDishAndAttributeUrl = baseUrl + "/queryDishAndAttribute",
-        queryRevelanceSettingUrl = baseUrl + "/queryRevelanceSetting",
-        checkDishBrandUrl = baseUrl + "/checkDishBrand",
-        checkDishBrandSkuKeyUrl = baseUrl + "/checkDishBrandSkuKey";
-    checkBarcodeUrl = baseUrl + "/checkBarcode";
+    var rootPath = ctx2Path,
+        baseUrl = ctx2Path,
+        saveOrUpdateUrl = baseUrl + "&act=saveOrUpdateDishBrand",
+        listUrl = baseUrl + "&act=queryDishList",
+        queryDishTypesUrl = baseUrl + "&act=queryDishTypes",
+        queryDishAndAttributeUrl = baseUrl + "&act=queryDishAndAttribute",
+        queryRevelanceSettingUrl = baseUrl + "&act=queryRevelanceSetting",
+        checkDishBrandUrl = baseUrl + "&act=checkDishBrand",
+        checkDishBrandSkuKeyUrl = baseUrl + "&act=checkDishBrandSkuKey";
+    checkBarcodeUrl = baseUrl + "&act=checkBarcode";
     $("input[name=name]").blur(function () {
         var chineseName = $("input[name=name]").val().trim();
         var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
@@ -1013,6 +1008,12 @@
     }
 
 
+</script>
+<script type="text/javascript">
+    var editor = new UE.ui.Editor();
+    editor.render("myEditor");
+    //1.2.4以后可以使用一下代码实例化编辑器
+    //UE.getEditor('myEditor')
 </script>
 {include file="inc/footer.html"}
 

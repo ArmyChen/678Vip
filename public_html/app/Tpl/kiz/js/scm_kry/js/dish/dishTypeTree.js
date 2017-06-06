@@ -1,7 +1,7 @@
 
 $.refreshDishType = function(ctxPath, codeOrName, dishId) {
 	var args = {};
-	args.url = ctxPath + "/dish/manage/queryDishTypes";
+	args.url = ctx2Path + "&act=queryDishTypes";
 	args.postData = {codeOrName:codeOrName, dishId:dishId};
 	args.callback = "$.reloadDishType";
 	$.submitWithAjax(args);
