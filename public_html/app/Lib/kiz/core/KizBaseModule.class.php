@@ -693,6 +693,21 @@ class KizBaseModule{
     }
 
     /**
+     * 查询标签
+     */
+    public function get_supplier_cate_tag_row($id=0){
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        if($id>0){
+            $pandian=$GLOBALS['db']->getRow("select * from fanwe_dish_goods_tag where id=".$id);
+            return $pandian;
+        }
+        /* 系统默认 */
+        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dish_goods_tag where location_id=".$slid);
+        return $pandianlist;
+    }
+
+    /**
      * 商品大类ajax
      */
     public function goods_category_one_ajax($id){

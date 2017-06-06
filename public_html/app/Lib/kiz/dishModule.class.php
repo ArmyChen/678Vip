@@ -247,6 +247,50 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/dish/addDish.html");
     }
 
+    public function dish_tag()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "标签管理");
+        $GLOBALS['tmpl']->display("pages/dish/tag.html");
+    }
+    public function dish_tag_add()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "新增标签管理");
+        $GLOBALS['tmpl']->display("pages/dish/tagAdd.html");
+    }
+    public function dish_tag_edit()
+    {
+        init_app_page();
+        $id = $_REQUEST['id'];
+        $cangku = $GLOBALS['db']->getRow("select * from fanwe_dish_goods_tag where id=" . $id);
+        $disable = "";
+        $enable = "";
+        if (!empty($cangku['is_effect'])) {
+            $disable = "checked";
+            $enable = "";
+        } else {
+            $disable = "";
+            $enable = "checked";
+        }
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("cangku", $cangku);
+        $GLOBALS['tmpl']->assign("disable", $disable);
+        $GLOBALS['tmpl']->assign("enable", $enable);
+
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "编辑单位");
+        $GLOBALS['tmpl']->display("pages/dish/tagEdit.html");
+    }
+
 
 }
 
