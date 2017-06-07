@@ -659,5 +659,16 @@
     "sort": 9,
     "type": 1,
     "url": "act=dish_list"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:biaoqianguanli",
+    "id": 146,
+    "levelId": "001001001",
+    "name": "5-3-5-标签管理",
+    "parentId": 143,
+    "platform": 13,
+    "sort": 4,
+    "type": 1,
+    "url": "act=dish_tag"
   }
 ]
