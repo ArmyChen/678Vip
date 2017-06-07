@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/tabScroll.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/store-goods.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/jquery.Jcrop.min.css">
-<input type="hidden" id="domain" value="http://or4dwzium.bkt.clouddn.com/">
+<input type="hidden" id="domain" value="http://or63agv72.bkt.clouddn.com/">
 <div class="article-header">
     <div class="center-block w1200">
         <h1>新增商品</h1>
@@ -273,8 +273,8 @@
                 <ul class="tab-white-gray goodsConfig-tab">
                     <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
                     </li>
-                    <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
-                    <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+                    <!--<li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>-->
+                    <!--<li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>-->
                     <li data-show="goodsPracticeCon"><em>做法</em></li>
                 </ul>
             </div>
@@ -492,7 +492,7 @@
     }
     $(document).ready(function () {
         var jcropConfig = {};
-        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', ctxPath + '/themes/style/img/default.jpg');
+        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', '/app/Tpl/kiz/js/scm_kry/img/default.jpg');
         var $imgClipperModalImg = $(imgClipperModalStr);
         $imgClipperModalImg.appendTo($('body'));
         var option = {image: {scalingRatio: 0.5}};

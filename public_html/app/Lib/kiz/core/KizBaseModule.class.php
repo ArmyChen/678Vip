@@ -14,7 +14,9 @@
 
 // +----------------------------------------------------------------------
 
+use Qiniu\Auth;
 
+require __DIR__.'/autoload.php';
 
 class KizBaseModule{
 
@@ -135,7 +137,17 @@ class KizBaseModule{
 
 	}
 
+    public function get_update_token(){
+        // 用于签名的公钥和私钥
+        $accessKey = 'B-A4mcgEPAH8V99AuRQNCf9O47G4x-cdhZVK4atc';
+        $secretKey = '4be7iIt4RtA32QIK2WKTWmqLNN1ZXpKKPX4nG0Ih';
+        $bucket = '678sh';
 
+        // 初始化签权对象
+        $auth = new Auth($accessKey, $secretKey);
+        $token = $auth->uploadToken($bucket);
+        return $token;
+    }
 
 	public function index()
 
