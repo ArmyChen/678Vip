@@ -381,9 +381,9 @@ $.reloadRevelanceSetting = function(args) {
 };
 
 function saveDishInfo() {
-	if (!$("#stepOneForm").valid()) {
-		window._isAlreadySaving = false;return;
-	}
+	// if (!$("#stepOneForm").valid()) {
+	// 	window._isAlreadySaving = false;return;
+	// }
 	var dishVo = {};
 	dishVo.id = $("#dishId").val();
 	var dishTypeId = "";
@@ -567,8 +567,8 @@ function saveDishInfo() {
 	}
 	dishVo.deleteImage = deleteImage;
 //	zww
-	dishVo.richDesc = ue.getContent();
-// 
+	dishVo.richDesc = UE.getEditor('myEditor').getContent();
+//
 	//商品和餐盒数量设置
 	var dishQty = $("#dishQty").val();
 	var boxQty = $("#boxQty").val();
@@ -587,7 +587,8 @@ function saveDishInfo() {
 	$.ajax({
 		type : "POST",
 		url : saveOrUpdateUrl,
-		data : JSON.stringify(dishVo),
+        // data :  {"posts" : "1231"},
+        data : JSON.stringify(dishVo),
 		dataType : "json",
 		contentType : "application/json",
 		async : false,

@@ -1054,4 +1054,259 @@ class ajaxSettingsModule extends KizBaseModule
         exit;
     }
 
+    //common function
+    public function get_hanzi()
+    {
+        $pinyin = new pinyin();
+        if ($_REQUEST['name']) {
+            $result = $pinyin->pinyin1($_REQUEST['name']);
+            $data['firstName'] = $result;
+            echo json_encode($data);
+            exit;
+        }
+    }
+
+//{dishTypeId: "3112", dishCode: "", name: "国防观", barcode: "23123", dishNameIndex: "GFG",…}
+//attributes
+//:
+//[{id: "143977", propertyKindId: "4", propertyTypeId: "19548"}]
+//0
+//:
+//{id: "143977", propertyKindId: "4", propertyTypeId: "19548"}
+//id
+//:
+//"143977"
+//propertyKindId
+//:
+//"4"
+//propertyTypeId
+//:
+//"19548"
+//barcode
+//:
+//"23123"
+//boxQty
+//:
+//"1"
+//condiments
+//:
+//[]
+//cookingWays
+//:
+//[]
+//deleteImage
+//:
+//1
+//dishCode
+//:
+//""
+//dishDesc
+//:
+//"12312"
+//dishIncreaseUnit
+//:
+//""
+//dishNameIndex
+//:
+//"GFG"
+//dishQty
+//:
+//"1"
+//dishTypeId
+//:
+//"3112"
+//imageName
+//:
+//"preview.jpg"
+//imageSize
+//:
+//"5004"
+//imageSuffixes
+//:
+//".jpg"
+//imageUrl
+//:
+//"http://or63agv72.bkt.clouddn.com/o_1bi44l0u01o201bqj12hnf6l16i38.jpg?imageMogr2/auto-orient/strip/gravity/NorthWest/quality/90/thumbnail/960x720!"
+//isChangePrice
+//:
+//2
+//isDiscountAll
+//:
+//"1"
+//isOrder
+//:
+//"1"
+//isSendOutside
+//:
+//"1"
+//isSingle
+//:
+//"1"
+//labels
+//:
+//[]
+//marketPrice
+//:
+//"1"
+//memos
+//:
+//[]
+//name
+//:
+//"国防观"
+//richDesc
+//:
+//"<p>3123</p>"
+//saleType
+//:
+//2
+//sort
+//:
+//""
+//stepNum
+//:
+//""
+//templates
+//:
+//[{id: "1"}]
+//0
+//:
+//{id: "1"}
+//id
+//:
+//"1"
+//unitId
+//:
+//"67729"
+//wmType
+//:
+//"2"
+    public function saveOrUpdateDishBrand(){
+        init_app_page();
+        /* 基本参数初始化 */
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*获取参数*/
+        $id = intval($_REQUEST['id']);
+
+        $input = file_get_contents('php://input');
+        $object = json_decode($input);
+        $name = $object->name;
+        var_dump($name);
+        exit;
+        $location_id = intval($_REQUEST['location_id']);
+        $data['name'] = strim($_REQUEST['menu_name']);
+
+        //检查重名
+        $sql="select count(id) from ".DB_PREFIX."dc_menu where location_id=".$location_id." and name='".$data['name']."'";
+        $check = $GLOBALS['db']->getOne($sql);
+        if($check>1){
+            $root['status'] = 0;
+            $root['info'] = "名称有重复！";
+        }
+
+
+
+        $data['fu_title'] = strim($_REQUEST['fu_title']);
+        $data['m_desc'] = strim($_REQUEST['m_desc']);
+        $data['cate_id'] = intval($_REQUEST['cate_id']);
+        $data['funit'] = $_REQUEST['funit'];
+        $data['tichengmoney'] = $_REQUEST['tichengmoney'];
+        $data['ticheng_style'] = $_REQUEST['ticheng_style'];
+        $data['times'] = floatval($_REQUEST['times']);
+        $data['orderid'] = intval($_REQUEST['orderid']);
+        $data['is_effect_enable'] = intval($_REQUEST['is_effect_enable']);
+        $data['is_stock'] = intval($_REQUEST['is_stock']);
+        $data['is_stock_enable'] = intval($_REQUEST['is_stock_enable']);
+        //缩略图片
+        if(!empty($_REQUEST['image'])){
+            $pic_path=$_REQUEST['image'];
+            $pic_path=str_replace("http://www.678sh.com",".",$pic_path);
+
+            if(strpos($_REQUEST['image'],'/public/attachment') > 0){
+                $pic_path = str_replace('/./','',$_REQUEST['image']);
+                $data['image'] = $pic_path;
+            }else{
+                require_once APP_ROOT_PATH."openApi/thumpic.php";
+                $t = new ThumbHandler();
+                $t->setSrcImg($pic_path);
+                $t->setDstImg($pic_path);
+                $t->setMaskPosition(4);
+                $t->setMaskImgPct(80);
+                $t->createImg(400,300);
+                $data['image'] =  replace_domain_to_public(strim($_REQUEST['image']));
+            }
+        }
+
+
+
+
+
+
+        $data['price'] = floatval($_REQUEST['price']);
+        $data['tags'] = implode(",", $_REQUEST['tags']);
+        $data['is_effect'] = intval($_REQUEST['is_effect']);
+        //2016.4.24 枫叶增加
+        $data['isdazhe'] = intval($_REQUEST['isdazhe']);
+
+        $data['barcode'] = strim($_REQUEST['barcode']);
+        $data['buyPrice'] = floatval($_REQUEST['buyPrice']);
+
+        $data['customerPrice'] = floatval($_REQUEST['customerPrice']);
+        $data['sellPrice2'] = floatval($_REQUEST['sellPrice2']);
+        $data['unit'] = strim($_REQUEST['unit']);
+        $data['pinyin'] = strim($_REQUEST['pinyin']);
+
+        $data['company'] = strim($_REQUEST['company']);
+        $data['productionDate'] = strim($_REQUEST['productionDate']);
+        $data['shelfLife'] = strim($_REQUEST['shelfLife']);
+        $data['maxStock'] = intval($_REQUEST['maxStock']);
+
+        $data['minStock'] = intval($_REQUEST['minStock']);
+        $data['biaoqian'] = strim($_REQUEST['biaoqian']);
+        $data['print'] = strim($_REQUEST['print']);
+        $data['info'] = strim($_REQUEST['info']);
+        /* 业务逻辑部分 */
+        if (!in_array($location_id, $account_info['location_ids'])){
+            $root['status'] = 0;
+            $root['info'] = "没有权限添加/修改该门店的菜单";
+        }
+
+        $location_info = $GLOBALS['db']->getRow("select xpoint,ypoint from ".DB_PREFIX."supplier_location where id=".$location_id);
+        $data['location_id'] = $location_id;
+        $data['supplier_id'] = $supplier_id;
+        $data['xpoint'] = $location_info['xpoint'];
+        $data['ypoint'] = $location_info['ypoint'];
+
+        /*获取标签中文,同步函数*/
+
+        if($data['cate_id']==0 || $data['print']=="" || $data['price']<0){
+            $root['status'] = 0;
+            $root['info'] = "注意红色为必填字段！";
+            ajax_return($root);
+        }
+
+        if($id>0){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data,"UPDATE","id=".$id);
+
+            syn_supplier_location_menu_match($id);
+            $root['info'] = "修改成功";
+        }else{
+            $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data);
+            $id = $GLOBALS['db']->insert_id();
+
+            syn_supplier_location_menu_match($id);
+            $root['info'] = "添加成功";
+        }
+
+        if($data['is_effect']==1) {
+            $this->caipinpush($location_id);
+        }
+
+        $root['status'] = 1;
+
+        $root['jump'] = url("biz","dc#dc_menu_index",array("id"=>$location_id));
+
+    }
 }

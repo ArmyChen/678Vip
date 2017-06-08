@@ -525,10 +525,10 @@
     checkBarcodeUrl = baseUrl + "&act=checkBarcode";
     $("input[name=name]").blur(function () {
         var chineseName = $("input[name=name]").val().trim();
-        var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
+        var getAllFirstLetterUrl = ctx2Path + "&act=get_hanzi";
         $.ajax({
             type: "POST",
-            url: getAllFirstLetterUrl + "?random=" + Math.random(),
+            url: getAllFirstLetterUrl + "&random=" + Math.random(),
             data: {name: chineseName},
             dataType: "json",
             async: false,
@@ -904,18 +904,18 @@
         var flag = false;
         $.ajax({
             type: "POST",
-            url: checkBarcodeUrl + "?random=" + Math.random(),
+            url: checkBarcodeUrl + "&random=" + Math.random(),
             data: {dishId: $("#dishId").val(), barcode: $("#barcode").val()},
             dataType: "json",
             // contentType: "application/json",
             async: false,
             success: function (data) {
-                if (!data) {
-                    validate.showErrors({
-                        "barcode": "条形码已存在"
-                    });
-                }
-                flag = data;
+//                if (!data) {
+//                    validate.showErrors({
+//                        "barcode": "条形码已存在"
+//                    });
+//                }
+                flag = true;
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 Message.alert({title: "提示", describe: '网络异常'});
