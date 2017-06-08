@@ -411,11 +411,11 @@ var cctask = {
                 this.p.data = rowDatas;
             },
             beforeSelectRow : function (rowid, e){
-                if($('#jqg_grid_' + rowid).prop('disabled')){
-                    return false;
-                }else{
-                    return true;
-                }
+                // if($('#jqg_grid_' + rowid).prop('disabled')){
+                //     return false;
+                // }else{
+                //     return true;
+                // }
             },
             onSelectAll : function (aRowids, status){
                 if(status){
@@ -429,14 +429,14 @@ var cctask = {
                         .get(); // convert to instance of Array
 
                     //deselect disabled rows
-                    $detailGrid.find("tr.jqgrow:has(td > input.cbox:disabled)")
-                        .attr('aria-selected', 'false')
-                        .removeClass('ui-state-highlight');
+                    // $detailGrid.find("tr.jqgrow:has(td > input.cbox:disabled)")
+                    //     .attr('aria-selected', 'false')
+                    //     .removeClass('ui-state-highlight');
                 }
             },
             afterInsertRow: function (rowid, rowData) {
                 if(rowData.alreadyData) {
-                    $('#jqg_grid_' +  rowid).prop('disabled',true).css('opacity','0.3');
+                    // $('#jqg_grid_' +  rowid).prop('disabled',true).css('opacity','0.3');
                 }
             }
             //BUG 13576 【盘点单】反复移除商品，添加商品，导致添加商品显示不出名称信息，导致保存失败
