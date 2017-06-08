@@ -1,6 +1,7 @@
 <?php
 require_once 'core/page.php';
 
+
 class ajaxSettingsModule extends KizBaseModule
 {
     function __construct()
@@ -893,7 +894,10 @@ class ajaxSettingsModule extends KizBaseModule
     }
 
     public function uptokenStr(){
-        echo '{"hash":"Fho7WS6Fdn8uHAEeX28pZuzOA78X","key":"o_1bhud2t13caa1fj41imlk1a1buic.jpg"}';
+        $upToken = $this->get_update_token();
+        echo '{"uptoken":"'.$upToken.'"}';
+
+//        echo '{"uptoken":"gHckET3ezRBakrmBQVQRb8SLVHbQYlna1MnLQelM:f3HcPPdFvDRVhs75z8_kbg1xOhU=:eyJzY29wZSI6ImtyeS1vZmZpY2lhbCIsImRlYWRsaW5lIjoxNDk2ODIyNTIwfQ=="}';
         exit;
     }
 

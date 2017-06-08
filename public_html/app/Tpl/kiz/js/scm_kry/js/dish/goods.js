@@ -28,9 +28,9 @@ $(function () {
     	}
     	
     	if ($("#stepOneForm").length) {
-    		if (!$("#stepOneForm").valid()) {
-    			return;
-    		}
+    		// if (!$("#stepOneForm").valid()) {
+    		// 	return;
+    		// }
     		
 
     		var dishBrandVo = {},
@@ -48,31 +48,33 @@ $(function () {
     			});
     		});
     		dishBrandVo.attributes = attributeObjs;
-    		$.ajax({
-    			type:"POST",
-    			url:rootPath + "/dish/manage/checkDishBrandSkuKey",
-    			data:JSON.stringify(dishBrandVo),
-    			dataType:"json",
-    			contentType: "application/json", 
-    			async:false,
-    			cache:false,
-    			success:function(result){
-    				if (result) {
-    					Message.alert({title:"提示",describe:"已存在该规格的商品"},Message.display);
-
-    				} else {
-    					step(1);
-    				}
-    			},
-    			error: function(XMLHttpRequest, textStatus, errorThrown) {
-    		        alert(XMLHttpRequest.status);
-    		    },
-    		});
+            step(1);
+    		// $.ajax({
+    		// 	type:"POST",
+    		// 	url:rootPath + "/dish/manage/checkDishBrandSkuKey",
+    		// 	data:JSON.stringify(dishBrandVo),
+    		// 	dataType:"json",
+    		// 	contentType: "application/json",
+    		// 	async:false,
+    		// 	cache:false,
+    		// 	success:function(result){
+             //        // step(1);
+    		// 		if (result) {
+    		// 			Message.alert({title:"提示",describe:"已存在该规格的商品"},Message.display);
+            //
+    		// 		} else {
+    		// 			step(1);
+    		// 		}
+    		// 	},
+    		// 	error: function(XMLHttpRequest, textStatus, errorThrown) {
+    		//         alert(XMLHttpRequest.status);
+    		//     },
+    		// });
     	} else {
 			var flag = true;//验证返回
-			if ($('#js_setepOneForm').length) {
-				flag=$('#js_setepOneForm').valid();
-			}
+			// if ($('#js_setepOneForm').length) {
+			// 	flag=$('#js_setepOneForm').valid();
+			// }
 			var currentDiv = $("#scmBreadCrumbs > li.current").attr("data-show");
 			////只有验证成功了才能进入下一步
 			if (flag) {
