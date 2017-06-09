@@ -1,5 +1,6 @@
 <?php
 require_once 'core/page.php';
+require_once APP_ROOT_PATH."system/model/dc.php";
 
 
 class ajaxSettingsModule extends KizBaseModule
@@ -1193,80 +1194,77 @@ class ajaxSettingsModule extends KizBaseModule
         $input = file_get_contents('php://input');
         $object = json_decode($input);
         $name = $object->name;
-        var_dump($name);
-        exit;
-        $location_id = intval($_REQUEST['location_id']);
-        $data['name'] = strim($_REQUEST['menu_name']);
+        $sname = $object->sname;
+        $dishDesc = $object->dishDesc;
+        $imageUrl = $object->imageUrl;
+        $dishTypeId = $object->dishTypeId;
+        $unitId = $object->unitId;
+        $barcode = $object->barcode;
+        $richDesc = $object->richDesc;
+        $saleType = $object->saleType;
+        $marketPrice = $object->marketPrice;
+        $dishQty = $object->dishQty;
+        $dishNameIndexx = $object->dishNameIndex;
+        $wmType = $object->wmType;
+        $sort = $object->sort;
+//        $name = $object->name;
+//        $name = $object->name;
+        $tichengmoney = 0;
+        $ticheng_style = 0;
+        $times = 0;
+        $ticheng_style = 0;
+        $ticheng_style = 0;
+        $ticheng_style = 0;
+
+
+        $location_id = intval($account_info['slid']);
+        $data['name'] = strim($name);
 
         //检查重名
         $sql="select count(id) from ".DB_PREFIX."dc_menu where location_id=".$location_id." and name='".$data['name']."'";
         $check = $GLOBALS['db']->getOne($sql);
         if($check>1){
-            $root['status'] = 0;
-            $root['info'] = "名称有重复！";
+            $root['success'] = 0;
+            $root['message'] = "名称有重复！";
         }
 
 
 
-        $data['fu_title'] = strim($_REQUEST['fu_title']);
-        $data['m_desc'] = strim($_REQUEST['m_desc']);
-        $data['cate_id'] = intval($_REQUEST['cate_id']);
-        $data['funit'] = $_REQUEST['funit'];
-        $data['tichengmoney'] = $_REQUEST['tichengmoney'];
-        $data['ticheng_style'] = $_REQUEST['ticheng_style'];
-        $data['times'] = floatval($_REQUEST['times']);
-        $data['orderid'] = intval($_REQUEST['orderid']);
-        $data['is_effect_enable'] = intval($_REQUEST['is_effect_enable']);
-        $data['is_stock'] = intval($_REQUEST['is_stock']);
-        $data['is_stock_enable'] = intval($_REQUEST['is_stock_enable']);
-        //缩略图片
-        if(!empty($_REQUEST['image'])){
-            $pic_path=$_REQUEST['image'];
-            $pic_path=str_replace("http://www.678sh.com",".",$pic_path);
-
-            if(strpos($_REQUEST['image'],'/public/attachment') > 0){
-                $pic_path = str_replace('/./','',$_REQUEST['image']);
-                $data['image'] = $pic_path;
-            }else{
-                require_once APP_ROOT_PATH."openApi/thumpic.php";
-                $t = new ThumbHandler();
-                $t->setSrcImg($pic_path);
-                $t->setDstImg($pic_path);
-                $t->setMaskPosition(4);
-                $t->setMaskImgPct(80);
-                $t->createImg(400,300);
-                $data['image'] =  replace_domain_to_public(strim($_REQUEST['image']));
-            }
-        }
-
-
-
-
-
-
-        $data['price'] = floatval($_REQUEST['price']);
-        $data['tags'] = implode(",", $_REQUEST['tags']);
-        $data['is_effect'] = intval($_REQUEST['is_effect']);
+        $data['fu_title'] = $sname;
+        $data['m_desc'] = $richDesc;
+        $data['cate_id'] = intval($dishTypeId);
+//        $data['funit'] = $unitId;
+//        $data['tichengmoney'] = $tichengmoney;
+//        $data['ticheng_style'] = $ticheng_style;
+//        $data['times'] =$times;
+        $data['orderid'] = intval($sort);
+        $data['is_effect_enable'] = 1;
+        $data['is_stock'] = 0;
+        $data['is_stock_enable'] = 0;
+        $data['image'] = $imageUrl;
+        $data['price'] = $marketPrice;
+//        $data['tags'] = implode(",", $_REQUEST['tags']);
+        $data['is_effect'] = 1;
         //2016.4.24 枫叶增加
-        $data['isdazhe'] = intval($_REQUEST['isdazhe']);
+//        $data['isdazhe'] = intval($_REQUEST['isdazhe']);
 
-        $data['barcode'] = strim($_REQUEST['barcode']);
-        $data['buyPrice'] = floatval($_REQUEST['buyPrice']);
+        $data['barcode'] = $barcode;
+//        $data['buyPrice'] = floatval($_REQUEST['buyPrice']);
+//
+//        $data['customerPrice'] = floatval($_REQUEST['customerPrice']);
+//        $data['sellPrice2'] = floatval($_REQUEST['sellPrice2']);
+        $data['unit'] = $unitId;
+        $data['pinyin'] = $dishNameIndexx;
 
-        $data['customerPrice'] = floatval($_REQUEST['customerPrice']);
-        $data['sellPrice2'] = floatval($_REQUEST['sellPrice2']);
-        $data['unit'] = strim($_REQUEST['unit']);
-        $data['pinyin'] = strim($_REQUEST['pinyin']);
-
-        $data['company'] = strim($_REQUEST['company']);
-        $data['productionDate'] = strim($_REQUEST['productionDate']);
-        $data['shelfLife'] = strim($_REQUEST['shelfLife']);
-        $data['maxStock'] = intval($_REQUEST['maxStock']);
-
-        $data['minStock'] = intval($_REQUEST['minStock']);
-        $data['biaoqian'] = strim($_REQUEST['biaoqian']);
-        $data['print'] = strim($_REQUEST['print']);
-        $data['info'] = strim($_REQUEST['info']);
+//        $data['company'] = strim($_REQUEST['company']);
+//        $data['productionDate'] = strim($_REQUEST['productionDate']);
+//        $data['shelfLife'] = strim($_REQUEST['shelfLife']);
+//        $data['maxStock'] = intval($_REQUEST['maxStock']);
+//
+//        $data['minStock'] = intval($_REQUEST['minStock']);
+//        $data['biaoqian'] = strim($_REQUEST['biaoqian']);
+        $data['print'] = $wmType;
+        $data['info'] = $dishDesc;
         /* 业务逻辑部分 */
         if (!in_array($location_id, $account_info['location_ids'])){
             $root['status'] = 0;
@@ -1282,31 +1280,60 @@ class ajaxSettingsModule extends KizBaseModule
         /*获取标签中文,同步函数*/
 
         if($data['cate_id']==0 || $data['print']=="" || $data['price']<0){
-            $root['status'] = 0;
-            $root['info'] = "注意红色为必填字段！";
-            ajax_return($root);
+            $root['success'] = 0;
+            $root['message'] = "注意红色为必填字段！";
+            echo json_encode($root);
+            exit;
         }
-
+//        var_dump($data);
+//        exit;
         if($id>0){
             $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data,"UPDATE","id=".$id);
 
             syn_supplier_location_menu_match($id);
-            $root['info'] = "修改成功";
+            $root['message'] = "修改成功";
         }else{
             $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data);
             $id = $GLOBALS['db']->insert_id();
 
             syn_supplier_location_menu_match($id);
-            $root['info'] = "添加成功";
+            $root['message'] = "添加成功";
         }
 
         if($data['is_effect']==1) {
             $this->caipinpush($location_id);
         }
 
-        $root['status'] = 1;
+        $root['success'] = 1;
 
-        $root['jump'] = url("biz","dc#dc_menu_index",array("id"=>$location_id));
+        echo json_encode($root);
+        exit;
+    }
+
+    function caipinpush($location_id){
+
+
+        require_once APP_ROOT_PATH."openApi/gl/hy_tool.class.php";
+
+        $list=$GLOBALS['db']->getAll("select appid from fanwe_app where slid='$location_id' order by loginTime desc ");
+        foreach($list as $kc=>$vc){
+            $channelIdlist[]=$vc['appid'];
+        }
+
+        $type = "cmd";
+
+
+        $description=array('code'=>'1001');
+        $message = array (
+            'title' => '提示',
+            'description' =>'有菜品更新' ,
+            'custom_content'=>$description
+        );
+
+        $ht = new HyTool ();
+        $ht->sendMessage ($channelIdlist,$type,$message);
+        $ht->sendMessage_NEW ($channelIdlist,$type,$message);
+
 
     }
 }

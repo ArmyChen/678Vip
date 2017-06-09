@@ -407,7 +407,8 @@ function saveDishInfo() {
 	// 	window._isAlreadySaving = false;return;
 	// }
 	dishVo.dishCode = dishCode;
-	var name = $("#name").val();
+    var name = $("#name").val();
+    var sname = $("#sname").val();
 	if (!name) {
 		Message.alert({
 			title : "提示",
@@ -415,7 +416,8 @@ function saveDishInfo() {
 		}, Message.display);
 		window._isAlreadySaving = false;return;
 	}
-	dishVo.name = name;
+    dishVo.name = name;
+    dishVo.sname = sname;
 	dishVo.aliasName = $("#aliasName").val();
 	dishVo.shortName = $("#shortName").val();
 	dishVo.aliasShortName = $("#aliasShortName").val();
@@ -594,21 +596,18 @@ function saveDishInfo() {
 		async : false,
 		cache : false,
 		success : function(result) {
-			window._isAlreadySaving = false;
-			if (result.success && result.isAutoCode) {
-				result.message += "商品编码为：<span style='color: red;'>" + result.dishCode + "</span>";
-			}
+            Message.alert({
+                title : "提示",
+                describe : result.message
+            }, function(){
+                if (result.success) {
+                    location.href = dishPath + "&act=dish_list";
+                }else{
+                    bkeruyun.hideLoading();
+                }
+            });
 
-			Message.alert({
-				title : "提示",
-				describe : result.message
-			}, function(){
-				if (result.success) {
-					location.href = listUrl;
-				}else{
-					bkeruyun.hideLoading();
-				}
-			});
+
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 		//	alert(XMLHttpRequest.status);

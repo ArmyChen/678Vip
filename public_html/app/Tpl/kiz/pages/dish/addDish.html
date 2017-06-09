@@ -77,6 +77,10 @@
                                                 value=""></td>
 
                         <th valign="top">&nbsp;</th>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="sname"
+                                                id="sname"
+                                                placeholder="第二语言" value=""></td>
+
                     </tr>
                     <tr>
 
@@ -516,7 +520,7 @@
     var rootPath = ctx2Path,
         baseUrl = ctx2Path,
         saveOrUpdateUrl = baseUrl + "&act=saveOrUpdateDishBrand",
-        listUrl = baseUrl + "&act=queryDishList",
+        listUrl = dishPath + "&act=dish_list",
         queryDishTypesUrl = baseUrl + "&act=queryDishTypes",
         queryDishAndAttributeUrl = baseUrl + "&act=queryDishAndAttribute",
         queryRevelanceSettingUrl = baseUrl + "&act=queryRevelanceSetting",
@@ -655,11 +659,12 @@
             }
         });
         $(".js-save").on("click", function () {
-            if (window._isAlreadySaving) {
-            } else {
-                saveDishInfo();
-                window._isAlreadySaving = true;
-            }
+            saveDishInfo();
+//            if (window._isAlreadySaving) {
+//            } else {
+//                saveDishInfo();
+//                window._isAlreadySaving = true;
+//            }
         });
         $(".js-back").on("click", function () {
             Message.confirm(

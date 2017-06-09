@@ -1,11 +1,17 @@
 
-{include file="inc/header.html"}
+{include file="inc/header2.html"}
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/tree.css">
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/report.css">
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/tabScroll.css">
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/store-goods.css">
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/jquery.Jcrop.min.css">
+<input type="hidden" id="domain" value="http://or63agv72.bkt.clouddn.com/">
 <div class="article-header">
     <div class="center-block w1200">
-        <h1>更新商品</h1>
+        <h1>新增商品</h1>
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10" id="btnPrev" style="display:none;">上一步</a>
-            <a class="btn-link ml10 js-back" href="javascript:;" id="btncancle">取消</a>
+            <a class="btn-link ml10 js-back" href="javascript:history.back();" id="btncancle">取消</a>
             <a class="btn-link ml10" id="btnNext">下一步</a>
             <a class="btn-link ml10 js-save" id="btnSave" style="display:none;">保存</a>
         </div>
@@ -30,6 +36,7 @@
             </div>
             <div class="aside-column classificationAll" id="classificationAll">
                 <ul class="tree" id="tree">
+
                 </ul>
             </div>
         </div>
@@ -53,36 +60,34 @@
                         <td valign="top">
                             <input type="text" class="form-control w220" maxlength="16" name="dishCode"
                                    id="dishCode"
-                                   value="0001" placeholder="若不填写，则系统自动生成"
-                                   disabled>
+                                   value="" placeholder="若不填写，则系统自动生成"
+                            >
                         </td>
                         <th valign="top"><label class="control-label">商品名称</label> <strong
                                 class="red">*</strong></th>
                         <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="name"
                                                 id="name"
-                                                placeholder="第一语言" value="蕃茄鸡蛋"></td>
+                                                placeholder="第一语言" value=""></td>
                     </tr>
                     <tr>
                         <th valign="top"><label class="control-label">定价</label> <strong class="red">*</strong>
                         </th>
                         <td valign="top"><input type="text" class="form-control w220 number1" data-type="number1"
                                                 data-left-max="8" data-right-max="2" name="marketPrice" id="marketPrice"
-                                                value="10.00"></td>
+                                                value=""></td>
 
                         <th valign="top">&nbsp;</th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="48" name="aliasName"
-                                                id="aliasName" placeholder="第二语言" value=""></td>
+                        <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="sname"
+                                                id="sname"
+                                                placeholder="第二语言" value=""></td>
+
                     </tr>
                     <tr>
 
-                        <th valign="top"><label for="dishNameIndex" class="control-label">名称首字母</label></th>
+                        <th valign="top"><label for="dishNameIndex" class="control-label">简码</label></th>
                         <td valign="top"><input type="text" class="form-control w220" name="dishNameIndex"
                                                 id="dishNameIndex"
-                                                value="fqjd"></td>
-                        <th valign="top"><label for="shortName" class="control-label">短名称</label></th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="shortName"
-                                                id="shortName"
-                                                placeholder="第一语言" value=""></td>
+                                                value=""></td>
                     </tr>
 
                     <tr>
@@ -90,10 +95,6 @@
                         <td valign="top"><input type="text" class="form-control w220" name="barcode" id="barcode"
                                                 maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value=""></td>
                         <th valign="top">&nbsp;</th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="48"
-                                                name="aliasShortName"
-                                                id="aliasShortName" placeholder="第二语言" value="">
-                        </td>
 
                     </tr>
                     <tr>
@@ -101,24 +102,24 @@
                         <td valign="top">
 
 
+                            <div class="w220"><select name="wmType" id="wmType">
+                                <option value=""></option>
 
+                                <option value="1">预制商品</option>
 
+                                <option value="2">现制商品</option>
 
-                            <input type="text" class="form-control w220" name="barcode" id="barcode"
-                                   value="现制商品" disabled>
+                                <option value="3">外购商品</option>
 
-
-
-
-
+                            </select></div>
 
                         </td>
-                        <th valign="top"><label class="control-label">销售类型</label></th>
-                        <td valign="top">
-                            <label id="saleTypeBox"
-                                   class="checkbox "><span></span>
-                                <input type="checkbox" name="saleType" id="saleType" data-value="1"
-                                >称重商品</label></td>
+                        <!--<th valign="top"><label class="control-label">销售类型</label></th>-->
+                        <!--<td valign="top">-->
+                        <!--<label id="saleTypeBox"-->
+                        <!--class="checkbox "><span></span>-->
+                        <!--<input type="checkbox" name="saleType" id="saleType" data-value="1"-->
+                        <!--&gt;称重商品</label></td>-->
 
                     </tr>
 
@@ -126,14 +127,41 @@
                         <th valign="top"><label class="control-label">销售单位</label> <strong class="red">*</strong></th>
                         <td valign="top">
 
+                            <div class="w220">
+                                <select name="unitId" id="unitId">
+                                    <option value=""></option>
+
+                                    <option value="64497"
+                                    >杯</option>
+
+                                    <option value="67729"
+                                    >份</option>
+
+                                    <option value="74711"
+                                    >瓶</option>
+
+                                    <option value="74713"
+                                    >盘</option>
+
+                                    <option value="74714"
+                                    >位</option>
+
+                                    <option value="100139"
+                                    >块</option>
+
+                                    <option value="100357"
+                                    >罐</option>
+
+                                    <option value="105347"
+                                    >kg</option>
+
+                                </select>
+                            </div>
 
 
 
 
 
-                            <input type="text" class="form-control w220" name="67729"
-                                   value="份" disabled>
-                            <input id="unitId" type="hidden" value="67729">
 
 
 
@@ -154,26 +182,28 @@
                         <td colspan="2">
                             <!--add 称重兑换开始-->
                             <div class="hidden" id="weightWrapper">
-                                等于<input type="text" class="form-control w110" id="weight" value="0.00">克
+                                等于<input type="text" class="form-control w110" id="weight" value="">克
                                 <label for="weight" class="error-tip" style="display: inline-block;"></label>
                             </div>
                             <!--add 称重兑换结束-->
                         </td>
                     </tr>
                     <tr>
-                        <th valign="top"><label class="control-label">规格类别</label></th>
+                        <th valign="top"><label class="control-label"> 规格类别</label></th>
                         <td colspan="3" valign="top" id="goodsAttributeTd">
+
                             <div class="additem-wrap" id="goodsAttribute">
 
                             </div>
-                            <span class="icon-plus">添加</span>
+                            <span class="icon-plus" style="    left: 465px;position: relative;">添加</span>
                         </td>
+
                     </tr>
                     <tr>
                         <th valign="top"><label class="control-label">排序</label></th>
                         <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="sort"
                                                 id="sort"
-                                                placeholder="1000" value="1000"></td>
+                                                placeholder="1000" value=""></td>
                         <th valign="top">&nbsp;</th>
                         <td valign="top">&nbsp;</td>
                     </tr>
@@ -195,7 +225,7 @@
                         <th><label class="control-label">起卖数</label></th>
                         <td><input type="text" class="form-control w220 number1" data-type="number1"
                                    data-left-max="3" data-right-max="2" placeholder="1"
-                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="1.0">
+                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="">
                         </td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
@@ -210,15 +240,15 @@
                         <th><label class="control-label">增量设置</label></th>
                         <td><input type="text" class="form-control w220 number1" data-type="number1"
                                    data-left-max="3" data-right-max="2" placeholder="1"
-                                   name="stepNum" id="stepNum" value="1.0"></td>
+                                   name="stepNum" id="stepNum" value=""></td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
                                 <input type="checkbox" name="isSendOutside" id="isSendOutside" data-value="1"
                                        checked>允许外送</label>
 
-                            <label class="checkbox checkbox-check mr30"><span></span>
+                            <label class="checkbox  mr30"><span></span>
                                 <input type="checkbox" name="isChangePrice" id="isChangePrice" data-value="1"
-                                       checked>允许变价</label>
+                                >允许变价</label>
                         </td>
                     </tr>
                     <tr>
@@ -226,10 +256,10 @@
                         <td>
                             <input type="text" style="width:60px;" class="form-control" data-type="digits"
                                    data-left-max="3" data-right-max="3" min='0' placeholder="1" maxlength="7"
-                                   name="dishQty" id="dishQty" value="1">个商品
+                                   name="dishQty" id="dishQty" value="">个商品
                             <input type="text" style="width:60px;" class="form-control" data-type="digits"
                                    data-left-max="3" min='0' maxlength="3" placeholder="1"
-                                   name="boxQty" id="boxQty" value="1">个餐盒
+                                   name="boxQty" id="boxQty" value="">个餐盒
                         </td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
@@ -247,8 +277,8 @@
                 <ul class="tab-white-gray goodsConfig-tab">
                     <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
                     </li>
-                    <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
-                    <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+                    <!--<li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>-->
+                    <!--<li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>-->
                     <li data-show="goodsPracticeCon"><em>做法</em></li>
                 </ul>
             </div>
@@ -256,7 +286,7 @@
                 <h3 class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion"
                     data-target="#collapseMore"><em>更多</em><span class="caret pull-right"></span></h3>
             </div>
-            <div id="collapseMore" class="panel-collapse collapse">
+            <div id="collapseMore" >
                 <div class="panel-body">
                     <table cellpadding="0" cellspacing="0"
                            class="table-nobd table-fixed">
@@ -267,9 +297,9 @@
                                 <div class="input-group-inset w402 pull-left mr15" id="imageUrlContainer">
                                     <div id="bntImageUrl">
                                         <input type="text" class="form-control" name="imageUrl" id="imageUrl"
-                                               data-imageSize="29" data-imageSuffixes=".jpg"
-                                               data-imageName="3bdd47a94efd4a8897725250855e8acf.jpg"
-                                               value="http://img.keruyun.net/3bdd47a94efd4a8897725250855e8acf.jpg"
+                                               data-imageSize="" data-imageSuffixes=""
+                                               data-imageName=""
+                                               value=""
                                                readonly="readonly">
                                         <button class="btn btn-default" type="button">浏览图片</button>
                                     </div>
@@ -285,30 +315,28 @@
                                 <div id="divPreviewImage">
 
 
-                                    <img
-                                            src="http://img.keruyun.net/3bdd47a94efd4a8897725250855e8acf.jpg" class="img-responsive">
-
-
+                                    <img src="/app/Tpl/kiz/js/scm_kry/img/default.jpg"
+                                         class="img-responsive">
 
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th><label class="control-label">视频</label></th>
-                            <td>
-                                <div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">
-                                    <div id="bntVideoUrl">
-                                        <input type="text" class="form-control" name="videoUrl" id="videoUrl"
-                                               value="" readonly="readonly">
-                                        <button class="btn btn-default" type="button">上传视频</button>
-                                    </div>
-                                </div>
-                                <span class="bnt-clear">清空</span>
-                                <span for="" class="red"
-                                      style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>
-                            </td>
+                        <!--<tr>-->
+                        <!--<th><label class="control-label">视频</label></th>-->
+                        <!--<td>-->
+                        <!--<div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">-->
+                        <!--<div id="bntVideoUrl">-->
+                        <!--<input type="text" class="form-control" name="videoUrl" id="videoUrl"-->
+                        <!--value="" readonly="readonly">-->
+                        <!--<button class="btn btn-default" type="button">上传视频</button>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<span class="bnt-clear">清空</span>-->
+                        <!--<span for="" class="red"-->
+                        <!--style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>-->
+                        <!--</td>-->
 
-                        </tr>
+                        <!--</tr>-->
                         <tr>
                             <th valign="top"><label class="control-label">描述</label></th>
                             <td><textarea class="form-control w402" name="dishDesc"
@@ -318,68 +346,68 @@
                         <tr>
                             <th valign="top">菜品详情</th>
                             <td>
-                                <script id="dishEditor" type="text/plain" style="width:700px;height:500px;"></script>
-                                </td>
-                                </tr>
-                                </tbody>
-                                </table>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
+                                <textarea name="后台取值的key" id="myEditor" style="width: 600px;height: 800px;"></textarea>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-                                <script src="/merchandise/js/jquery-1.10.2.min.js"></script>
-                                <div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
-                                    <div class="panel" min-hieght="">
-                                        <div class="panel-body">
-                                            <h3 class="goodsListAll"><label id="checkAllLable" class="checkbox"><span></span><input type="checkbox" name="sampleAll" id="sampleAll" data-all="sample">全部</label></h3>
-                                            <ul class="goodsList" id="templeteLaber">
+    <div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
+        <div class="panel" min-hieght="">
+            <div class="panel-body">
+                <h3 class="goodsListAll"><label id="checkAllLable" class="checkbox"><span></span><input type="checkbox" name="sampleAll" id="sampleAll" data-all="sample">全部</label></h3>
+                <ul class="goodsList" id="templeteLaber">
 
-                                                <li>
+                    <li>
 
-                                                    <label class="checkbox checkbox-check">
-                                                        <span></span><input type="checkbox" name="sample" disabled="disabled" value="39817" data-checked-all="sampleAll" checked> &nbsp 默认模板 /MRMB </label>
-
+                        <label class="checkbox checkbox-check">
+                            <span></span><input type="checkbox" name="sample" disabled="disabled" value="1" data-checked-all="sampleAll" checked> &nbsp 默认模板 /MRMB </label>
 
 
-                                                </li>
 
-                                                <li>
+                    </li>
 
-
-                                                    <label class="checkbox checkbox-check" >
-                                                        <span></span><input type="checkbox" name="sample" value="57573" data-checked-all="sampleAll" checked> &nbsp 111 /111</label>
-
-                                                </li>
-
-                                                <li>
+                    <!--<li>-->
 
 
-                                                    <label class="checkbox checkbox-check" >
-                                                        <span></span><input type="checkbox" name="sample" value="58238" data-checked-all="sampleAll" checked> &nbsp 121 /www</label>
+                    <!--<label class="checkbox " >-->
+                    <!--<span></span><input type="checkbox" name="sample" value="57573" data-checked-all="sampleAll" > &nbsp 111 /111</label>-->
 
-                                                </li>
+                    <!--</li>-->
 
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!--<li>-->
 
-                                <script type="text/javascript">
-                                    var checkFlag;
-                                    (function (){
-                                        $("[name='sample']").each(function(i,val){
-                                            checkFlag=val.checked;
-                                            if(!checkFlag){
-                                                return checkFlag;
-                                            }
-                                        });
-                                        if(checkFlag){
-                                            $("#checkAllLable").attr('class','checkbox checkbox-check');
-                                        }
-                                    })();
-                                </script>
+
+                    <!--<label class="checkbox " >-->
+                    <!--<span></span><input type="checkbox" name="sample" value="58238" data-checked-all="sampleAll" > &nbsp 121 /www</label>-->
+
+                    <!--</li>-->
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var checkFlag;
+        (function (){
+            $("[name='sample']").each(function(i,val){
+                checkFlag=val.checked;
+                if(!checkFlag){
+                    return checkFlag;
+                }
+            });
+            if(checkFlag){
+                $("#checkAllLable").attr('class','checkbox checkbox-check');
+            }
+        })();
+    </script>
 
 
 </form>
@@ -402,60 +430,21 @@
 </div>
 
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/merchandise/js/bootstrap/js/bootstrap.js"></script>
-<script src="/merchandise/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
-<script src="/merchandise/js/umeditor/umeditor.config.js"></script>
-<script src="/merchandise/js/umeditor/umeditor.min.js"></script>
-<script src="/merchandise/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script src="/merchandise/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="/merchandise/js/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
-<script src="/merchandise/js/jquery-json-2.4.js"></script>
-<script src="/merchandise/js/jquery.validate/jquery.validate.js"></script>
-<script src="/merchandise/js/jquery.validate/additional_methods.js"></script>
-<script src="/merchandise/js/jquery.validate/jquery.metadata.js"></script>
-<script src="/merchandise/js/jquery.validate/messages_cn.js"></script>
-<!--  <script src="/merchandise/js/jquery.validate/cmxform.css"></script>-->
-<!-- jqgrid start -->
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/tree.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/tabScroll.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/goods.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/dish-manage.js?v=4.9.1"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/dishTypeTree.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/jquery.Jcrop.min.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/ImgClipperUitl.js"></script>
 
-<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/jquery.jqGrid.src.js"></script>
-<script src="/merchandise/js/plugins/jqGrid/jqGrid-4.4.3/js/i18n/grid.locale-cn.js"></script>
-<script src="/merchandise/js/plugins/jqGrid/dataGrid.js"></script>
-
-
-<!-- jqgrid end -->
-<!--[if lt IE 10]>
-<script src="/merchandise/js/JPlaceholder.js"></script>
-<![endif]-->
-<script src="/merchandise/js/bkeruyun.js?v4.981"></script>
-<script src="/merchandise/js/messageBox.js"></script>
-<script src="/merchandise/js/ajaxfileupload-2.1GD.js"></script>
-<script src="/merchandise/js/pageQuery.js"></script>
-<script src="/merchandise/js/netUtil.js"></script>
-<!--[if IE]>
-<script src="/merchandise/js/ie.js"></script>
-<![endif]-->
-<script type="text/javascript">
-    <!--
-    var ctxPath="/merchandise";
-    var ctxFullPath="http://b.keruyun.com:80/merchandise";
-    var _loginUrl='http://b.keruyun.com';
-    //-->
-</script>
-<script src="/merchandise/js/tree.js"></script>
-<script src="/merchandise/js/tabScroll.js"></script>
-<script src="/merchandise/js/goods.js"></script>
-<script src="/merchandise/js/dish/dish-manage.js?v=4.9.1"></script>
-<script src="/merchandise/js/dish/dishTypeTree.js"></script>
-<script src="/merchandise/js/jquery-extension/jcrop/jquery.Jcrop.min.js"></script>
-<script src="/merchandise/js/jquery-extension/jcrop/ImgClipperUitl.js"></script>
-
-<script type="text/javascript" src="/merchandise/js/qiniu/plupload/plupload.full.min.js"></script>
-<script type="text/javascript" src="/merchandise/js/qiniu/plupload/i18n/zh_CN.js"></script>
-<script type="text/javascript" src="/merchandise/js/qiniu/qiniu.js"></script>
-<script type="text/javascript" src="/merchandise/js/common/bkeruyun-qiniu-util.js"></script>
-<script type="text/javascript" src="/merchandise/js/common/scm-tooltip.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/plupload.full.min.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/zh_CN.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/qiniu.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish//bkeruyun-qiniu-util.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/scm-tooltip.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.js"></script>
 <script type="text/javascript">
     function clearPreviewTemp() {
         $('#previewTemp').empty();
@@ -507,7 +496,7 @@
     }
     $(document).ready(function () {
         var jcropConfig = {};
-        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', ctxPath + '/themes/style/img/default.jpg');
+        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', '/app/Tpl/kiz/js/scm_kry/img/default.jpg');
         var $imgClipperModalImg = $(imgClipperModalStr);
         $imgClipperModalImg.appendTo($('body'));
         var option = {image: {scalingRatio: 0.5}};
@@ -527,17 +516,17 @@
 </script>
 
 <script type="text/javascript">
-    var ue = UE.getEditor('dishEditor');
-    var rootPath = "/merchandise",
-        baseUrl = rootPath + "/dish/manage",
-        saveOrUpdateUrl = baseUrl + "/saveOrUpdateDishBrand",
-        listUrl = baseUrl + "/list",
-        queryDishTypesUrl = baseUrl + "/queryDishTypes",
-        queryDishAndAttributeUrl = baseUrl + "/queryDishAndAttribute",
-        queryRevelanceSettingUrl = baseUrl + "/queryRevelanceSetting",
-        checkDishBrandUrl = baseUrl + "/checkDishBrand",
-        checkDishBrandSkuKeyUrl = baseUrl + "/checkDishBrandSkuKey";
-    checkBarcodeUrl = baseUrl + "/checkBarcode";
+    //    var ue = UE.getEditor('dishEditor');
+    var rootPath = ctx2Path,
+        baseUrl = ctx2Path,
+        saveOrUpdateUrl = baseUrl + "&act=saveOrUpdateDishBrand",
+        listUrl = dishPath + "&act=dish_list",
+        queryDishTypesUrl = baseUrl + "&act=queryDishTypes",
+        queryDishAndAttributeUrl = baseUrl + "&act=queryDishAndAttribute",
+        queryRevelanceSettingUrl = baseUrl + "&act=queryRevelanceSetting",
+        checkDishBrandUrl = baseUrl + "&act=checkDishBrand",
+        checkDishBrandSkuKeyUrl = baseUrl + "&act=checkDishBrandSkuKey";
+    checkBarcodeUrl = baseUrl + "&act=checkBarcode";
     $("input[name=name]").blur(function () {
         var chineseName = $("input[name=name]").val().trim();
         var getAllFirstLetterUrl = ctx2Path + "&act=get_hanzi";
@@ -561,10 +550,10 @@
     });
     var validate;
     $(function () {
-        ue.addListener("ready", function () {
-            $("#edui1").css("z-index", "1");
-            $('#ueditor_0').contents().find("body").html('');
-        });
+//        ue.addListener("ready", function () {
+//            $("#edui1").css("z-index", "1");
+//            $('#ueditor_0').contents().find("body").html('');
+//        });
         $("#tree").tree({
             'folding': true,
             'foldingType': 'single',
@@ -633,7 +622,7 @@
         $("#creatAttribute").on("click", function () {
             if ($("#attribute-list > li.current").length > 0) {
                 var newTypeId = $("#attribute-list > li.current").attr("data-id");
-                var newType = new Object();
+                var newType = {};
                 for (var i = 0, len = attributeArray.length; i < len; i++) {
                     if (newTypeId == attributeArray[i].id) {
                         newType = attributeArray[i];
@@ -670,11 +659,12 @@
             }
         });
         $(".js-save").on("click", function () {
-            if (window._isAlreadySaving) {
-            } else {
-                saveDishInfo();
-                window._isAlreadySaving = true;
-            }
+            saveDishInfo();
+//            if (window._isAlreadySaving) {
+//            } else {
+//                saveDishInfo();
+//                window._isAlreadySaving = true;
+//            }
         });
         $(".js-back").on("click", function () {
             Message.confirm(
@@ -842,7 +832,7 @@
                 }
                 getSkuInfo(value);
             }
-        })
+        });
 
         /**
          * 商品信息显示
@@ -998,7 +988,7 @@
     }
 
     function setImageVal(url, imageSize, imageName) {
-        $('#imageUrl').attr('data-uploaded', 'yes')
+        $('#imageUrl').attr('data-uploaded', 'yes');
         if (!url) {
             $('#imageUrl').val(url);
             url = ctxPath + '/themes/style/img/default.jpg';
@@ -1023,6 +1013,12 @@
     }
 
 
+</script>
+<script type="text/javascript">
+    var editor = new UE.ui.Editor();
+    editor.render("myEditor");
+    //1.2.4以后可以使用一下代码实例化编辑器
+    //UE.getEditor('myEditor')
 </script>
 {include file="inc/footer.html"}
 
