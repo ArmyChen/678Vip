@@ -20,7 +20,7 @@ var cctask = {
         details : [],
         editable : false,
         warehouseId : '#warehouseId',
-        urlWebSocket : '',
+        urlWebSocket : '127.0.0.1:1935',
         exportUrl:'/export',
         tooltipText1: '&nbsp;<span class="iconfont question color-g" data-content="创建盘点单时的库存数"></span>',
         tooltipText2: '&nbsp;<span class="iconfont question color-g" data-content="在盘点过程中，产生库存变化后，仓库当前的库存数（当单据确认后，实时库存不再变化）"></span>',
@@ -435,9 +435,9 @@ var cctask = {
                 }
             },
             afterInsertRow: function (rowid, rowData) {
-                if(rowData.alreadyData) {
+                // if(rowData.alreadyData) {
                     // $('#jqg_grid_' +  rowid).prop('disabled',true).css('opacity','0.3');
-                }
+                // }
             }
             //BUG 13576 【盘点单】反复移除商品，添加商品，导致添加商品显示不出名称信息，导致保存失败
             /*afterInsertRow: function (rowid, aData) {
@@ -514,23 +514,27 @@ var cctask = {
         }
 
         if(cctask.opts.connectNum <=0){
-            $.layerMsg('实时库存更新中断，请保存单据后刷新页面重试', false);
-            return;
+            $.layerMsg('实时库存更新中断，请保存单据后刷新页面重试', false);return;
         }
 
         cctask.opts.wsCloseType = 1;
         var wareHouseId = $('#warehouseId').val();
+        var cid = $("#cid").val();
+        var url = ctxPath + cctask.opts.urlWebSocket + "&wareHouseId="+wareHouseId+"&id="+cid;
+        // let $gridDiv =  $("#gridDiv");
+        // $gridDiv.empty().html('<table id="grid"></table>');
+        // let $grid = $(cctask.opts.listGridId);
 
-        cctask.opts.ws = new WebSocket(cctask.opts.urlWebSocket + wareHouseId);
-        cctask.opts.ws.onmessage = function(evt){
-            var list = JSON.parse(evt.data);
+        $.post(url,function(data){
+            var list = eval(data);
+            // var list = JSON.parse(dd_details);
             list.forEach(function(object,index){
-                var row = $('#grid').jqGrid('getRowData', object.id);
-                $('#grid').jqGrid('setRowData', object.id, {
-                    realTimeInventory : object.inventoryQty,
-                    qtyDiff : $.toFixed(parseFloat(row.ccQty) - parseFloat(object.inventoryQty)),
-                    amountDiff : $.toFixed((parseFloat(row.ccQty) - parseFloat(object.inventoryQty)) * parseFloat(row.price)),
-                    relTimeAmount : $.toFixed(parseFloat(object.inventoryQty) * parseFloat(row.price)),
+                var row = $('#grid').jqGrid('getRowData', object.skuId);
+                $('#grid').jqGrid('setRowData', object.skuId, {
+                    realTimeInventory : object.realTimeInventory,
+                    qtyDiff : $.toFixed(parseFloat(row.ccQty) - parseFloat(object.realTimeInventory)),
+                    amountDiff : $.toFixed((parseFloat(row.ccQty) - parseFloat(object.realTimeInventory)) * parseFloat(row.price)),
+                    relTimeAmount : $.toFixed(parseFloat(object.realTimeInventory) * parseFloat(row.price)),
                     inventoryQty : row.inventoryQty,
                     price : row.price
                 });
@@ -538,21 +542,51 @@ var cctask = {
             //$('#grid').trigger('reloadGrid'); //注释原因:盘点数去除了gridinput类，修改后没有加入缓存中，reload会显示上次保存的缓存
             scmSkuSelect.opts.dataGridCal.summaryCalculate(scmSkuSelect.opts.dataGridCal.opts, $(cctask.opts.detailGridId));
             scmSkuSelect.opts.dataGridCal.customerFunc();
-        };
-        cctask.opts.ws.onclose = function(evt){
-            if(cctask.opts.wsCloseType == 1){
-                cctask.opts.connectNum--;
-                cctask.updateRealTimeQty();
-                // console.log('onclose...reconnect websocket......' + new Date());
-            }
-        };
-        cctask.opts.ws.onerror = function(evt){
-            if(cctask.opts.wsCloseType == 1){
-                cctask.opts.connectNum--;
-                cctask.updateRealTimeQty();
-                // console.log('onerror...reconnect websocket......' + new Date());
-            }
-        };
+        });
+
+        //
+        // cctask.opts.ws = new WebSocket(cctask.opts.urlWebSocket +"&wareHouseId="+ wareHouseId);
+        // cctask.opts.ws.onmessage = function(evt){
+        //     var list = JSON.parse(evt.data);
+        //     list.forEach(function(object,index){
+        //         var row = $('#grid').jqGrid('getRowData', object.id);
+        //         $('#grid').jqGrid('setRowData', object.id, {
+        //             realTimeInventory : object.inventoryQty,
+        //             qtyDiff : $.toFixed(parseFloat(row.ccQty) - parseFloat(object.inventoryQty)),
+        //             amountDiff : $.toFixed((parseFloat(row.ccQty) - parseFloat(object.inventoryQty)) * parseFloat(row.price)),
+        //             relTimeAmount : $.toFixed(parseFloat(object.inventoryQty) * parseFloat(row.price)),
+        //             inventoryQty : row.inventoryQty,
+        //             price : row.price
+        //         });
+        //     });
+        //     //$('#grid').trigger('reloadGrid'); //注释原因:盘点数去除了gridinput类，修改后没有加入缓存中，reload会显示上次保存的缓存
+        //     scmSkuSelect.opts.dataGridCal.summaryCalculate(scmSkuSelect.opts.dataGridCal.opts, $(cctask.opts.detailGridId));
+        //     scmSkuSelect.opts.dataGridCal.customerFunc();
+        // };
+        // cctask.opts.ws.onclose = function(evt){
+        //     if(cctask.opts.wsCloseType == 1){
+        //         cctask.opts.connectNum--;
+        //         cctask.updateRealTimeQty();
+        //         // console.log('onclose...reconnect websocket......' + new Date());
+        //     }
+        // };
+        // cctask.opts.ws.onerror = function(evt){
+        //     if(cctask.opts.wsCloseType == 1){
+        //         cctask.opts.connectNum--;
+        //         cctask.updateRealTimeQty();
+        //         // console.log('onerror...reconnect websocket......' + new Date());
+        //     }
+        // };
+    },
+    startCheck : function(){
+        setInterval(function () {
+            cctask.updateRealTimeQty()
+        },3000);
+    },
+    endCheck : function () {
+        clearInterval(function () {
+            cctask.updateRealTimeQty()
+        });
     }
 };
 

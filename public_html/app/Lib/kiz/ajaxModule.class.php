@@ -6045,4 +6045,62 @@ class ajaxModule extends KizBaseModule
         echo json_encode($goods);
         exit;
     }
+
+    public function count_task_edit_ajax()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $id = $_REQUEST['id'];
+        $sql = "select fc.id,fc.name from fanwe_cangku fc where fc.slid=$slid";
+        $gsql = "select * from fanwe_cangku_pandian_danju where id=$id";
+        $glist = $GLOBALS['db']->getRow($gsql);
+        $glist['warehousename']=parent::get_cangku_list($glist['cangku_id'])['name'];
+        $ddsql = "select * from fanwe_cangku_pandian_stat where djid=".$glist['id'];
+        $clist = $GLOBALS['db']->getAll($ddsql);
+        $list = $GLOBALS['db']->getAll($sql);
+        foreach ($list as $key=>$item) {
+            $pandian = "select * from fanwe_cangku_pandian_danju where isdisable=1 and cangku_id=".$item['id']."  and slid=$slid";
+            $pandianlist = $GLOBALS['db']->getAll($pandian);
+            if(count($pandianlist) > 0){
+                unset($list[$key]);
+            }
+        }
+        $inventoryAmount = 0;
+        $ccAmount = 0;
+        $dd_detail = [];
+//        var_dump($clist);
+        foreach ($clist as $key=>$item) {
+            $typeName = parent::get_dc_current_supplier_cate($item['cate_id']);
+            $cangku = parent::getCangkuMenuInfoByMidCid($item['mid'],$item['cid']);
+            if (!empty($typeName)){
+                $dd_detail[$key]['skuTypeName'] = $typeName['name'];
+            }else{
+                $dd_detail[$key]['skuTypeName'] = '<span style="color:red">顶级分类</span>';
+            }
+            $dd_detail[$key]['skuId'] = $item['mid'];
+            $dd_detail[$key]['skuTypeId'] = $item['cate_id'];
+            $dd_detail[$key]['skuCode'] = $item['id'];
+            $dd_detail[$key]['skuName'] = $item['mname'];
+            $dd_detail[$key]['uom'] = $item['unit'];
+            $dd_detail[$key]['price'] = $item['mprice'];
+            $dd_detail[$key]['inventoryQty'] = $item['stock'];
+            $dd_detail[$key]['realTimeInventory'] = $cangku['mstock'];
+            $dd_detail[$key]['ccQty'] = $item['pandianshu'];
+            $dd_detail[$key]['qtyDiff'] =$item['chayishu'];
+            $dd_detail[$key]['amountDiff'] =$item['chanyijine'];
+            $dd_detail[$key]['remarks'] = $item['memo'];
+            $dd_detail[$key]['ccAmount'] = $item['stock']*$item['mprice'];
+            $dd_detail[$key]['relTimeAmount'] = $item['mstock']*$item['mprice'];
+            $dd_detail[$key]['alreadyData'] = 1;
+            $dd_detail[$key]['remarks'] =$item['memo'];
+            $dd_detail[$key]['djid'] = $item['id'];
+            $inventoryAmount +=  $dd_detail[$key]['inventoryQty'];
+            $ccAmount +=  $dd_detail[$key]['ccAmount'];
+        }
+//        var_dump($clist);
+        /* 系统默认 */
+        echo json_encode($dd_detail);
+        exit;
+    }
 }

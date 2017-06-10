@@ -151,7 +151,7 @@
         <!-- 单据明细信息 end -->
     </div>
 </div>
-
+<input type="hidden" id="cid" value='<?php echo "&id=".$_GET["id"];?>'/>
 
 <div id="scmSkuSelectDiv" gridId="grid" skuScene="61" warehouseId="warehouseId" ccTask="1" qtyColName="ccQty"></div>
 
@@ -167,14 +167,15 @@
 
         var opts = {
             commandType: 2,
-            urlRoot: '/scm_kry/cc/task',
+            urlRoot: ctxPath,
             editable: true,
             details: {$dd_detail},
-            urlWebSocket : 'ws://' + window.location.host + '/scm_kry/inventoryWebsocket/',
+            urlWebSocket : '&act=count_task_edit_ajax&random='+Math.random(),
             ccModel: 1
         };
 
         cctask._init(opts);
+        cctask.startCheck();
     });
 
     //盘点模板控制
