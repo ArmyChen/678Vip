@@ -2295,18 +2295,19 @@ class ajaxModule extends KizBaseModule
             }
             foreach ($row2 as $key2 => $item2) {
 
-//                var_dump($item2);
                 if ($item['print'] != 3) {
                     $price = $item['buyPrice'];
                 } else {
                     $price = $item['price'];
                 }
+                $price = $item2['price'];
+
                 $mtock += $item2['fstock'];
                 $cangku = parent::get_cangku_list($item2['cid']);
                 $output['skuVOs'][$key]['titleVOs'][$key2]['price'] = $price;
-                $output['skuVOs'][$key]['titleVOs'][$key2]['priceSum'] = $price;
+                $output['skuVOs'][$key]['titleVOs'][$key2]['priceSum'] += $price;
                 $output['skuVOs'][$key]['titleVOs'][$key2]['amount'] = $price * intval($item2['fstock']);
-                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum'] = $price * intval($item2['fstock']);
+                $output['skuVOs'][$key]['titleVOs'][$key2]['amountSum'] += $price * intval($item2['fstock']);
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialId'] = $account_info['slid'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['commercialName'] = $account_info['slname'];
                 $output['skuVOs'][$key]['titleVOs'][$key2]['qty'] = intval($item2['fstock']);
@@ -3447,7 +3448,7 @@ class ajaxModule extends KizBaseModule
                 if (count($list) > 0 && $warehouseId && $data_stat[$key]['mid']) {
 //                    $sql = "update fanwe_cangku_menu set mstock=".intval($data_stat[$key]['pandianshu'])." where mid=".$data_stat[$key]['mid']." and cid=".$warehouseId;
 //                    var_dump($sql);die;
-                    $sql = "update fanwe_cangku_menu set mstock=mstock+" . intval($data_stat[$key]['chayishu']) . " where mid=" . $data_stat[$key]['mid'] . " and cid=" . $warehouseId;
+                    $sql = "update fanwe_cangku_menu set mstock=" . intval($data_stat[$key]['pandianshu']) . " where mid=" . $data_stat[$key]['mid'] . " and cid=" . $warehouseId;
                     $r = $GLOBALS['db']->query($sql);
                 } else {
                     //添加
@@ -3469,7 +3470,7 @@ class ajaxModule extends KizBaseModule
                         "ctime" => date('Y-m-d H:i:s', time())
                     );
                     $r = $GLOBALS['db']->autoExecute("fanwe_cangku_menu", $data_menu, "INSERT");
-                    $res = $GLOBALS['db']->query("update " . DB_PREFIX . "dc_menu set stock=stock+" . $data_stat[$key]['pandianshu'] . " where id=" . $data_stat[$key]['mid']);
+                    $res = $GLOBALS['db']->query("update " . DB_PREFIX . "dc_menu set stock=" . $data_stat[$key]['chayishu'] . " where id=" . $data_stat[$key]['mid']);
                 }
             }
         }
