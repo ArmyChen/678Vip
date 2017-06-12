@@ -685,7 +685,7 @@ class KizBaseModule{
             return $pandian;
         }
         /* 系统默认 */
-        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_taste where slid=".$slid);
+        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_taste where location_id=".$slid);
         return $pandianlist;
     }
 
@@ -700,7 +700,7 @@ class KizBaseModule{
             return $pandian;
         }
         /* 系统默认 */
-        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_unit_cate where slid=".$slid);
+        $pandianlist=$GLOBALS['db']->getAll("select * from fanwe_dc_supplier_unit_cate where location_id=".$slid);
         return $pandianlist;
     }
 
