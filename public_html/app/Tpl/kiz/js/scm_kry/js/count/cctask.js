@@ -530,13 +530,16 @@ var cctask = {
             // var list = JSON.parse(dd_details);
             list.forEach(function(object,index){
                 var row = $('#grid').jqGrid('getRowData', object.skuId);
+                var realTimeInventory = object.realTimeInventory == null ? 0 : object.realTimeInventory;
+                var inventoryQty = object.inventoryQty == null ? 0 : object.inventoryQty;
+                var price = object.price == null ? 0 : object.price;
                 $('#grid').jqGrid('setRowData', object.skuId, {
-                    realTimeInventory : object.realTimeInventory,
-                    qtyDiff : $.toFixed(parseFloat(row.ccQty) - parseFloat(object.realTimeInventory)),
-                    amountDiff : $.toFixed((parseFloat(row.ccQty) - parseFloat(object.realTimeInventory)) * parseFloat(row.price)),
-                    relTimeAmount : $.toFixed(parseFloat(object.realTimeInventory) * parseFloat(row.price)),
-                    inventoryQty : row.inventoryQty,
-                    price : row.price
+                    realTimeInventory : realTimeInventory,
+                    qtyDiff : $.toFixed(parseFloat(row.ccQty) - parseFloat(realTimeInventory)),
+                    amountDiff : $.toFixed((parseFloat(row.ccQty) - parseFloat(realTimeInventory)) * parseFloat(price)),
+                    relTimeAmount : $.toFixed(parseFloat(realTimeInventory) * parseFloat(price)),
+                    inventoryQty : inventoryQty,
+                    price : price
                 });
             });
             //$('#grid').trigger('reloadGrid'); //注释原因:盘点数去除了gridinput类，修改后没有加入缓存中，reload会显示上次保存的缓存
@@ -581,7 +584,7 @@ var cctask = {
     startCheck : function(){
         setInterval(function () {
             cctask.updateRealTimeQty()
-        },3000);
+        },1000);
     },
     endCheck : function () {
         clearInterval(function () {
