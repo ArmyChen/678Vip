@@ -1326,11 +1326,46 @@ class ajaxSettingsModule extends KizBaseModule
         if($id>0){
             $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data,"UPDATE","id=".$id);
 
+            $data = [];
+            //保存扩展信息
+            $data['mid'] = $id;
+            $data['start'] = $_REQUEST['dishIncreaseUnit'];
+            $data['increase'] = $_REQUEST['stepNum'];;
+            $data['box'] = $_REQUEST['boxQty'];;
+            $data['boxs'] = $_REQUEST['dishQty'];;
+            $data['is_one'] = $_REQUEST['isSingle'];;
+            $data['is_cut'] = $_REQUEST['isDiscountAll'];;
+            $data['is_send'] = $_REQUEST['isSendOutside'];;
+            $data['is_reprice'] = $_REQUEST['isChangePrice'];;
+            $data['is_dish'] = $_REQUEST['isOrder'];;
+            $data['mtags'] = serialize($_REQUEST['labels']);
+            $data['mdishs'] = serialize($_REQUEST['cookingWays']);
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends","update",$data,"id=".$id);
+
             syn_supplier_location_menu_match($id);
             $root['message'] = "修改成功";
         }else{
             $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data);
             $id = $GLOBALS['db']->insert_id();
+
+            $data = [];
+            //保存扩展信息
+            $data['mid'] = $id;
+            $data['start'] = $_REQUEST['dishIncreaseUnit'];
+            $data['increase'] = $_REQUEST['stepNum'];;
+            $data['box'] = $_REQUEST['boxQty'];;
+            $data['boxs'] = $_REQUEST['dishQty'];;
+            $data['is_one'] = $_REQUEST['isSingle'];;
+            $data['is_cut'] = $_REQUEST['isDiscountAll'];;
+            $data['is_send'] = $_REQUEST['isSendOutside'];;
+            $data['is_reprice'] = $_REQUEST['isChangePrice'];;
+            $data['is_dish'] = $_REQUEST['isOrder'];;
+            $data['mtags'] = serialize($_REQUEST['labels']);
+            $data['mdishs'] = serialize($_REQUEST['cookingWays']);
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data);
+
 
             syn_supplier_location_menu_match($id);
             $root['message'] = "添加成功";
