@@ -243,8 +243,19 @@ class dishModule extends KizBaseModule
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "商品管理");
+        $GLOBALS['tmpl']->assign("page_title", "新增商品");
         $GLOBALS['tmpl']->display("pages/dish/addDish.html");
+    }
+
+    public function editDish()
+    {
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        /* 系统默认 */
+        $GLOBALS['tmpl']->assign("page_title", "编辑商品");
+        $GLOBALS['tmpl']->display("pages/dish/editDish.html");
     }
 
     public function dish_tag()

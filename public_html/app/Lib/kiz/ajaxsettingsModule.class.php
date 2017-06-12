@@ -761,7 +761,7 @@ class ajaxSettingsModule extends KizBaseModule
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where  order by g.id desc limit $limit";
         $check = $GLOBALS['db']->getAll($sql);
 //var_dump($check);
         $data = [];
@@ -781,6 +781,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data[$key]['funit'] = $item['funit'];
             $data[$key]['times'] = $item['times'];
             $data[$key]['price'] = $item['price'];
+            $data[$key]['logo'] = empty($item['image']) ? null : $item['image'];
             $data[$key]['pinyin'] = $item['pinyin'];
             $data[$key]['reckonPrice'] = $price;
             $data[$key]['reckonPriceStr'] = $price;
@@ -1342,6 +1343,11 @@ class ajaxSettingsModule extends KizBaseModule
         $root['success'] = 1;
 
         echo json_encode($root);
+        exit;
+    }
+
+    public function checkBarcode(){
+        echo "true";
         exit;
     }
 

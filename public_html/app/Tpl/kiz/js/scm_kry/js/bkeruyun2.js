@@ -2212,7 +2212,7 @@ $(function () {
     $.doForward = function (args) {
         var url = args.url, postData = args.postData;
         $.urlAndPostDataCheck(url, postData);
-        window.location.href = url + '?' + $.param(postData);
+        window.location.href = url + '&' + $.param(postData);
     };
     
     /**
