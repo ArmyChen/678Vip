@@ -679,11 +679,23 @@
             dishCodeOrName: dishCodeOrName,
             enabledFlag: enabledFlag
         };
+        $.showClock = function (row) {
+            if(row.is_effect == 1){
+                return renderEnum.normal
+            }
+            return renderEnum.hidden;
+        };
+        $.showUnClock = function (row){
+            if(row.is_effect != 1){
+                return renderEnum.normal
+            }
+            return renderEnum.hidden;
+        };
         var dataGridConfig = {
             url: queryUrl,
             gridview: true,
             "postData": postData,
-            colNames: ['id','商品名称', '商品中类', '商品编号', '商品名称', '库存类型', '单位', '定价', '排序', '状态', '',''],
+            colNames: ['id','商品名称', '商品中类', '商品编号', '商品名称', '库存类型', '单位', '定价', '排序', '状态', '','','商品状态','is_effect'],
             colModel: [
                 {name : 'id',hidden : true},
                 {name : 'dishName',hidden : true},
@@ -721,7 +733,16 @@
                 {name : 'sort',index : 'sort',width : 100,align : 'center',hidden:true},
                 {name : 'status',index : 'status',width : 100,align : 'center',formatter : "select",editoptions : {value : "1:启用;2:停用"},hidden:true},
                 {name : 'logo',hidden : true},
-                {name : 'type',hidden : true}
+                {name : 'type',hidden : true},
+                {name : 'is_effect',align : 'center', formatter:function(r){
+                    if(r== 1){
+                        return "<span style='color:green'>启用</span>"
+                    }else{
+                        return "<span style='color:#ff233e'>禁用</span>"
+
+                    }
+                }},
+                {name : 'is_effect',hidden : true}
             ],
             multiselect: true,
             rowNum: 10,
@@ -769,7 +790,7 @@
             },
             gridComplete: function(){
                 //sessionStorage
-                console.info('gridComplete');
+//                console.info('gridComplete');
                 var pageObj = {
                     page: $(this).jqGrid('getGridParam','page'),
                     rowNum: $(this).jqGrid('getGridParam','rowNum'),
@@ -806,12 +827,24 @@
                     }
                 }
             },
+
             actionParam: {
                 editor: {
                     url: editorUrl,
                     extraRender: $.extraRender,
                     showExpression: $.show
                 },
+                delete:{
+                    url:ctx2Path+"&act=delete_dish_ajax"
+                },
+                clock:{
+                    render:$.showClock,
+                    url:ctx2Path+"&act=clock_dish_ajax"
+                },
+                unlock:{
+                    render:$.showUnClock,
+                    url:ctx2Path+"&act=clock_dish_ajax"
+                }
 //                clock: {
 //                    url: baseUrl + '/isUsed',
 //                    extraRender: $.extraRender,

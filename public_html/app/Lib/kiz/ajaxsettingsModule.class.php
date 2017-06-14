@@ -761,7 +761,7 @@ class ajaxSettingsModule extends KizBaseModule
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where  order by g.id desc limit $limit";
+        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty,g.is_effect as status from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where  order by g.id desc limit $limit";
         $check = $GLOBALS['db']->getAll($sql);
 //var_dump($check);
         $data = [];
@@ -789,6 +789,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data[$key]['yieldRateStr'] = $item['chupinliu'];
             $data[$key]['inClassName'] = $item['skuTypeName'];
             $data[$key]['inventoryQty'] = empty($result) ? 0 : $result['mstock'];
+            $data[$key]['is_effect'] =$item['status'];
 
 
         }
@@ -1383,6 +1384,67 @@ class ajaxSettingsModule extends KizBaseModule
 
     public function checkBarcode(){
         echo "true";
+        exit;
+    }
+
+    /**
+     * 锁定菜单
+     */
+    public function clock_dish_ajax(){
+        init_app_page();
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $location_id = $account_info['slid'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_dc_menu where id=".$id;
+        $r = $GLOBALS['db']->getRow($sql);
+        if($r['is_effect'] == 1){
+            $r['is_effect'] = 0;
+        }else{
+            $r['is_effect'] = 1;
+        }
+        if ($GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$r,"UPDATE","id=".$id)){
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $return['success'] = false;
+            $return['message'] = "修改失败";
+        }
+        $sql = "select * from fanwe_dc_menu where id=".$id;
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 删除菜单
+     */
+    public function delete_dish_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_dc_menu where id=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+
+        if(!empty($row)){
+            if($row['buy_count'] > 0){
+                $return['success'] = false;
+                $return['message'] = "商品已经卖出无法删除";
+            }else{
+                if ($GLOBALS['db']->query("delete from fanwe_dc_menu where id=".$id)){
+                    $return['success'] = true;
+                    $return['message'] = "删除成功";
+                }else{
+                    $return['success'] = false;
+                    $return['message'] = "删除失败";
+                }
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "商品不存在";
+        }
+        echo json_encode($return);
         exit;
     }
 

@@ -1923,9 +1923,7 @@ $(function () {
 
     $.doDelete = function (args) {
         Message.confirm({title: "提示", describe: "是否删除?"}, function () {
-        	if(args.callback == 'undefined' ||args.callback == ""){
-        		args.callback = '$.showMsgAndRefresh';
-        	}
+            args.callback = '$.showMsgAndRefresh';
             $.submitWithAjax(args);
         });
     };
@@ -1943,9 +1941,7 @@ $(function () {
              desc = '是否停用?';
          }
         Message.confirm({title: "提示", describe: desc}, function () {
-        	if(args.callback == 'undefined' ||args.callback == ""){
-        		args.callback = '$.showMsgAndRefresh';
-        	}
+            args.callback = '$.showMsgAndRefresh';
         	$.submitWithAjax(args);
         });
     };
