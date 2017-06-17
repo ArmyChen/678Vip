@@ -10,7 +10,7 @@
         <h1>更新商品</h1>
         <div class="btn-wrap pull-right tar">
             <a class="btn-link ml10" id="btnPrev" style="display:none;">上一步</a>
-            <a class="btn-link ml10 js-back" href="javascript:;" id="btncancle">取消</a>
+            <a class="btn-link ml10 js-back" href="javascript:history.back();" id="btncancle">取消</a>
             <a class="btn-link ml10" id="btnNext">下一步</a>
             <a class="btn-link ml10 js-save" id="btnSave" style="display:none;">保存</a>
         </div>
@@ -26,13 +26,13 @@
 <form id="stepOneForm">
     <div class="center-block panel-group mt20" id="baseInfo">
         <div class="aside">
-            <div class="aside-column panel-search">
-                <div class="search-box" id="goodsTypeSearch">
-                    <input type="text" name="keyWord" id="keyWord" class="form-control" placeholder="请输入类别编码/名称"
-                           maxlength="48" value=""/>
-                    <span id="js-type-search-button" class="icon-search">搜索</span>
-                </div>
-            </div>
+            <!--<div class="aside-column panel-search">-->
+                <!--<div class="search-box" id="goodsTypeSearch">-->
+                    <!--<input type="text" name="keyWord" id="keyWord" class="form-control" placeholder="请输入类别编码/名称"-->
+                           <!--maxlength="48" value=""/>-->
+                    <!--<span id="js-type-search-button" class="icon-search">搜索</span>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="aside-column classificationAll" id="classificationAll">
                 <ul class="tree" id="tree">
                 </ul>
@@ -58,59 +58,60 @@
                         <td valign="top">
                             <input type="text" class="form-control w220" maxlength="16" name="dishCode"
                                    id="dishCode"
-                                   value="0117" placeholder="若不填写，则系统自动生成"
+                                   value="{$dish.id}" placeholder="若不填写，则系统自动生成"
                                    disabled>
                         </td>
                         <th valign="top"><label class="control-label">商品名称</label> <strong
                                 class="red">*</strong></th>
                         <td valign="top"><input type="text" class="form-control w220" maxlength="64" name="name"
                                                 id="name"
-                                                placeholder="第一语言" value="蜜桃乌龙奶慕"></td>
+                                                placeholder="第一语言" value="{$dish.name}"></td>
                     </tr>
                     <tr>
                         <th valign="top"><label class="control-label">定价</label> <strong class="red">*</strong>
                         </th>
                         <td valign="top"><input type="text" class="form-control w220 number1" data-type="number1"
                                                 data-left-max="8" data-right-max="2" name="marketPrice" id="marketPrice"
-                                                value="16.00"></td>
+                                                value="{$dish.price}"></td>
 
                         <th valign="top">&nbsp;</th>
                         <td valign="top"><input type="text" class="form-control w220" maxlength="48" name="aliasName"
-                                                id="aliasName" placeholder="第二语言" value=""></td>
+                                                id="aliasName" placeholder="第二语言" value="{$dish.futitle}"></td>
                     </tr>
                     <tr>
 
-                        <th valign="top"><label for="dishNameIndex" class="control-label">名称首字母</label></th>
+                        <th valign="top"><label for="dishNameIndex" class="control-label">简码</label></th>
                         <td valign="top"><input type="text" class="form-control w220" name="dishNameIndex"
                                                 id="dishNameIndex"
-                                                value="mtwlnm"></td>
-                        <th valign="top"><label for="shortName" class="control-label">短名称</label></th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="4" name="shortName"
-                                                id="shortName"
-                                                placeholder="第一语言" value=""></td>
+                                                value="{$dish.pinyin}"></td>
                     </tr>
 
                     <tr>
                         <th valign="top"><label for="barcode" class="control-label">条形码</label></th>
                         <td valign="top"><input type="text" class="form-control w220" name="barcode" id="barcode"
-                                                maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value=""></td>
+                                                maxlength="40" data-format="rule" data-rule="/[^\a-\z\A-\Z0-9\-]/g" value="{$dish.barcode}"></td>
                         <th valign="top">&nbsp;</th>
-                        <td valign="top"><input type="text" class="form-control w220" maxlength="48"
-                                                name="aliasShortName"
-                                                id="aliasShortName" placeholder="第二语言" value="">
-                        </td>
 
                     </tr>
                     <tr>
                         <th valign="top"><label class="control-label">库存类型</label><strong class="red">*</strong></th>
                         <td valign="top">
+                            <div class="w220">
+                                <select name="wmType" id="wmType">
 
 
 
+                                    {foreach from=$kcnx item=item key=key}
+                                    <option value="{$key}" {if $key eq $dish.print}selected{/if}>{$item}</option>
+                                    {/foreach}
 
 
-                            <input type="text" class="form-control w220" name="barcode" id="barcode"
-                                   value="现制商品" disabled>
+
+                                </select>
+
+
+                                </select>
+                            </div>
 
 
 
@@ -118,16 +119,15 @@
 
 
                         </td>
-                        <th valign="top"><label class="control-label">销售类型</label></th>
-                        <td valign="top">
-                            <label id="saleTypeBox"
-                                   class="checkbox "><span></span>
-                                <input type="checkbox" name="saleType" id="saleType" data-value="1"
-                                >称重商品</label></td>
+                        <!--<th valign="top"><label class="control-label">销售类型</label></th>-->
+                        <!--<td valign="top">-->
+                            <!--<label id="saleTypeBox"-->
+                                   <!--class="checkbox "><span></span>-->
+                                <!--<input type="checkbox" name="saleType" id="saleType" data-value="1"-->
+                                <!--&gt;称重商品</label></td>-->
 
                     </tr>
-
-                    <tr>
+                    <tr style="display: none">
                         <th valign="top"><label class="control-label">销售单位</label> <strong class="red">*</strong></th>
                         <td valign="top">
 
@@ -208,30 +208,30 @@
                         <th><label class="control-label">起卖数</label></th>
                         <td><input type="text" class="form-control w220 number1" data-type="number1"
                                    data-left-max="3" data-right-max="2" placeholder="1"
-                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="1.0">
+                                   name="dishIncreaseUnit" id="dishIncreaseUnit" value="{$dishExtends.start}">
                         </td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
                                 <input type="checkbox" name="isSingle" id="isSingle" data-value="1"
-                                       checked>允许单点</label>
+                                    {if $dishExtends.is_one eq 1}checked{/if} >允许单点</label>
                             <label class="checkbox checkbox-check"><span></span>
                                 <input type="checkbox" name="isDiscountAll" id="isDiscountAll" data-value="1"
-                                       checked>允许手动折扣</label>
+                                       {if $dishExtends.is_cut eq 1}checked{/if}>允许手动折扣</label>
                         </td>
                     </tr>
                     <tr>
                         <th><label class="control-label">增量设置</label></th>
                         <td><input type="text" class="form-control w220 number1" data-type="number1"
                                    data-left-max="3" data-right-max="2" placeholder="1"
-                                   name="stepNum" id="stepNum" value="1.0"></td>
+                                   name="stepNum" id="stepNum" value="{$dishExtends.increase}"></td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
                                 <input type="checkbox" name="isSendOutside" id="isSendOutside" data-value="1"
-                                       checked>允许外送</label>
+                                       {if $dishExtends.is_send eq 1}checked{/if}>允许外送</label>
 
                             <label class="checkbox checkbox-check mr30"><span></span>
                                 <input type="checkbox" name="isChangePrice" id="isChangePrice" data-value="1"
-                                       checked>允许变价</label>
+                                       {if $dishExtends.is_reprice eq 1}checked{/if}>允许变价</label>
                         </td>
                     </tr>
                     <tr>
@@ -239,15 +239,15 @@
                         <td>
                             <input type="text" style="width:60px;" class="form-control" data-type="digits"
                                    data-left-max="3" data-right-max="3" min='0' placeholder="1" maxlength="7"
-                                   name="dishQty" id="dishQty" value="1">个商品
+                                   name="dishQty" id="dishQty" value="{$dishExtends.boxs}">个商品
                             <input type="text" style="width:60px;" class="form-control" data-type="digits"
                                    data-left-max="3" min='0' maxlength="3" placeholder="1"
-                                   name="boxQty" id="boxQty" value="1">个餐盒
+                                   name="boxQty" id="boxQty" value="{$dishExtends.box}">个餐盒
                         </td>
                         <td>
                             <label class="checkbox checkbox-check mr30"><span></span>
                                 <input type="checkbox" name="isOrder" id="isOrder" data-value="1"
-                                       checked>允许堂食</label>
+                                       {if $dishExtends.is_dish eq 1}checked{/if}>允许堂食</label>
                         </td>
                     </tr>
                     </tbody>
@@ -260,8 +260,8 @@
                 <ul class="tab-white-gray goodsConfig-tab">
                     <li class="current" data-show="goodsLabelCon"><em>标签</em>&nbsp;<span id="labelCount"></span>
                     </li>
-                    <li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>
-                    <li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>
+                    <!--<li data-show="goodsNoteCon"><em>备注</em>&nbsp;<span id="memoCount"></span></li>-->
+                    <!--<li data-show="goodsBurdeningCon"><em>配料</em>&nbsp;<span id="condimentCount"></span></li>-->
                     <li data-show="goodsPracticeCon"><em>做法</em></li>
                 </ul>
             </div>
@@ -269,7 +269,7 @@
                 <h3 class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion"
                     data-target="#collapseMore"><em>更多</em><span class="caret pull-right"></span></h3>
             </div>
-            <div id="collapseMore" class="panel-collapse collapse">
+            <div id="collapseMore" class="">
                 <div class="panel-body">
                     <table cellpadding="0" cellspacing="0"
                            class="table-nobd table-fixed">
@@ -282,7 +282,7 @@
                                         <input type="text" class="form-control" name="imageUrl" id="imageUrl"
                                                data-imageSize="" data-imageSuffixes=""
                                                data-imageName=""
-                                               value=""
+                                               value="{$dish.image}"
                                                readonly="readonly">
                                         <button class="btn btn-default" type="button">浏览图片</button>
                                     </div>
@@ -298,49 +298,49 @@
                                 <div id="divPreviewImage">
 
 
-                                    <img src="/merchandise/themes/style/img/default.jpg"
+                                    <img src="{$dish.image}"
                                          class="img-responsive">
 
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th><label class="control-label">视频</label></th>
-                            <td>
-                                <div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">
-                                    <div id="bntVideoUrl">
-                                        <input type="text" class="form-control" name="videoUrl" id="videoUrl"
-                                               value="" readonly="readonly">
-                                        <button class="btn btn-default" type="button">上传视频</button>
-                                    </div>
-                                </div>
-                                <span class="bnt-clear">清空</span>
-                                <span for="" class="red"
-                                      style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>
-                            </td>
+                        <!--<tr>-->
+                            <!--<th><label class="control-label">视频</label></th>-->
+                            <!--<td>-->
+                                <!--<div class="input-group-inset w402 pull-left mr15" id="videoUrlContainer">-->
+                                    <!--<div id="bntVideoUrl">-->
+                                        <!--<input type="text" class="form-control" name="videoUrl" id="videoUrl"-->
+                                               <!--value="" readonly="readonly">-->
+                                        <!--<button class="btn btn-default" type="button">上传视频</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<span class="bnt-clear">清空</span>-->
+                                <!--<span for="" class="red"-->
+                                      <!--style="display: inline-block;font-size: small;line-height: 34px;">(文件大小10MB以内;格式:mp4、mov、3gp)</span>-->
+                            <!--</td>-->
 
-                        </tr>
+                        <!--</tr>-->
                         <tr>
                             <th valign="top"><label class="control-label">描述</label></th>
                             <td><textarea class="form-control w402" name="dishDesc"
-                                          id="dishDesc"></textarea>
+                                          id="dishDesc">{$dish.info}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <th valign="top">菜品详情</th>
                             <td>
-                                <script id="dishEditor" type="text/plain" style="width:700px;height:500px;"></script>
-                                </td>
-                                </tr>
-                                </tbody>
-                                </table>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
+                                <textarea name="后台取值的key" id="myEditor" style="width: 600px;height: 800px;">{$dish.m_desc}</textarea>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-                                <script src="/merchandise/js/jquery-1.10.2.min.js"></script>
                                 <div class="center-block panel-group mt20" id="sampleCon" style="display:none;">
                                     <div class="panel" min-hieght="">
                                         <div class="panel-body">
@@ -499,16 +499,17 @@
 
 <script type="text/javascript">
     var ue = UE.getEditor('dishEditor');
+    var id = "<?php echo $_REQUEST['id'];?>";
     var rootPath = ctx2Path,
         baseUrl = ctx2Path,
-        saveOrUpdateUrl = baseUrl + "&act=saveOrUpdateDishBrand",
-        listUrl = dishPath + "&act=dish_list",
-        queryDishTypesUrl = baseUrl + "&act=queryDishTypes",
-        queryDishAndAttributeUrl = baseUrl + "&act=queryDishAndAttribute",
-        queryRevelanceSettingUrl = baseUrl + "&act=queryRevelanceSetting",
-        checkDishBrandUrl = baseUrl + "&act=checkDishBrand",
-        checkDishBrandSkuKeyUrl = baseUrl + "&act=checkDishBrandSkuKey";
-    checkBarcodeUrl = baseUrl + "&act=checkBarcode";
+        saveOrUpdateUrl = baseUrl + "&act=saveOrUpdateDishBrand&op=" +id,
+        listUrl = dishPath + "&act=dish_list&op=" +id,
+        queryDishTypesUrl = baseUrl + "&act=queryDishTypes&op=" +id,
+        queryDishAndAttributeUrl = baseUrl + "&act=queryDishAndAttribute&op=" +id,
+        queryRevelanceSettingUrl = baseUrl + "&act=queryRevelanceSetting&op=" +id,
+        checkDishBrandUrl = baseUrl + "&act=checkDishBrand&op=" +id,
+        checkDishBrandSkuKeyUrl = baseUrl + "&act=checkDishBrandSkuKey&op=" +id,
+    checkBarcodeUrl = baseUrl + "&act=checkBarcode&op=" +id;
     $("input[name=name]").blur(function () {
         var chineseName = $("input[name=name]").val().trim();
         var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
@@ -658,8 +659,6 @@
         $.initDishAttribute();
         $.initRelevanceCount();
         $.initMedia();
-
-
     });
     $(function () {
         validate = $("#stepOneForm").validate({
@@ -1000,6 +999,7 @@
     editor.render("myEditor");
     //1.2.4以后可以使用一下代码实例化编辑器
     //UE.getEditor('myEditor')
+//    editor.setContent('欢迎使用umeditor', true);
 </script>
 {include file="inc/footer.html"}
 

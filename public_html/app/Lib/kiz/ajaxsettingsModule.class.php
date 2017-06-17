@@ -811,24 +811,51 @@ class ajaxSettingsModule extends KizBaseModule
     }
 
     public function queryDishAndAttribute(){
+        $id = $_REQUEST['op'];
         $attr = parent::get_supplier_cate_unit_row();
+        $dish = parent::getDcMenuInfoByMid($id);
+//var_dump($dish);
         $dishPropertyType =[];
+        $dishAndAttribute =[];
         foreach ($attr as $k => $v) {
             $dishPropertyType[$k]['id'] = $v['id'];
             $dishPropertyType[$k]['name'] = $v['name'];
+            if(!empty($id)){
+                if($dish['unit'] == $v['name']){
+                    $dishAndAttribute['id'] = $v['id'];
+                    $dishAndAttribute['name'] = $v['name'];
+
+                }
+            }
         }
 
+
         $dishPropertyTypes = json_encode($dishPropertyType);
-        echo '{"dishPropertyTypes":[{"serverCreateTime":"2016-12-02 14:15:58","serverUpdateTime":"2017-05-11 18:48:41","creatorId":99999999,"creatorName":"admin","updatorId":1,"updatorName":"","statusFlag":1,"id":1,"name":"默认","aliasName":"默认","propertyKind":4,"sort":1000,"brandIdenty":1,"enabledFlag":1,"dishPropertys":[],"dishProperties":'.$dishPropertyTypes.'}],"dishAndAttributes":[]}';
+        $dishAndAttributes = json_encode($dishAndAttribute);
+        echo '{"dishPropertyTypes":[{"serverCreateTime":"2016-12-02 14:15:58","serverUpdateTime":"2017-05-11 18:48:41","creatorId":99999999,"creatorName":"admin","updatorId":1,"updatorName":"","statusFlag":1,"id":1,"name":"默认","aliasName":"默认","propertyKind":4,"sort":1000,"brandIdenty":1,"enabledFlag":1,"dishPropertys":[],"dishProperties":'.$dishPropertyTypes.'}],"dishAndAttributes":'.$dishAndAttributes.'}';
         exit;
     }
 
     public function queryRevelanceSetting(){
+        $id = $_REQUEST['op'];
+        $dishExtends = parent::getDcMenuExtendsByMid($id);
+//        var_dump($GLOBALS['db']->getAll("show COLUMNs from fanwe_goods_extends"));
         $revel = parent::get_supplier_cate_tag_row();
         $labelCount = [];
         foreach ($revel as $k => $v) {
             $labelCount[$k]['id'] = $v['id'];
             $labelCount[$k]['name'] = $v['name'];
+            if(!empty($id)){
+                if(!empty($dishExtends)){
+                    if(strpos($dishExtends['mtags'],$v['name']) > 0){
+                        $cookingWayTypesAndCount[$k]['isChecked'] = true;
+                    }else{
+                        $cookingWayTypesAndCount[$k]['isChecked'] = false;
+                    }
+                }else{
+                    $cookingWayTypesAndCount[$k]['isChecked'] = false;
+                }
+            }
         }
         $type1 = parent::get_supplier_cate_row();
         $cookingWayTypesAndCount = [];
@@ -841,6 +868,18 @@ class ajaxSettingsModule extends KizBaseModule
                 $dish[$k3]['id'] = $v3->id;
                 $dish[$k3]['name'] = urldecode($v3->name);
                 $dish[$k3]['reprice'] = $v3->price;
+                if(!empty($id)){
+                    if(!empty($dishExtends)){
+                        if(strpos($dishExtends['mdishs'],$v3['name']) > 0){
+                            $cookingWayTypesAndCount[$k2]['isChecked'] = true;
+                        }else{
+                            $cookingWayTypesAndCount[$k2]['isChecked'] = false;
+                        }
+                    }else{
+                        $cookingWayTypesAndCount[$k2]['isChecked'] = false;
+                    }
+                }
+
             }
             $cookingWayTypesAndCount[$k2]['dishProperties'] = $dish;
             $cookingWayTypesAndCount[$k2]['count'] = count($dish);
@@ -1226,7 +1265,7 @@ class ajaxSettingsModule extends KizBaseModule
         $supplier_id = $account_info['supplier_id'];
 
         /*获取参数*/
-        $id = intval($_REQUEST['id']);
+        $id = intval($_REQUEST['op']);
 
         $input = file_get_contents('php://input');
         $object = json_decode($input);

@@ -253,7 +253,15 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $id = intval($_REQUEST['id']);
+        $dish = parent::getDcMenuInfoByMid($id);
+        $dishExtends = parent::getDcMenuExtendsByMid($id);
+
         /* 系统默认 */
+
+        $GLOBALS['tmpl']->assign("dish", $dish);
+        $GLOBALS['tmpl']->assign("dishExtends", $dishExtends);
+        $GLOBALS['tmpl']->assign("kcnx", $this->kcnx);
         $GLOBALS['tmpl']->assign("page_title", "编辑商品");
         $GLOBALS['tmpl']->display("pages/dish/editDish.html");
     }

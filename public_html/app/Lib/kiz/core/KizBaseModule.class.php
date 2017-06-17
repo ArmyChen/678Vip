@@ -386,6 +386,23 @@ class KizBaseModule{
     }
 
     /**
+     * 根据mid查询商品扩展信息
+     * @param $id
+     * @return mixedm
+     */
+    public function getDcMenuExtendsByMid($id){
+        if($id > 0){
+            $sql = "select * from fanwe_goods_extends where mid=".$id;
+            $result = $GLOBALS['db']->getRow($sql);
+            if(empty($result)){
+                return 0;
+            }
+            return $result;
+        }
+        return null;
+    }
+
+    /**
      * 根据mid查询仓库信息
      * @param $id
      * @return mixed
