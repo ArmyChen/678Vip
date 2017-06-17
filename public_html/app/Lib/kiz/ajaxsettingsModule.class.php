@@ -899,6 +899,8 @@ class ajaxSettingsModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $id = $_REQUEST['dishId'];
+        $dish = parent::getDcMenuInfoByMid($id);
         //分类
         $sortconditions = " where is_effect = 1 and  wlevel<4 and supplier_id = " . $supplier_id; // 查询条件
         $sortconditions .= " and location_id=" . $slid;
@@ -959,6 +961,12 @@ class ajaxSettingsModule extends KizBaseModule
                     $data2[$k2]['brandIdenty'] =  $v2['id'];
                     $data2[$k2]['isCure'] = 0;
                     $data2[$k2]['enabledFlag'] = 1;
+                    if($dish['cate_id'] == $v2['id']){
+                        $data2[$k2]['isChecked'] =  true;
+                        $data[$num]['isChecked'] = true;
+                    }else{
+                        $data2[$k2]['isChecked'] =  false;
+                    }
 
                     $data[$num]['middleDishBrandTypes'][$k2] = $data2[$k2];
                 }
