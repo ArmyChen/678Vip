@@ -839,7 +839,8 @@ class ajaxSettingsModule extends KizBaseModule
     public function queryRevelanceSetting(){
         $id = $_REQUEST['op'];
         $dishExtends = parent::getDcMenuExtendsByMid($id);
-//        var_dump($GLOBALS['db']->getAll("show COLUMNs from fanwe_goods_extends"));
+//        var_dump($dishExtends['mtags']);
+//        var_dump($GLOBALSf['db']->getAll("show COLUMNs from fanwe_goods_extends"));
         $revel = parent::get_supplier_cate_tag_row();
         $labelCount = [];
         foreach ($revel as $k => $v) {
@@ -847,13 +848,14 @@ class ajaxSettingsModule extends KizBaseModule
             $labelCount[$k]['name'] = $v['name'];
             if(!empty($id)){
                 if(!empty($dishExtends)){
-                    if(strpos($dishExtends['mtags'],$v['name']) > 0){
-                        $cookingWayTypesAndCount[$k]['isChecked'] = true;
+//var_dump(strpos($dishExtends['mtags'],$v['id']));
+                    if(strpos($dishExtends['mtags'],$v['id']) > 0){
+                        $labelCount[$k]['isChecked'] = true;
                     }else{
-                        $cookingWayTypesAndCount[$k]['isChecked'] = false;
+                        $labelCount[$k]['isChecked'] = false;
                     }
                 }else{
-                    $cookingWayTypesAndCount[$k]['isChecked'] = false;
+                    $labelCount[$k]['isChecked'] = false;
                 }
             }
         }
@@ -862,7 +864,9 @@ class ajaxSettingsModule extends KizBaseModule
         foreach ($type1 as $k2 => $v2) {
             $cookingWayTypesAndCount[$k2]['id'] = $v2['id'];
             $cookingWayTypesAndCount[$k2]['name'] = $v2['name'];
+
             $type2 = json_decode($v2['flavor']);
+
             $dish = [];
             foreach ($type2 as $k3 => $v3) {
                 $dish[$k3]['id'] = $v3->id;
@@ -870,13 +874,16 @@ class ajaxSettingsModule extends KizBaseModule
                 $dish[$k3]['reprice'] = $v3->price;
                 if(!empty($id)){
                     if(!empty($dishExtends)){
-                        if(strpos($dishExtends['mdishs'],$v3['name']) > 0){
+                        if(strpos(urldecode($dishExtends['mdishs']),$dish[$k3]['name']) > 0){
                             $cookingWayTypesAndCount[$k2]['isChecked'] = true;
+                            $dish[$k3]['isChecked'] = true;
                         }else{
                             $cookingWayTypesAndCount[$k2]['isChecked'] = false;
+                            $dish[$k3]['isChecked'] = false;
                         }
                     }else{
                         $cookingWayTypesAndCount[$k2]['isChecked'] = false;
+                        $dish[$k3]['isChecked'] = false;
                     }
                 }
 
@@ -1373,24 +1380,29 @@ class ajaxSettingsModule extends KizBaseModule
 //        exit;
         if($id>0){
             $GLOBALS['db']->autoExecute(DB_PREFIX."dc_menu",$data,"UPDATE","id=".$id);
-
             $data = [];
+
             //保存扩展信息
             $data['mid'] = $id;
-            $data['start'] = $_REQUEST['dishIncreaseUnit'];
-            $data['increase'] = $_REQUEST['stepNum'];;
-            $data['box'] = $_REQUEST['boxQty'];;
-            $data['boxs'] = $_REQUEST['dishQty'];;
-            $data['is_one'] = $_REQUEST['isSingle'];;
-            $data['is_cut'] = $_REQUEST['isDiscountAll'];;
-            $data['is_send'] = $_REQUEST['isSendOutside'];;
-            $data['is_reprice'] = $_REQUEST['isChangePrice'];;
-            $data['is_dish'] = $_REQUEST['isOrder'];;
-            $data['mtags'] = serialize($_REQUEST['labels']);
-            $data['mdishs'] = serialize($_REQUEST['cookingWays']);
-
-            $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends","update",$data,"id=".$id);
-
+            $data['start'] = $object->dishIncreaseUnit;
+            $data['increase'] = $object->stepNum;
+            $data['box'] = $object->boxQty;
+            $data['boxs'] = $object->dishQty;
+            $data['is_one'] = $object->isSingle;
+            $data['is_cut'] = $object->isDiscountAll;
+            $data['is_send'] = $object->isSendOutside;
+            $data['is_reprice'] = $object->isChangePrice;
+            $data['is_dish'] = $object->isOrder;
+            $data['mtags'] = json_encode($object->labels,JSON_UNESCAPED_UNICODE);
+            $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
+            $goodsExtends = parent::getDcMenuExtendsByMid($id);
+//var_dump($data);die;
+            if(!empty($goodsExtends)){
+                $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data,"update","mid=".$id);
+            }else{
+                $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data);
+            }
+//var_dump($data);die;
             syn_supplier_location_menu_match($id);
             $root['message'] = "修改成功";
         }else{
@@ -1400,20 +1412,27 @@ class ajaxSettingsModule extends KizBaseModule
             $data = [];
             //保存扩展信息
             $data['mid'] = $id;
-            $data['start'] = $_REQUEST['dishIncreaseUnit'];
-            $data['increase'] = $_REQUEST['stepNum'];;
-            $data['box'] = $_REQUEST['boxQty'];;
-            $data['boxs'] = $_REQUEST['dishQty'];;
-            $data['is_one'] = $_REQUEST['isSingle'];;
-            $data['is_cut'] = $_REQUEST['isDiscountAll'];;
-            $data['is_send'] = $_REQUEST['isSendOutside'];;
-            $data['is_reprice'] = $_REQUEST['isChangePrice'];;
-            $data['is_dish'] = $_REQUEST['isOrder'];;
-            $data['mtags'] = serialize($_REQUEST['labels']);
-            $data['mdishs'] = serialize($_REQUEST['cookingWays']);
+            $data['start'] = $object->dishIncreaseUnit;
+            $data['increase'] = $object->stepNum;
+            $data['box'] = $object->boxQty;
+            $data['boxs'] = $object->dishQty;
+            $data['is_one'] = $object->isSingle;
+            $data['is_cut'] = $object->isDiscountAll;
+            $data['is_send'] = $object->isSendOutside;
+            $data['is_reprice'] = $object->isChangePrice;
+            $data['is_dish'] = $object->isOrder;
+            $data['mtags'] =json_encode($object->labels,JSON_UNESCAPED_UNICODE);
+            $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
 
-            $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data);
 
+            $goodsExtends = parent::getDcMenuExtendsByMid($id);
+            if(!empty($goodsExtends)){
+                $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data,"update","mid=".$id);
+            }else{
+                $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data);
+            }
+//            $dishExtends = parent::getDcMenuExtendsByMid($id);
+//            var_dump($dishExtends['mtags']);die;
 
             syn_supplier_location_menu_match($id);
             $root['message'] = "添加成功";

@@ -782,6 +782,112 @@ class KizBaseModule{
 //var_dump($wmenulist);
         return $wmenulist;
     }
+
+    /**
+
+     * $str 原始中文字符串
+
+     * $encoding 原始字符串的编码，默认utf-8
+
+     * $prefix 编码后的前缀，默认"&#"
+
+     * $postfix 编码后的后缀，默认";"
+
+     */
+
+    function unicode_encode($str, $encoding = 'utf-8', $prefix = '&#', $postfix = ';') {
+
+        //将字符串拆分
+
+        $str = iconv("UTF-8", "gb2312", $str);
+
+        $cind = 0;
+
+        $arr_cont = array();
+
+
+
+        for ($i = 0; $i < strlen($str); $i++) {
+
+            if (strlen(substr($str, $cind, 1)) > 0) {
+
+                if (ord(substr($str, $cind, 1)) < 0xA1) { //如果为英文则取1个字节
+
+                    array_push($arr_cont, substr($str, $cind, 1));
+
+                    $cind++;
+
+                } else {
+
+                    array_push($arr_cont, substr($str, $cind, 2));
+
+                    $cind+=2;
+
+                }
+
+            }
+
+        }
+
+        foreach ($arr_cont as &$row) {
+
+            $row = iconv("gb2312", "UTF-8", $row);
+
+        }
+
+
+
+        //转换Unicode码
+
+        foreach ($arr_cont as $key => $value) {
+
+            $unicodestr.= $prefix . base_convert(bin2hex(iconv('utf-8', 'UCS-4', $value)), 16, 10) .$postfix;
+
+        }
+
+
+
+        return $unicodestr;
+
+    }
+
+
+
+    /**
+
+     * $str Unicode编码后的字符串
+
+     * $decoding 原始字符串的编码，默认utf-8
+
+     * $prefix 编码字符串的前缀，默认"&#"
+
+     * $postfix 编码字符串的后缀，默认";"
+
+     */
+
+    function unicode_decode($unistr, $encoding = 'utf-8', $prefix = '&#', $postfix = ';') {
+
+        $arruni = explode($prefix, $unistr);
+
+        $unistr = '';
+
+        for ($i = 1, $len = count($arruni); $i < $len; $i++) {
+
+            if (strlen($postfix) > 0) {
+
+                $arruni[$i] = substr($arruni[$i], 0, strlen($arruni[$i]) - strlen($postfix));
+
+            }
+
+            $temp = intval($arruni[$i]);
+
+            $unistr .= ($temp < 256) ? chr(0) . chr($temp) : chr($temp / 256) . chr($temp % 256);
+
+        }
+
+        return iconv('UCS-2', $encoding, $unistr);
+
+    }
 }
 
 ?>

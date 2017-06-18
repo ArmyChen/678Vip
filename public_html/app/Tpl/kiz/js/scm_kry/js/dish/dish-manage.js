@@ -64,7 +64,7 @@ $.reloadDishAttribute = function(args) {
 			html += '<input type="text" class="form-control select-group js-attribute-type" value="'
 					+ selectedType.name + '" disabled>';
 			html += "<select class='property-attribute' data-type-value='"
-					+ selectedType.id + "' data-kind-value='4'>";
+					+ selectedType.name + "' data-kind-value='4'>";
 			html += "<option>/</option>";
 			var dishProperties = selectedType.dishProperties, dishPropertySize = dishProperties.length;
 			for (var k = 0; k < dishPropertySize; k++) {
@@ -89,7 +89,7 @@ $.reloadDishAttribute = function(args) {
 		html += '<input type="text" class="form-control select-group js-attribute-type" value="'
 				+ firstType.name + '" disabled>';
 		html += "<select class='property-attribute' data-type-value='"
-				+ firstType.id + "' data-kind-value='4'>";
+				+ firstType.name + "' data-kind-value='4'>";
 		html += "<option>/</option>";
 		var dishProperties = firstType.dishProperties, dishPropertySize = dishProperties.length;
 		for (var k = 0; k < dishPropertySize; k++) {
@@ -142,7 +142,7 @@ function addAttribute(newType){
 	html += '<input type="text" class="form-control select-group js-attribute-type" value="'
 			+ newType.name + '" disabled>';
 	html += "<select class='property-attribute'  data-type-value='"
-			+ newType.id + "' data-kind-value='4'>";
+			+ newType.name + "' data-kind-value='4'>";
 	html += "<option>/</option>";
 	var dishProperties = newType.dishProperties, dishPropertySize = dishProperties.length;
 	for (var k = 0; k < dishPropertySize; k++) {
@@ -355,7 +355,7 @@ $.reloadRevelanceSetting = function(args) {
 							+ "' data-checked-all='goodsPractice"
 							+ i
 							+ "All' data-value='" + cookingWay.id + "' ";
-					cookingWayHtml += "data-type-value='" + cookingWayType.id
+					cookingWayHtml += "data-type-value='" + cookingWay.name
 							+ "' data-kind-value='1' data-is-default='"
 							+ cookingWay.isDefault + "' " + inputChecked + " "
 							+ disabled + ">";
@@ -541,7 +541,7 @@ function saveDishInfo() {
 			cookingWayObjs.push({
 				id : $(this).attr("data-value"),
 				propertyKindId : $(this).attr("data-kind-value"),
-				propertyTypeId : $(this).attr("data-type-value"),
+                propertyTypeId : $(this).attr("data-type-value"),
 				isDefault : $(this).attr("data-is-default")
 			});
 		});
