@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/tabScroll.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/store-goods.css">
 <link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/jquery.Jcrop.min.css">
+<input type="hidden" id="domain" value="http://or63agv72.bkt.clouddn.com/">
 <div class="article-header">
     <div class="center-block w1200">
         <h1>更新商品</h1>
@@ -513,7 +514,7 @@
     checkBarcodeUrl = baseUrl + "&act=checkBarcode&op=" +id;
     $("input[name=name]").blur(function () {
         var chineseName = $("input[name=name]").val().trim();
-        var getAllFirstLetterUrl = baseUrl + "/getAllFirstLetter";
+        var getAllFirstLetterUrl = ctx2Path + "&act=get_hanzi";
         $.ajax({
             type: "POST",
             url: getAllFirstLetterUrl + "?random=" + Math.random(),
