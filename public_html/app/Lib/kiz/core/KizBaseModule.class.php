@@ -452,6 +452,24 @@ class KizBaseModule{
         }
     }
 
+
+    /**
+     * 获取单位
+     * @param int $slid
+     * @return mixed
+     */
+    function get_unit( $id = 0){
+        $unitList = " select id,name,is_effect,sort from fanwe_dc_supplier_unit_cate  where 1 = 1";
+        if($id != 0) {
+//            var_dump($unitList." and id=".$id);die;
+            $check = $GLOBALS['db']->getRow($unitList." and id=".$id);
+            return $check;
+        }else{
+            $check = $GLOBALS['db']->getAll($unitList);
+            return $check;
+        }
+    }
+
     /**
      * 获取键值
      * @param $arrays

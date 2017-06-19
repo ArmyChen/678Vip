@@ -27,6 +27,7 @@ class ajaxSettingsModule extends KizBaseModule
 //";
 //        $sql = "CREATE TABLE `fanwe_dish_goods_tag` (  `id` int(11) NOT NULL AUTO_INCREMENT,  `name` varchar(255) DEFAULT NULL,  `sort` int(11) DEFAULT NULL,  `created` int(11) DEFAULT NULL,  `update` int(11) DEFAULT NULL,  `is_effect` int(11) DEFAULT NULL,  `location_id` int(11) DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
         $sql = "show columns from fanwe_goods_extends";
+//        $sql = "alter table fanwe_goods_extends add COLUMN is_half int(11)";
         $res = $GLOBALS['db']->getAll($sql);
         var_dump($res);die;
 
@@ -822,8 +823,9 @@ class ajaxSettingsModule extends KizBaseModule
             $dishPropertyType[$k]['name'] = $v['name'];
             if(!empty($id)){
                 if($dish['unit'] == $v['name']){
-                    $dishAndAttribute['id'] = $v['id'];
-                    $dishAndAttribute['name'] = $v['name'];
+                    $dishAndAttribute[0]['id'] = $v['id'];
+                    $dishAndAttribute[0]['propertyId'] = $v['id'];
+                    $dishAndAttribute[0]['name'] = $v['name'];
 
                 }
             }
@@ -1285,11 +1287,21 @@ class ajaxSettingsModule extends KizBaseModule
         $input = file_get_contents('php://input');
         $object = json_decode($input);
         $name = $object->name;
-        $sname = $object->sname;
+        $sname = $object->aliasName;
         $dishDesc = $object->dishDesc;
         $imageUrl = $object->imageUrl;
         $dishTypeId = $object->dishTypeId;
-        $unitId = $object->unitId;
+        $unitId = $object->attributes;
+        if(!empty($unitId)){
+            $uid = $unitId[0]->id;
+            $unit = parent::get_unit($uid);
+            if(!empty($unit)){
+                $unitId = $unit['name'];
+            }else{
+                $unitId = "";
+            }
+        }
+//var_dump($unitId);die;
         $barcode = $object->barcode;
         $richDesc = $object->richDesc;
         $saleType = $object->saleType;
@@ -1298,6 +1310,7 @@ class ajaxSettingsModule extends KizBaseModule
         $dishNameIndexx = $object->dishNameIndex;
         $wmType = $object->wmType;
         $sort = $object->sort;
+
 //        $name = $object->name;
 //        $name = $object->name;
         $tichengmoney = 0;
@@ -1393,6 +1406,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data['is_send'] = $object->isSendOutside;
             $data['is_reprice'] = $object->isChangePrice;
             $data['is_dish'] = $object->isOrder;
+            $data['is_half'] = $object->isHalf;
             $data['mtags'] = json_encode($object->labels,JSON_UNESCAPED_UNICODE);
             $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
             $goodsExtends = parent::getDcMenuExtendsByMid($id);
@@ -1421,6 +1435,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data['is_send'] = $object->isSendOutside;
             $data['is_reprice'] = $object->isChangePrice;
             $data['is_dish'] = $object->isOrder;
+            $data['is_half'] = $object->isHalf;
             $data['mtags'] =json_encode($object->labels,JSON_UNESCAPED_UNICODE);
             $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
 

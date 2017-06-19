@@ -55,7 +55,7 @@ $.reloadDishAttribute = function(args) {
 			var dishAttribute = dishAttributes[i];
 			for (var j = 0; j < dishPropertyTypeSize; j++) {
 				var dishPropertyType = dishPropertyTypes[j];
-				if (dishPropertyType.id == dishAttribute.propertyTypeId) {
+				if (dishPropertyType.id == 1) {
 					selectedType = dishPropertyType;
 					break;
 				}
@@ -418,6 +418,7 @@ function saveDishInfo() {
 	}
     dishVo.name = name;
     dishVo.sname = sname;
+    alert( $("#aliasName").val());
 	dishVo.aliasName = $("#aliasName").val();
 	dishVo.shortName = $("#shortName").val();
 	dishVo.aliasShortName = $("#aliasShortName").val();
@@ -467,8 +468,8 @@ function saveDishInfo() {
 			return;
 		}
 		attributeObjs.push({
-			id : $(this).val(),
-			propertyKindId : $(this).attr("data-kind-value"),
+            id : $(this).val(),
+            propertyKindId : $(this).attr("data-kind-value"),
 			propertyTypeId : $(this).attr("data-type-value")
 		});
 	});
@@ -493,12 +494,17 @@ function saveDishInfo() {
 		isSendOutside = 2;
 	}
 
-	var isChangePrice = $(":checkbox[name='isChangePrice']:checked").attr("data-value");
-	if (!isChangePrice||isChangePrice==undefined) {
-		isChangePrice = 2;
-	}
-	dishVo.isChangePrice = isChangePrice;
-	dishVo.isSendOutside = isSendOutside;
+    var isChangePrice = $(":checkbox[name='isChangePrice']:checked").attr("data-value");
+    if (!isChangePrice||isChangePrice==undefined) {
+        isChangePrice = 2;
+    }
+    dishVo.isChangePrice = isChangePrice;
+    var isHalf = $(":checkbox[name='isHalf']:checked").attr("data-value");
+    if (!isHalf||isHalf==undefined) {
+        isHalf = 2;
+    }
+    dishVo.isHalf = isHalf;
+    dishVo.isSendOutside = isSendOutside;
 
 	var isOrder = $(":checkbox[name='isOrder']:checked").attr("data-value");
 	if (!isOrder) {

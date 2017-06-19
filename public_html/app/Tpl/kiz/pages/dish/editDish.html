@@ -213,11 +213,11 @@
                                    name="dishIncreaseUnit" id="dishIncreaseUnit" value="{$dishExtends.start}">
                         </td>
                         <td>
-                            <label class="checkbox checkbox-check mr30"><span></span>
+                            <label class="checkbox {if $dishExtends.is_one eq 1}checkbox-check{/if} mr30"><span></span>
                                 <input type="checkbox" name="isSingle" id="isSingle" data-value="1"
                                     {if $dishExtends.is_one eq 1}checked{/if} >允许单点</label>
-                            <label class="checkbox checkbox-check"><span></span>
-                                <input type="checkbox" name="isDiscountAll" id="isDiscountAll" data-value="1"
+                            <label class="checkbox {if $dishExtends.is_send eq 1}checkbox-check{/if}"><span></span>
+                                <input type="checkbox" name="is_cut" id="isDiscountAll" data-value="1"
                                        {if $dishExtends.is_cut eq 1}checked{/if}>允许手动折扣</label>
                         </td>
                     </tr>
@@ -227,11 +227,11 @@
                                    data-left-max="3" data-right-max="2" placeholder="1"
                                    name="stepNum" id="stepNum" value="{$dishExtends.increase}"></td>
                         <td>
-                            <label class="checkbox checkbox-check mr30"><span></span>
+                            <label class="checkbox {if $dishExtends.is_send eq 1}checkbox-check{/if} mr30"><span></span>
                                 <input type="checkbox" name="isSendOutside" id="isSendOutside" data-value="1"
                                        {if $dishExtends.is_send eq 1}checked{/if}>允许外送</label>
 
-                            <label class="checkbox checkbox-check mr30"><span></span>
+                            <label class="checkbox {if $dishExtends.is_reprice eq 1}checkbox-check{/if} mr30"><span></span>
                                 <input type="checkbox" name="isChangePrice" id="isChangePrice" data-value="1"
                                        {if $dishExtends.is_reprice eq 1}checked{/if}>允许变价</label>
                         </td>
@@ -247,9 +247,12 @@
                                    name="boxQty" id="boxQty" value="{$dishExtends.box}">个餐盒
                         </td>
                         <td>
-                            <label class="checkbox checkbox-check mr30"><span></span>
+                            <label class="checkbox {if $dishExtends.is_dish eq 1}checkbox-check{/if} mr30"><span></span>
                                 <input type="checkbox" name="isOrder" id="isOrder" data-value="1"
                                        {if $dishExtends.is_dish eq 1}checked{/if}>允许堂食</label>
+                            <label class="checkbox {if $dishExtends.is_reprice eq 1}checkbox-check{/if} mr30"><span></span>
+                                <input type="checkbox" name="isHalf" id="isHalf" data-value="1"
+                                       >允许半价销售</label>
                         </td>
                     </tr>
                     </tbody>
