@@ -256,7 +256,7 @@ class dishModule extends KizBaseModule
         $id = intval($_REQUEST['id']);
         $dish = parent::getDcMenuInfoByMid($id);
         $dishExtends = parent::getDcMenuExtendsByMid($id);
-
+//var_dump($dish);
         /* 系统默认 */
 
         $GLOBALS['tmpl']->assign("dish", $dish);

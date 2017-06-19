@@ -418,7 +418,6 @@ function saveDishInfo() {
 	}
     dishVo.name = name;
     dishVo.sname = sname;
-    alert( $("#aliasName").val());
 	dishVo.aliasName = $("#aliasName").val();
 	dishVo.shortName = $("#shortName").val();
 	dishVo.aliasShortName = $("#aliasShortName").val();
