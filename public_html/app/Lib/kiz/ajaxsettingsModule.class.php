@@ -870,6 +870,7 @@ class ajaxSettingsModule extends KizBaseModule
             $type2 = json_decode($v2['flavor']);
 
             $dish = [];
+            $dishCount = 0;
             foreach ($type2 as $k3 => $v3) {
                 $dish[$k3]['id'] = $v3->id;
                 $dish[$k3]['name'] = urldecode($v3->name);
@@ -877,6 +878,7 @@ class ajaxSettingsModule extends KizBaseModule
                 if(!empty($id)){
                     if(!empty($dishExtends)){
                         if(strpos(urldecode($dishExtends['mdishs']),$dish[$k3]['name']) > 0){
+                            $dishCount ++;
                             $cookingWayTypesAndCount[$k2]['isChecked'] = true;
                             $dish[$k3]['isChecked'] = true;
                         }else{
@@ -892,7 +894,7 @@ class ajaxSettingsModule extends KizBaseModule
             }
             $cookingWayTypesAndCount[$k2]['dishProperties'] = $dish;
             $cookingWayTypesAndCount[$k2]['count'] = count($dish);
-            $cookingWayTypesAndCount[$k2]['checkedCount'] = 0;
+            $cookingWayTypesAndCount[$k2]['checkedCount'] = $dishCount;
             $cookingWayTypesAndCount[$k2]['isCheckedAll'] = false;
 
         }
@@ -1280,6 +1282,7 @@ class ajaxSettingsModule extends KizBaseModule
         /* 基本参数初始化 */
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
 
         /*获取参数*/
         $id = intval($_REQUEST['op']);
@@ -1417,6 +1420,32 @@ class ajaxSettingsModule extends KizBaseModule
                 $GLOBALS['db']->autoExecute(DB_PREFIX."goods_extends",$data);
             }
 //var_dump($data);die;
+
+            //更新口味组表
+//            $taste = "select * from fanwe_dc_supplier_taste where location_id=".$slid;
+//            $msg = $GLOBALS['db']->getAll($taste);
+//            $cookiing = $object->cookingWays;
+//            foreach ($msg as $kk => $vv) {
+//                foreach ($cookiing as $k=>$v) {
+//                    if(strpos(urldecode($vv['flavor']),$v->propertyTypeId) > 0){
+//                        $shops = json_decode($vv['shops']);
+//                        foreach ($shops as $k3=>$v3) {
+//                            array_push($shops,(string)$id);
+//                        }
+//                        $datas['shops'] = array_unique($shops);
+//
+////                        $GLOBALS['db']->autoExecute("fanwe_dc_supplier_tase",$data,"update","id=".$vv['id']);
+//
+//
+//
+//
+//                    }
+//                }
+//
+//            }
+//
+//            var_dump($msg);die;
+
             syn_supplier_location_menu_match($id);
             $root['message'] = "修改成功";
         }else{
