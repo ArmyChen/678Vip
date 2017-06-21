@@ -356,6 +356,7 @@ $.reloadRevelanceSetting = function(args) {
 							+ i
 							+ "All' data-value='" + cookingWay.id + "' ";
 					cookingWayHtml += "data-type-value='" + cookingWay.name
+							+ "' data-type-reprice='" + cookingWay.reprice
 							+ "' data-kind-value='1' data-is-default='"
 							+ cookingWay.isDefault + "' " + inputChecked + " "
 							+ disabled + ">";
@@ -547,6 +548,7 @@ function saveDishInfo() {
 				id : $(this).attr("data-value"),
 				propertyKindId : $(this).attr("data-kind-value"),
                 propertyTypeId : $(this).attr("data-type-value"),
+                propertyTypeRePrice : $(this).attr("data-type-reprice"),
 				isDefault : $(this).attr("data-is-default")
 			});
 		});
