@@ -357,7 +357,7 @@ $.reloadRevelanceSetting = function(args) {
 							+ "All' data-value='" + cookingWay.id + "' ";
 					cookingWayHtml += "data-type-value='" + cookingWay.name
 							+ "' data-type-reprice='" + cookingWay.reprice
-							+ "' data-kind-value='1' data-is-default='"
+							+ "' data-kind-value='"+cookingWay.kindId+"' data-is-default='"
 							+ cookingWay.isDefault + "' " + inputChecked + " "
 							+ disabled + ">";
 					cookingWayHtml += "<i>"+cookingWay.name+"</i>("

@@ -873,6 +873,7 @@ class ajaxSettingsModule extends KizBaseModule
             $dish = [];
             $dishCount = 0;
             foreach ($type2 as $k3 => $v3) {
+                $dish[$k3]['kindId'] = $v2['id'];
                 $dish[$k3]['id'] = $v3->id;
                 $dish[$k3]['name'] = urldecode($v3->name);
                 $dish[$k3]['reprice'] = $v3->price;
