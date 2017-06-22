@@ -1598,11 +1598,12 @@ class ajaxSettingsModule extends KizBaseModule
         $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
         $page = intval($_REQUEST['page']);
         $name = trim($_REQUEST['name']);
+        $type = intval($_REQUEST['type']);
 
         if ($page == 0) $page = 1;
         $limit = (($page - 1) * $page_size) . "," . $page_size;
 
-        $where = "where slid=$slid and type =0 ";
+        $where = "where slid=$slid and type =$type ";
         if($name){
             $where .= " and ptname like '%$name%'";
         }
@@ -1613,6 +1614,30 @@ class ajaxSettingsModule extends KizBaseModule
 
         foreach ($rows as $k => $v) {
             $rows[$k]['id'] = $v['dpid'];
+            if ($type==1){
+                $page_title='支付备注';
+                $ptname = $v['memo'];
+            }elseif($type==2){
+                $page_title='支付折扣';
+
+                $ptname = $v['zhekou'];
+            }elseif($type==3){
+                $page_title='退菜备注';
+
+                $ptname = $v['tuireason'];
+            }elseif($type==4){
+                $page_title='赠菜备注';
+
+                $ptname = $v['zencaiyuanyin'];
+            }else{
+                $page_title='支付方式';
+
+                $ptname = $v['ptname'];
+            }
+            $rows[$k]['ptname'] = $ptname;
+            $rows[$k]['page_title'] = $page_title;
+            $rows[$k]['type'] = $type;
+
         }
 
         $records = count($GLOBALS['db']->getAll($sql2));
@@ -1642,17 +1667,30 @@ class ajaxSettingsModule extends KizBaseModule
 
         /*活出参数*/
         $location_id = $account_info['slid'];
-        $name = strim($_REQUEST['name']);
+        $ptname = strim($_REQUEST['name']);
         $sort = intval($_REQUEST['sort']);
         $is_effect = intval($_REQUEST['isDisable']);
         $id = intval($_REQUEST['dpid']);
+        $type = intval($_REQUEST['type']);
 
 
 
 
         $data = array();
-        $data['ptname'] = $name;
+        if ($type==1){
+            $data['memo']=$ptname;
+        }elseif($type==2){
+            $data['zhekou']=round(floatval($ptname),2);
+        }elseif($type==3){
+            $data['tuireason']=($ptname);
+        }elseif($type==4){
+            $data['zencaiyuanyin']=($ptname);
+        }else{
+            $data['ptname']=$ptname;
+        }
         $data['slid'] = $location_id;
+        $data['type'] = $type;
+//        var_dump($data);die;
         if($id > 0){
             if ($GLOBALS['db']->autoExecute("fanwe_dc_paytype",$data,"update","dpid=".$id)){
                 $return['success'] = true;
@@ -1664,12 +1702,12 @@ class ajaxSettingsModule extends KizBaseModule
         }else{
             /*业务逻辑部分*/
 
-            if($GLOBALS['db']->getOne("select count(*) from fanwe_dc_paytype where ptname='".$name."' and slid = ".$location_id)){
-                $return['success'] = false;
-                $return['message'] = "支付类型重复";
-                echo json_encode($return);
-                exit;
-            }
+//            if($GLOBALS['db']->getOne("select count(*) from fanwe_dc_paytype where ptname='".$name."' and slid = ".$location_id)){
+//                $return['success'] = false;
+//                $return['message'] = "支付类型重复";
+//                echo json_encode($return);
+//                exit;
+//            }
             if ($GLOBALS['db']->autoExecute("fanwe_dc_paytype",$data)){
                 $return['success'] = true;
                 $return['message'] = "添加成功";

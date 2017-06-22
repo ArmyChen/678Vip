@@ -1,5 +1,6 @@
 //Create by LiXing On 2015/8/11
-var tagList = {
+var type = "&type=" + $("#type").val();
+var dPayList = {
     $listGrid : '',
     $detailGrid : '',
     //默认参数
@@ -8,17 +9,16 @@ var tagList = {
         commandType : 0,
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
-        queryUrl : '&act=dish_pay_ajax',
-        editUrl : '&act=dish_pay_edit',
+        queryUrl : '&act=dish_pay_ajax'+type,
+        editUrl : '&act=dish_pay_edit'+type,
         viewUrl : '/view',
-        lockUrl : '&act=dish_pay_lock',
+        lockUrl : '&act=dish_pay_lock'+type,
         saveUrl : '/save',
-        unlockUrl : '&act=dish_pay_lock',
-        deleteUrl : '&act=dish_pay_checkUsed',
-        sortName : 'parentSkuTypeCode',
+        unlockUrl : '&act=dish_pay_lock'+type,
+        deleteUrl : '&act=dish_pay_checkUsed'+type,
+        sortName : 'parentSkuTypeCode'+type,
         pager : '#gridPager',
         formId : 'baseInfoForm',
-        type : 0
     },
 
     //初始化
@@ -91,12 +91,13 @@ var tagList = {
         };
 
         var $gridObj = $("#" + _this.opts.listGridId);
+        var page_title = $("#page_title").val();
         $gridObj.dataGrid({
             rownumbers: true,
             formId: "queryConditions",
             serializeGridDataCallback: $.serializeGridDataCallback,
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
-            colNames: ['id','编号',  '支付方式', '状态'],
+            colNames: ['id','编号', page_title , '状态'],
             colModel: [
                 {name: 'id', index: 'id', width: 50, hidden: true},
                 {name: 'dpid', index: 'dpid', width: 50, hidden: true},

@@ -317,8 +317,21 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $type = $_REQUEST['type'];
+        if ($type==1){
+            $page_title='支付备注';
+        }elseif($type==2){
+            $page_title='支付折扣';
+        }elseif($type==3){
+            $page_title='退菜备注';
+        }elseif($type==4){
+            $page_title='赠菜备注';
+        }else{
+            $page_title='支付方式';
+        }
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "标签管理");
+        $GLOBALS['tmpl']->assign("page_title", $page_title);
+        $GLOBALS['tmpl']->assign("type", $type);
         $GLOBALS['tmpl']->display("pages/dish/dpay.html");
     }
     public function dish_pay_add()
@@ -327,8 +340,21 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
+        $type = $_REQUEST['type'];
+        if ($type==1){
+            $page_title='支付备注';
+        }elseif($type==2){
+            $page_title='支付折扣';
+        }elseif($type==3){
+            $page_title='退菜备注';
+        }elseif($type==4){
+            $page_title='赠菜备注';
+        }else{
+            $page_title='支付方式';
+        }
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "新增标签管理");
+        $GLOBALS['tmpl']->assign("page_title", "新增".$page_title);
+        $GLOBALS['tmpl']->assign("type", $type);
         $GLOBALS['tmpl']->display("pages/dish/dpayAdd.html");
     }
     public function dish_pay_edit()
@@ -346,12 +372,33 @@ class dishModule extends KizBaseModule
 //            $enable = "checked";
 //        }
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("cangku", $cangku);
 //        $GLOBALS['tmpl']->assign("disable", $disable);
 //        $GLOBALS['tmpl']->assign("enable", $enable);
 
+        $type = $_REQUEST['type'];
+        if ($type==1){
+            $page_title='支付备注';
+            $cangku['ptname'] = $cangku['memo'];
+
+        }elseif($type==2){
+            $page_title='支付折扣';
+            $cangku['ptname'] = $cangku['zhekou'];
+
+        }elseif($type==3){
+            $page_title='退菜备注';
+            $cangku['ptname'] = $cangku['tuireason'];
+
+        }elseif($type==4){
+            $page_title='赠菜备注';
+            $cangku['ptname'] = $cangku['zencaiyuanyin'];
+
+        }else{
+            $page_title='支付方式';
+        }
         /* 系统默认 */
-        $GLOBALS['tmpl']->assign("page_title", "编辑单位");
+        $GLOBALS['tmpl']->assign("page_title", "编辑".$page_title);
+        $GLOBALS['tmpl']->assign("cangku", $cangku);
+        $GLOBALS['tmpl']->assign("type", $type);
         $GLOBALS['tmpl']->display("pages/dish/dpayEdit.html");
     }
 

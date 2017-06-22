@@ -5,6 +5,7 @@ function getContextPath() {
     var result = pathName.substr(0, index + 1);
     return result;
 }
+var type = $("#type").val() == ""?0:$("#type").val();
 
 $("#btncancle").on("click", function () {
     //Message.confirm({title: '取消提示', describe: '是否放弃当前操作'}, function () {
@@ -14,7 +15,7 @@ $("#btncancle").on("click", function () {
     //});
 
     layer.confirm("是否放弃当前操作？", {icon: 3, title:'提示', offset: '30%'}, function(index){
-        window.location.href = dishPath + "&act=dish_tag";
+        window.location.href = dishPath + "&act=dish_pay&type="+ type,
         layer.close(index);
     });
 });
@@ -23,7 +24,6 @@ $(function () {
     //保存
     $("#btn-save,#btnSave-bak").on("click", function () {
     	var isBtnBak = $(this).attr("id")=="btnSave-bak";
-    	
         $("#warehouseForm").submit();
         //检查是否验证通过
         var flag = $("#warehouseForm").valid();
@@ -31,7 +31,7 @@ $(function () {
             var params = $("#warehouseForm").serialize();
             $.ajax({
                 type: "POST",
-                url: ctx2Path + "&act=dish_pay_add_ajax",
+                url: ctx2Path + "&act=dish_pay_add_ajax&type="+ type,
                 data: params,
                 dataType: "json",
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -42,7 +42,7 @@ $(function () {
                     if (data.success) {
                         $.layerMsg(data.message, true, {
                             end:function(){
-                                window.location.href = dishPath + "&act=dish_pay";
+                                window.location.href = dishPath + "&act=dish_pay&type="+ type;
                             },shade: 0.3});
                     }
                     // else {
