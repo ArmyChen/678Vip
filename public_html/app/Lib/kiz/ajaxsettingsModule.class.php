@@ -1586,4 +1586,127 @@ class ajaxSettingsModule extends KizBaseModule
 
 
     }
+
+    /**
+     * 支付方式列表
+     */
+    public function dish_pay_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where slid=$slid and type =0 ";
+        if($name){
+            $where .= " and ptname like '%$name%'";
+        }
+        $sql = "select * from fanwe_dc_paytype $where order by dpid desc limit $limit ";
+        $sql2 = "select * from fanwe_dc_paytype $where";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+
+        foreach ($rows as $k => $v) {
+            $rows[$k]['id'] = $v['dpid'];
+        }
+
+        $records = count($GLOBALS['db']->getAll($sql2));
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+
+    /**
+     * 新增支付方式
+     */
+    public function dish_pay_add_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*活出参数*/
+        $location_id = $account_info['slid'];
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $is_effect = intval($_REQUEST['isDisable']);
+        $id = intval($_REQUEST['dpid']);
+
+
+
+
+        $data = array();
+        $data['ptname'] = $name;
+        $data['slid'] = $location_id;
+        if($id > 0){
+            if ($GLOBALS['db']->autoExecute("fanwe_dc_paytype",$data,"update","dpid=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }else{
+            /*业务逻辑部分*/
+
+            if($GLOBALS['db']->getOne("select count(*) from fanwe_dc_paytype where ptname='".$name."' and slid = ".$location_id)){
+                $return['success'] = false;
+                $return['message'] = "支付类型重复";
+                echo json_encode($return);
+                exit;
+            }
+            if ($GLOBALS['db']->autoExecute("fanwe_dc_paytype",$data)){
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "添加失败";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 支付方式删除功能
+     */
+    public function dish_pay_checkUsed(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_dc_paytype where dpid=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            if ($GLOBALS['db']->query("delete from fanwe_dc_paytype where dpid=".$id)){
+                $return['success'] = true;
+                $return['message'] = "删除成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "删除失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "支付方式不存在";
+        }
+        echo json_encode($return);
+        exit;
+    }
 }
