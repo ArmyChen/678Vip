@@ -520,7 +520,7 @@
         var getAllFirstLetterUrl = ctx2Path + "&act=get_hanzi";
         $.ajax({
             type: "POST",
-            url: getAllFirstLetterUrl + "?random=" + Math.random(),
+            url: getAllFirstLetterUrl + "&random=" + Math.random(),
             data: {name: chineseName},
             dataType: "json",
             async: false,
@@ -894,7 +894,7 @@
         var flag = false;
         $.ajax({
             type: "POST",
-            url: checkBarcodeUrl + "?random=" + Math.random(),
+            url: checkBarcodeUrl + "&random=" + Math.random(),
             data: {dishId: $("#dishId").val(), barcode: $("#barcode").val()},
             dataType: "json",
             // contentType: "application/json",
