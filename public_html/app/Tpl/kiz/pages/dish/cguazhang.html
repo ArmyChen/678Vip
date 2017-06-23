@@ -1,0 +1,87 @@
+
+
+{include file="inc/header.html"}
+<input type="hidden" value="{$type}" id="type"/>
+<input type="hidden" value="{$page_title}" id="page_title"/>
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>{$page_title}列表</h1>
+        <div class="btn-wrap pull-right tar">
+            <!--<a code="scm:button:masterdata:warehouse:deduction" function="$.doForward" args="{url:'/scm_kry/scm/warehouse/deduction'}" class="btn-link ml10" id="btn-deduction">支付方式扣减设定</a>-->
+            <a code="scm:button:masterdata:warehouse:add" function="$.doForward" args="{url:'/kiz.php?ctl=dish&act=dish_guazhang_add'}" class="btn-link ml10" id="btn-create">创建</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <div class="aside">
+        <form action="" id="queryConditions" method="post" autocomplete="off">
+            <!-- 模糊查询 start -->
+            <div class="aside-column panel-search">
+                <h2>模糊查询</h2>
+                <!--<div class="search-box">-->
+                    <!--<input type="text" name="wareHouseCode" id="wareHouseCode" class="form-control"-->
+                           <!--placeholder="请输入支付方式编码" data-format="code" maxlength="8">-->
+                    <!--<button type="button" class="close" aria-hidden="true">&times;</button>-->
+                <!--</div>-->
+                <div class="search-box mt10">
+                    <input type="text" name="name" id="name" class="form-control"
+                           placeholder="请输入{$page_title}名称" maxlength="48"
+                           data-format="name">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                </div>
+            </div>
+            <!-- 模糊查询 end -->
+
+            <!-- 状态 start -->
+            <!--<div class="aside-column">-->
+                <!--<h2>状态</h2>-->
+                <!--<ul class="panel-list-type">-->
+                    <!--<li>-->
+                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
+                            <!--<input type="checkbox" name="isDisable" id="status-0" checked value="0">启用</label>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<label class="checkbox" for="status-1" id="checkbox-1"><span></span>-->
+                            <!--<input type="checkbox" name="isDisable" id="status-1" value="1">停用</label>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+            <!-- 状态 end -->
+
+            <a class="link undo-all" id="undo-all">全部撤销</a>
+            <a class="btn-blue btn-search" role="button" function="$.doSearch" args="{dataGridId:grid}">查 询</a>
+        </form>
+    </div>
+    <!-- 左栏 end -->
+
+    <!-- 右栏 start -->
+    <div class="panel main">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/cguazhang.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
+<script type="text/javascript">
+    $(function() {
+        var opts = {
+            urlRoot : ctx2Path,
+            commandType :0
+        };
+        cguazhangList._init(opts);
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

@@ -736,5 +736,50 @@
     "sort": 4,
     "type": 1,
     "url": "act=dish_tag"
+  },
+
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 160,
+    "levelId": "001001001",
+    "name": "5-6-挂账管理",
+    "parentId": 130,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 161,
+    "levelId": "001001001001",
+    "name": "5-6-1-挂账人管理",
+    "parentId": 160,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_guazhang"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 162,
+    "levelId": "001001001001",
+    "name": "5-6-2-挂账日志",
+    "parentId": 160,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_guazhang_rz"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 163,
+    "levelId": "001001001001",
+    "name": "5-6-3-清账",
+    "parentId": 160,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_guazhang_qz"
   }
 ]

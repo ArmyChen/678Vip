@@ -402,6 +402,65 @@ class dishModule extends KizBaseModule
         $GLOBALS['tmpl']->display("pages/dish/dpayEdit.html");
     }
 
+
+    public function dish_guazhang(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "挂账人管理");
+        $GLOBALS['tmpl']->display("pages/dish/cguazhang.html");
+
+    }
+
+    public function dish_guazhang_add(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "添加挂账人管理");
+        $GLOBALS['tmpl']->display("pages/dish/cguazhangAdd.html");
+
+    }
+
+    public function dish_guazhang_edit(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $r = $GLOBALS['db']->getRow("select * from fanwe_guanzhang where id=".$_REQUEST['id']);
+
+        $GLOBALS['tmpl']->assign("page_title", "修改挂账人管理");
+        $GLOBALS['tmpl']->assign("r", $r);
+        $GLOBALS['tmpl']->display("pages/dish/cguazhangEdit.html");
+
+    }
+
+    public function dish_guazhang_qz(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "清账");
+        $GLOBALS['tmpl']->display("pages/dish/cguazhangQZ.html");
+
+    }
+
+    public function dish_guazhang_rz(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "挂账日志");
+        $GLOBALS['tmpl']->display("pages/dish/cguazhangRZ.html");
+
+    }
+
 }
 
 ?>

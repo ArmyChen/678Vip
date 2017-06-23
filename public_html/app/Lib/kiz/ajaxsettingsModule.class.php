@@ -1747,4 +1747,117 @@ class ajaxSettingsModule extends KizBaseModule
         echo json_encode($return);
         exit;
     }
+
+    /**
+     * 挂账人管理
+     */
+    public function dish_guazhang_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where slid=$slid";
+        if($name){
+            $where .= " and (name like '%{$name}%' or contact like '%{$name}%' or tel='{$name}')";
+        }
+        $sql = "select * from fanwe_guanzhang $where limit $limit";
+        $sql2 = "select id from fanwe_guanzhang $where";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['resMsg'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['resMsg'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 新增挂账人
+     */
+    public function dish_guazhang_add_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        $sid = intval($_REQUEST['id']);
+        $name = $_REQUEST['name'];
+        if($name){
+            $data=$_REQUEST;
+            $slid = $account_info['slid'];
+            $data['slid'] = $account_info['slid'];
+            $data['supplier_id']=$supplier_id;
+            unset($data['ctl']);
+            unset($data['act']);
+            unset($data['id']);
+        }
+        $return = array();
+//var_dump($data);die;
+        if($sid && $data){
+            $GLOBALS['db']->autoExecute(DB_PREFIX."guanzhang",$data,"UPDATE","id='$sid'");
+            $return['success'] = true;
+            $return['message'] = "编辑成功";
+
+        }elseif($data){
+            //echo "2";
+            $has = $GLOBALS['db']->getRow(" select * from " . DB_PREFIX . "guanzhang where slid='$slid' and name='$name' limit 1 ");
+            if(empty($has)){
+
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."guanzhang",$data,"INSERT");
+
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "已经存在的名称";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 删除挂账人功能
+     */
+    public function dish_guazhang_checkUsed(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_guanzhang where id=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            if ($GLOBALS['db']->query("delete from fanwe_guanzhang where id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "删除成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "删除失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "挂账人不存在";
+        }
+        echo json_encode($return);
+        exit;
+    }
 }
