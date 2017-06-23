@@ -1,15 +1,13 @@
 
 
 {include file="inc/header.html"}
-<input type="hidden" value="{$type}" id="type"/>
-<input type="hidden" value="{$page_title}" id="page_title"/>
 <!-- 标题 -->
 <div class="article-header">
     <div class="center-block w1200">
         <h1>{$page_title}列表</h1>
         <div class="btn-wrap pull-right tar">
             <!--<a code="scm:button:masterdata:warehouse:deduction" function="$.doForward" args="{url:'/scm_kry/scm/warehouse/deduction'}" class="btn-link ml10" id="btn-deduction">支付方式扣减设定</a>-->
-            <a code="scm:button:masterdata:warehouse:add" function="$.doForward" args="{url:'/kiz.php?ctl=dish&act=dish_pay_add&type={$type}'}" class="btn-link ml10" id="btn-create">创建</a>
+            <a code="scm:button:masterdata:warehouse:add" function="$.doForward" args="{url:'/kiz.php?ctl=dish&act=dish_guazhang_qz'}" class="btn-link ml10" id="btn-create">创建</a>
         </div>
     </div>
 </div>
@@ -35,20 +33,25 @@
             <!-- 模糊查询 end -->
 
             <!-- 状态 start -->
-            <!--<div class="aside-column">-->
-                <!--<h2>状态</h2>-->
-                <!--<ul class="panel-list-type">-->
-                    <!--<li>-->
-                        <!--<label class="checkbox checkbox-check" for="status-0" id="checkbox-0"><span></span>-->
-                            <!--<input type="checkbox" name="isDisable" id="status-0" checked value="0">启用</label>-->
-                    <!--</li>-->
-                    <!--<li>-->
-                        <!--<label class="checkbox" for="status-1" id="checkbox-1"><span></span>-->
-                            <!--<input type="checkbox" name="isDisable" id="status-1" value="1">停用</label>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</div>-->
+            <div class="aside-column">
+                <h2>挂账人</h2>
+                <select name="gzrid" id="gzrid">
+                    <option value="" >全部挂账人</option>
+                    {foreach from=$gzr item=item key=key}
+                    <option value="{$item.id}">{$item.name}</option>
+                    {/foreach}
+                </select>
+            </div>
             <!-- 状态 end -->
+
+            <div class="aside-column">
+                <h2>状态</h2>
+                <select name="type" id="type">
+                    <option value="" >全部状态</option>
+                    <option value="1" >挂账</option>
+                    <option value="2" >清账</option>
+                </select>
+            </div>
 
             <a class="link undo-all" id="undo-all">全部撤销</a>
             <a class="btn-blue btn-search" role="button" function="$.doSearch" args="{dataGridId:grid}">查 询</a>
@@ -69,7 +72,7 @@
 </div>
 
 <!-- 添加通用js引入信息 -->
-<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/dpay.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/cguazhangRZ.js?v=20170315_135229"></script>
 <script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
 <script type="text/javascript">
     $(function() {
@@ -77,7 +80,7 @@
             urlRoot : ctx2Path,
             commandType :0
         };
-        dPayList._init(opts);
+        cguazhangRZ._init(opts);
     });
 </script>
 

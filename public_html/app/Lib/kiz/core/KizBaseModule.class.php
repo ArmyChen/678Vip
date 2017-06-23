@@ -802,6 +802,26 @@ class KizBaseModule{
     }
 
     /**
+     * 获取挂账人
+     * @param int $id
+     * @return
+     */
+    public function guazhangren_list($id = 0){
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid =$account_info['slid'];
+
+        if($id == 0){
+            $r = $GLOBALS['db']->getAll("select name,id from fanwe_guanzhang where slid = $slid");
+        }else{
+            $r = $GLOBALS['db']->getRow("select name,id from fanwe_guanzhang where id = $id");
+        }
+
+        return $r;
+    }
+
+
+    /**
 
      * $str 原始中文字符串
 

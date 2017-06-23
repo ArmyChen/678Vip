@@ -70,12 +70,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if (count($flavors) > 0) {
             $return['dataList'] = $data;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -334,12 +334,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if ($records > 0) {
             $return['dataList'] = $rows;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -348,7 +348,7 @@ class ajaxSettingsModule extends KizBaseModule
 //    public function dish_unit_checkUsed(){
 //        init_app_page();
 //        $return['status'] = true;
-//        $return['resMsg'] = "操作成功";
+//        $return['message'] = "操作成功";
 //        echo json_encode($return);
 //        exit;
 //
@@ -801,12 +801,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if ($check) {
             $return['dataList'] = $data;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -1028,12 +1028,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if ($records > 0) {
             $return['dataList'] = $rows;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -1645,12 +1645,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if ($records > 0) {
             $return['dataList'] = $rows;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -1777,12 +1777,12 @@ class ajaxSettingsModule extends KizBaseModule
         $return['records'] = $records;
         $return['total'] = ceil($records / $page_size);
         $return['status'] = true;
-        $return['resMsg'] = null;
+        $return['message'] = null;
         if ($records > 0) {
             $return['dataList'] = $rows;
         } else {
             $return['status'] = false;
-            $return['resMsg'] = "查无结果！";
+            $return['message'] = "查无结果！";
         }
         echo json_encode($return);
         exit;
@@ -1859,5 +1859,143 @@ class ajaxSettingsModule extends KizBaseModule
         }
         echo json_encode($return);
         exit;
+    }
+
+    /**
+     * 挂账日志
+     */
+    public function dish_guazhang_rz_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+        $type=intval($_REQUEST['type']);
+        $gzrid=intval($_REQUEST['gzrid']);
+
+
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where a.slid=$slid";
+        if($name){
+            $where .= " and (b.name like '%{$name}%' or b.contact like '%{$name}%' or b.tel='{$name}')";
+        }
+        if($gzrid){
+            $where .= " and (a.gid=$gzrid)";
+        }
+        if($type==2){
+            $where .= " and (a.money<0 and a.memo='清账')";
+        }
+        if($type==1){
+            $where .= " and (a.money>0)";
+        }
+        $sql = "select a.*,b.name from fanwe_guanzhang_log a left join fanwe_guanzhang b on a.gid=b.id $where order by id desc limit $limit";
+        $sql2 = "select * from fanwe_guanzhang_log a left join fanwe_guanzhang b on a.gid=b.id $where";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+//        var_dump($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['message'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['success'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 清账
+     */
+    public function dish_guazhang_qz_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        $gzrid = intval($_REQUEST['gzrid']);
+        $slid = intval($account_info['slid']);
+        $money = floatval($_REQUEST['money']);
+
+        if($money>0){
+            $data=array(
+                "slid"=>$slid,
+                "gid"=>$gzrid,
+                "onum"=>'挂账冲正',
+                "ctime"=>date("Y-m-d H:i:s"),
+                "money"=>"-".$money,
+                "gname"=>$_REQUEST['gname'],
+                "memo"=>'清账');
+
+            $sql = "update `fanwe_guanzhang` set `guamoney` = guamoney-$money where `id` = ".$gzrid;
+            $result2=$GLOBALS['db']->query($sql); //更新状态
+            $onum=date('YmdHis').rand(1000,9999);
+            $otime=NOW_TIME;
+
+            $data_tj=array(
+                "onum"=>$onum,
+                "otime"=>$otime,
+                "pid"=>0,
+                "pnum"=>1,
+                "pmoney"=>$money,
+                "pprice"=>$money,
+                "zffs"=>'cash',
+                "slid"=>$slid,
+                "zhifustatus"=>1,
+                "tichengmoney"=>0,
+                "ticheng_status"=>1
+            );
+            $GLOBALS['db']->autoExecute("orders_tj",$data_tj);
+
+            $data_orders=array(
+                "onum"=>$onum,
+                "otime"=>$otime,
+                "money_ys"=>$money,
+                "price"=>$money,
+                "zffs"=>'cash',
+                "mid"=>$slid,
+                "zhifustatus"=>1,
+                "zdbs"=>'后台'
+            );
+            $GLOBALS['db']->autoExecute("orders",$data_orders);
+
+
+            $data_pay=array(
+                "onum"=>$onum,
+                "otime"=>$otime,
+                "zmoney"=>$money,
+                "cmoney"=>$money,
+                "zffs"=>'cash',
+                "mid"=>$slid,
+                "zhifustatus"=>1,
+                "shoukuanfang"=>1,
+                "zdbs"=>'后台',
+                "payorder"=>'Houtaiwudan'
+            );
+            $GLOBALS['db']->autoExecute("orders_pay",$data_pay);
+
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."guanzhang_log",$data);
+            $return['success'] = true;
+            $return['message'] = "清账成功！";
+            echo json_encode($return);
+            exit;
+        }else{
+            $return['success'] = true;
+            $return['message'] = "清账失败，金额需正数";
+            echo json_encode($return);
+            exit;
+        }
     }
 }

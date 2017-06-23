@@ -446,6 +446,7 @@ class dishModule extends KizBaseModule
         $slid = $account_info['slid'];
 
         $GLOBALS['tmpl']->assign("page_title", "清账");
+        $GLOBALS['tmpl']->assign("gzr", parent::guazhangren_list());
         $GLOBALS['tmpl']->display("pages/dish/cguazhangQZ.html");
 
     }
@@ -456,7 +457,9 @@ class dishModule extends KizBaseModule
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
 
+
         $GLOBALS['tmpl']->assign("page_title", "挂账日志");
+        $GLOBALS['tmpl']->assign("gzr", parent::guazhangren_list());
         $GLOBALS['tmpl']->display("pages/dish/cguazhangRZ.html");
 
     }
