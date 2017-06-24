@@ -781,5 +781,27 @@
     "sort": 9,
     "type": 1,
     "url": "act=dish_guazhang_qz"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 170,
+    "levelId": "001001001",
+    "name": "5-7-员工管理",
+    "parentId": 130,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "#"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 171,
+    "levelId": "001001001001",
+    "name": "5-7-1-收银员管理",
+    "parentId": 170,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_dc_yg"
   }
 ]

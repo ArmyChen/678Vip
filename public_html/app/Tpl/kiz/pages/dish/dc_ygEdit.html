@@ -1,0 +1,164 @@
+
+
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+
+        <h1>编辑收银员</h1>
+
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btn-save">保存</a>
+
+            <!--<a class="btn-link ml10" id="btnSave-bak">保存并复制</a>-->
+
+            <a class="btn-link ml10" href="#" id="btncancle">返回</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>收银员信息</em></h3>
+        </div>
+        <form method="post" id="warehouseForm" autocomplete="off">
+            <input id="id" name="id" type="hidden" value="{$r.id}">
+            <input id="sid" name="sid" type="hidden" value="{$r.sid}">
+
+            <div class="panel-body" style="margin-left: -25px;height: 275px;">
+                <!--<dl class="panel-item">-->
+                <!--<dt>-->
+                <!--<label for="wareshouseCode" id="wareshouseCodeLabel" style="margin-top: 6px;">支付方式编码<strong class="red vam"> &ensp;</strong></label>-->
+                <!--</dt>-->
+
+                <!--<dd class="positionRelative">-->
+                <!--<div class="search-box w402 pull-left" style="margin-top: 6px;">-->
+                <!--<input type="text" class="form-control" id="wareshouseCode" name="wareshouseCode"-->
+                <!--value="" placeholder="若不填写，则系统自动生成" data-format="code" maxlength="8">-->
+                <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
+                <!--<div class="wrong"></div>-->
+                <!--</div>-->
+                <!--<div class="pull-left code-question" style="margin-top: 6px;">-->
+                <!--<span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>WH+流水号</span>"></span>-->
+                <!--</div>-->
+                <!--</dd>-->
+
+
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="sno">编号<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="sno" name="sno"
+                                   value="{$r.sno}" placeholder="请输入编号" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="sname" >用户名<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="sname" name="sname"
+                                   value="{$r.sname}" placeholder="请输入用户名" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="passwd">密码<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="passwd" name="passwd"
+                                   value="{$r.passwd}" placeholder="请输入密码" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="realname">真实姓名<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="realname" name="realname"
+                                   value="{$r.realname}" placeholder="请输入真实姓名" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="tel">电话<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="tel" name="tel"
+                                   value="{$r.tel}" placeholder="请输入电话" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="isDisable" id="isDisable">状态<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
+                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">启用</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
+                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">停用</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+                <!--<dl class="panel-item">-->
+                <!--<dt>-->
+                <!--<label for="note">备注信息<strong class="white vam"> *</strong></label>-->
+                <!--</dt>-->
+                <!--<dd>-->
+                <!--<TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"-->
+                <!--maxlength="96" data-character="true"></TEXTAREA>-->
+                <!--</dd>-->
+                <!--</dl>-->
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135123" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/dc_yg-edit.js?v=20170315_1351223"></script>
+<script type="text/javascript">
+    var OrderStatusEnum = new EnumWrapper('');
+    var SourceEnum = new EnumWrapper('');
+
+    /* 支付方式编码，名字移除 */
+    $("#wareshouseCode,#warehouseName").on("keyup change",function(){
+        $(this).parent().find(".wrong").html("");
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

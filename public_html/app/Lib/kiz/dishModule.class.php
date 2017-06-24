@@ -464,6 +464,42 @@ class dishModule extends KizBaseModule
 
     }
 
+    public function dish_dc_yg(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "收银员管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_yg.html");
+
+    }
+
+    public function dish_dc_yg_add(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "添加收银员");
+        $GLOBALS['tmpl']->display("pages/dish/dc_ygAdd.html");
+
+    }
+
+    public function dish_dc_yg_edit(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $r = $GLOBALS['db']->getRow("select * from fanwe_syy where sid=".$_REQUEST['id']);
+
+        $GLOBALS['tmpl']->assign("page_title", "修改收银员");
+        $GLOBALS['tmpl']->assign("r", $r);
+        $GLOBALS['tmpl']->display("pages/dish/dc_ygEdit.html");
+
+    }
+
 }
 
 ?>

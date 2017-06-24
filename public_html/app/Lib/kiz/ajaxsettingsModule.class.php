@@ -26,8 +26,8 @@ class ajaxSettingsModule extends KizBaseModule
 //) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 //";
 //        $sql = "CREATE TABLE `fanwe_dish_goods_tag` (  `id` int(11) NOT NULL AUTO_INCREMENT,  `name` varchar(255) DEFAULT NULL,  `sort` int(11) DEFAULT NULL,  `created` int(11) DEFAULT NULL,  `update` int(11) DEFAULT NULL,  `is_effect` int(11) DEFAULT NULL,  `location_id` int(11) DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
-        $sql = "show columns from fanwe_goods_extends";
-        $sql = "select * from fanwe_goods_extends where mid=50500";
+        $sql = "show columns from fanwe_syy";
+//        $sql = "select * from fanwe_goods_extends where mid=50500";
 //        $sql = "alter table fanwe_goods_extends add COLUMN is_half int(11)";
         $res = $GLOBALS['db']->getAll($sql);
         var_dump($res);die;
@@ -1997,5 +1997,118 @@ class ajaxSettingsModule extends KizBaseModule
             echo json_encode($return);
             exit;
         }
+    }
+
+
+    /**
+     * 收银员管理
+     */
+    public function dish_dc_yg_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where slid=$slid";
+        if($name){
+            $where .= " and (sname like '%{$name}%' or sno like '%{$name}%' or tel like '%{$name}%'  or realname like '%{$name}%' )";
+        }
+        $sql = "select *,sid as id from fanwe_syy $where limit $limit";
+        $sql2 = "select sid from fanwe_syy $where";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['message'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 新增收银员
+     */
+    public function dish_dc_yg_add_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        $sid = intval($_REQUEST['sid']);
+        $name = $_REQUEST['sname'];
+        $data=$_REQUEST;
+        $slid = $account_info['slid'];
+        $data['slid'] = $account_info['slid'];
+        $data['supplier_id']=$supplier_id;
+        unset($data['ctl']);
+        unset($data['act']);
+        unset($data['id']);
+        $return = array();
+//        var_dump($data);die;
+        if($sid && $data){
+
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."syy",$data,"UPDATE","sid='$sid'");
+            $return['success'] = true;
+            $return['message'] = "编辑成功";
+
+        }elseif($data){
+            //echo "2";
+            $has = $GLOBALS['db']->getRow(" select * from " . DB_PREFIX . "syy where slid='$slid' and name='$name' limit 1 ");
+            if(empty($has)){
+
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."syy",$data,"INSERT");
+
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "已经存在的名称";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 删除收银员功能
+     */
+    public function dish_dc_yg_checkUsed(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_syy where sid=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            if ($GLOBALS['db']->query("delete from fanwe_syy where sid=".$id)){
+                $return['success'] = true;
+                $return['message'] = "删除成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "删除失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "收银员不存在";
+        }
+        echo json_encode($return);
+        exit;
     }
 }
