@@ -803,5 +803,38 @@
     "sort": 9,
     "type": 1,
     "url": "act=dish_dc_yg"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 172,
+    "levelId": "001001001",
+    "name": "5-7-2-营销员管理",
+    "parentId": 170,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_dc_waiter"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 173,
+    "levelId": "001001001",
+    "name": "5-7-3-营销统计",
+    "parentId": 170,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_dc_waiter_tj"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 174,
+    "levelId": "001001001",
+    "name": "5-7-4-整单营销统计",
+    "parentId": 170,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_dc_waiter_zdtj"
   }
 ]

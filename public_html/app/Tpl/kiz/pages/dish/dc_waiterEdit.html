@@ -1,0 +1,310 @@
+
+
+{include file="inc/header.html"}
+<link rel="stylesheet" href="/app/Tpl/kiz/js/scm_kry/css/dish/jquery.Jcrop.min.css">
+<input type="hidden" id="domain" value="http://or63agv72.bkt.clouddn.com/">
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+
+        <h1>新增营销员</h1>
+
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btn-save">保存</a>
+
+            <!--<a class="btn-link ml10" id="btnSave-bak">保存并复制</a>-->
+
+            <a class="btn-link ml10" href="#" id="btncancle">返回</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>营销员信息</em></h3>
+        </div>
+        <form method="post" id="warehouseForm" autocomplete="off">
+            <input id="id" name="id" type="hidden" value="{$r.wid}">
+
+            <div class="panel-body" style="margin-left: -25px;">
+                <!--<dl class="panel-item">-->
+                <!--<dt>-->
+                <!--<label for="wareshouseCode" id="wareshouseCodeLabel" style="margin-top: 6px;">支付方式编码<strong class="red vam"> &ensp;</strong></label>-->
+                <!--</dt>-->
+
+                <!--<dd class="positionRelative">-->
+                <!--<div class="search-box w402 pull-left" style="margin-top: 6px;">-->
+                <!--<input type="text" class="form-control" id="wareshouseCode" name="wareshouseCode"-->
+                <!--value="" placeholder="若不填写，则系统自动生成" data-format="code" maxlength="8">-->
+                <!--<button type="button" name="close" class="close" aria-hidden="true">&times;</button>-->
+                <!--<div class="wrong"></div>-->
+                <!--</div>-->
+                <!--<div class="pull-left code-question" style="margin-top: 6px;">-->
+                <!--<span class="iconfont question" data-content="自动编码的生成规则为<span style='color:red;'>WH+流水号</span>"></span>-->
+                <!--</div>-->
+                <!--</dd>-->
+
+
+                <!--</dl>-->
+
+
+
+                <dl class="panel-item">
+                    <dt>
+                        <label for="sno">编号<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="sno" name="sno"
+                                   value="{$r.sno}" placeholder="请输入编号" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--<dl class="panel-item">-->
+                    <!--<dt>-->
+                        <!--<label for="sname" >用户名<strong class="red vam"> *</strong></label>-->
+                    <!--</dt>-->
+                    <!--<dd class="positionRelative">-->
+                        <!--<div class="search-box w402">-->
+                            <!--<input type="text" class="form-control w402 required" id="sname" name="sname"-->
+                                   <!--value="{$r.sname}" placeholder="请输入用户名" maxlength="48" data-format="name" select='auto'>-->
+                            <!--<button type="button" class="close" name="close" aria-hidden="true">&times;</button>-->
+                            <!--<div class="wrong"></div>-->
+                        <!--</div>-->
+                    <!--</dd>-->
+                <!--</dl>-->
+
+                <dl class="panel-item">
+                    <dt>
+                        <label for="bntImageUrl" >图片<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="input-group-inset w402 pull-left mr15" id="imageUrlContainer">
+                            <div id="bntImageUrl">
+                                <input type="text" class="form-control" name="imageUrl" id="imageUrl"
+                                       data-imageSize="" data-imageSuffixes=""
+                                       data-imageName=""
+                                       value="{$r.picurl}"
+                                       readonly="readonly">
+                                <button class="btn btn-default" type="button">浏览图片</button>
+                            </div>
+                        </div>
+                        <span class="bnt-clear">清空</span>
+                        <span for="" class="red"
+                              style="display: inline-block;font-size: small;line-height: 34px;">(建议上传大小为960*720的图片)</span>
+                    </dd>
+                </dl>
+
+                <dl class="panel-item">
+                    <dt>
+                        <label for="divPreviewImage" >图片预览<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <div id="divPreviewImage">
+                                {if empty($r.picurl)}
+                                <img src="/app/Tpl/kiz/js/scm_kry/img/default.jpg"
+                                     class="img-responsive">
+                                {else}
+                                <img src="{$r.picurl}"
+                                     class="img-responsive">
+                                {/if}
+
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+
+                <dl class="panel-item">
+                    <dt>
+                        <label for="realname">真实姓名<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="realname" name="realname"
+                                   value="{$r.realname}" placeholder="请输入真实姓名" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="tel">电话<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="tel" name="tel"
+                                   value="{$r.tel}" placeholder="请输入电话" maxlength="48" data-format="name" select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="isDisable" id="isDisable">状态<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox  {if $r.isdisable == 1}checkbox-check{/if}  " for="status-0" id="checkbox-0">
+                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1}checked{/if}  value="1">启用</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox {if $r.isdisable == 0}checkbox-check{/if}  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
+                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0}checked{/if} value="0">停用</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+                <!--<dl class="panel-item">-->
+                <!--<dt>-->
+                <!--<label for="note">备注信息<strong class="white vam"> *</strong></label>-->
+                <!--</dt>-->
+                <!--<dd>-->
+                <!--<TEXTAREA id="memo" name="memo" class="w402" style="height: 100px;" placeholder="备注说明（可不填）"-->
+                <!--maxlength="96" data-character="true"></TEXTAREA>-->
+                <!--</dd>-->
+                <!--</dl>-->
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135123" ></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/dc_waiter-edit.js?v=20170315_135123"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/jquery.Jcrop.min.js"></script>
+<script src="/app/Tpl/kiz/js/scm_kry/js/dish/ImgClipperUitl.js"></script>
+
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/plupload.full.min.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/zh_CN.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish/qiniu.js"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/dish//bkeruyun-qiniu-util.js"></script>
+
+<script type="text/javascript">
+    var OrderStatusEnum = new EnumWrapper('');
+    var SourceEnum = new EnumWrapper('');
+
+    /* 支付方式编码，名字移除 */
+    $("#wareshouseCode,#warehouseName").on("keyup change",function(){
+        $(this).parent().find(".wrong").html("");
+    });
+
+    function clearPreviewTemp() {
+        $('#previewTemp').empty();
+        $('#previewTemp').prev().show();
+        $('#fileImage').removeAttr('data-selectObj');
+
+    }
+    function openImgClipper() {
+        setTimeout(function () {
+            var $target = $('#fileImage');
+            if ($target.val()) {
+                var $targetPreview = $('#divPreview-2');
+                var $img = $targetPreview.find('img');
+                if ($img.length > 0) {
+                    var imgSrc = $img.attr('src');
+                    imgClipper.open(imgSrc, $target, function (theClipper) {
+                        var $temp = theClipper.$preview.clone();
+                        $targetPreview.hide();
+                        $('#previewTemp').empty().append($temp);
+                    });
+                }
+            }
+        }, 1000);
+
+    }
+
+    $(document).ready(function () {
+        var jcropConfig = {};
+        var imgClipperModalStr = ImgClipper.prototype.getModalDomStr('imgClipperModal', '/app/Tpl/kiz/js/scm_kry/img/default.jpg');
+        var $imgClipperModalImg = $(imgClipperModalStr);
+        $imgClipperModalImg.appendTo($('body'));
+        var option = {image: {scalingRatio: 0.5}};
+        var imgClipper = new ImgClipper(
+            jcropConfig, option, $('#imgClipperModal')
+        );
+        window.imgClipper = imgClipper;
+
+
+        $('#weight').on('blur', function () {
+            checkUnitWeight();
+        });
+        if ($('#saleTypeBox').hasClass('checkbox-check')) {
+            $('#weightWrapper').removeClass('hidden');
+        }
+
+        qiniuUtil.setConfigItem('domain', $('#domain').val());
+        initImageUpload();
+
+    });
+
+
+    function initImageUpload() {
+        var option = {
+            max_file_size: '10mb',
+            filters: {
+                mime_types: [
+                    {title: "Image files", extensions: "jpg,jpeg,png,gif,bmp"}
+                ]
+            }
+        };
+        var containerId = 'imageUrlContainer';
+        var browseButtonId = 'bntImageUrl';
+        var localUpLoader = new qiniuUtil.LocalUpLoader(browseButtonId, containerId, option);
+        localUpLoader.handleFileUploaded = function (up, file, infoObj) {
+            var url = qiniuUtil.keyToQiniuUrl(infoObj.key);
+            setImageVal(url, file.size, file.name);
+            var $target = $('#imageUrl');
+            $target.removeAttr('data-selectObj');
+            imgClipper.open(url, $target, function (theClipper) {
+                var cropObj = theClipper.selectObj;
+                var tempUrl = qiniuUtil.photoshop.clipImage(infoObj.key, cropObj, 960, 720);
+                setImageVal(tempUrl);
+            });
+
+        };
+        $('#' + browseButtonId).closest('td').find('.bnt-clear').on('click', function () {
+            setImageVal('');
+        });
+        localUpLoader.init();
+    }
+
+    function setImageVal(url, imageSize, imageName) {
+        $('#imageUrl').attr('data-uploaded', 'yes');
+        if (!url) {
+            $('#imageUrl').val(url);
+            url = ctxPath + '/themes/style/img/default.jpg';
+            $('#divPreviewImage img').attr('src', url);
+            $('#imageUrl').attr('data-imageSize', 0);
+            $('#imageUrl').attr('data-imageName', '');
+            $('#imageUrl').attr('data-imageSuffixes', '');
+        } else {
+            $('#imageUrl').val(url);
+            $('#divPreviewImage img').attr('src', url);
+        }
+        if (typeof imageSize === 'number') {
+            $('#imageUrl').attr('data-imageSize', imageSize);
+            $('#imageUrl').attr('data-imageName', imageName);
+            var imageSuffixes = '';
+            if (imageName.indexOf('.') > -1) {
+                var tempSet = imageName.split('.');
+                imageSuffixes = '.' + tempSet[tempSet.length - 1];
+            }
+            $('#imageUrl').attr('data-imageSuffixes', imageSuffixes);
+        }
+    }
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>
