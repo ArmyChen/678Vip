@@ -1732,7 +1732,7 @@ public function app_user_edit(){
 	    $limit = (($page-1)*$page_size).",".$page_size;
 
 		$sql="SELECT id,onum,price,money_ys,zffs FROM orders where wsno=$sno and mid=$slid and zhifustatus=1 and (otime between $begin_time_s and $end_time_s) $orderby limit ".$limit;
-	 //   echo $sql;
+	    echo $sql;
 	    $sql_count="SELECT count(*) FROM orders where wsno=$sno and mid=$slid and zhifustatus=1 and (otime between $begin_time_s and $end_time_s) $orderby ";
 		//$sql_count="SELECT count(*) FROM orders_tj a left join orders b on a.onum=b.onum where a.ticheng_status=1 and a.wsno=$sno and a.slid=$slid and a.zhifustatus=1 and (a.otime between $begin_time_s and $end_time_s) $orderby ";
 		$list = $GLOBALS['db']->getAll($sql);

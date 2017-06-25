@@ -500,6 +500,84 @@ class dishModule extends KizBaseModule
 
     }
 
+    public function dish_dc_waiter(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "营销员管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiter.html");
+
+    }
+
+    public function dish_dc_waiter_tj(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "营销员统计管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiter_tj.html");
+
+    }
+
+    public function dish_dc_waiter_zdtj(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "营销员整单统计管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiter_zdtj.html");
+
+    }
+    public function dish_dc_waiter_detail(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "营销员统计详情管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiter_detail.html");
+
+    }
+    public function dish_dc_waiter_zddetail(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "营销员统计详情管理");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiter_zddetail.html");
+
+    }
+
+    public function dish_dc_waiter_add(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "添加营销员");
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiterAdd.html");
+
+    }
+
+    public function dish_dc_waiter_edit(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $r = $GLOBALS['db']->getRow("select * from fanwe_waiter where wid=".$_REQUEST['id']);
+//var_dump($r);
+        $GLOBALS['tmpl']->assign("page_title", "修改营销员");
+        $GLOBALS['tmpl']->assign("r", $r);
+        $GLOBALS['tmpl']->display("pages/dish/dc_waiterEdit.html");
+
+    }
+
 }
 
 ?>

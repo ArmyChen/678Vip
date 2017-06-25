@@ -926,6 +926,15 @@ class KizBaseModule{
         return iconv('UCS-2', $encoding, $unistr);
 
     }
+
+
+    function check_zffs($zffs,$zffsarr){
+        foreach($zffsarr as $k=>$v){
+            if ($k==$zffs){
+                return true;
+            }
+        }
+    }
 }
 
 ?>

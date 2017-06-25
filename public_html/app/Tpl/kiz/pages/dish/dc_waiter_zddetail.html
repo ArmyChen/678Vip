@@ -1,0 +1,48 @@
+
+
+{include file="inc/header.html"}
+<input type="hidden" value="{$type}" id="type"/>
+<input type="hidden" value="{$page_title}" id="page_title"/>
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+        <h1>{$page_title}列表</h1>
+        <div class="btn-wrap pull-right tar">
+            <!--<a code="scm:button:masterdata:warehouse:deduction" function="$.doForward" args="{url:'/scm_kry/scm/warehouse/deduction'}" class="btn-link ml10" id="btn-deduction">支付方式扣减设定</a>-->
+            <!--<a code="scm:button:masterdata:warehouse:add" function="$.doForward" args="{url:'/kiz.php?ctl=dish&act=dish_dc_yg_add'}" class="btn-link ml10" id="btn-create">创建</a>-->
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <!-- 左栏 start -->
+    <!-- 左栏 end -->
+
+    <!-- 右栏 start -->
+    <div class="panel">
+        <div class="panel-body">
+            <!-- grid start -->
+            <table id="grid"></table>
+            <div id="gridPager"></div>
+            <!-- grid end -->
+        </div>
+    </div>
+    <!-- 右栏 end -->
+</div>
+
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/dc_waiter_zddetail.js?v=20170315_135229"></script>
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-msg.js?v=20170315_135229"></script>
+<script type="text/javascript">
+    $(function() {
+        var opts = {
+            urlRoot : ctx2Path,
+            commandType :0
+        };
+        dc_waiter_zddetail._init(opts);
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>

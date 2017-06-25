@@ -2111,4 +2111,463 @@ class ajaxSettingsModule extends KizBaseModule
         echo json_encode($return);
         exit;
     }
+
+
+    /**
+     * 收银员管理
+     */
+    public function dish_dc_waiter_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where slid=$slid";
+        if($name){
+            $where .= " and (realname like '%{$name}%'  or sno like '%{$name}%' or tel like '%{$name}%')";
+        }
+        $sql = "select *,wid as id from fanwe_waiter $where limit $limit";
+        $sql2 = "select wid from fanwe_waiter $where";
+//var_dump($sql);
+        $rows = $GLOBALS['db']->getAll($sql);
+        $records = count($GLOBALS['db']->getAll($sql2));
+
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['message'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 新增收银员
+     */
+    public function dish_dc_waiter_add_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        $wid = intval($_REQUEST['id']);
+        $name = $_REQUEST['sname'];
+        $data=$_REQUEST;
+        $slid = $account_info['slid'];
+        $data['picurl'] = $_REQUEST['imageUrl'];
+        $data['slid'] = $account_info['slid'];
+        $data['supplier_id']=$supplier_id;
+
+        unset($data['ctl']);
+        unset($data['act']);
+        unset($data['id']);
+        unset($data['imageUrl']);
+        $return = array();
+//        var_dump($data);die;
+        if($wid && $data){
+
+            $res = $GLOBALS['db']->autoExecute(DB_PREFIX."waiter",$data,"UPDATE","wid='$wid'");
+            $return['success'] = true;
+            $return['message'] = "编辑成功";
+
+        }elseif($data){
+            //echo "2";
+            $has = $GLOBALS['db']->getRow(" select * from " . DB_PREFIX . "waiter where slid='$slid' and name='$name' limit 1 ");
+            if(empty($has)){
+
+                $res=$GLOBALS['db']->autoExecute(DB_PREFIX."waiter",$data,"INSERT");
+
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "已经存在的名称";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 删除收银员功能
+     */
+    public function dish_dc_waiter_checkUsed(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $id = intval($_REQUEST['id']);
+        $sql = "select * from fanwe_waiter where wid=".$id;
+        $row = $GLOBALS['db']->getRow($sql);
+
+        if(!empty($row)){
+            if ($GLOBALS['db']->query("delete from fanwe_waiter where wid=".$id)){
+                $return['success'] = true;
+                $return['message'] = "删除成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "删除失败";
+            }
+
+        }else{
+            $return['success'] = false;
+            $return['message'] = "收银员不存在";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+    /**
+     * 营销统计管理
+     */
+    public function dish_dc_waiter_tj_ajax(){
+        init_app_page();
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当天的时间
+            $start=to_date(NOW_TIME,"Y-m-d");
+            $startstr=strtotime(to_date(NOW_TIME,"Y-m")."-1");
+            $startend=strtotime($start)+24*3600-1;
+            $begin_time=to_date($startstr);
+            $end_time=to_date($startend);
+        }
+        $GLOBALS['tmpl']->assign("begin_time",$begin_time);
+        $GLOBALS['tmpl']->assign("end_time",$end_time);
+
+        $begin_time_s = to_timespan($begin_time);
+        $end_time_s = to_timespan($end_time);
+
+        if (isset ( $_REQUEST ['_sort'] )) {
+            $sort = $_REQUEST ['_sort'] ? 'desc' : 'asc';
+        } else {
+            $sort = 'asc';
+        }
+        $order=$_REQUEST ['_order'];
+        if(isset($order))
+        {
+            if ($order=='yxpnum'){
+                $orderby = " order by yxpnum ".$sort;
+            }elseif($order=='tichengmoney'){
+                $orderby = " order by tichengmoney ".$sort;
+            }else{
+                $orderby = " order by a.".$order." ".$sort;
+            }
+            $sortImg=array($order=>'<img src="/admin/Tpl/default/Common/images/'.$sort.'.gif" width="12" height="17" border="0" align="absmiddle">');
+        }else
+        {
+            $orderby = "";
+            $sortImg=array();
+        }
+        //var_dump($sortImg);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isdisable'];
+        $kw = $_REQUEST['name'];
+
+        if($kw){
+            $str = "and (a.sno='$kw' or a.tel='$kw' or a.realname='$kw')";
+        }
+
+        !isset($isdd) && $isdd = 1;
+
+        $sql="SELECT a.*,sum(b.pnum) as yxpnum,sum(b.tichengmoney) as tichengmoney FROM " . DB_PREFIX . "waiter a left join orders_tj b on a.sno=b.wsno where b.ticheng_status=1 and b.wsno>0 and a.slid=$slid and b.slid=$slid and a.isdisable=$isdd $str and (b.otime between $begin_time_s and $end_time_s)  GROUP BY b.wsno $orderby ";
+
+
+        $rows = $GLOBALS['db']->getAll($sql);
+
+        $return['page'] = 1;
+        $return['records'] = 20;
+        $return['total'] = 20;
+        $return['status'] = true;
+        $return['message'] = null;
+        if (count($rows) > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 营销整单统计管理
+     */
+    public function dish_dc_waiter_zdtj_ajax(){
+        init_app_page();
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当天的时间
+            $start=to_date(NOW_TIME,"Y-m-d");
+            $startstr=strtotime(to_date(NOW_TIME,"Y-m")."-1");
+            $startend=strtotime($start)+24*3600-1;
+            $begin_time=to_date($startstr);
+            $end_time=to_date($startend);
+        }
+        $GLOBALS['tmpl']->assign("begin_time",$begin_time);
+        $GLOBALS['tmpl']->assign("end_time",$end_time);
+
+        $begin_time_s = to_timespan($begin_time);
+        $end_time_s = to_timespan($end_time);
+
+        if (isset ( $_REQUEST ['_sort'] )) {
+            $sort = $_REQUEST ['_sort'] ? 'desc' : 'asc';
+        } else {
+            $sort = 'asc';
+        }
+        $order=$_REQUEST ['_order'];
+        if(isset($order))
+        {
+            if ($order=='yxpnum'){
+                $orderby = " order by yxpnum ".$sort;
+            }elseif($order=='tichengmoney'){
+                $orderby = " order by tichengmoney ".$sort;
+            }else{
+                $orderby = " order by a.".$order." ".$sort;
+            }
+            $sortImg=array($order=>'<img src="/admin/Tpl/default/Common/images/'.$sort.'.gif" width="12" height="17" border="0" align="absmiddle">');
+        }else
+        {
+            $orderby = "";
+            $sortImg=array();
+        }
+        //var_dump($sortImg);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isdisable'];
+        $kw = $_REQUEST['name'];
+
+        if($kw){
+            $str = "and (a.sno='$kw' or a.tel='$kw' or a.realname='$kw')";
+        }
+
+        !isset($isdd) && $isdd = 1;
+
+        $sql="SELECT a.*,count(b.onum) as yxpnum,sum(b.money_ys) as tichengmoney FROM " . DB_PREFIX . "waiter a left join orders b on a.sno=b.wsno where b.zhifustatus=1 and a.slid=$slid and b.mid=$slid and a.isdisable=$isdd $str and (b.otime between $begin_time_s and $end_time_s)  GROUP BY b.wsno $orderby ";
+
+
+        $rows = $GLOBALS['db']->getAll($sql);
+
+        $return['page'] = 1;
+        $return['records'] = 20;
+        $return['total'] = 20;
+        $return['status'] = true;
+        $return['message'] = null;
+        if (count($rows) > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 营销统计详情管理
+     */
+    public function dish_dc_waiter_detail_ajax(){
+        init_app_page();
+        $zffsarr=json_decode(ZFFSLIST,true); //解析支付方式
+
+        $CURRENT_URL='http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+        $GLOBALS['tmpl']->assign("CURRENT_URL",$CURRENT_URL);
+
+
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当天的时间
+            $start=to_date(NOW_TIME,"Y-m-01");
+            $end=to_date(NOW_TIME,"Y-m-d");
+            $startstr=strtotime($start);
+            $startend=strtotime($end)+24*3600-1;
+            $begin_time=to_date($startstr);
+            $end_time=to_date($startend);
+        }
+
+        $begin_time_s = to_timespan($begin_time);
+        $end_time_s = to_timespan($end_time);
+
+        if (isset ( $_REQUEST ['_sort'] )) {
+            $sort = $_REQUEST ['_sort'] ? 'desc' : 'asc';
+        } else {
+            $sort = 'asc';
+        }
+
+        $sno=$_REQUEST ['sno'];
+        $GLOBALS['tmpl']->assign("sno",$sno);
+        $order=$_REQUEST ['_order'];
+        if(isset($order))
+        {
+            if ($order=='money_ys'){
+                $orderby = " order by b.money_ys ".$sort;
+            }elseif ($order=='name'){
+                $orderby = " order by c.name ".$sort;
+            }else{
+                $orderby = " order by a.".$order." ".$sort;
+            }
+            $sortImg=array($order=>'<img src="/admin/Tpl/default/Common/images/'.$sort.'.gif" width="12" height="17" border="0" align="absmiddle">');
+        }else
+        {
+            $orderby = "";
+            $sortImg=array();
+        }
+        //var_dump($sortImg);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isdisable'];
+        $kw = $_REQUEST['name'];
+
+        !isset($isdd) && $isdd = 1;
+
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $sql="SELECT a.*,b.money_ys,c.name FROM orders_tj a left join orders b on a.onum=b.onum left join fanwe_dc_menu c on a.pid=c.id where a.ticheng_status=1 and a.wsno=$sno and a.slid=$slid and a.zhifustatus=1 and (a.otime between $begin_time_s and $end_time_s) $orderby limit ".$limit;
+
+
+        $rows = $GLOBALS['db']->getAll($sql);
+        foreach($rows as $k=>$v){
+            $zffs=$v['zffs'];
+            if($this->check_zffs($zffs,$zffsarr)){
+                $rows[$k]['zffs']=$zffsarr[$zffs];
+            }
+            $rows[$k]['tjid']=$i;
+            //小计开始
+            $total['money_ys']=$total['money_ys']+$v['money_ys'];
+            $total['price']=$total['price']+$v['price'];
+        }
+//var_dump($zffsarr);
+        $return['page'] = 1;
+        $return['records'] = 20;
+        $return['total'] = 20;
+        $return['status'] = true;
+        $return['message'] = null;
+        if (count($rows) > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    /**
+     * 营销zd统计详情管理
+     */
+    public function dish_dc_waiter_zddetail_ajax(){
+        init_app_page();
+        $zffsarr=json_decode(ZFFSLIST,true); //解析支付方式
+
+        $CURRENT_URL='http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+        $GLOBALS['tmpl']->assign("CURRENT_URL",$CURRENT_URL);
+
+
+        if ((isset($_REQUEST['begin_time']))|| (isset($_REQUEST['end_time']))){
+            $begin_time = strim($_REQUEST['begin_time']);
+            $end_time = strim($_REQUEST['end_time']);
+        }else{	 //默认为当天的时间
+            $start=to_date(NOW_TIME,"Y-m-01");
+            $end=to_date(NOW_TIME,"Y-m-d");
+            $startstr=strtotime($start);
+            $startend=strtotime($end)+24*3600-1;
+            $begin_time=to_date($startstr);
+            $end_time=to_date($startend);
+        }
+        $GLOBALS['tmpl']->assign("begin_time",$begin_time);
+        $GLOBALS['tmpl']->assign("end_time",$end_time);
+
+        $begin_time_s = to_timespan($begin_time);
+        $end_time_s = to_timespan($end_time);
+
+        if (isset ( $_REQUEST ['_sort'] )) {
+            $sort = $_REQUEST ['_sort'] ? 'desc' : 'asc';
+        } else {
+            $sort = 'asc';
+        }
+        $sno=$_REQUEST ['sno'];
+        $GLOBALS['tmpl']->assign("sno",$sno);
+        $order=$_REQUEST ['_order'];
+        if(isset($order))
+        {
+
+            $orderby = " order by a.".$order." ".$sort;
+            $sortImg=array($order=>'<img src="/admin/Tpl/default/Common/images/'.$sort.'.gif" width="12" height="17" border="0" align="absmiddle">');
+        }else
+        {
+            $orderby = "";
+            $sortImg=array();
+        }
+        //var_dump($sortImg);
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $isdd = $_REQUEST['isdisable'];
+        $kw = $_REQUEST['name'];
+
+        !isset($isdd) && $isdd = 1;
+
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        if($page==0) $page = 1;
+        $limit = (($page-1)*$page_size).",".$page_size;
+
+        $sql="SELECT id,onum,price,money_ys,zffs FROM orders where wsno=$sno and mid=$slid and zhifustatus=1 and (otime between $begin_time_s and $end_time_s) $orderby limit ".$limit;
+        //   echo $sql;
+        $sql_count="SELECT count(*) FROM orders where wsno=$sno and mid=$slid and zhifustatus=1 and (otime between $begin_time_s and $end_time_s) $orderby ";
+        //$sql_count="SELECT count(*) FROM orders_tj a left join orders b on a.onum=b.onum where a.ticheng_status=1 and a.wsno=$sno and a.slid=$slid and a.zhifustatus=1 and (a.otime between $begin_time_s and $end_time_s) $orderby ";
+
+        $rows = $GLOBALS['db']->getAll($sql);
+        foreach($list as $k=>$v){
+            $zffs=$v['zffs'];
+            if($this->check_zffs($zffs,$zffsarr)){
+                $list[$k]['zffs']=$zffsarr[$zffs];
+            }
+            $list[$k]['tjid']=$i;
+            //小计开始
+            $total['money_ys']=$total['money_ys']+$v['money_ys'];
+            $total['price']=$total['price']+$v['price'];
+        }
+
+//var_dump($zffsarr);
+        $return['page'] = 1;
+        $return['records'] = 20;
+        $return['total'] = 20;
+        $return['status'] = true;
+        $return['message'] = null;
+        if (count($rows) > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+
 }
