@@ -61,10 +61,10 @@
         }
     </style>
     <tr>
-        <th colspan="8" class="head">{$header}</th>
+        <th colspan="9" class="head">{$header}</th>
     </tr>
     <tr>
-        <th colspan="8">
+        <th colspan="9">
             <ul>
                 <li>
                     <span class="title">验收入库单号:</span><span>{$result.danjuhao}</span>
@@ -76,7 +76,7 @@
         </th>
     </tr>
     <tr>
-        <th colspan="8">
+        <th colspan="9">
             <ul>
                 <li>
                     <span class="title">入库商户:</span><span>{$result.supplier}</span>
@@ -91,7 +91,7 @@
         </th>
     </tr>
     <tr class="gys">
-        <th colspan="8">
+        <th colspan="9">
             <ul>
                 <li>
                     <span class="title">供应商:</span><span>{$result.gys}</span>
@@ -114,6 +114,7 @@
         <td>单位</td>
         <td>采购入库数</td>
         <td>合计金额(含税)</td>
+        <td>串码</td>
     </tr>
     {foreach from=$dd_detail item=item}
 
@@ -126,11 +127,12 @@
             <td>{$item.uom}</td>
             <td>{$item.actualQty}</td>
             <td>{$item.amount}</td>
+            <td>{$item.chuan}</td>
         </tr>
 
     {/foreach}
     <tr>
-        <td colspan="8">
+        <td colspan="9">
             <ul>
                 <li>
                     <span class="title">备注:</span><span></span>
@@ -140,7 +142,7 @@
             </td>
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="9">
             <ul>
                 <li>
                     <span class="title">制单:</span><span>{$result.lihuoren}</span>

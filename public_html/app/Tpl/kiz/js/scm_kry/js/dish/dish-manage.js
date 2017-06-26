@@ -513,7 +513,8 @@ function saveDishInfo() {
 	dishVo.isOrder = isOrder;
 	dishVo.stepNum = $("#stepNum").val();
 	dishVo.videoUrl = $("#videoUrl").val();
-	dishVo.dishDesc = $("#dishDesc").val();
+    dishVo.dishDesc = $("#dishDesc").val();
+    dishVo.chuan = $("#chuan").val();
 
 	var labelObjs = [];
 	$(":checkbox[name='goodsLabels']:checked").each(function() {

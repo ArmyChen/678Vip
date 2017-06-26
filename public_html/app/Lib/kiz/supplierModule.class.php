@@ -269,6 +269,7 @@ class supplierModule extends KizBaseModule
                 $datailinfo[$k]['amount'] = $v['price']* $v['num'];
                 $datailinfo[$k]['standardInventoryQty'] = $v['ssnum'];
                 $datailinfo[$k]['inventoryQty'] = $v['num'];
+                $datailinfo[$k]['chuan'] = $v['chuan'];
 
 
             }
@@ -524,6 +525,7 @@ class supplierModule extends KizBaseModule
         $sum = 0;
         $amount = 0;
         $datailinfo = array();
+//        var_dump($result['dd_detail']);die;
         foreach(unserialize($result['dd_detail']) as $k=>$v){
             $dc_menu = $this->getCangkuMenuInfoByMidCid($v['mid'],$v['cid']);
 //                var_dump($dc_menu);
@@ -540,6 +542,7 @@ class supplierModule extends KizBaseModule
             $datailinfo[$k]['amount'] = $v['price']* $v['num'];
             $datailinfo[$k]['standardInventoryQty'] = $v['ssnum'];
             $datailinfo[$k]['inventoryQty'] = $v['num'];
+            $datailinfo[$k]['chuan'] = $v['chuan'];
             $sum += intval($v['num']);
             $amount += floatval($v['price']* $v['num']);
 

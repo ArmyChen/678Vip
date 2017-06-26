@@ -507,7 +507,7 @@ class ajaxModule extends KizBaseModule
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty from fanwe_dc_menu g  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty , fge.chuan as chuan from fanwe_dc_menu g inner join fanwe_goods_extends as fge on fge.mid = g.id  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check = $GLOBALS['db']->getAll($sql);
 //var_dump($check);
         $data = [];
@@ -528,6 +528,7 @@ class ajaxModule extends KizBaseModule
             $data[$key]['times'] = $item['times'];
             $data[$key]['price'] = $item['price'];
             $data[$key]['pinyin'] = $item['pinyin'];
+            $data[$key]['chuan'] = $item['chuan'];
             $data[$key]['reckonPrice'] = $price;
             $data[$key]['reckonPriceStr'] = $price;
             $data[$key]['skuTypeId'] = $item['skuTypeId'];
@@ -633,6 +634,7 @@ class ajaxModule extends KizBaseModule
             $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
             $datailinfo[$k]['zmoney'] = $v['actualQty'] * $v['price'];
             $datailinfo[$k]['memo'] = $v['memo'];
+            $datailinfo[$k]['chuan'] = $v['chuan'];
             $znum += $v['actualQty'];
             $zmoney += $v['actualQty'] * $v['price'];
         }
@@ -720,6 +722,7 @@ class ajaxModule extends KizBaseModule
                 $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
                 $datailinfo[$k]['zmoney'] = $v['actualQty'] * $v['price'];
                 $datailinfo[$k]['memo'] = $v['memo'];
+                $datailinfo[$k]['chuan'] = $v['chuan'];
                 $znum += $v['actualQty'];
                 $zprice += $v['actualQty'] * $v['price'];
             }
@@ -796,6 +799,7 @@ class ajaxModule extends KizBaseModule
             $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
             $datailinfo[$k]['zmoney'] = $v['amount'];
             $datailinfo[$k]['memo'] = $v['memo'];
+            $datailinfo[$k]['chuan'] = $v['chuan'];
             $znum += $v['actualQty'];
             $zmoney += $v['price'];
         }
@@ -879,6 +883,7 @@ class ajaxModule extends KizBaseModule
                 $datailinfo[$k]['ssnum'] = $v['standardInventoryQty'];
                 $datailinfo[$k]['zmoney'] = $v['uom'];
                 $datailinfo[$k]['memo'] = $v['memo'];
+                $datailinfo[$k]['chuan'] = $v['chuan'];
             }
 
             $dd_detail = serialize($datailinfo);

@@ -28,7 +28,7 @@ class ajaxSettingsModule extends KizBaseModule
 //        $sql = "CREATE TABLE `fanwe_dish_goods_tag` (  `id` int(11) NOT NULL AUTO_INCREMENT,  `name` varchar(255) DEFAULT NULL,  `sort` int(11) DEFAULT NULL,  `created` int(11) DEFAULT NULL,  `update` int(11) DEFAULT NULL,  `is_effect` int(11) DEFAULT NULL,  `location_id` int(11) DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
         $sql = "show columns from fanwe_syy";
 //        $sql = "select * from fanwe_goods_extends where mid=50500";
-//        $sql = "alter table fanwe_goods_extends add COLUMN is_half int(11)";
+//        $sql = "alter table fanwe_goods_extends add COLUMN chuan text";
         $res = $GLOBALS['db']->getAll($sql);
         var_dump($res);die;
 
@@ -1412,6 +1412,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data['is_reprice'] = $object->isChangePrice;
             $data['is_dish'] = $object->isOrder;
             $data['is_half'] = $object->isHalf;
+            $data['chuan'] = $object->chuan;
             $data['mtags'] = json_encode($object->labels,JSON_UNESCAPED_UNICODE);
             $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
             $goodsExtends = parent::getDcMenuExtendsByMid($id);
@@ -1467,6 +1468,7 @@ class ajaxSettingsModule extends KizBaseModule
             $data['is_reprice'] = $object->isChangePrice;
             $data['is_dish'] = $object->isOrder;
             $data['is_half'] = $object->isHalf;
+            $data['chuan'] = $object->chuan;
             $data['mtags'] =json_encode($object->labels,JSON_UNESCAPED_UNICODE);
             $data['mdishs'] = urlencode(json_encode($object->cookingWays,JSON_UNESCAPED_UNICODE));
 

@@ -336,7 +336,7 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)','串码', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
@@ -344,6 +344,7 @@ var asnSi = {
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
+                {name: 'chuan', index: 'chuan', width: 200, sortable: !editable,editable: true,formatter: formatInput,unformat: unformatInput},
                 {name: 'uom', index: 'uom', width: 100, sortable: !editable,align: "center", hidden: editable},
                 {name: 'uom', index: 'uom', width: 100, sortable: !editable, align: 'center', hidden: !editable,
                     formatter: $.unitSelectFormatter,
