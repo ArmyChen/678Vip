@@ -101,7 +101,7 @@ var dc_waiter_detail = {
             url:  _this.opts.urlRoot + _this.opts.queryUrl,
             colNames: ['序号','订单号', '订单总价' , '菜品名称','当前商品价格','实收金额','数量','营销佣金','支付方式'],
             colModel: [
-                {name: 'id', index: 'id',align: "center", width: 50},
+                {name: 'id', index: 'id',align: "center", width: 120},
                 {name: 'onum', index: 'onum',align: "center", width: 180},
                 {name: 'money_ys', index: 'money_ys', align: "center", width: 250},
                 {name: 'name', index: 'name', align: "center", width: 120},
@@ -114,7 +114,7 @@ var dc_waiter_detail = {
             sortname: 'dpid',
             sortorder:'desc',
             pager: "#gridPager",
-            showOperate: true,
+            showOperate: false,
             actionParam: {
             	view: {
                     render : $.showView,
@@ -143,6 +143,13 @@ var dc_waiter_detail = {
                     render: $.showDelete,
                     disabledTitle :"指定扣减仓库或存在库存信息，无法删除"
                 }
+            },
+            loadComplete: function(data) {
+                $("#money_ys").text(data.total.money_ys);
+                $("#pprice").text(data.total.pprice);
+                $("#pmoney").text(data.total.pmoney);
+                $("#pnum").text(data.total.pnum);
+                $("#tichengmoney").text(data.total.tichengmoney);
             }
         });
         /**

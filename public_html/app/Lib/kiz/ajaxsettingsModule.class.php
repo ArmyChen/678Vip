@@ -2439,7 +2439,8 @@ class ajaxSettingsModule extends KizBaseModule
 
         !isset($isdd) && $isdd = 1;
 
-        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 100;
+        $page_size = 9999;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
@@ -2456,16 +2457,20 @@ class ajaxSettingsModule extends KizBaseModule
             $rows[$k]['tjid']=$i;
             //小计开始
             $total['money_ys']=$total['money_ys']+$v['money_ys'];
-            $total['price']=$total['price']+$v['price'];
+            $total['pprice']=$total['pprice']+$v['pprice'];
+            $total['pmoney']=$total['pmoney']+$v['pmoney'];
+            $total['pnum']=$total['pnum']+$v['pnum'];
+            $total['tichengmoney']=$total['tichengmoney']+$v['tichengmoney'];
         }
 //var_dump($zffsarr);
         $return['page'] = 1;
-        $return['records'] = 20;
-        $return['total'] = 20;
+        $return['records'] = 1;
+        $return['total'] = 1;
         $return['status'] = true;
         $return['message'] = null;
         if (count($rows) > 0) {
             $return['dataList'] = $rows;
+            $return['total'] = $total;
         } else {
             $return['status'] = false;
             $return['message'] = "查无结果！";
@@ -2530,7 +2535,8 @@ class ajaxSettingsModule extends KizBaseModule
 
         !isset($isdd) && $isdd = 1;
 
-        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 50;
+        $page_size = 9999;
         $page = intval($_REQUEST['page']);
         if($page==0) $page = 1;
         $limit = (($page-1)*$page_size).",".$page_size;
@@ -2541,7 +2547,7 @@ class ajaxSettingsModule extends KizBaseModule
         //$sql_count="SELECT count(*) FROM orders_tj a left join orders b on a.onum=b.onum where a.ticheng_status=1 and a.wsno=$sno and a.slid=$slid and a.zhifustatus=1 and (a.otime between $begin_time_s and $end_time_s) $orderby ";
 
         $rows = $GLOBALS['db']->getAll($sql);
-        foreach($list as $k=>$v){
+        foreach($rows as $k=>$v){
             $zffs=$v['zffs'];
             if($this->check_zffs($zffs,$zffsarr)){
                 $list[$k]['zffs']=$zffsarr[$zffs];
@@ -2554,12 +2560,14 @@ class ajaxSettingsModule extends KizBaseModule
 
 //var_dump($zffsarr);
         $return['page'] = 1;
-        $return['records'] = 20;
-        $return['total'] = 20;
+        $return['records'] = 1;
+        $return['total'] = 1;
         $return['status'] = true;
         $return['message'] = null;
         if (count($rows) > 0) {
             $return['dataList'] = $rows;
+            $return['total'] = $total;
+
         } else {
             $return['status'] = false;
             $return['message'] = "查无结果！";

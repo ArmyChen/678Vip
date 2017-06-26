@@ -548,7 +548,7 @@ class dishModule extends KizBaseModule
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
 
-        $GLOBALS['tmpl']->assign("page_title", "营销员统计详情管理");
+        $GLOBALS['tmpl']->assign("page_title", "营销员整单统计详情管理");
         $GLOBALS['tmpl']->display("pages/dish/dc_waiter_zddetail.html");
 
     }
