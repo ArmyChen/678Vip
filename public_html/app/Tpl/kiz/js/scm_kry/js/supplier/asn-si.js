@@ -13,6 +13,8 @@ var asnSi = {
         queryConditionsId : 'queryConditions',
         listGridId : 'grid',
         queryUrl : '&act=go_down_index_ajax2&type=1',
+        queryAsnUrl : '&act=go_down_index_chuan_ajax',
+        saveAsnUrl : '&act=go_down_index_chuan_add_ajax',
         editUrl : '&act=go_down_index_edit&type=1',
         deleteUrl :'&act=go_down_delete_ajax&type=1',
         viewUrl : '&act=go_down_index_view',
@@ -336,7 +338,7 @@ var asnSi = {
             //height: 300,
             rownumbers: true,
             rowNum : 10000,
-            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)','串码', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
+            colNames: ['商品编码','skuId', '所属分类id', '所属分类', '商品条码', '商品名称(规格)','串码/卡号', '单位', '单位', '价格', '入库数', '合计金额', '计算后库存', '当期库存', '当前换算率', '标准单位换算率', '定价', '标准单位ID', '标准单位'],
             colModel: [
                 {name: 'id', index: 'id', width: 80, hidden: false, sortable: !editable},
                 {name: 'skuId', index: 'skuId', width: 80, hidden: true, sortable: !editable},
@@ -344,7 +346,9 @@ var asnSi = {
                 {name: 'skuTypeName', index: 'skuTypeName', width: 80, sortable: !editable},
                 {name: 'skuCode', index: 'skuCode', width: 100, sortable: !editable},
                 {name: 'skuName', index: 'skuName', width: 200, sortable: !editable},
-                {name: 'chuan', index: 'chuan', width: 200, sortable: !editable,editable: true,formatter: formatInput,unformat: unformatInput},
+                {name: 'chuan', index: 'chuan', width: 200, sortable: !editable,editable: true,formatter:function(c,o,p){
+                    return "<span style='cursor: pointer' id='"+p.id+"' data-val='"+p.chuan+"' onclick='editChuan(this)'>查看/编辑</span>"
+                }},
                 {name: 'uom', index: 'uom', width: 100, sortable: !editable,align: "center", hidden: editable},
                 {name: 'uom', index: 'uom', width: 100, sortable: !editable, align: 'center', hidden: !editable,
                     formatter: $.unitSelectFormatter,
@@ -574,4 +578,81 @@ function print(id){
             id: id
         }
     });
+}
+
+function editChuan(obj){
+    $("#chuan_id").val(obj.id);
+    var $gridObj = $("#gridChuan");
+    var url =  asnSi.opts.urlRoot + asnSi.opts.queryAsnUrl + "&mid="+obj.id;
+    $.get(url,function (e) {
+        $gridObj.find("tbody").html("");
+        var data = eval(e);
+        for(var i=0;i< data.length;i++){
+            var html = "<tr>";
+            html += "<td><input type='text' class='form-control w140' value='"+data[i]['chuan']+"' name='chuan' /></td>&nbsp;";
+            html += "<td><select class='form-control w140' name='isdisable'>" ;
+            if(data[i]['isdisable'] == "1"){
+                html += "<option  value='1'>已使用</option>"
+                html += "<option selected value='0'>未使用</optionselected>"
+            }
+            if(data[i]['isdisable'] == "0"){
+                html += "<option selected value='1'>已使用</option>"
+                html += "<option value='0'>未使用</option>"
+            }
+            html +=    "</select></td>";
+            html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
+            html += "</tr>";
+
+            $gridObj.find("tbody").append(html);
+        }
+    })
+
+    $("#editInput").modal();
+
+}
+
+function addChuanTable() {
+    var $gridObj = $("#gridChuan");
+    var html = "<tr>";
+    html += "<td><input type='text' class='form-control w140' value='' name='chuan' /></td>&nbsp;";
+    html += "<td><select class='form-control w140' name='isdisable'><option value='0'>已使用</option><option selected value='1'>未使用</option></select></td>";
+    html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
+    html += "</tr>";
+
+    $gridObj.append(html);
+
+}
+
+function addChuan() {
+    var form = $("#editMultiForm tbody");
+    var mid = $("#chuan_id").val();
+    var trr = form.find("tr");
+    var jsonArray = [];
+
+    trr.each(function (data,value) {
+        var json = {};
+
+        var chuan = $(value).find("[name=chuan]").val()
+        var isdisable = $(value).find("[name=isdisable]").val()
+        json.chuan = chuan;
+        json.isdisable = isdisable;
+
+        jsonArray.push(json);
+    })
+    var url =  asnSi.opts.urlRoot + asnSi.opts.saveAsnUrl + "&mid="+mid;
+
+    $.post(url,{"json":jsonArray},function (e) {
+        var rs = $.parseJSON(e)
+        if (rs.success) {
+            $.layerMsg(rs.message, true,{shade: 0.3});
+            $("#editInput").modal('hide')
+
+        } else {
+            $.layerMsg(rs.message, false,{shade: 0.3});
+        }
+    })
+}
+
+function remove(obj) {
+    $(obj).parent().parent().remove();
 }

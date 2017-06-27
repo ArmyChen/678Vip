@@ -6110,4 +6110,56 @@ class ajaxModule extends KizBaseModule
         echo json_encode($dd_detail);
         exit;
     }
+
+    public function go_down_index_chuan_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $mid = $_REQUEST['mid'];
+        $sql = "select * from fanwe_goods_extends where  mid=" . $mid;
+        $records = $GLOBALS['db']->getRow($sql);
+        $chuan = [];
+        try{
+            $chuan = unserialize($records['chuan']);
+        }catch (Exception $e){
+            $chuan = [];
+        }
+        $data = [];
+
+        if(!empty($chuan)){
+            foreach ($chuan as $k => $v) {
+                $data[$k]['chuan'] = $v['chuan'];
+                $data[$k]['isdisable'] = $v['isdisable'];
+            }
+        }
+
+        echo json_encode($data);
+        exit;
+    }
+
+    public function go_down_index_chuan_add_ajax(){
+        $account_info = $GLOBALS['account_info'];
+        $slid = $account_info['slid'];
+        $mid = $_REQUEST['mid'];
+        $sql = "select * from fanwe_goods_extends where mid=" . $mid;
+        $records = $GLOBALS['db']->getRow($sql);
+
+        $records['chuan'] = serialize($_REQUEST['json']);
+//        var_dump($_REQUEST['json']);die;
+//var_dump($records);
+        if(count($records)>0){
+            $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"update","mid=".$mid);
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }else{
+            $records['mid'] =  $mid;
+//            $records['slid'] =  $slid;
+            $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"insert");
+            $return['success'] = true;
+            $return['message'] = "操作成功";
+        }
+
+        echo json_encode($return);
+        exit;
+    }
 }

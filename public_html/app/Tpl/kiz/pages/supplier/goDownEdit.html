@@ -265,7 +265,53 @@
         asnSi._init(opts);
     });
 </script>
+<div id="editInput" class="modal fade in" aria-hidden="true">
+    <div class="modal-dialog"  style="width: 540px; margin-top: 90px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3 style="font-size: 17px" onclick="addChuanTable()">修改串码/卡号<span style="margin-left: 15px;font-size: 13px;color: #999;cursor:pointer;">+</span></h3>
+            </div>
+            <div class="modal-body">
+                <form id="editMultiForm">
+                    <input data-val="" id="chuan_id" value="" style="display: none" />
+                    <table id="gridChuan" cellpadding="0" cellspacing="0" style="width: 92%;margin-bottom: 20px;table-layout: fixed;"
+                           class="text-center" >
+                        <thead>
+                        <tr>
+                            <th style="text-align:center">
+                                串码/卡号
+                            </th>
+                            <th style="text-align:center">
+                                状态
+                            </th>
+                            <th style="text-align:center;width: 60px">
+                                操作
+                            </th>
 
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    串码/卡号
+                                </td>
+                                <td>
+                                    状态
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer" style="margin-top: 0;position:relative;">
+                <a href="#" id="addchuan" class="btn btn-success" onclick="addChuan()" style="position:relative;">保 存<span class="iconfont loading icon-b"></span></a>
+                <a href="#" class="btn btn-primary" data-dismiss="modal" style="position:relative;">关 闭<span class="iconfont loading icon-b"></span></a>
+            </div>
+        </div>
+    </div>
+</div>
 {include file="inc/footer.html"}
 
 </body>
