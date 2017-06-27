@@ -35,6 +35,11 @@ class apiModule
             }
         }
     }
+
+    /**
+     * @Param mid 商品id
+     * @return $data 商品的串码数组
+     */
     public function get_chuan_info(){
         $mid = $_REQUEST['mid'];
         $sql = "select * from fanwe_goods_extends where  mid=" . $mid;
@@ -50,6 +55,35 @@ class apiModule
             foreach ($chuan as $k => $v) {
                 $data[$k]['chuan'] = $v['chuan'];
                 $data[$k]['isdisable'] = $v['isdisable'];
+            }
+        }
+
+        echo json_encode($data);
+        exit;
+    }
+
+    /**
+     * @Param chuan 串码
+     * @return $data 串码状态
+     * 0 = 已售出    1 = 未销售
+     */
+    public function get_chuan_state(){
+        $chuan_r = $_REQUEST['chuan'];
+        $sql = "select * from fanwe_goods_extends where  chuan like '%".$chuan_r."%'" ;
+        $records = $GLOBALS['db']->getRow($sql);
+        try{
+            $chuan = unserialize($records['chuan']);
+        }catch (Exception $e){
+            $chuan = [];
+        }
+        $data = [];
+
+        if(!empty($chuan)){
+            foreach ($chuan as $k => $v) {
+                if($chuan_r == $v['chuan']){
+                    $data['chuan'] = $v['chuan'];
+                    $data['isdisable'] = $v['isdisable'];
+                }
             }
         }
 
