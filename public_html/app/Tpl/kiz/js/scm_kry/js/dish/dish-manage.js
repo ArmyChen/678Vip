@@ -383,7 +383,7 @@ $.reloadRevelanceSetting = function(args) {
 
 function saveDishInfo() {
 	// if (!$("#stepOneForm").valid()) {
-	// 	window._isAlreadySaving = false;return;
+	// 	//window._isAlreadySaving = false;return;
 	// }
 	var dishVo = {};
 	dishVo.id = $("#dishId").val();
@@ -396,7 +396,7 @@ function saveDishInfo() {
 			title : "提示",
 			describe : "请选择商品类别"
 		}, Message.display);
-		window._isAlreadySaving = false;return;
+		// //window._isAlreadySaving = false;return;
 	}
 	dishVo.dishTypeId = dishTypeId;
 	var dishCode = $("#dishCode").val();
@@ -405,7 +405,7 @@ function saveDishInfo() {
 	// 		title : "提示",
 	// 		describe : "商品编码不能为空"
 	// 	}, Message.display);
-	// 	window._isAlreadySaving = false;return;
+	// 	//window._isAlreadySaving = false;return;
 	// }
 	dishVo.dishCode = dishCode;
     var name = $("#name").val();
@@ -415,7 +415,7 @@ function saveDishInfo() {
 			title : "提示",
 			describe : "商品名称不能为空"
 		}, Message.display);
-		window._isAlreadySaving = false;return;
+		// //window._isAlreadySaving = false;return;
 	}
     dishVo.name = name;
     dishVo.sname = sname;
@@ -430,7 +430,7 @@ function saveDishInfo() {
 			title : "提示",
 			describe : "商品定价不能为空"
 		}, Message.display);
-		window._isAlreadySaving = false;return;
+		//window._isAlreadySaving = false;return;
 	}
 	dishVo.marketPrice = marketPrice;
 	var unitId = $("#unitId").val();
@@ -439,7 +439,7 @@ function saveDishInfo() {
 			title : "提示",
 			describe : "销售单位不能为空"
 		}, Message.display);
-		window._isAlreadySaving = false;return;
+		//window._isAlreadySaving = false;return;
 	}
 	dishVo.unitId = unitId;
 	dishVo.wmType = $("#wmType").val();

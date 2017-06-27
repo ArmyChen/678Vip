@@ -18,17 +18,31 @@ $.reloadDishType = function(args) {
 		if(topDishType.isCure==1){
 			continue;
 		}
-		var html = "<li class='shutDown";
-		if (topDishType.isChecked || topDishTypeSize == 1) {
+
+
+        // var html = "<li class='shutDown";
+        var html = "<li class=' shutDown";
+        if (topDishType.isChecked || topDishTypeSize == 1) {
 			html += " open";
         }
+        var isTopCheck = "";
+        var inputChecked = "";
+        if(topDishType.isChecked){
+            isTopCheck = "checkbox-check";
+            inputChecked = "checked";
+        }else{
+            isTopCheck = "";
+            inputChecked = "";
+
+        }
+        // var html = ""
         html += "'>";
-		html += "<em>" + topDishType.name + "/" + topDishType.typeCode ;
+		html += "<label class='checkbox "+isTopCheck+"'><span></span><input type='checkbox' "+inputChecked+"  name='dishTypeId' data-value='"+topDishType.id+"' ><em>" + topDishType.name + "/" + topDishType.typeCode ;
 		if (topDishType.enabledFlag == 2) {
 			html += "<span class='red'>（已停用）</span>";
         }
-        html += "</em>";
-		html += "<ul class='highlighted-list'>";					
+        html += "</em></label>";
+		html += "<ul class='highlighted-list' style='margin-left: 20px;'>";
 		for (var j = 0; j < middleDishTypeSize; j++) {
 			var middleDishType = middleDishTypes[j],
 				labelCheckedClass = "",

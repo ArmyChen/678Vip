@@ -949,6 +949,11 @@ class ajaxSettingsModule extends KizBaseModule
                 $data[$num]['brandIdenty'] =  $v['id'];
                 $data[$num]['isCure'] = 0;
                 $data[$num]['enabledFlag'] = 1;
+                if($dish['cate_id'] == $v['id']){
+                    $data[$num]['isChecked'] = true;
+                }else{
+                    $data[$num]['isChecked'] = false;
+                }
 
                 $sql2 = "select * from fanwe_dc_supplier_menu_cate where wcategory=".$v['id'];
                 $sG = $GLOBALS['db']->getAll($sql2);
@@ -976,7 +981,6 @@ class ajaxSettingsModule extends KizBaseModule
                     $data2[$k2]['enabledFlag'] = 1;
                     if($dish['cate_id'] == $v2['id']){
                         $data2[$k2]['isChecked'] =  true;
-                        $data[$num]['isChecked'] = true;
                     }else{
                         $data2[$k2]['isChecked'] =  false;
                     }

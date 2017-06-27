@@ -5,7 +5,6 @@
  * Date: 2017/6/27
  * Time: 17:20
  */
-require_once APP_ROOT_PATH."system/model/dc.php";
 
 class apiModule
 {
@@ -16,7 +15,7 @@ class apiModule
     public function __construct()
     {
         $this->checkToken();
-        global_run();
+//        global_run();
     }
 
     private function checkToken(){
