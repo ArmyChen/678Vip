@@ -6154,13 +6154,42 @@ class ajaxModule extends KizBaseModule
             $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"update","mid=".$mid);
             $return['success'] = true;
             $return['message'] = "操作成功";
+
+            $dataChuan = [];
+            foreach ($_REQUEST['json'] as $k => $value) {
+                $dataChuan[$k]['mid'] = $mid;
+                $dataChuan[$k]['chuan'] = $mid;
+                $dataChuan[$k]['status'] = 1;
+                $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"update","mid=".$mid);
+            }
+
         }else{
+
             $records['mid'] =  $mid;
 //            $records['slid'] =  $slid;
             $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"insert");
             $return['success'] = true;
             $return['message'] = "操作成功";
+
         }
+
+        //串码表数据变化
+        $sql2 = "select * from fanwe_goods_chuan " ;
+        $records2 = $GLOBALS['db']->getAll($sql2);
+
+        $dataChuan = [];
+        if(count($records2)>0){
+            $dataChuan['mid'] = $mid;
+            $dataChuan['chuan'] = $records['chuan'];
+            $dataChuan['status'] = 1;
+            $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"update","mid=".$mid);
+        }else{
+            $dataChuan['mid'] = $mid;
+            $dataChuan['chuan'] = $records['chuan'];
+            $dataChuan['status'] = 1;
+            $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"insert");
+        }
+
 
         echo json_encode($return);
         exit;
