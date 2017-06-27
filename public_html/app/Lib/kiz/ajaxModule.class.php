@@ -6174,22 +6174,29 @@ class ajaxModule extends KizBaseModule
         }
 
         //串码表数据变化
-        $sql2 = "select * from fanwe_goods_chuan " ;
+        $sql2 = "select * from fanwe_goods_chuan where mid = ".$mid ;
         $records2 = $GLOBALS['db']->getAll($sql2);
 
         $dataChuan = [];
+
         if(count($records2)>0){
             $dataChuan['mid'] = $mid;
             $dataChuan['chuan'] = $records['chuan'];
-            $dataChuan['status'] = 1;
-            $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"update","mid=".$mid);
+            $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"UPDATE","mid=".$mid);
         }else{
             $dataChuan['mid'] = $mid;
             $dataChuan['chuan'] = $records['chuan'];
-            $dataChuan['status'] = 1;
-            $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"insert");
-        }
+//            $sql22 = "show columns from fanwe_goods_chuan " ;
+//            $records22 = $GLOBALS['db']->getAll($sql2);
+//            var_dump($records22);
 
+//            $res = $GLOBALS['db']->autoExecute(DB_PREFIX . "cangku_log", $datainGys, "INSERT");
+
+
+            $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"INSERT");
+//            $res = $GLOBALS['db']->query("insert into fanwe_goods_chuan (mid) values (3)");
+
+        }
 
         echo json_encode($return);
         exit;

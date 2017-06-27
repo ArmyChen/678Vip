@@ -600,7 +600,7 @@ function editChuan(obj){
                 html += "<option value='0'>未销售</option>"
             }
             html +=    "</select></td>";
-            html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
+            html += "<td><span class='w100' onclick='removeAAA(this)'>删除</span></td>&nbsp;";
             html += "</tr>";
 
             $gridObj.find("tbody").append(html);
@@ -616,7 +616,7 @@ function addChuanTable() {
     var html = "<tr>";
     html += "<td><input type='text' class='form-control w140' value='' name='chuan' /></td>&nbsp;";
     html += "<td><select class='form-control w140' name='isdisable'><option value='0'>已售出</option><option selected value='1'>未销售</option></select></td>";
-    html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
+    html += "<td><span class='w100' onclick='removeAAA(this)'>删除</span></td>&nbsp;";
     html += "</tr>";
 
     $gridObj.append(html);
@@ -653,6 +653,6 @@ function addChuan() {
     })
 }
 
-function remove(obj) {
+function removeAAA(obj) {
     $(obj).parent().parent().remove();
 }
