@@ -469,6 +469,7 @@ class ajaxModule extends KizBaseModule
     public function goods_list_ajax()
     {
         init_app_page();
+
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $_REQUEST['id'] ? intval($_REQUEST['id']) : $account_info['slid'];
@@ -480,21 +481,21 @@ class ajaxModule extends KizBaseModule
         if ($page == 0) $page = 1;
         $limit = (($page - 1) * $page_size) . "," . $page_size;
 
-        $where = "where  g.location_id=$slid";
+        $where = "where  g.location_id = $slid";
 //        $where .=" and g.is_effect = 0";//是否显示在终端
 //        $where .= " and g.is_stock = 1 ";//是否是库存商品
 //        $where .=" and g.is_delete = 1";//是否删除
 
         //库存商品
         $where .= " and (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1))";
-
+//
         if (!empty($wmTypes)) {
             $where .= " and g.print in (" . $wmTypes . ")";//筛选库存类型
         } else {
             $where .= " and g.print <> 1";//库存类型不等于现制商品
         }
-
-
+//
+//
         if ($_REQUEST['skuTypeId']) {
             $where .= " and g.cate_id=" . $_REQUEST['skuTypeId'];
         }
@@ -503,11 +504,13 @@ class ajaxModule extends KizBaseModule
             $where .= " or g.barcode like '%" . $_REQUEST['skuCodeOrName'] . "%'";
             $where .= " or g.id like '%" . $_REQUEST['skuCodeOrName'] . "%' or g.pinyin like '%" . $_REQUEST['skuCodeOrName'] . "%' )";
         }
-
+//        $sql = "select * from fanwe_dc_menu g $where";
+//        echo $sql;
+//        var_dump($GLOBALS['db']->getAll($sql));die;
 //        var_dump($where);
         $sqlcount = "select count(id) from fanwe_dc_menu g $where";
         $records = $GLOBALS['db']->getOne($sqlcount);
-        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty , fge.chuan as chuan from fanwe_dc_menu g inner join fanwe_goods_extends as fge on fge.mid = g.id  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
+        $sql = "select *,g.id as mmid,g.name as skuName,g.barcode as skuCode,g.unit as uom,g.funit,g.times,g.price,g.pinyin,g.cate_id as skuTypeId,c.name as skuTypeName,g.stock as inventoryQty , fge.chuan as chuan from fanwe_dc_menu g left join fanwe_goods_extends as fge on fge.mid = g.id  LEFT join fanwe_dc_supplier_menu_cate c on c.id=g.cate_id $where limit $limit";
         $check = $GLOBALS['db']->getAll($sql);
 //var_dump($check);
         $data = [];
