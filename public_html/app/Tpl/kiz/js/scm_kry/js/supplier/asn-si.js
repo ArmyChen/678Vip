@@ -592,12 +592,12 @@ function editChuan(obj){
             html += "<td><input type='text' class='form-control w140' value='"+data[i]['chuan']+"' name='chuan' /></td>&nbsp;";
             html += "<td><select class='form-control w140' name='isdisable'>" ;
             if(data[i]['isdisable'] == "1"){
-                html += "<option  value='1'>已使用</option>"
-                html += "<option selected value='0'>未使用</optionselected>"
+                html += "<option  value='1'>已售出</option>"
+                html += "<option selected value='0'>未销售</optionselected>"
             }
             if(data[i]['isdisable'] == "0"){
-                html += "<option selected value='1'>已使用</option>"
-                html += "<option value='0'>未使用</option>"
+                html += "<option selected value='1'>已售出</option>"
+                html += "<option value='0'>未销售</option>"
             }
             html +=    "</select></td>";
             html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
@@ -615,7 +615,7 @@ function addChuanTable() {
     var $gridObj = $("#gridChuan");
     var html = "<tr>";
     html += "<td><input type='text' class='form-control w140' value='' name='chuan' /></td>&nbsp;";
-    html += "<td><select class='form-control w140' name='isdisable'><option value='0'>已使用</option><option selected value='1'>未使用</option></select></td>";
+    html += "<td><select class='form-control w140' name='isdisable'><option value='0'>已售出</option><option selected value='1'>未销售</option></select></td>";
     html += "<td><span class='w100' onclick='remove(this)'>删除</span></td>&nbsp;";
     html += "</tr>";
 
