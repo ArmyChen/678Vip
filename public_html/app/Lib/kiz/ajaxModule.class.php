@@ -6148,29 +6148,27 @@ class ajaxModule extends KizBaseModule
         $records = $GLOBALS['db']->getRow($sql);
 
         $records['chuan'] = serialize($_REQUEST['json']);
-//        var_dump($_REQUEST['json']);die;
-//var_dump($records);
+        $chuans = $_REQUEST['json'];
+        $name = [];
+        foreach ($chuans as $k => $v) {
+            $name[] = $v['chuan'];
+        }
+        if(count($name) != count(array_unique($name))){
+            $return['success'] = false;
+            $return['message'] = "操作失败，码不能相同";
+            echo json_encode($return);
+            exit;
+        }
+
         if(count($records)>0){
             $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"update","mid=".$mid);
             $return['success'] = true;
             $return['message'] = "操作成功";
-
-            $dataChuan = [];
-            foreach ($_REQUEST['json'] as $k => $value) {
-                $dataChuan[$k]['mid'] = $mid;
-                $dataChuan[$k]['chuan'] = $mid;
-                $dataChuan[$k]['status'] = 1;
-                $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"update","mid=".$mid);
-            }
-
         }else{
-
             $records['mid'] =  $mid;
-//            $records['slid'] =  $slid;
             $GLOBALS['db']->autoExecute("fanwe_goods_extends",$records,"insert");
             $return['success'] = true;
             $return['message'] = "操作成功";
-
         }
 
         //串码表数据变化
@@ -6180,24 +6178,22 @@ class ajaxModule extends KizBaseModule
         $dataChuan = [];
 
         if(count($records2)>0){
-            $dataChuan['mid'] = $mid;
-            $dataChuan['chuan'] = $records['chuan'];
-            $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"UPDATE","mid=".$mid);
+            $sql22 = "delete from fanwe_goods_chuan where mid = ".$mid ;
+            $res = $GLOBALS['db']->query($sql22);
+
+            foreach ($chuans as $k => $v) {
+                $dataChuan['mid'] = $mid;
+                $dataChuan['chuan'] = $v['chuan'];
+                $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"INSERT");
+            }
         }else{
-            $dataChuan['mid'] = $mid;
-            $dataChuan['chuan'] = $records['chuan'];
-//            $sql22 = "show columns from fanwe_goods_chuan " ;
-//            $records22 = $GLOBALS['db']->getAll($sql2);
-//            var_dump($records22);
-
-//            $res = $GLOBALS['db']->autoExecute(DB_PREFIX . "cangku_log", $datainGys, "INSERT");
-
-
-            $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"INSERT");
-//            $res = $GLOBALS['db']->query("insert into fanwe_goods_chuan (mid) values (3)");
-
+            foreach ($chuans as $k => $v) {
+                $dataChuan['mid'] = $mid;
+                $dataChuan['chuan'] = $v['chuan'];
+                $res = $GLOBALS['db']->autoExecute("fanwe_goods_chuan",$dataChuan,"INSERT");
+            }
         }
-
+//var_dump($records2);
         echo json_encode($return);
         exit;
     }
