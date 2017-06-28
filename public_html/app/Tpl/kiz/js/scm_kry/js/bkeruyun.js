@@ -2017,6 +2017,9 @@ $(function () {
             var gridData = [];
             if (gridId) {
                 gridData = $grid.jqGrid('getRowData');
+                $.each(gridData,function(e,d){
+                   d.chuan = undefined;//不需要保存串码
+                })
             }
 
             //生成最后提交数据
