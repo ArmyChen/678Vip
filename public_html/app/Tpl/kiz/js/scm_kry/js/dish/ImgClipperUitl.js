@@ -24,7 +24,7 @@ function ImgClipper(jcropConfig,option, $modal){
     this.option = $.extend(true, {
         image:{
             //理想的宽度,高度,缩放比例
-            idealWidth:960,
+            idealWidth:720,
             idealHeight:720,
             scalingRatio:0.3
 

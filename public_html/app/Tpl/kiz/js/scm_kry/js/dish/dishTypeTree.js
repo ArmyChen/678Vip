@@ -37,7 +37,9 @@ $.reloadDishType = function(args) {
         }
         // var html = ""
         html += "'>";
-		html += "<label class='checkbox "+isTopCheck+"'><span></span><input type='checkbox' "+inputChecked+"  name='dishTypeId' data-value='"+topDishType.id+"' ><em>" + topDishType.name + "/" + topDishType.typeCode ;
+		html += "<label class='checkbox "+isTopCheck+"'><span></span><input type='checkbox' "+inputChecked+"  name='dishTypeId' data-value='"+topDishType.id+"' ><em>" +
+            // topDishType.name + "/" + topDishType.typeCode ;
+		topDishType.name;
 		if (topDishType.enabledFlag == 2) {
 			html += "<span class='red'>（已停用）</span>";
         }
@@ -61,7 +63,8 @@ $.reloadDishType = function(args) {
 			}
 			html += "<li title="+ middleDishType.name+"/"+middleDishType.typeCode+";><label class='checkbox "+labelCheckedClass+"' for='types-"+i+'_'+j+"'><span></span>";
 			html += "<input type='checkbox'  name='dishTypeId' id='types-"+i+'_'+j+"' data-value='"+middleDishType.id+"' "+inputChecked+" "+disabled+">";
-			html += middleDishType.name+"/"+middleDishType.typeCode;
+            // html += middleDishType.name+"/"+middleDishType.typeCode;
+            html += middleDishType.name;
 			html += "</label>"+stoped+"</li>";
 		}
 		html += "</ul>";

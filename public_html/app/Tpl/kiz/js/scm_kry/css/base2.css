@@ -2332,7 +2332,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 div[id^="divPreview"], div[id^="divPreview"]>img, .preview-img {
-	width: 540px;
+	width: 180px;
 	height: 180px;
 }
 /*低版本浏览器提示框*/
