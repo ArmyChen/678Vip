@@ -2648,4 +2648,51 @@ class ajaxSettingsModule extends KizBaseModule
 
     }
 
+    public function dish_hongbaoguanli_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+        $name = trim($_REQUEST['name']);
+        $type = intval($_REQUEST['type']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where h.slid=$slid ";
+        if($name){
+            $where .= " and (h.userid ='$name' or u.user_name like '%{$name}%')";
+
+        }
+        $sql = "select *,h.id as id from fanwe_hongbao_log h left join fanwe_user u on h.userid=u.id  $where  order by h.id desc limit $limit ";
+        $sql2 = "select *,h.id as id from fanwe_hongbao_log h left join fanwe_user u on h.userid=u.id  $where";
+//var_dump($sql);
+        $rows = $GLOBALS['db']->getAll($sql);
+        foreach($rows as $key => $val)
+        {
+            if ($val['type']=='0'){
+                $rows[$key]['typ'] = '线上外买';
+            }else{
+                $rows[$key]['typ'] = '线下门店';
+            }
+
+        }
+
+        $records = count($GLOBALS['db']->getAll($sql2));
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['message'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+    }
 }
