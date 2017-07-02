@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-<div class="center-block panel-group mt20">
+<div class="center-block panel-group ">
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title"><em>{$page_title}</em></h3>
@@ -26,11 +26,95 @@
         <form method="post" id="warehouseForm" autocomplete="off">
             <input id="id" name="id" type="hidden" value="{$r.id}">
 
-            <div class="panel-body" style="margin-left: -25px;height: 275px;">
+            <div class="panel-body" style="margin-left: -25px;">
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">充值金额<strong class="red vam"> *</strong></label>
+                        <label for="chongzhi_money">Appid<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">AppSecret<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">微支付商户号<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">API密钥<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">apiclient_cert私钥文件<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">apiclient_key公钥文件<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="chongzhi_money">CA证书文件<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
@@ -47,8 +131,16 @@
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                           <textarea name="chongzhi_memo"></textarea>
-                            <div class="wrong"></div>
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
+                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">商家自收</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
+                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">平台代收</label>
+                                </li>
+                            </ul>
                         </div>
                     </dd>
                 </dl>
