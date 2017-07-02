@@ -647,6 +647,47 @@ class dishModule extends KizBaseModule
 
     }
 
+    //微信支付配置
+    public function dish_cashier_wxpay(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $GLOBALS['tmpl']->assign("page_title", "微信支付配置");
+        $GLOBALS['tmpl']->display("pages/dish/dish_cashier_wxpay.html");
+
+    }
+
+    //支付宝支付配置
+    public function dish_cashier_alipay(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $GLOBALS['tmpl']->assign("page_title", "支付宝支付配置");
+        $GLOBALS['tmpl']->display("pages/dish/dish_cashier_alipay.html");
+
+    }
+
+    //翼支付配置
+    public function dish_cashier_bestpay(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $GLOBALS['tmpl']->assign("page_title", "翼支付配置");
+        $GLOBALS['tmpl']->display("pages/dish/dish_cashier_bestpay.html");
+
+    }
+
+    //和包支付配置
+    public function dish_cashier_hbpay(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $GLOBALS['tmpl']->assign("page_title", "和包支付配置");
+        $GLOBALS['tmpl']->display("pages/dish/dish_cashier_hbpay.html");
+
+    }
+
+
 
 }
 
