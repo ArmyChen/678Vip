@@ -578,6 +578,74 @@ class dishModule extends KizBaseModule
 
     }
 
+    //红包设置
+    public function dish_hongbao_cfg(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $syy = $GLOBALS['db']->getRow("select * from " . DB_PREFIX ."hongbao_set where slid=$slid limit 1");
+        $r = [];
+        $r=$syy;
+        $r['min_hb']=$syy['min_hb']/100;
+        $r['max_hb']=$syy['max_hb']/100;
+
+        $GLOBALS['tmpl']->assign("r", $r);
+        $GLOBALS['tmpl']->assign("page_title", "红包设置");
+        $GLOBALS['tmpl']->display("pages/dish/dish_hongbao_cfg.html");
+
+    }
+
+    //红包发送记录
+    public function dish_hongbaoguanlig(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "红包发送记录");
+        $GLOBALS['tmpl']->display("pages/dish/dish_hongbaoguanlig.html");
+
+    }
+
+    //发放红包准备金充值
+    public function dish_chongbao_autocz(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "发放红包准备金充值");
+        $GLOBALS['tmpl']->display("pages/dish/dish_chongbao_autocz.html");
+
+    }
+
+    //红包准备金充值记录
+    public function dish_chongbao_autocz_log(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "红包准备金充值记录");
+        $GLOBALS['tmpl']->display("pages/dish/dish_chongbao_autocz_log.html");
+
+    }
+
+    //线上余额转红包营销余额
+    public function dish_hongbao_jiezhuan(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $GLOBALS['tmpl']->assign("page_title", "线上余额转红包营销余额");
+        $GLOBALS['tmpl']->display("pages/dish/dish_hongbao_jiezhuan.html");
+
+    }
+
+
 }
 
 ?>

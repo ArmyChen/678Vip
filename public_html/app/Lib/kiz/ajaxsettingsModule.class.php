@@ -2583,5 +2583,69 @@ class ajaxSettingsModule extends KizBaseModule
 
     }
 
+    //红包
+    public function gongbao_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+
+        /*活出参数*/
+        $location_id = $account_info['slid'];
+        $slid = $account_info['slid'];
+        $name = strim($_REQUEST['name']);
+        $sort = intval($_REQUEST['sort']);
+        $is_effect = intval($_REQUEST['is_effect']);
+        $id = intval($_REQUEST['id']);
+//echo $slid;
+        $isdisable = $_REQUEST['isdisable'];
+        $isdinge = $_REQUEST['isdinge'];
+        $min_hb = $_REQUEST['min_hb'];
+        $max_hb = $_REQUEST['max_hb'];
+
+
+        $data = array();
+
+        if (intval($_REQUEST['min_hb'])<1) {
+            $return['success'] = false;
+            $return['message'] = "最小红包金额不能小于1元";
+            echo json_encode($return);
+            exit;
+        }elseif(intval($_REQUEST['isdinge'])==0 && $max_hb<$min_hb){
+            $return['success'] = false;
+            $return['message'] = "设置为随机金额的话，最大红包必须大于最小红包金额！";
+            echo json_encode($return);
+            exit;
+        }
+
+        $data['id'] = $id;
+        $data['slid'] = $slid;
+        $data['isdisable'] = $isdisable;
+        $data['isdinge'] = $isdinge;
+        $data['min_hb'] = round($min_hb*100,0);
+        $data['max_hb'] = round($max_hb*100,0);
+
+        if($id > 0){
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."hongbao_set",$data,"update","id=".$id)){
+                $return['success'] = true;
+                $return['message'] = "修改成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "修改失败";
+            }
+        }else{
+            /*业务逻辑部分*/
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX."hongbao_set",$data)){
+                $return['success'] = true;
+                $return['message'] = "添加成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "添加失败";
+            }
+        }
+
+        echo json_encode($return);
+        exit;
+
+    }
 
 }

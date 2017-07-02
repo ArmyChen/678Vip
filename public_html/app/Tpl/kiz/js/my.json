@@ -836,5 +836,71 @@
     "sort": 9,
     "type": 1,
     "url": "act=dish_dc_waiter_zdtj"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 180,
+    "levelId": "001001001",
+    "name": "5-8-红包管理",
+    "parentId": 130,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "#"
+  },
+  {
+  "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+  "id": 181,
+  "levelId": "001001001001",
+  "name": "5-8-1-红包设置",
+  "parentId": 180,
+  "platform": 13,
+  "sort": 9,
+  "type": 1,
+  "url": "act=dish_hongbao_cfg"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 182,
+    "levelId": "001001001001",
+    "name": "5-8-2-红包发送记录",
+    "parentId": 180,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_hongbaoguanlig"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 183,
+    "levelId": "001001001",
+    "name": "5-8-3-发放红包准备金充值",
+    "parentId": 180,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_chongbao_autocz"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 184,
+    "levelId": "001001001",
+    "name": "5-8-4-红包准备金充值记录",
+    "parentId": 180,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_chongbao_autocz_log"
+  },
+  {
+    "code": "mind:shezhi:shangpinshezhi:shangpinguanli",
+    "id": 185,
+    "levelId": "001001001",
+    "name": "5-8-5-线上余额转红包营销余额",
+    "parentId": 180,
+    "platform": 13,
+    "sort": 9,
+    "type": 1,
+    "url": "act=dish_hongbao_jiezhuan"
   }
 ]

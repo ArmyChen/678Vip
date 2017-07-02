@@ -1,0 +1,168 @@
+
+
+{include file="inc/header.html"}
+
+<!-- 标题 -->
+<div class="article-header">
+    <div class="center-block w1200">
+
+        <h1>{$page_title}</h1>
+
+
+        <div class="btn-wrap pull-right tar">
+            <a class="btn-link ml10" id="btn-save">保存</a>
+
+            <!--<a class="btn-link ml10" id="btnSave-bak">保存并复制</a>-->
+
+            <a class="btn-link ml10" href="javascript:history.back()">返回</a>
+        </div>
+    </div>
+</div>
+<div class="center-block panel-group mt20">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title"><em>{$page_title}</em></h3>
+        </div>
+        <form method="post" id="warehouseForm" autocomplete="off">
+            <input id="id" name="id" type="hidden" value="{$r.id}">
+
+            <div class="panel-body" style="margin-left: -25px;height: 275px;">
+                <!--</dl>-->
+                <dl class="panel-item">
+                    <dt>
+                        <label for="min_hb">最小金额<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="min_hb" name="min_hb"
+                                   value="{$r.min_hb}" placeholder="请输入编号" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong">（如设置为定额的话，仅最小金额起作用，默认红包为当前最小金额）特别说明：红包金额单位:元。</div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="max_hb" >最大金额<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="max_hb" name="max_hb"
+                                   value="{$r.max_hb}" placeholder="请输入用户名" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong">特别说明：红包金额单位：元。</div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="isdinge" id="isdinge">是否定额<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox {if $r.isdinge == 1} checkbox-check {/if}" for="isdinge-0">
+                                        <input type="radio" name="isdinge" id="isdinge-0" {if $r.isdinge == 1} checked {/if} value="1">启用</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox  {if $r.isdinge == 0} checkbox-check {/if}" for="isdinge-1">
+                                        <input type="radio" name="isdinge" id="isdinge-1" {if $r.isdinge == 0} checked {/if} value="0">停用</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="isDisable" id="isDisable">是否启用<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <ul class="panel-list-type">
+                                <li>
+                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
+                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">启用</label>
+                                </li>
+                                <li>
+                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
+                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">停用</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- 添加通用js引入信息 -->
+<script type="text/javascript" src="/app/Tpl/kiz/js/scm_kry/js/basic/scm-tooltip.js?v=20170315_135123" ></script>
+<script type="text/javascript">
+    var OrderStatusEnum = new EnumWrapper('');
+    var SourceEnum = new EnumWrapper('');
+
+    /* 支付方式编码，名字移除 */
+    $("#wareshouseCode,#warehouseName").on("keyup change",function(){
+        $(this).parent().find(".wrong").html("");
+    });
+
+    //Create by LiXing On 2015/8/11
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result;
+    }
+
+    $(function () {
+        //保存
+        $("#btn-save,#btnSave-bak").on("click", function () {
+            var isBtnBak = $(this).attr("id")=="btnSave-bak";
+            $("#warehouseForm").submit();
+            //检查是否验证通过
+            var flag = $("#warehouseForm").valid();
+            if (flag) {
+                var params = $("#warehouseForm").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: ctx2Path + "&act=gongbao_ajax",
+                    data: params,
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        $("#btn-save").bind("click");
+                        if (data.success) {
+                            $.layerMsg(data.message, true, {
+                                end:function(){
+                                    window.location.reload();
+                                },shade: 0.3});
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $("#btn-save").bind("click");
+                        $.layerMsg("保存失败，请刷新页面或重新登录！", false);
+                    }
+                });
+            }
+        });
+
+
+        $("#warehouseForm").validate({
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parents(".positionRelative")
+                    .find(".wrong"));
+            },
+            //只验证不提交 需要提交时注销这段代码
+            debug: true
+        });
+    });
+</script>
+
+{include file="inc/footer.html"}
+
+</body>
+</html>
