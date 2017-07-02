@@ -30,65 +30,25 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="min_hb">最小金额<strong class="red vam"> *</strong></label>
+                        <label for="chongzhi_money">充值金额<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="min_hb" name="min_hb"
-                                   value="{$r.min_hb}" placeholder="请输入最小金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
+                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong">（如设置为定额的话，仅最小金额起作用，默认红包为当前最小金额）特别说明：红包金额单位:元。</div>
+                            <div class="wrong"></div>
                         </div>
                     </dd>
                 </dl>
                 <dl class="panel-item">
                     <dt>
-                        <label for="max_hb" >最大金额<strong class="red vam"> *</strong></label>
+                        <label>备注<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="max_hb" name="max_hb"
-                                   value="{$r.max_hb}" placeholder="请输入最大金额" maxlength="48"  select='auto'>
-                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong">特别说明：红包金额单位：元。</div>
-                        </div>
-                    </dd>
-                </dl>
-                <dl class="panel-item">
-                    <dt>
-                        <label for="isdinge" id="isdinge">是否定额<strong class="red vam"> *</strong></label>
-                    </dt>
-                    <dd class="positionRelative">
-                        <div class="search-box w402">
-                            <ul class="panel-list-type">
-                                <li>
-                                    <label class="checkbox {if $r.isdinge == 1} checkbox-check {/if}" for="isdinge-0">
-                                        <input type="radio" name="isdinge" id="isdinge-0" {if $r.isdinge == 1} checked {/if} value="1">启用</label>
-                                </li>
-                                <li>
-                                    <label class="checkbox  {if $r.isdinge == 0} checkbox-check {/if}" for="isdinge-1">
-                                        <input type="radio" name="isdinge" id="isdinge-1" {if $r.isdinge == 0} checked {/if} value="0">停用</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </dd>
-                </dl>
-                <dl class="panel-item">
-                    <dt>
-                        <label for="isDisable" id="isDisable">是否启用<strong class="red vam"> *</strong></label>
-                    </dt>
-                    <dd class="positionRelative">
-                        <div class="search-box w402">
-                            <ul class="panel-list-type">
-                                <li>
-                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
-                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">启用</label>
-                                </li>
-                                <li>
-                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
-                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">停用</label>
-                                </li>
-                            </ul>
+                           <textarea name="chongzhi_memo"></textarea>
+                            <div class="wrong"></div>
                         </div>
                     </dd>
                 </dl>
@@ -127,7 +87,7 @@
                 var params = $("#warehouseForm").serialize();
                 $.ajax({
                     type: "POST",
-                    url: ctx2Path + "&act=gongbao_ajax",
+                    url: ctx2Path + "&act=chongzhi_ajax",
                     data: params,
                     dataType: "json",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",

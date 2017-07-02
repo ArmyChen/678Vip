@@ -2695,4 +2695,145 @@ class ajaxSettingsModule extends KizBaseModule
         echo json_encode($return);
         exit;
     }
+
+
+    //红包chongzhi
+    public function chongzhi_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $chongzhi_money=intval($_REQUEST['chongzhi_money']);
+        $chongzhi_memo=$_REQUEST['chongzhi_memo'];
+        /*活出参数*/
+
+        $data['jine']=$chongzhi_money;
+        $data['slid']=$slid;
+        $data['cztime']=to_date(NOW_TIME);
+        $data['memo']=$chongzhi_memo;
+        $data['ordersn']=date("YmdHis");
+//        var_dump($data);die;
+        if ($chongzhi_money) {
+            /*业务逻辑部分*/
+            if ($GLOBALS['db']->autoExecute(DB_PREFIX . "hongbao_chongzhi_log", $data)) {
+                $return['success'] = true;
+                $return['message'] = "充值成功";
+            } else {
+                $return['success'] = false;
+                $return['message'] = "充值失败";
+            }
+        }else{
+            $return['success'] = false;
+            $return['message'] = "充值失败,请输入金额";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
+
+    public function dish_chongbao_autocz_ajax(){
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page = intval($_REQUEST['page']);
+//        $name = trim($_REQUEST['name']);
+//        $type = intval($_REQUEST['type']);
+
+        if ($page == 0) $page = 1;
+        $limit = (($page - 1) * $page_size) . "," . $page_size;
+
+        $where = "where slid=$slid and issucess=1";
+//        if($name){
+//            $where .= " and (h.userid ='$name' or u.user_name like '%{$name}%')";
+//
+//        }
+        $sql = "select * from  fanwe_hongbao_chongzhi_log $where  order by id desc limit $limit ";
+        $sql2 = "select * from fanwe_hongbao_chongzhi_log  $where";
+//var_dump($sql);
+        $rows = $GLOBALS['db']->getAll($sql);
+
+        $records = count($GLOBALS['db']->getAll($sql2));
+        $return['page'] = $page;
+        $return['records'] = $records;
+        $return['total'] = ceil($records / $page_size);
+        $return['status'] = true;
+        $return['message'] = null;
+        if ($records > 0) {
+            $return['dataList'] = $rows;
+        } else {
+            $return['status'] = false;
+            $return['message'] = "查无结果！";
+        }
+        echo json_encode($return);
+        exit;
+    }
+
+    //红包结转
+    public function jiezhuan_ajax(){
+        /*初始化*/
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $account_name=$account_info['account_name'];
+
+        $money=$GLOBALS['db']->getOne("select money from " . DB_PREFIX . "supplier_location where id='$slid'");
+
+        /*活出参数*/
+        $jiezhuan=floatval($_REQUEST['chongzhi_money']);
+        $chongzhi_memo=$_REQUEST['chongzhi_memo'];
+        if(isset($_REQUEST['chongzhi_money']) && $jiezhuan==0){
+            $return['success'] = false;
+            $return['message'] = "结转金额不能为0";
+            echo json_encode($return);
+            exit;
+        }
+        if($jiezhuan>$money){
+            $return['success'] = false;
+            $return['message'] = "结转超限额了";
+            echo json_encode($return);
+            exit;
+        }
+
+
+        if ($jiezhuan){
+
+            $log_data = array();
+            $log_data['log_info']="线上结转红包营销帐户，操作人员：".$account_name."，共计：".format_price($jiezhuan)."元。";
+            $log_data['location_id']=$slid;
+            $log_data['supplier_id'] = $supplier_id;
+            $log_data['create_time'] = NOW_TIME;
+            $log_data['money'] = $jiezhuan;
+            $log_data['type'] = 7;
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."supplier_money_log",$log_data);
+            //减余额
+            $GLOBALS['db']->query("update ".DB_PREFIX."supplier_location set money=money-$jiezhuan where id=".$slid );
+            //红包余额增加
+            $GLOBALS['db']->query("update `fanwe_hongbao_set` set `hongbaoyue`=hongbaoyue+$jiezhuan where `slid`='".$slid."'"); //更新Orders状态
+            //写记录
+            $data['jine']=$jiezhuan;
+            $data['slid']=$slid;
+            $data['cztime']=to_date(NOW_TIME);
+            $data['memo']=$chongzhi_memo."线上余额转红包营销余额";
+            $data['ordersn']=date("YmdHis");
+            $data['issucess']=1;
+            //写入数据库
+            if ( $GLOBALS['db']->autoExecute(DB_PREFIX."hongbao_chongzhi_log",$data)) {
+                $return['success'] = true;
+                $return['message'] = "结转成功";
+            } else {
+                $return['success'] = false;
+                $return['message'] = "结转失败";
+            }
+        }else{
+            $return['success'] = false;
+            $return['message'] = "结转失败,请输入结转金额";
+        }
+        echo json_encode($return);
+        exit;
+
+    }
 }

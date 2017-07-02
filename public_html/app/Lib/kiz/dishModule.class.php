@@ -616,6 +616,7 @@ class dishModule extends KizBaseModule
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
 
+
         $GLOBALS['tmpl']->assign("page_title", "发放红包准备金充值");
         $GLOBALS['tmpl']->display("pages/dish/dish_chongbao_autocz.html");
 
@@ -639,7 +640,8 @@ class dishModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
-
+        $money=$GLOBALS['db']->getOne("select money from " . DB_PREFIX . "supplier_location where id='$slid'");
+        $GLOBALS['tmpl']->assign("money", $money);
         $GLOBALS['tmpl']->assign("page_title", "线上余额转红包营销余额");
         $GLOBALS['tmpl']->display("pages/dish/dish_hongbao_jiezhuan.html");
 
