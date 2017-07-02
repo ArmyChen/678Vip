@@ -26,16 +26,16 @@
         <form method="post" id="warehouseForm" autocomplete="off">
             <input id="id" name="id" type="hidden" value="{$r.id}">
 
-            <div class="panel-body" style="margin-left: -25px;">
+            <div class="panel-body" style="">
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">Appid<strong class="red vam"> *</strong></label>
+                        <label for="alipay_appid">AppId<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_appid" name="alipay_appid"
+                                   value="{$r.alipay_appid}" placeholder="alipay_appid" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -44,12 +44,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">AppSecret<strong class="red vam"> *</strong></label>
+                        <label for="alipay_pid">PID<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_pid" name="alipay_pid"
+                                   value="{$r.alipay_pid}" placeholder="PID" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -58,12 +58,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">微支付商户号<strong class="red vam"> *</strong></label>
+                        <label for="alipay_key">Key<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_key" name="alipay_key"
+                                   value="{$r.alipay_key}" placeholder="Key" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -72,12 +72,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">API密钥<strong class="red vam"> *</strong></label>
+                        <label for="alipay_name">卖家账号<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_name" name="alipay_name"
+                                   value="{$r.alipay_name}" placeholder="卖家账号" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -86,12 +86,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">apiclient_cert私钥文件<strong class="red vam"> *</strong></label>
+                        <label for="alipay_storeId">商户门店编号<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_storeId" name="alipay_storeId"
+                                   value="{$r.alipay_storeId}" placeholder="商户门店编号" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -100,12 +100,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">apiclient_key公钥文件<strong class="red vam"> *</strong></label>
+                        <label for="alipay_alipayStoreId">支付宝的店铺编号<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_alipayStoreId" name="alipay_alipayStoreId"
+                                   value="{$r.alipay_alipayStoreId}" placeholder="支付宝的店铺编号" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -114,12 +114,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">CA证书文件<strong class="red vam"> *</strong></label>
+                        <label for="alipay_providerId">系统服务商PID<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="alipay_providerId" name="alipay_providerId"
+                                   value="{$r.alipay_providerId}" placeholder="系统服务商PID" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -127,18 +127,57 @@
                 </dl>
                 <dl class="panel-item">
                     <dt>
-                        <label>备注<strong class="red vam"> *</strong></label>
+                        <label for="alipay_public_key">支付宝公钥文件<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="alipay_public_key" name="alipay_public_key"
+                                   value="{$r.alipay_public_key}" placeholder="支付宝公钥文件" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="alipay_merchant_public_key">商户公钥文件<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="alipay_merchant_public_key" name="alipay_merchant_public_key"
+                                   value="{$r.alipay_merchant_public_key}" placeholder="商户公钥文件" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label for="alipay_merchant_private_key">商户私钥文件<strong class="red vam"> *</strong></label>
+                    </dt>
+                    <dd class="positionRelative">
+                        <div class="search-box w402">
+                            <input type="text" class="form-control w402 required" id="alipay_merchant_private_key" name="alipay_merchant_private_key"
+                                   value="{$r.alipay_merchant_private_key}" placeholder="商户私钥文件" maxlength="48"  select='auto'>
+                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
+                            <div class="wrong"></div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="panel-item">
+                    <dt>
+                        <label><strong class="red vam"> </strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
                             <ul class="panel-list-type">
                                 <li>
-                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
-                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">商家自收</label>
+                                    <label class="checkbox {if $r.alipay_plat == 1} checkbox-check {/if}" for="alipay_plat-01" id="checkbox-1">
+                                        <input type="radio" name="alipay_plat" id="alipay_plat-01" {if $r.alipay_plat == 1} checked {/if} value="1">商家自收</label>
                                 </li>
                                 <li>
-                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
-                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">平台代收</label>
+                                    <label class="checkbox {if $r.alipay_plat == 0} checkbox-check {/if}" for="alipay_plat-00" id="checkbox-0">
+                                        <input type="radio" name="alipay_plat" id="alipay_plat-00" {if $r.alipay_plat == 0} checked {/if} value="0">平台代收</label>
                                 </li>
                             </ul>
                         </div>
@@ -179,7 +218,7 @@
                 var params = $("#warehouseForm").serialize();
                 $.ajax({
                     type: "POST",
-                    url: ctx2Path + "&act=chongzhi_ajax",
+                    url: ctx2Path + "&act=save_pay_settings_ajax&type=2",
                     data: params,
                     dataType: "json",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",

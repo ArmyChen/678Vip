@@ -652,6 +652,11 @@ class dishModule extends KizBaseModule
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $row=$GLOBALS['db']->getAll("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . "");
+//        var_dump($row);
+        $GLOBALS['tmpl']->assign("r", $row[0]);
+
         $GLOBALS['tmpl']->assign("page_title", "微信支付配置");
         $GLOBALS['tmpl']->display("pages/dish/dish_cashier_wxpay.html");
 
@@ -662,6 +667,10 @@ class dishModule extends KizBaseModule
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $row=$GLOBALS['db']->getAll("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . "");
+        $GLOBALS['tmpl']->assign("r", $row[0]);
+
         $GLOBALS['tmpl']->assign("page_title", "支付宝支付配置");
         $GLOBALS['tmpl']->display("pages/dish/dish_cashier_alipay.html");
 
@@ -672,6 +681,10 @@ class dishModule extends KizBaseModule
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $row=$GLOBALS['db']->getAll("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . "");
+        $GLOBALS['tmpl']->assign("r", $row[0]);
+
         $GLOBALS['tmpl']->assign("page_title", "翼支付配置");
         $GLOBALS['tmpl']->display("pages/dish/dish_cashier_bestpay.html");
 
@@ -682,6 +695,10 @@ class dishModule extends KizBaseModule
         init_app_page();
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+        $row=$GLOBALS['db']->getAll("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . "");
+        $GLOBALS['tmpl']->assign("r", $row[0]);
+
         $GLOBALS['tmpl']->assign("page_title", "和包支付配置");
         $GLOBALS['tmpl']->display("pages/dish/dish_cashier_hbpay.html");
 

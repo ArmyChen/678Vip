@@ -26,16 +26,16 @@
         <form method="post" id="warehouseForm" autocomplete="off">
             <input id="id" name="id" type="hidden" value="{$r.id}">
 
-            <div class="panel-body" style="margin-left: -25px;">
+            <div class="panel-body">
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">Appid<strong class="red vam"> *</strong></label>
+                        <label for="bestpay_appid">商户号<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="bestpay_appid" name="bestpay_appid"
+                                   value="{$r.bestpay_appid}" placeholder="商户号" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -44,12 +44,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">AppSecret<strong class="red vam"> *</strong></label>
+                        <label for="bestpay_pid">交易KEY<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="bestpay_pid" name="bestpay_pid"
+                                   value="{$r.bestpay_pid}" placeholder="交易KEY" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -58,12 +58,12 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">微支付商户号<strong class="red vam"> *</strong></label>
+                        <label for="bestpay_key">数据Key<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="bestpay_key" name="bestpay_key"
+                                   value="{$r.bestpay_key}" placeholder="数据Key" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
                             <div class="wrong"></div>
                         </div>
@@ -72,73 +72,45 @@
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">API密钥<strong class="red vam"> *</strong></label>
+                        <label for="bestpay_zaccount">子帐户<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="bestpay_zaccount" name="bestpay_zaccount"
+                                   value="{$r.bestpay_zaccount}" placeholder="子帐户" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong"></div>
+                            <div class="wrong">子账户和分账比例请慎重填写，如果无请留空</div>
                         </div>
                     </dd>
                 </dl>
                 <!--</dl>-->
                 <dl class="panel-item">
                     <dt>
-                        <label for="chongzhi_money">apiclient_cert私钥文件<strong class="red vam"> *</strong></label>
+                        <label for="bestpay_fenbili">分帐比例<strong class="red vam"> *</strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
+                            <input type="text" class="form-control w402 required" id="bestpay_fenbili" name="bestpay_fenbili"
+                                   value="{$r.bestpay_fenbili}" placeholder="分帐比例" maxlength="48"  select='auto'>
                             <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong"></div>
-                        </div>
-                    </dd>
-                </dl>
-                <!--</dl>-->
-                <dl class="panel-item">
-                    <dt>
-                        <label for="chongzhi_money">apiclient_key公钥文件<strong class="red vam"> *</strong></label>
-                    </dt>
-                    <dd class="positionRelative">
-                        <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
-                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong"></div>
-                        </div>
-                    </dd>
-                </dl>
-                <!--</dl>-->
-                <dl class="panel-item">
-                    <dt>
-                        <label for="chongzhi_money">CA证书文件<strong class="red vam"> *</strong></label>
-                    </dt>
-                    <dd class="positionRelative">
-                        <div class="search-box w402">
-                            <input type="text" class="form-control w402 required" id="chongzhi_money" name="chongzhi_money"
-                                   value="{$r.chongzhi_money}" placeholder="请输入充值金额" maxlength="48"  select='auto'>
-                            <button type="button" class="close" name="close" aria-hidden="true">&times;</button>
-                            <div class="wrong"></div>
+                            <div class="wrong">填写说明：0代表不分账，1 代表全部给子帐户，0.9 代表子帐户分得90% 以此往后推（超过1的话会出现错误后果自负）</div>
                         </div>
                     </dd>
                 </dl>
                 <dl class="panel-item">
                     <dt>
-                        <label>备注<strong class="red vam"> *</strong></label>
+                        <label><strong class="red vam"> </strong></label>
                     </dt>
                     <dd class="positionRelative">
                         <div class="search-box w402">
                             <ul class="panel-list-type">
                                 <li>
-                                    <label class="checkbox {if $r.isdisable == 1} checkbox-check {/if}" for="status-0" id="checkbox-0">
-                                        <input type="radio" name="isdisable" id="status-0" {if $r.isdisable == 1} checked {/if} value="1">商家自收</label>
+                                    <label class="checkbox {if $r.bestpay_plat == 1} checkbox-check {/if}" for="bestpay_plat-0" id="checkbox-0">
+                                        <input type="radio" name="bestpay_plat" id="bestpay_plat-0" {if $r.isdisable == 1} checked {/if} value="1">商家自收</label>
                                 </li>
                                 <li>
-                                    <label class="checkbox  {if $r.isdisable == 0} checkbox-check {/if}" for="status-1" id="checkbox-1">
-                                        <input type="radio" name="isdisable" id="status-1" {if $r.isdisable == 0} checked {/if} value="0">平台代收</label>
+                                    <label class="checkbox  {if $r.bestpay_plat == 0} checkbox-check {/if}" for="bestpay_plat-1" id="checkbox-1">
+                                        <input type="radio" name="bestpay_plat" id="bestpay_plat-1" {if $r.bestpay_plat == 0} checked {/if} value="0">平台代收</label>
                                 </li>
                             </ul>
                         </div>
@@ -179,7 +151,7 @@
                 var params = $("#warehouseForm").serialize();
                 $.ajax({
                     type: "POST",
-                    url: ctx2Path + "&act=chongzhi_ajax",
+                    url: ctx2Path + "&act=save_pay_settings_ajax&type=3",
                     data: params,
                     dataType: "json",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",

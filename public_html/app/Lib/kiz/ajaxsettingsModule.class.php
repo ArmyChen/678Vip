@@ -2836,4 +2836,124 @@ class ajaxSettingsModule extends KizBaseModule
         exit;
 
     }
+
+
+    public function save_pay_settings_ajax(){
+        /* 基本参数初始化 */
+        init_app_page();
+        $account_info = $GLOBALS['account_info'];
+        $supplier_id = $account_info['supplier_id'];
+        $slid = $account_info['slid'];
+
+        $type = $_REQUEST['type'];
+//        var_dump($GLOBALS['db']->getRow("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . ""));die;
+        if ($GLOBALS['db']->getOne("select * from ".DB_PREFIX."cashier_config where storeid=" . intval($slid) . "")) {
+
+            $InsertData=Array();
+            $InsertData['storeid']=$slid;
+//            var_dump($type);
+            switch ($type){
+                case  1:
+                    $InsertData['weixin_appid']=$_REQUEST['weixin_appid'];
+                    $InsertData['weixin_appsecret']=$_REQUEST['weixin_appsecret'];
+                    $InsertData['weixin_mchid']=$_REQUEST['weixin_mchid'];
+                    $InsertData['weixin_key']=$_REQUEST['weixin_key'];
+                    $InsertData['weixin_apiclient_cert']=$_REQUEST['weixin_apiclient_cert'];
+                    $InsertData['weixin_apiclient_key']=$_REQUEST['weixin_apiclient_key'];
+                    $InsertData['weixin_rootca']=$_REQUEST['weixin_rootca'];
+                    $InsertData['wx_plat']=intval($_REQUEST['wx_plat']);
+                    break;
+                case 2:
+                    $InsertData['alipay_appid']=$_REQUEST['alipay_appid'];
+                    $InsertData['alipay_pid']=$_REQUEST['alipay_pid'];
+                    $InsertData['alipay_key']=$_REQUEST['alipay_key'];
+                    $InsertData['alipay_name']=$_REQUEST['alipay_name'];
+                    $InsertData['alipay_public_key']=$_REQUEST['alipay_public_key'];
+                    $InsertData['alipay_merchant_public_key']=$_REQUEST['alipay_merchant_public_key'];
+                    $InsertData['alipay_merchant_private_key']=$_REQUEST['alipay_merchant_private_key'];
+                    $InsertData['alipay_storeId']=$_REQUEST['alipay_storeId'];
+                    $InsertData['alipay_alipayStoreId']=$_REQUEST['alipay_alipayStoreId'];
+                    $InsertData['alipay_providerId']=$_REQUEST['alipay_providerId'];
+                    $InsertData['alipay_plat']=intval($_REQUEST['alipay_plat']);
+                    break;
+                case 3:
+                    $InsertData['bestpay_appid']=$_REQUEST['bestpay_appid'];
+                    $InsertData['bestpay_pid']=$_REQUEST['bestpay_pid'];
+                    $InsertData['bestpay_key']=$_REQUEST['bestpay_key'];
+                    $InsertData['bestpay_plat']=intval($_REQUEST['bestpay_plat']);
+                    $InsertData['bestpay_zaccount']=$_REQUEST['bestpay_zaccount'];
+                    $InsertData['bestpay_fenbili']=$_REQUEST['bestpay_fenbili'];
+                    break;
+                case 4:
+                    $InsertData['hbpay_id']=$_REQUEST['hbpay_id'];
+                    $InsertData['hbpay_plat']=intval($_REQUEST['hbpay_plat']);
+                    $InsertData['hbpay_private_key']=$_REQUEST['hbpay_private_key'];
+                    braek;
+            }
+//            var_dump($InsertData);die;
+            $res=$GLOBALS['db']->autoExecute(DB_PREFIX . "cashier_config", $InsertData, "UPDATE", "id =".intval($_REQUEST['id']));
+
+            if($res){
+                $return['success'] = true;
+                $return['message'] = "更新成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "更新失败";
+            }
+        }else{
+            switch ($type){
+                case  1:
+                    $InsertData['weixin_appid']=$_REQUEST['weixin_appid'];
+                    $InsertData['weixin_appsecret']=$_REQUEST['weixin_appsecret'];
+                    $InsertData['weixin_mchid']=$_REQUEST['weixin_mchid'];
+                    $InsertData['weixin_key']=$_REQUEST['weixin_key'];
+                    $InsertData['weixin_apiclient_cert']=$_REQUEST['weixin_apiclient_cert'];
+                    $InsertData['weixin_apiclient_key']=$_REQUEST['weixin_apiclient_key'];
+                    $InsertData['weixin_rootca']=$_REQUEST['weixin_rootca'];
+                    $InsertData['wx_plat']=intval($_REQUEST['wx_plat']);
+                    break;
+                case 2:
+                    $InsertData['alipay_appid']=$_REQUEST['alipay_appid'];
+                    $InsertData['alipay_pid']=$_REQUEST['alipay_pid'];
+                    $InsertData['alipay_key']=$_REQUEST['alipay_key'];
+                    $InsertData['alipay_name']=$_REQUEST['alipay_name'];
+                    $InsertData['alipay_public_key']=$_REQUEST['alipay_public_key'];
+                    $InsertData['alipay_merchant_public_key']=$_REQUEST['alipay_merchant_public_key'];
+                    $InsertData['alipay_merchant_private_key']=$_REQUEST['alipay_merchant_private_key'];
+                    $InsertData['alipay_storeId']=$_REQUEST['alipay_storeId'];
+                    $InsertData['alipay_alipayStoreId']=$_REQUEST['alipay_alipayStoreId'];
+                    $InsertData['alipay_providerId']=$_REQUEST['alipay_providerId'];
+                    $InsertData['alipay_plat']=intval($_REQUEST['alipay_plat']);
+                    break;
+                case 3:
+                    $InsertData['bestpay_appid']=$_REQUEST['bestpay_appid'];
+                    $InsertData['bestpay_pid']=$_REQUEST['bestpay_pid'];
+                    $InsertData['bestpay_key']=$_REQUEST['bestpay_key'];
+                    $InsertData['bestpay_plat']=intval($_REQUEST['bestpay_plat']);
+                    $InsertData['bestpay_zaccount']=$_REQUEST['bestpay_zaccount'];
+                    $InsertData['bestpay_fenbili']=$_REQUEST['bestpay_fenbili'];
+                    break;
+                case 4:
+                    $InsertData['hbpay_id']=$_REQUEST['hbpay_id'];
+                    $InsertData['hbpay_plat']=intval($_REQUEST['hbpay_plat']);
+                    $InsertData['hbpay_private_key']=$_REQUEST['hbpay_private_key'];
+                    braek;
+            }
+
+            $GLOBALS['db']->autoExecute(DB_PREFIX."cashier_config",$InsertData);
+            $id = $GLOBALS['db']->insert_id();
+            if($id){
+                $return['success'] = true;
+                $return['message'] = "更新成功";
+            }else{
+                $return['success'] = false;
+                $return['message'] = "更新失败";
+            }
+
+        }
+
+        echo json_encode($return);
+        exit;
+
+    }
 }
