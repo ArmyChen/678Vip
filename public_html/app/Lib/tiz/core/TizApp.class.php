@@ -6,12 +6,12 @@
 // +----------------------------------------------------------------------
 // | 淘宝购买地址：https://shop36624490.taobao.com/
 // +----------------------------------------------------------------------
-require APP_ROOT_PATH.'app/Lib/kiz/core/TizBaseModule.class.php';
-require APP_ROOT_PATH.'app/Lib/kiz/core/kiz_init.php';
+require APP_ROOT_PATH.'app/Lib/tiz/core/TizBaseModule.class.php';
+require APP_ROOT_PATH.'app/Lib/tiz/core/tiz_init.php';
 define("CTL",'ctl');
 define("ACT",'act');
 
-class KizApp{
+class TizApp{
 	private $module_obj;
 	//网站项目构造
 	public function __construct(){
@@ -25,16 +25,16 @@ class KizApp{
 		
 		$module = filter_ctl_act_req($module);
 		$action = filter_ctl_act_req($action);
-		if(!file_exists(APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php"))
+		if(!file_exists(APP_ROOT_PATH."app/Lib/tiz/".$module."Module.class.php"))
 		$module = "inventory";
 
 
-		require_once APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php";
+		require_once APP_ROOT_PATH."app/Lib/tiz/".$module."Module.class.php";
 
 		if(!class_exists($module."Module"))
 		{
 			$module = "inventory";
-			require_once APP_ROOT_PATH."app/Lib/kiz/".$module."Module.class.php";
+			require_once APP_ROOT_PATH."app/Lib/tiz/".$module."Module.class.php";
 		}
 		if(!method_exists($module."Module",$action))
 		$action = "go_down_index";
