@@ -46,11 +46,6 @@ function init_app_page()
  */
 function global_run()
 {
-    if (app_conf("SHOP_OPEN") == 0)  //网站关闭时跳转到站点关闭页
-    {
-        app_redirect(url("index", "close"));
-    }
-
 
     //输出语言包的js
     if (!file_exists(get_real_path() . "public/runtime/app/lang.js")) {
@@ -79,17 +74,6 @@ function global_run()
 
     if ($adm_id == 0) {
         if (empty($account_info)) {
-// 		$cookie_aname = es_cookie::get.txt("account_name")?es_cookie::get.txt("account_name"):'';
-// 		$cookie_apwd = es_cookie::get.txt("account_pwd")?es_cookie::get.txt("account_pwd"):'';
-
-// 		if($cookie_aname!=''&&$cookie_apwd!=''&&!es_session::get("account_info"))
-// 		{
-// 			$cookie_aname = strim($cookie_aname);
-// 			$cookie_apwd = strim($cookie_apwd);
-
-// 			auto_do_login_biz($cookie_aname,$cookie_apwd);
-// 			$account_info = es_session::get('account_info');
-// 		}
             es_cookie::set("userurl", $_SERVER['REQUEST_URI'], 2);
             app_redirect(url("biz", "user#login"));
         }
@@ -204,8 +188,6 @@ d.account_name = '" . $account_info['account_name'] . "'";
         es_cookie::set("account_name", $account_info['account_name'], 3600 * 1 * 1);
         es_cookie::set("account_pwd", md5($account_info['account_password'] . "_EASE_COOKIE"), 3600 * 1 * 1);
     }
-
-
 }
 
 
