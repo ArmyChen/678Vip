@@ -1,0 +1,11 @@
+.chooseBox li{
+    list-style: none;
+    text-decoration: none;
+    width: 100px;
+    float: left;
+}
+
+.chooseBox {
+    margin: 0;
+    padding: 0;
+}

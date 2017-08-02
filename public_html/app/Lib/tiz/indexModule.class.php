@@ -11,6 +11,8 @@ class indexModule extends TizBaseModule
     }
 
     public function index(){
-        $GLOBALS['tmpl']->display("pages/index/dashboard_2.html");
+
+
+        $GLOBALS['tmpl']->display("pages/index/index.html");
     }
 }
