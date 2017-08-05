@@ -37,7 +37,19 @@
         }
     });
 
+    var cityPicker2 = new IIInsomniaCityPicker({
+        data: cityData,
+        target: '#endCity',
+        valType: 'k-v',
+        hideCityInput: '#city',
+        hideProvinceInput: '#province',
+        callback: function (city_id) {
+//            alert(city_id);
+        }
+    });
+
     cityPicker.init();
+    cityPicker2.init();
 </script>
 <script>
     $('#nofees_desc').summernote({height: 300});
@@ -49,4 +61,77 @@
     $('#product_content').summernote({height: 1300});
     $('#travel_content').summernote({height: 1300});
 
+</script>
+<script>
+    //保存信息
+    function saveRoot(){
+        var		id	=	$("#id").val();
+        var		name	=	$("#name").val();
+        var		subtitle	=	$("#subtitle").val();
+        var		start_city	=	$("#start_city").val();
+        var		start_city_code	=	$("#start_city_code").val();
+        var		end_city	=	$("#end_city").val();
+        var		ent_city_code	=	$("#ent_city_code").val();
+        var		type_id	=	$("#type_id").val();
+        var		type_name	=	$("#type_name").val();
+        var		nature_id	=	$("#nature_id").val();
+        var		nature_name	=	$("#nature_name").val();
+        var		price	=	$("#price").val();
+        var		other_name	=	$("#other_name").val();
+        var		root_code	=	$("#root_code").val();
+        var		backway	=	$("#backway").val();
+        var		root_theme	=	$("#root_theme").val();
+        var		check_type	=	$("#check_type").val();
+        var		description	=	$("#description").val();
+        var		need_desc	=	$("#need_desc").val();
+        var		tip_desc	=	$("#tip_desc").val();
+        var		fee_desc	=	$("#fee_desc").val();
+        var		no_fee_desc	=	$("#no_fee_desc").val();
+        var		safe_desc	=	$("#safe_desc").val();
+        var		product_desc	=	$("#product_desc").val();
+        var		content_desc	=	$("#content_desc").val();
+        var		is_refund	=	$("#is_refund").val();
+        var		detail_rule	=	$("#detail_rule").val();
+        if(name = ""){
+            bootbox.alert("线路名称不能为空");
+        }
+        $.ajax({
+            url:ajaxUrl + "act=root_add_ajax",
+            type:"post",
+            data:{
+                id	:	id	,
+                name	:	name	,
+                subtitle	:	subtitle	,
+                start_city	:	start_city	,
+                start_city_code	:	start_city_code	,
+                end_city	:	end_city	,
+                ent_city_code	:	ent_city_code	,
+                type_id	:	type_id	,
+                type_name	:	type_name	,
+                nature_id	:	nature_id	,
+                nature_name	:	nature_name	,
+                price	:	price	,
+                other_name	:	other_name	,
+                root_code	:	root_code	,
+                backway	:	backway	,
+                root_theme	:	root_theme	,
+                check_type	:	check_type	,
+                description	:	description	,
+                need_desc	:	need_desc	,
+                tip_desc	:	tip_desc	,
+                fee_desc	:	fee_desc	,
+                no_fee_desc	:	no_fee_desc	,
+                safe_desc	:	safe_desc	,
+                product_desc	:	product_desc	,
+                content_desc	:	content_desc	,
+                is_refund	:	is_refund	,
+                detail_rule	:	detail_rule
+            },
+            dataType:"json",
+            success:function (e) {
+                bootbox.alert(e.message);
+            }
+
+        })
+    }
 </script>
