@@ -187,7 +187,7 @@ class excelModule extends KizBaseModule
         }
         $return['dataList'] = $list;
 
-        $export = new Exporter();
+        $export = new Export();
 
         $export->startExport($return);
 //
