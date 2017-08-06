@@ -1,10 +1,11 @@
 <?php
 require_once 'core/pinyin.php';
 require_once 'core/page.php';
-
+//以下是客户端的代码
+include_once("../../../Exporter.php");
 
 //dc_menu where (( g.is_effect = 0 and g.is_stock = 1 and g.is_delete = 1) or (g.is_delete = 1))
-class ajaxModule extends KizBaseModule
+class excelModule extends KizBaseModule
 {
     function __construct()
     {
@@ -185,8 +186,13 @@ class ajaxModule extends KizBaseModule
             $list[$k] = $v;
         }
         $return['dataList'] = $list;
-        echo json_encode($return);
-        exit;
+
+        $export = new Exporter();
+
+        $export->startExport($return);
+//
+//        echo json_encode($return);
+//        exit;
     }
 
     /**
