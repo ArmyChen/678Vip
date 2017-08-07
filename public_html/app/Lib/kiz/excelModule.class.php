@@ -93,6 +93,7 @@ class excelModule extends KizBaseModule
      */
     public function go_down_index_ajax()
     {
+
 //        $r = $GLOBALS['db']->getAll("select * from fanwe_cangku_log where type=2");
 //        var_dump($r);die;
         $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
@@ -188,8 +189,7 @@ class excelModule extends KizBaseModule
         $return['dataList'] = $list;
 
         $export = new Export();
-
-        $export->startExport($return);
+        $export->startExport($list);
 //
 //        echo json_encode($return);
 //        exit;
