@@ -344,7 +344,7 @@
             var sord = $gridObj.jqGrid('getGridParam','sortorder');
 
             //rows=0将获取所有记录，不分页
-            var exportUrl = "/scm_kry/inventory/export?rows=0&sidx=" + sidx + "&sord=" + sord;
+            var exportUrl = "kiz.php?ctl=excel&act=stock_search_ajax";
 
             $("#queryConditions").attr("action", exportUrl).attr("target", "_blank");
             $("#queryConditions").submit();

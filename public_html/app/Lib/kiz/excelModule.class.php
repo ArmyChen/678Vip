@@ -2171,7 +2171,7 @@ class excelModule extends KizBaseModule
             $arr[$key]['uom'] = $item['unit'];
             $arr[$key]['qty'] = intval($item['sstock']);
             $arr[$key]['print'] = $item['print'];
-            $arr[$key]['cate_id'] = $item['cate_id'];
+//            $arr[$key]['cate_id'] = $item['cate_id'];
         }
 
         $return['page'] = $page;
@@ -2181,8 +2181,11 @@ class excelModule extends KizBaseModule
         $return['resMsg'] = null;
         $return['dataList'] = $arr;
 
-        echo json_encode($return);
-        exit;
+        $export = new Export();
+        $export->startExport($arr);
+
+//        echo json_encode($return);
+//        exit;
     }
 
     //出入库汇总明细表
