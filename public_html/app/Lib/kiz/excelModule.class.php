@@ -2115,7 +2115,7 @@ class excelModule extends KizBaseModule
         $account_info = $GLOBALS['account_info'];
         $supplier_id = $account_info['supplier_id'];
         $slid = $account_info['slid'];
-        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 20;
+        $page_size = $_REQUEST['rows'] ? $_REQUEST['rows'] : 99999;
         $page = intval($_REQUEST['page']);
         $skuNameOrCode = $_REQUEST['skuNameOrCode'];
         $print = $_REQUEST['print'];
@@ -2154,7 +2154,18 @@ class excelModule extends KizBaseModule
         $list = $GLOBALS['db']->getAll($sql);
 //        var_dump($list);
         $arr = [];
+        $arr[0]['mid'] = "商品编码";
+        $arr[0]['commercialName'] = "商家名称";
+        $arr[0]['skuCode'] = "商品编码";
+        $arr[0]['skuName'] = "商品名称";
+        $arr[0]['marketPrice'] = "商品价格";
+        $arr[0]['cost'] ="库存金额";
+        $arr[0]['uom'] = "单位";
+        $arr[0]['qty'] = "库存";
+
         foreach ($list as $key => $item) {
+            $key ++;
+//            $arr = [];
             if ($item['print'] != 3) {
                 $price = $item['sbuy'];
             } else {
@@ -2170,8 +2181,9 @@ class excelModule extends KizBaseModule
             $arr[$key]['cost'] = $price * $item['sstock'];
             $arr[$key]['uom'] = $item['unit'];
             $arr[$key]['qty'] = intval($item['sstock']);
-            $arr[$key]['print'] = $item['print'];
+//            $arr[$key]['print'] = $item['print'];
 //            $arr[$key]['cate_id'] = $item['cate_id'];
+
         }
 
         $return['page'] = $page;
@@ -2183,8 +2195,8 @@ class excelModule extends KizBaseModule
 
         $export = new Export();
         $export->startExport($arr);
-
-//        echo json_encode($return);
+//
+//        echo json_encode($arr);
 //        exit;
     }
 
